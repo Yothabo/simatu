@@ -6,6 +6,11 @@ import {
 } from 'react';
 import { supabase } from '../../../utils/supabase';
 import toast from 'react-hot-toast';
+import { ADMIN_STORAGE_KEYS } from '../constants/admin.constants';
+import {
+  readAdminSnapshot,
+  writeAdminSnapshot,
+} from '../utils/adminSnapshot';
 
 export type AdminActivity = {
   id: string;
@@ -17,6 +22,31 @@ export type AdminActivity = {
   metadata: Record<string, unknown>;
   created_at: string;
 };
+
+function isAdminActivities(value: unknown): value is AdminActivity[] {
+  return (
+    Array.isArray(value) &&
+    value.every((entry) => {
+      if (!entry || typeof entry !== 'object') return false;
+
+      const item = entry as Record<string, unknown>;
+
+      return (
+        typeof item.id === 'string' &&
+        typeof item.event_type === 'string' &&
+        (item.entity_type === 'product' || item.entity_type === 'order') &&
+        (item.entity_id === null || typeof item.entity_id === 'string') &&
+        typeof item.description === 'string' &&
+        (item.actor_email === null || typeof item.actor_email === 'string') &&
+        !!item.metadata &&
+        typeof item.metadata === 'object' &&
+        !Array.isArray(item.metadata) &&
+        typeof item.created_at === 'string' &&
+        Number.isFinite(Date.parse(item.created_at))
+      );
+    })
+  );
+}
 
 export function useAdminActivity(
   isAdmin: boolean | null,
@@ -52,8 +82,6 @@ export function useAdminActivity(
       adminRef.current === true &&
       userIdRef.current === requestUserId;
 
-    setIsLoadingActivities(true);
-
     try {
       const {
         data: { session },
@@ -83,10 +111,17 @@ export function useAdminActivity(
         throw new Error(data.error || 'Unable to load activities.');
       }
 
+      if (!isAdminActivities(data.activities)) {
+        throw new Error('The activities response has an invalid format.');
+      }
+
       if (!isCurrentRequest()) return;
 
-      setActivities(
-        Array.isArray(data.activities) ? data.activities : []
+      setActivities(data.activities);
+      writeAdminSnapshot(
+        ADMIN_STORAGE_KEYS.activitiesCache,
+        requestUserId,
+        data.activities
       );
     } catch (error) {
       if (isCurrentRequest()) {
@@ -110,16 +145,21 @@ export function useAdminActivity(
       return;
     }
 
+    const cachedActivities = readAdminSnapshot(
+      ADMIN_STORAGE_KEYS.activitiesCache,
+      userId,
+      isAdminActivities
+    );
+
+    if (cachedActivities) {
+      setActivities(cachedActivities);
+      setIsLoadingActivities(false);
+      return;
+    }
+
     setActivities([]);
     setIsLoadingActivities(true);
-
     void loadActivities();
-
-    const interval = window.setInterval(() => {
-      void loadActivities();
-    }, 30000);
-
-    return () => window.clearInterval(interval);
   }, [isAdmin, userId, loadActivities]);
 
   return {

@@ -1,4 +1,15 @@
-import { useEffect, useMemo, useState, type FormEvent } from 'react';
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type FormEvent,
+} from 'react';
+import { ADMIN_STORAGE_KEYS } from '../../constants/admin.constants';
+import {
+  readAdminSnapshot,
+  writeAdminSnapshot,
+} from '../../utils/adminSnapshot';
 import {
   FiActivity,
   FiArrowDownCircle,
@@ -56,6 +67,83 @@ type InventoryResponse = {
   movements: InventoryMovement[];
   aggregates: InventoryAggregates;
 };
+
+function isNumericValue(value: unknown): boolean {
+  return (
+    (typeof value === 'number' || typeof value === 'string') &&
+    String(value).trim() !== '' &&
+    Number.isFinite(Number(value))
+  );
+}
+
+function isNullableString(value: unknown): boolean {
+  return value === null || typeof value === 'string';
+}
+
+function isInventoryResponse(value: unknown): value is InventoryResponse {
+  if (!value || typeof value !== 'object') return false;
+
+  const data = value as Record<string, unknown>;
+
+  if (
+    !Array.isArray(data.inventory) ||
+    !Array.isArray(data.movements) ||
+    !data.aggregates ||
+    typeof data.aggregates !== 'object'
+  ) {
+    return false;
+  }
+
+  const inventoryValid = data.inventory.every((entry: unknown) => {
+    if (!entry || typeof entry !== 'object') return false;
+
+    const item = entry as Record<string, unknown>;
+
+    return (
+      typeof item.product_id === 'string' &&
+      typeof item.product_name === 'string' &&
+      isNullableString(item.sku) &&
+      (item.price === null || isNumericValue(item.price)) &&
+      (item.supplier_cost === null || isNumericValue(item.supplier_cost)) &&
+      isNullableString(item.image_url) &&
+      typeof item.is_active === 'boolean' &&
+      isNumericValue(item.on_hand_quantity) &&
+      isNumericValue(item.reserved_quantity) &&
+      isNumericValue(item.available_quantity) &&
+      typeof item.is_initialized === 'boolean' &&
+      isNullableString(item.updated_at)
+    );
+  });
+
+  const movementsValid = data.movements.every((entry: unknown) => {
+    if (!entry || typeof entry !== 'object') return false;
+
+    const item = entry as Record<string, unknown>;
+
+    return (
+      typeof item.id === 'string' &&
+      typeof item.product_id === 'string' &&
+      typeof item.product_name === 'string' &&
+      isNullableString(item.product_sku) &&
+      typeof item.movement_type === 'string' &&
+      isNumericValue(item.quantity_delta) &&
+      isNumericValue(item.reserved_delta) &&
+      typeof item.source_type === 'string' &&
+      isNullableString(item.reason) &&
+      isNullableString(item.actor_email) &&
+      typeof item.created_at === 'string'
+    );
+  });
+
+  const aggregates = data.aggregates as Record<string, unknown>;
+
+  return (
+    inventoryValid &&
+    movementsValid &&
+    isNumericValue(aggregates.received) &&
+    isNumericValue(aggregates.adjusted)
+  );
+}
 
 const sections: {
   id: InventorySection;
@@ -136,10 +224,15 @@ function MetricCard({
 export default function AdminInventory({
   storefrontFilter,
   accessToken,
+  userId,
 }: {
   storefrontFilter: StorefrontFilter;
   accessToken: string;
+  userId: string;
 }) {
+  const accessTokenRef = useRef(accessToken);
+  accessTokenRef.current = accessToken;
+
   const [section, setSection] = useState<InventorySection>('overview');
   const [stockSearch, setStockSearch] = useState('');
   const [stockAction, setStockAction] = useState<StockAction>(null);
@@ -165,6 +258,26 @@ export default function AdminInventory({
   const selectedProduct = inventory.find(
     (item) => item.product_id === selectedProductId
   );
+
+  function applyInventoryResponse(
+    data: InventoryResponse,
+    persistSnapshot = true
+  ) {
+    setInventory(data.inventory);
+    setMovements(data.movements);
+    setAggregates({
+      received: Number(data.aggregates.received) || 0,
+      adjusted: Number(data.aggregates.adjusted) || 0,
+    });
+
+    if (persistSnapshot && userId && storefrontFilter !== 'all') {
+      writeAdminSnapshot(
+        `${ADMIN_STORAGE_KEYS.inventoryCache}:${storefrontFilter}`,
+        userId,
+        data
+      );
+    }
+  }
 
   async function handleStockSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -260,21 +373,13 @@ export default function AdminInventory({
           );
         }
 
-        setInventory(
-          Array.isArray(refreshData.inventory) ? refreshData.inventory : []
-        );
-        setMovements(
-          Array.isArray(refreshData.movements) ? refreshData.movements : []
-        );
-        setAggregates({
-          received: Number(refreshData.aggregates?.received) || 0,
-          adjusted: Number(refreshData.aggregates?.adjusted) || 0,
-        });
+        if (!isInventoryResponse(refreshData)) {
+          throw new Error('The inventory response has an invalid format.');
+        }
+
+        applyInventoryResponse(refreshData);
         setLoadError('');
       } catch (refreshError) {
-        setInventory([]);
-        setMovements([]);
-        setAggregates({ received: 0, adjusted: 0 });
         setLoadError(
           `Stock was saved, but inventory could not be refreshed. Reload the page. ${
             refreshError instanceof Error
@@ -295,7 +400,7 @@ export default function AdminInventory({
   }
 
   useEffect(() => {
-    if (storefrontFilter === 'all' || !accessToken) {
+    if (storefrontFilter === 'all' || !userId) {
       setInventory([]);
       setMovements([]);
       setAggregates({ received: 0, adjusted: 0 });
@@ -304,23 +409,41 @@ export default function AdminInventory({
       return;
     }
 
-    const controller = new AbortController();
+    const storageKey =
+      `${ADMIN_STORAGE_KEYS.inventoryCache}:${storefrontFilter}`;
 
-    setInventory([]);
-    setMovements([]);
-    setAggregates({ received: 0, adjusted: 0 });
+    const cachedInventory = readAdminSnapshot(
+      storageKey,
+      userId,
+      isInventoryResponse
+    );
+
+    if (cachedInventory) {
+      applyInventoryResponse(cachedInventory, false);
+      setLoadError('');
+      setIsLoading(false);
+      return;
+    }
+
+    const token = accessTokenRef.current;
+
+    if (!token) {
+      setIsLoading(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    setIsLoading(true);
+    setLoadError('');
 
     async function loadInventory() {
-      setIsLoading(true);
-      setLoadError('');
-
       try {
         const response = await fetch(
           `/api/inventory?storefront=${encodeURIComponent(storefrontFilter)}`,
           {
             method: 'GET',
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${accessTokenRef.current}`,
               Accept: 'application/json',
             },
             signal: controller.signal,
@@ -333,18 +456,14 @@ export default function AdminInventory({
           throw new Error(data?.error || 'Unable to load inventory.');
         }
 
-        setInventory(Array.isArray(data.inventory) ? data.inventory : []);
-        setMovements(Array.isArray(data.movements) ? data.movements : []);
-        setAggregates({
-          received: Number(data.aggregates?.received) || 0,
-          adjusted: Number(data.aggregates?.adjusted) || 0,
-        });
+        if (!isInventoryResponse(data)) {
+          throw new Error('The inventory response has an invalid format.');
+        }
+
+        applyInventoryResponse(data);
       } catch (error) {
         if (error instanceof Error && error.name === 'AbortError') return;
 
-        setInventory([]);
-        setMovements([]);
-        setAggregates({ received: 0, adjusted: 0 });
         setLoadError(
           error instanceof Error
             ? error.message
@@ -360,7 +479,7 @@ export default function AdminInventory({
     void loadInventory();
 
     return () => controller.abort();
-  }, [storefrontFilter, accessToken]);
+  }, [storefrontFilter, userId, Boolean(accessToken)]);
 
   const filteredInventory = useMemo(() => {
     const search = stockSearch.trim().toLowerCase();

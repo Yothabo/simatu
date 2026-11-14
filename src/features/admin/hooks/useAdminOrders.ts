@@ -154,7 +154,6 @@ export function useAdminOrders(
       adminRef.current === true &&
       userIdRef.current === requestUserId;
 
-    setIsLoadingOrders(true);
     setOrdersLoadError(null);
 
     try {
@@ -265,12 +264,12 @@ export function useAdminOrders(
       setOrders(normalizeOrders(cachedOrders) as Order[]);
       setIsLoadingOrders(false);
       setHasLoadedOrders(true);
-    } else {
-      setOrders([]);
-      setIsLoadingOrders(true);
-      setHasLoadedOrders(false);
+      return;
     }
 
+    setOrders([]);
+    setIsLoadingOrders(true);
+    setHasLoadedOrders(false);
     void loadOrders();
   }, [isAdmin, userId, loadOrders]);
 

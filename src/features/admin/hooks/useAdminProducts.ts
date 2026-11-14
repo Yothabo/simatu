@@ -157,7 +157,6 @@ export function useAdminProducts(
       adminRef.current === true &&
       userIdRef.current === requestUserId;
 
-    setIsLoading(true);
     setProductsLoadError(null);
 
     try {
@@ -338,12 +337,12 @@ export function useAdminProducts(
       setProducts(normalizeAdminRows(cachedProducts) as AdminRow[]);
       setIsLoading(false);
       setHasLoadedProducts(true);
-    } else {
-      setProducts([]);
-      setIsLoading(true);
-      setHasLoadedProducts(false);
+      return;
     }
 
+    setProducts([]);
+    setIsLoading(true);
+    setHasLoadedProducts(false);
     void loadProducts();
   }, [isAdmin, userId, loadProducts]);
 

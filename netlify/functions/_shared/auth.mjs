@@ -48,6 +48,8 @@ export async function requireAdmin(
       apikey: supabaseKey,
       Authorization: `Bearer ${token}`,
     },
+    // A stalled Supabase Auth request must not hold a Netlify function open.
+    signal: AbortSignal.timeout(8_000),
   });
 
   if (!response.ok) return null;
