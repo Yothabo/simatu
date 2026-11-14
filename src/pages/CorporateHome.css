@@ -1,0 +1,844 @@
+.simatu-site {
+  --simatu-ink: #20211f;
+  --simatu-muted: #777970;
+  --simatu-paper: #f4f3ef;
+  --simatu-white: #fff;
+  --simatu-accent: #b69a70;
+  --simatu-line: rgba(32, 33, 31, 0.16);
+  width: 100%;
+  overflow: hidden;
+  background: var(--simatu-paper);
+  color: var(--simatu-ink);
+  font-family: var(--font-body, 'Manrope', sans-serif);
+}
+
+.simatu-site a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.simatu-header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  min-height: 94px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  padding: 16px clamp(22px, 6vw, 96px);
+  background: var(--simatu-paper);
+}
+
+.simatu-brand {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 11px;
+}
+
+.simatu-brand img {
+  width: 43px;
+  height: 53px;
+  object-fit: contain;
+}
+
+.simatu-brand span {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.simatu-brand strong {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.19em;
+}
+
+.simatu-brand small {
+  margin-top: 5px;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+}
+
+.simatu-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 3.4vw, 52px);
+}
+
+.simatu-nav a,
+.simatu-header-link {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.035em;
+}
+
+.simatu-nav a {
+  color: #62635d;
+  transition: color 180ms ease;
+}
+
+.simatu-nav a:hover {
+  color: var(--simatu-ink);
+}
+
+.simatu-header-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid var(--simatu-ink);
+  padding: 10px 0;
+}
+
+.simatu-header-link span,
+.simatu-brand-card-link span {
+  font-size: 17px;
+}
+
+.simatu-hero {
+  position: relative;
+  display: flex;
+  min-height: 660px;
+  align-items: center;
+  overflow: hidden;
+  padding: 100px clamp(22px, 10vw, 150px) 120px;
+  background: #222421;
+  color: #f8f7f2;
+}
+
+.simatu-hero-grid {
+  position: absolute;
+  inset: 0 0 0 48%;
+  opacity: 0.16;
+  background-image:
+    linear-gradient(rgba(255,255,255,.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.12) 1px, transparent 1px);
+  background-size: 76px 76px;
+  mask-image: linear-gradient(90deg, transparent, #000 35%);
+}
+
+.simatu-hero-grid::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(48vw, 570px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(182, 154, 112, 0.5);
+  border-radius: 50%;
+  content: '';
+  transform: translate(-50%, -50%);
+  box-shadow:
+    0 0 0 65px rgba(182, 154, 112, 0.035),
+    0 0 0 130px rgba(182, 154, 112, 0.025);
+}
+
+.simatu-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 850px;
+}
+
+.simatu-eyebrow,
+.simatu-kicker {
+  margin: 0;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+}
+
+.simatu-eyebrow {
+  color: #c6ad88;
+}
+
+.simatu-hero h1 {
+  margin: 30px 0 24px;
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: clamp(54px, 7.4vw, 104px);
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  line-height: 0.99;
+}
+
+.simatu-hero h1 span,
+.simatu-approach-heading h2 span,
+.simatu-businesses-heading h2 span,
+.simatu-outlook h2 span {
+  color: var(--simatu-accent);
+}
+
+.simatu-hero-description {
+  max-width: 550px;
+  margin: 0;
+  color: #c5c6bf;
+  font-size: 13px;
+  line-height: 1.95;
+}
+
+.simatu-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 30px;
+  margin-top: 36px;
+}
+
+.simatu-button {
+  display: inline-flex;
+  min-height: 49px;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  padding: 0 20px;
+  font-size: 10px;
+  font-weight: 800;
+  transition: transform 180ms ease, background 180ms ease;
+}
+
+.simatu-button:hover {
+  transform: translateY(-2px);
+}
+
+.simatu-button-light {
+  background: #f4f3ef;
+  color: #222421 !important;
+}
+
+.simatu-text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 13px;
+  color: #e2e1da !important;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.simatu-hero-aside {
+  position: absolute;
+  right: clamp(22px, 6vw, 90px);
+  bottom: 100px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #bfc0b9;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  writing-mode: vertical-rl;
+}
+
+.simatu-hero-aside-line {
+  width: 1px;
+  height: 55px;
+  background: var(--simatu-accent);
+}
+
+.simatu-hero-aside-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--simatu-accent);
+}
+
+.simatu-hero-index {
+  position: absolute;
+  right: clamp(22px, 6vw, 90px);
+  bottom: 28px;
+  left: clamp(22px, 10vw, 150px);
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255,255,255,.17);
+  padding-top: 13px;
+  color: #a9aaa3;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.simatu-intro,
+.simatu-businesses {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.7fr) 2fr;
+  gap: 40px;
+  padding: 125px clamp(22px, 10vw, 150px);
+}
+
+.simatu-section-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  color: #777970;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.simatu-section-label span:first-child {
+  color: var(--simatu-accent);
+}
+
+.simatu-intro-content {
+  max-width: 850px;
+}
+
+.simatu-kicker {
+  color: #9b815c;
+}
+
+.simatu-intro h2,
+.simatu-approach-heading h2,
+.simatu-businesses-heading h2,
+.simatu-outlook h2 {
+  margin: 22px 0 0;
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: clamp(43px, 5.4vw, 72px);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 1.04;
+}
+
+.simatu-intro h2 span {
+  color: #85867d;
+}
+
+.simatu-intro-bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  margin-top: 32px;
+}
+
+.simatu-intro-bottom > p {
+  max-width: 600px;
+  margin: 0;
+  color: #686a62;
+  font-size: 13px;
+  line-height: 2;
+}
+
+.simatu-intro-mark {
+  display: flex;
+  flex: 0 0 110px;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  color: #a28a67;
+}
+
+.simatu-intro-mark span {
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: 88px;
+  line-height: 0.9;
+}
+
+.simatu-intro-mark small {
+  font-size: 6px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+.simatu-approach {
+  padding: 110px clamp(22px, 10vw, 150px) 120px;
+  background: #292b27;
+  color: #f5f4ef;
+}
+
+.simatu-section-label-light {
+  color: #b9bab2;
+}
+
+.simatu-approach-heading {
+  max-width: 800px;
+  margin: 80px auto 70px;
+  text-align: center;
+}
+
+.simatu-approach-heading .simatu-kicker {
+  color: #c4a77d;
+}
+
+.simatu-approach-heading h2 {
+  margin-top: 20px;
+}
+
+.simatu-approach-heading > p:last-child {
+  max-width: 490px;
+  margin: 22px auto 0;
+  color: #c0c1ba;
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.simatu-principles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid rgba(255,255,255,.2);
+}
+
+.simatu-principle {
+  position: relative;
+  display: flex;
+  min-height: 210px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 25px;
+  border-right: 1px solid rgba(255,255,255,.15);
+  padding: 25px 30px 10px 0;
+}
+
+.simatu-principle + .simatu-principle {
+  padding-left: 30px;
+}
+
+.simatu-principle:last-child {
+  border-right: 0;
+}
+
+.simatu-principle-number {
+  color: #c4a77d;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+}
+
+.simatu-principle h3 {
+  margin: 0 0 12px;
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: 28px;
+  font-weight: 500;
+}
+
+.simatu-principle p {
+  max-width: 290px;
+  margin: 0;
+  color: #bfc0b8;
+  font-size: 11px;
+  line-height: 1.9;
+}
+
+.simatu-principle-arrow {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  color: #c4a77d;
+  font-size: 16px;
+}
+
+.simatu-businesses {
+  padding-top: 125px;
+  padding-bottom: 115px;
+}
+
+.simatu-businesses-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 35px;
+  grid-column: 2;
+  margin-bottom: 45px;
+}
+
+.simatu-businesses-heading h2 {
+  font-size: clamp(43px, 5vw, 66px);
+}
+
+.simatu-businesses-heading > p {
+  max-width: 310px;
+  margin: 0 0 7px;
+  color: #777970;
+  font-size: 11px;
+  line-height: 1.9;
+}
+
+.simatu-brand-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  grid-column: 2;
+}
+
+.simatu-brand-card {
+  display: flex;
+  min-height: 340px;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 25px 28px;
+  background: #e8e6df;
+}
+
+.simatu-brand-poshies {
+  background: #deded8;
+}
+
+.simatu-brand-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: #777970;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.simatu-brand-card-main {
+  max-width: 340px;
+  padding: 32px 0;
+}
+
+.simatu-brand-overline {
+  margin: 0 0 8px;
+  color: #8a795f;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+}
+
+.simatu-brand-card h3 {
+  margin: 0;
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: clamp(45px, 5vw, 66px);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+.simatu-brand-card h3 span {
+  color: #a58b65;
+}
+
+.simatu-brand-card-main > p:last-child {
+  max-width: 300px;
+  margin: 15px 0 0;
+  color: #696b64;
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.simatu-brand-card-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(32,33,31,.2);
+  padding-top: 15px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.simatu-portfolio-note {
+  grid-column: 2;
+  margin: 22px 0 0;
+  color: #777970;
+  font-size: 10px;
+}
+
+.simatu-outlook {
+  position: relative;
+  display: flex;
+  min-height: 480px;
+  align-items: center;
+  overflow: hidden;
+  padding: 90px clamp(22px, 10vw, 150px);
+  background: #e6e2d9;
+}
+
+.simatu-outlook-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+}
+
+.simatu-outlook h2 {
+  font-size: clamp(55px, 7vw, 86px);
+}
+
+.simatu-outlook-inner > p:not(.simatu-kicker) {
+  max-width: 480px;
+  margin: 25px 0 28px;
+  color: #696b64;
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.simatu-button-dark {
+  background: #252723;
+  color: #fff !important;
+}
+
+.simatu-outlook-decoration {
+  position: absolute;
+  top: 50%;
+  right: -80px;
+  width: min(46vw, 570px);
+  aspect-ratio: 1;
+  transform: translateY(-50%);
+}
+
+.simatu-outlook-decoration span {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(144, 119, 82, .28);
+  border-radius: 50%;
+}
+
+.simatu-outlook-decoration span:nth-child(2) {
+  inset: 13%;
+}
+
+.simatu-outlook-decoration span:nth-child(3) {
+  inset: 26%;
+}
+
+.simatu-footer {
+  padding: 65px clamp(22px, 6vw, 96px) 25px;
+  background: #222421;
+  color: #f5f4ef;
+}
+
+.simatu-footer-main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 30px;
+  padding-bottom: 55px;
+}
+
+.simatu-footer-brand img {
+  width: 47px;
+  height: 58px;
+}
+
+.simatu-footer-main > p {
+  margin: 0;
+  color: #c3c3bb;
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: 25px;
+  line-height: 1.3;
+  text-align: right;
+}
+
+.simatu-footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-top: 1px solid rgba(255,255,255,.18);
+  padding-top: 20px;
+  color: #aeb0a8;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.simatu-footer-bottom > div {
+  display: flex;
+  gap: 22px;
+}
+
+.simatu-footer-bottom a {
+  color: #f5f4ef;
+}
+
+@media (max-width: 760px) {
+  .simatu-header {
+    min-height: 76px;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 12px 20px;
+  }
+
+  .simatu-brand img {
+    width: 35px;
+    height: 43px;
+  }
+
+  .simatu-brand strong {
+    font-size: 15px;
+  }
+
+  .simatu-nav {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+    gap: 12px;
+    border-top: 1px solid var(--simatu-line);
+    padding-top: 12px;
+  }
+
+  .simatu-nav a {
+    font-size: 9px;
+  }
+
+  .simatu-header-link {
+    gap: 7px;
+    font-size: 9px;
+  }
+
+  .simatu-hero {
+    min-height: 610px;
+    padding: 95px 24px 110px;
+  }
+
+  .simatu-hero h1 {
+    font-size: clamp(48px, 12vw, 76px);
+  }
+
+  .simatu-hero-description {
+    max-width: 440px;
+    font-size: 12px;
+  }
+
+  .simatu-hero-grid {
+    inset-left: 15%;
+    opacity: 0.1;
+  }
+
+  .simatu-hero-aside {
+    display: none;
+  }
+
+  .simatu-hero-index {
+    right: 24px;
+    left: 24px;
+  }
+
+  .simatu-intro,
+  .simatu-businesses {
+    display: block;
+    padding: 85px 24px;
+  }
+
+  .simatu-section-label {
+    margin-bottom: 50px;
+  }
+
+  .simatu-intro h2,
+  .simatu-approach-heading h2,
+  .simatu-businesses-heading h2 {
+    font-size: clamp(42px, 10vw, 62px);
+  }
+
+  .simatu-intro-bottom {
+    align-items: flex-start;
+  }
+
+  .simatu-intro-mark {
+    display: none;
+  }
+
+  .simatu-approach {
+    padding: 85px 24px;
+  }
+
+  .simatu-approach-heading {
+    margin: 65px auto 50px;
+    text-align: left;
+  }
+
+  .simatu-approach-heading > p:last-child {
+    margin-left: 0;
+  }
+
+  .simatu-principles {
+    grid-template-columns: 1fr;
+  }
+
+  .simatu-principle,
+  .simatu-principle + .simatu-principle {
+    min-height: 175px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,.15);
+    padding: 22px 35px 22px 0;
+  }
+
+  .simatu-principle:last-child {
+    border-bottom: 0;
+  }
+
+  .simatu-businesses-heading {
+    display: block;
+    margin-bottom: 35px;
+  }
+
+  .simatu-businesses-heading > p {
+    margin-top: 22px;
+  }
+
+  .simatu-brand-grid {
+    grid-template-columns: 1fr;
+    gap: 13px;
+  }
+
+  .simatu-brand-card {
+    min-height: 310px;
+    padding: 22px;
+  }
+
+  .simatu-portfolio-note {
+    margin-top: 18px;
+    line-height: 1.7;
+  }
+
+  .simatu-outlook {
+    min-height: 460px;
+    padding: 80px 24px;
+  }
+
+  .simatu-outlook-decoration {
+    right: -190px;
+    width: 420px;
+    opacity: 0.6;
+  }
+
+  .simatu-footer {
+    padding: 50px 24px 22px;
+  }
+
+  .simatu-footer-main {
+    padding-bottom: 40px;
+  }
+
+  .simatu-footer-main > p {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 420px) {
+  .simatu-header-link {
+    font-size: 8px;
+  }
+
+  .simatu-hero {
+    min-height: 580px;
+  }
+
+  .simatu-hero h1 {
+    font-size: 46px;
+  }
+
+  .simatu-hero-actions {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .simatu-intro-bottom > p {
+    font-size: 12px;
+  }
+
+  .simatu-footer-bottom {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .simatu-site *,
+  .simatu-site *::before,
+  .simatu-site *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

@@ -22,6 +22,7 @@ import OrderDetailsModal from '../components/OrderDetailsModal';
 import AdminProductDetailsModal from '../components/AdminProductDetailsModal';
 
 import AdminLoginScreen from '../features/admin/components/AdminLoginScreen';
+import { Block } from '../features/admin/components/skeleton/SkeletonBlock';
 import AdminTopBar from '../features/admin/components/AdminTopBar';
 import AdminBottomNavigation from '../features/admin/components/AdminBottomNavigation';
 import AdminOverview from '../features/admin/components/overview';
@@ -90,8 +91,6 @@ export default function Admin() {
   // Login form state
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loginTransitionPending, setLoginTransitionPending] = useState(false);
-  const [showLoginTransition, setShowLoginTransition] = useState(false);
 
   // Product form state
   const formUserId =
@@ -247,40 +246,8 @@ export default function Admin() {
   // Login
   async function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setLoginTransitionPending(true);
-
-    const accepted = await login(email, password);
-
-    if (!accepted) {
-      setLoginTransitionPending(false);
-    }
+    await login(email, password);
   }
-
-  useEffect(() => {
-    if (!loginTransitionPending || !session || isChecking) return;
-
-    if (isAdmin === false) {
-      setLoginTransitionPending(false);
-      return;
-    }
-
-    if (
-      isAdmin === true &&
-      hasLoadedProducts &&
-      hasLoadedOrders &&
-      !isLoadingOrders
-    ) {
-      setShowLoginTransition(true);
-    }
-  }, [
-    loginTransitionPending,
-    session,
-    isChecking,
-    isAdmin,
-    hasLoadedProducts,
-    hasLoadedOrders,
-    isLoadingOrders,
-  ]);
 
   // Product actions
   async function handleHideProduct(product: AdminRow) {
@@ -467,34 +434,56 @@ export default function Admin() {
     [storefrontOrders],
   );
 
-  if (
-    !session ||
-    isChecking ||
-    isAdmin === null ||
-    (isAdmin && (!hasLoadedProducts || !hasLoadedOrders)) ||
-    loginTransitionPending
-  ) {
+  if (isChecking || (Boolean(session) && isAdmin === null)) {
+    return (
+      <main
+        className="min-h-screen bg-white px-4 py-6"
+        aria-busy="true"
+        aria-label="Verifying admin access"
+      >
+        <div className="mx-auto w-full max-w-6xl animate-pulse space-y-6">
+          <div className="flex items-center justify-between">
+            <Block height="2rem" width="8rem" />
+            <Block height="2.5rem" width="2.5rem" radius="9999px" />
+          </div>
+
+          <div className="space-y-2">
+            <Block height="1.75rem" width="12rem" />
+            <Block height="1rem" width="18rem" />
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {Array.from({ length: 4 }, (_, index) => (
+              <div key={index} className="space-y-3 rounded-xl border border-[#e5e5e5] p-4">
+                <Block height="0.875rem" width="5rem" />
+                <Block height="2rem" width="7rem" />
+                <Block height="0.75rem" width="9rem" />
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-3 rounded-xl border border-[#e5e5e5] p-4">
+            <Block height="1.25rem" width="10rem" />
+            <Block height="3rem" />
+            <Block height="3rem" />
+            <Block height="3rem" />
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (!session) {
     return (
       <AdminLoginScreen
         email={email}
         password={password}
         loginError={loginError}
         isLoggingIn={isLoggingIn}
-        isResolving={
-          Boolean(session) &&
-          (isChecking ||
-            isAdmin === null ||
-            !hasLoadedProducts ||
-            !hasLoadedOrders)
-        }
-        showAuthIndicator={
-          Boolean(session) && !isChecking && isAdmin === true && !showLoginTransition
-        }
-        isTransitioning={showLoginTransition}
-        onTransitionComplete={() => {
-          setShowLoginTransition(false);
-          setLoginTransitionPending(false);
-        }}
+        isResolving={false}
+        showAuthIndicator={false}
+        isTransitioning={false}
+        onTransitionComplete={() => {}}
         onEmailChange={setEmail}
         onPasswordChange={setPassword}
         onLogin={handleLogin}

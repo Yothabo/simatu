@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom';
 import useStorefront from '../hooks/useStorefront';
 
 interface MetaTagsProps {
@@ -13,24 +14,40 @@ export default function MetaTags({
   image,
   url = typeof window !== 'undefined' ? window.location.href : '/',
 }: MetaTagsProps) {
+  const { pathname } = useLocation();
   const { name: storeName } = useStorefront();
+  const isCorporate = pathname === '/';
   const isYotaabo = storeName === 'Yotaabo';
 
+  const corporateTitle = 'Simatu Cooperative | A Multi-Brand Commerce Group';
+  const corporateDescription =
+    'Simatu Cooperative develops and operates retail brands through distinct businesses, shared infrastructure and a connected approach to commerce.';
+
   const pageTitle =
-    title ?? (isYotaabo
-      ? `${storeName} | Fragrance, With Intention`
-      : `${storeName} | Comfort, Confidence, Your Way`);
+    title ??
+    (isCorporate
+      ? corporateTitle
+      : isYotaabo
+        ? `${storeName} | Fragrance, With Intention`
+        : `${storeName} | Comfort, Confidence, Your Way`);
 
   const pageDescription =
-    description ?? (isYotaabo
-      ? 'Discover fragrances that match your mood, define your style, and leave a lasting impression.'
-      : 'Discover intimate wear, everyday underwear and comfortable sleepwear at Poshies.');
+    description ??
+    (isCorporate
+      ? corporateDescription
+      : isYotaabo
+        ? 'Discover fragrances that match your mood, define your style, and leave a lasting impression.'
+        : 'Discover intimate wear, everyday underwear and comfortable sleepwear at Poshies.');
 
-  const pageImage = image ?? (isYotaabo ? '/images/hisimage.webp' : undefined);
+  const pageImage = image ?? (isCorporate ? '/simatu.png' : isYotaabo ? '/images/hisimage.webp' : undefined);
 
-  const keywords = isYotaabo
-    ? 'fragrances, perfume, signature scent, fragrance collection, South Africa'
-    : 'intimate wear, underwear, lingerie, sleepwear, pyjamas, lounge wear, South Africa';
+  const keywords = isCorporate
+    ? 'Simatu Cooperative, multi-brand commerce group, retail businesses, South Africa'
+    : isYotaabo
+      ? 'fragrances, perfume, signature scent, fragrance collection, South Africa'
+      : 'intimate wear, underwear, lingerie, sleepwear, pyjamas, lounge wear, South Africa';
+
+  const siteName = isCorporate ? 'Simatu Cooperative' : storeName;
 
   return (
     <>
@@ -42,7 +59,7 @@ export default function MetaTags({
       <meta property="og:title" content={pageTitle} />
       <meta property="og:description" content={pageDescription} />
       {pageImage && <meta property="og:image" content={pageImage} />}
-      <meta property="og:site_name" content={storeName} />
+      <meta property="og:site_name" content={siteName} />
       <meta name="twitter:card" content={pageImage ? 'summary_large_image' : 'summary'} />
       <meta name="twitter:url" content={url} />
       <meta name="twitter:title" content={pageTitle} />

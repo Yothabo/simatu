@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { useTouchSelection } from './utils/useTouchSelection';
 import { CartProvider } from './context/CartContext';
@@ -6,6 +6,7 @@ import useStorefront from './hooks/useStorefront';
 import MetaTags from './components/MetaTags';
 import ScrollToHash from './components/ScrollToHash';
 import Home from './pages/Home';
+import CorporateHome from './pages/CorporateHome';
 import About from './pages/About';
 import ServicesPage from './pages/ServicesPage';
 import NotFound from './pages/NotFound';
@@ -42,21 +43,6 @@ function AppToaster() {
   );
 }
 
-function LegacyPoshiesRedirect() {
-  const location = useLocation();
-  const pathname = location.pathname.replace(/^\/porschs(?=\/|$)/, '/poshies');
-
-  return (
-    <Navigate
-      to={{
-        pathname,
-        search: location.search,
-        hash: location.hash,
-      }}
-      replace
-    />
-  );
-}
 
 export default function App() {
   useTouchSelection();
@@ -66,8 +52,8 @@ export default function App() {
         <ScrollToHash />
         <MetaTags />
         <Routes>
-          {/* Temporary redirect until the store-selection landing page is built. */}
-          <Route path="/" element={<Navigate to="/yotaabo" replace />} />
+          {/* Simatu Cooperative corporate homepage */}
+          <Route path="/" element={<CorporateHome />} />
 
           {/* Yotaabo storefront */}
           <Route path="/yotaabo" element={<Home />} />
@@ -84,10 +70,6 @@ export default function App() {
           <Route path="/poshies/catalog" element={<ViewCatalog />} />
           <Route path="/poshies/cart" element={<CartPage />} />
           <Route path="/poshies/*" element={<NotFound />} />
-
-          {/* Legacy Poshies URLs */}
-          <Route path="/porschs" element={<LegacyPoshiesRedirect />} />
-          <Route path="/porschs/*" element={<LegacyPoshiesRedirect />} />
 
           {/* Shared operational routes */}
           <Route path="/admin" element={<Admin />} />

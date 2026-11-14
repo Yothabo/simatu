@@ -7,24 +7,51 @@ if (!supabaseUrl || !supabaseKey) {
   throw new Error('Missing Supabase environment variables. Check your .env file.');
 }
 
-// Custom storage adapter that respects the "Remember me" preference
+// Persist administrator authentication across application restarts.
+// Migrate an existing session from sessionStorage when available.
 const customStorage = {
   getItem: (key: string) => {
-    // If "remember me" was NOT checked, don't persist — return from sessionStorage or null
-    const remembered = localStorage.getItem('yotaabo-remember-me') === 'true';
-    return remembered ? localStorage.getItem(key) : sessionStorage.getItem(key);
+    try {
+      const persistentValue = localStorage.getItem(key);
+
+      if (persistentValue) {
+        return persistentValue;
+      }
+
+      const temporaryValue = sessionStorage.getItem(key);
+
+      if (temporaryValue) {
+        localStorage.setItem(key, temporaryValue);
+        sessionStorage.removeItem(key);
+      }
+
+      return temporaryValue;
+    } catch {
+      return sessionStorage.getItem(key);
+    }
   },
+
   setItem: (key: string, value: string) => {
-    const remembered = localStorage.getItem('yotaabo-remember-me') === 'true';
-    if (remembered) {
+    try {
       localStorage.setItem(key, value);
-    } else {
+      sessionStorage.removeItem(key);
+    } catch {
       sessionStorage.setItem(key, value);
     }
   },
+
   removeItem: (key: string) => {
-    localStorage.removeItem(key);
-    sessionStorage.removeItem(key);
+    try {
+      localStorage.removeItem(key);
+    } catch {
+      // Continue with session storage cleanup.
+    }
+
+    try {
+      sessionStorage.removeItem(key);
+    } catch {
+      // Storage may be unavailable.
+    }
   },
 };
 
