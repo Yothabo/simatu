@@ -21,10 +21,15 @@ export type AdminProduct = {
   sort_order: number;
 };
 
+export type SavedAdminProduct = AdminProduct & {
+  id: string;
+  created_at: string;
+};
+
 type AdminProductFormProps = {
   isOpen: boolean;
   onClose: () => void;
-  onSaved: () => void;
+  onSaved: (product: SavedAdminProduct) => void;
   productToEdit?: AdminProduct | null;
   adminRole?: 'super_admin' | 'store_admin' | null;
   storeSlug?: 'yotaabo' | 'poshies' | null;
@@ -81,6 +86,23 @@ const emptyProduct: AdminProduct = {
   sort_order: 0,
 };
 
+const normalizeSupplierCost = (value: unknown): number | null => {
+  if (value == null || (typeof value === 'string' && value.trim() === '')) {
+    return null;
+  }
+
+  if (typeof value === 'number') {
+    return value;
+  }
+
+  if (typeof value === 'string') {
+    const parsed = Number(value.trim());
+    return Number.isFinite(parsed) ? parsed : Number.NaN;
+  }
+
+  return Number.NaN;
+};
+
 export default function AdminProductForm({
   isOpen,
   onClose,
@@ -127,6 +149,7 @@ export default function AdminProductForm({
         setForm({
           ...emptyProduct,
           ...saved.form,
+          supplier_cost: normalizeSupplierCost(saved.form.supplier_cost),
           storefront: adminRole === 'store_admin' && storeSlug ? storeSlug : saved.form.storefront === 'poshies' ? 'poshies' : 'yotaabo',
         });
         setStatusValue(saved.statusValue ?? '');
@@ -135,6 +158,7 @@ export default function AdminProductForm({
           ? {
               ...emptyProduct,
               ...productToEdit,
+              supplier_cost: normalizeSupplierCost(productToEdit.supplier_cost),
               storefront: adminRole === 'store_admin' && storeSlug ? storeSlug : productToEdit.storefront === 'poshies' ? 'poshies' : 'yotaabo',
             }
           : {
@@ -152,6 +176,7 @@ export default function AdminProductForm({
         ? {
             ...emptyProduct,
             ...productToEdit,
+            supplier_cost: normalizeSupplierCost(productToEdit.supplier_cost),
             storefront: adminRole === 'store_admin' && storeSlug ? storeSlug : productToEdit.storefront === 'poshies' ? 'poshies' : 'yotaabo',
           }
         : {
@@ -503,6 +528,10 @@ export default function AdminProductForm({
     if (!form.subcategory_id) return toast.error('Select a valid subcategory');
 
     setIsSaving(true);
+
+    const requestId = crypto.randomUUID();
+    const startedAt = Date.now();
+
     const payload = {
       storefront: form.storefront,
       name: form.name.trim(),
@@ -531,6 +560,7 @@ export default function AdminProductForm({
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${session.access_token}`,
+          'x-request-id': requestId,
         },
         body: JSON.stringify({
           ...payload,
@@ -539,7 +569,7 @@ export default function AdminProductForm({
       });
 
       const responseText = await response.text();
-      let data: { error?: string; product?: AdminProduct } = {};
+      let data: { error?: string; product?: SavedAdminProduct } = {};
 
       if (responseText.trim()) {
         try {
@@ -553,9 +583,42 @@ export default function AdminProductForm({
         throw new Error(data.error || 'Unable to save the product.');
       }
 
-      if (!data.product) {
-        throw new Error('The server did not confirm the saved product.');
+      if (
+        !data.product ||
+        typeof data.product.id !== 'string' ||
+        !data.product.id ||
+        typeof data.product.created_at !== 'string' ||
+        !data.product.created_at
+      ) {
+        throw new Error('The server response did not contain a confirmed saved product.');
       }
+
+      const savedProduct = data.product;
+
+      console.info('[admin-products] save confirmed', {
+        requestId,
+        operation: productToEdit?.id ? 'update' : 'create',
+        productId: savedProduct.id,
+        storefront: savedProduct.storefront,
+        status: response.status,
+        serverRequestId: response.headers.get('x-request-id'),
+        totalDurationMs: Date.now() - startedAt,
+      });
+
+      try {
+        onSaved(savedProduct);
+      } catch (reconcileError) {
+        console.error('[admin-products] saved product reconciliation failed', {
+          requestId,
+          productId: savedProduct.id,
+          error: reconcileError,
+        });
+
+        toast.error('Product saved, but the product list could not be updated immediately.');
+      }
+
+      toast.success(productToEdit ? 'Product updated' : 'Product added');
+      handleClose();
 
       if (
         productToEdit?.image_url &&
@@ -564,21 +627,45 @@ export default function AdminProductForm({
         const oldImagePath = getProductStoragePath(productToEdit.image_url);
 
         if (oldImagePath) {
-          const { error: deleteError } = await supabase.storage
+          void supabase.storage
             .from('products')
-            .remove([oldImagePath]);
+            .remove([oldImagePath])
+            .then(({ error: deleteError }) => {
+              if (deleteError) {
+                console.error('[admin-products] previous image cleanup failed', {
+                  requestId,
+                  productId: savedProduct.id,
+                  error: deleteError,
+                });
 
-          if (deleteError) {
-            console.error('Previous product image could not be deleted:', deleteError);
-            toast.error('Product saved, but the previous image could not be deleted.');
-          }
+                toast.error('Product saved, but the previous image could not be deleted.');
+                return;
+              }
+
+              console.info('[admin-products] previous image cleanup completed', {
+                requestId,
+                productId: savedProduct.id,
+              });
+            })
+            .catch((deleteError) => {
+              console.error('[admin-products] previous image cleanup failed', {
+                requestId,
+                productId: savedProduct.id,
+                error: deleteError,
+              });
+
+              toast.error('Product saved, but the previous image could not be deleted.');
+            });
         }
       }
-
-      toast.success(productToEdit ? 'Product updated' : 'Product added');
-      onSaved();
-      handleClose();
     } catch (error) {
+      console.error('[admin-products] save request failed', {
+        requestId,
+        operation: productToEdit?.id ? 'update' : 'create',
+        totalDurationMs: Date.now() - startedAt,
+        error,
+      });
+
       toast.error(
         error instanceof Error ? error.message : 'Unable to save the product.'
       );

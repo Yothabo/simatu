@@ -10,11 +10,14 @@ const pool = new Pool({
   connectionTimeoutMillis: 10000,
 });
 
-function json(data, status = 200) {
-  return Response.json(data, { status });
+function json(data, status = 200, headers = {}) {
+  return Response.json(data, { status, headers });
 }
 
-async function saveProduct(body, isUpdate, admin) {
+async function saveProduct(body, isUpdate, admin, requestId) {
+  const operation = isUpdate ? 'update' : 'create';
+  const dbStartedAt = Date.now();
+
   if (isUpdate) {
     const id = String(body?.id || '');
     if (!uuidPattern.test(id)) {
@@ -39,10 +42,12 @@ async function saveProduct(body, isUpdate, admin) {
     return json({ error: 'A storefront is required for a new product.' }, 400);
   }
 
-  const client = await pool.connect();
+  let client;
   let result;
 
   try {
+    client = await pool.connect();
+
     await client.query('BEGIN');
     await client.query(
       "SELECT set_config('app.actor_email', $1, true)",
@@ -193,7 +198,7 @@ async function saveProduct(body, isUpdate, admin) {
          RETURNING id, name, price, supplier_cost, sku,
                    category, subcategory, description, image_url,
                    is_active, sort_order, storefront, store_id,
-                   category_id, subcategory_id`,
+                   category_id, subcategory_id, created_at`,
         [
           ...values,
           body.id,
@@ -210,7 +215,7 @@ async function saveProduct(body, isUpdate, admin) {
          RETURNING id, name, price, supplier_cost, sku,
                    category, subcategory, description, image_url,
                    is_active, sort_order, storefront, store_id,
-                   category_id, subcategory_id`,
+                   category_id, subcategory_id, created_at`,
         values
       );
     }
@@ -221,14 +226,37 @@ async function saveProduct(body, isUpdate, admin) {
     }
 
     await client.query('COMMIT');
+
+    console.info('[products] save committed', JSON.stringify({
+      requestId,
+      operation,
+      productId: result.rows[0].id,
+      storefront: result.rows[0].storefront,
+      dbDurationMs: Date.now() - dbStartedAt,
+    }));
   } catch (error) {
-    await client.query('ROLLBACK');
+    if (client) {
+      await client.query('ROLLBACK').catch(() => {});
+    }
+
+    console.error('[products] save failed', JSON.stringify({
+      requestId,
+      operation,
+      dbDurationMs: Date.now() - dbStartedAt,
+      errorCode: error?.code || null,
+      errorMessage: error?.message || 'Unknown database error',
+    }));
+
     throw error;
   } finally {
-    client.release();
+    client?.release();
   }
 
-  return json({ product: result.rows[0] }, isUpdate ? 200 : 201);
+  return json(
+    { product: result.rows[0] },
+    isUpdate ? 200 : 201,
+    { 'x-request-id': requestId }
+  );
 }
 
 async function listProducts(request) {
@@ -390,6 +418,10 @@ async function deleteProduct(body, admin) {
 }
 
 export default async (request) => {
+  const requestId =
+    request.headers.get('x-request-id') || globalThis.crypto.randomUUID();
+  const requestStartedAt = Date.now();
+
   try {
     if (request.method === 'GET') {
       return await listProducts(request);
@@ -419,7 +451,21 @@ export default async (request) => {
       return await updateProductStatus(body, admin);
     }
 
-    return await saveProduct(body, request.method === 'PATCH', admin);
+    const response = await saveProduct(
+      body,
+      request.method === 'PATCH',
+      admin,
+      requestId
+    );
+
+    console.info('[products] request completed', JSON.stringify({
+      requestId,
+      method: request.method,
+      status: response.status,
+      totalDurationMs: Date.now() - requestStartedAt,
+    }));
+
+    return response;
   } catch (error) {
     if (
       error?.code === '23505' &&
@@ -428,10 +474,22 @@ export default async (request) => {
       return json(
         { error: 'This SKU is already assigned to another product in this store.' },
         409,
+        { 'x-request-id': requestId }
       );
     }
 
-    console.error('Products function error:', error);
-    return json({ error: 'Unable to process the product request right now.' }, 500);
+    console.error('[products] request failed', JSON.stringify({
+      requestId,
+      method: request.method,
+      totalDurationMs: Date.now() - requestStartedAt,
+      errorCode: error?.code || null,
+      errorMessage: error?.message || 'Unknown error',
+    }));
+
+    return json(
+      { error: 'Unable to process the product request right now.' },
+      500,
+      { 'x-request-id': requestId }
+    );
   }
 };

@@ -7,6 +7,7 @@ import {
   FiRefreshCw,
 } from 'react-icons/fi';
 import type { AdminRow, Order, Storefront } from '../../types/admin.types';
+import type { AdminActivity } from '../../hooks/useAdminActivity';
 import type { OverviewDateSelection } from '../../types/overview.types';
 import { calculateOverviewAnalytics } from '../../analytics/overview/overviewCalculations';
 import { getOverviewDateKey, getOverviewDateRange } from '../../utils/overview/dateRanges';
@@ -23,10 +24,12 @@ import SalesPerformance from './sections/SalesPerformance';
 import OrderOperations from './sections/OrderOperations';
 import ProductPerformance from './sections/ProductPerformance';
 import StoreComparison from './sections/StoreComparison';
+import RecentActivity from './sections/RecentActivity';
 import './overview.css';
 
 type Props = {
   userId: string;
+  userName: string;
   searchQuery: string;
   onSearchChange: (value: string) => void;
   onSearchFocus: () => void;
@@ -42,7 +45,26 @@ type Props = {
   productsLoadError: string | null;
   isLoadingOrders: boolean;
   isLoadingProducts: boolean;
+  activities: AdminActivity[];
+  isLoadingActivities: boolean;
+  onViewAllActivities: () => void;
 };
+
+function getFirstName(userName: string): string {
+  const firstName = userName.trim().split(/[\\s._-]+/)[0];
+
+  if (!firstName) return 'Admin';
+
+  return firstName.charAt(0).toUpperCase() + firstName.slice(1);
+}
+
+function getTimeBasedGreeting(): string {
+  const hour = new Date().getHours();
+
+  if (hour < 12) return 'Good morning';
+  if (hour < 18) return 'Good afternoon';
+  return 'Good evening';
+}
 
 function getSelectionLabel(selection: OverviewDateSelection): string {
   if (selection.type === 'preset') {
@@ -156,6 +178,7 @@ function downloadOverviewReport(
 
 export default function AdminOverview({
   userId,
+  userName,
   searchQuery,
   onSearchChange,
   onSearchFocus,
@@ -171,6 +194,9 @@ export default function AdminOverview({
   productsLoadError,
   isLoadingOrders,
   isLoadingProducts,
+  activities,
+  isLoadingActivities,
+  onViewAllActivities,
 }: Props) {
   const [dateRange, setDateRange] = useState<OverviewDateSelection>(
     () => readOverviewDateSelection(userId)
@@ -225,18 +251,14 @@ const analytics = useMemo(
       style={{ gap: 'var(--admin-space-xl)' }}
     >
       <header className="flex flex-col gap-4">
-        <div className="flex flex-col justify-between gap-4 xl:flex-row xl:items-start">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wider overview-text-muted">
-              Dashboard
-            </p>
-            <h1 className="text-2xl font-semibold overview-text-primary">
-              Overview
-            </h1>
-            <p className="mt-1 text-sm overview-text-secondary">
-              Business activity and performance for the selected store.
-            </p>
-          </div>
+        <div className="w-full">
+          <h2 className="text-2xl font-semibold leading-tight tracking-tight overview-text-primary sm:text-3xl">
+            {getTimeBasedGreeting()}, {getFirstName(userName)}
+          </h2>
+          <p className="mt-2 text-sm overview-text-secondary">
+            Here's your business overview for today.
+          </p>
+        </div>
 
           <div className="flex w-full items-center gap-2">
             {canSwitchStore && (
@@ -298,7 +320,6 @@ const analytics = useMemo(
               <span className="hidden sm:inline">Filter</span>
             </button>
           </div>
-        </div>
 
         <div className="flex w-full items-center gap-2">
           <input
@@ -531,6 +552,11 @@ const analytics = useMemo(
       <OrderOperations data={analytics.orderOperations} />
       <ProductPerformance data={analytics.productPerformance} />
       <StoreComparison data={analytics.storeComparison} />
+      <RecentActivity
+        activities={activities}
+        isLoading={isLoadingActivities}
+        onViewAll={onViewAllActivities}
+      />
     </section>
   );
 }

@@ -16,7 +16,6 @@ import '../design-system/styles/admin-theme.css';
 import AdminProductForm, {
   type AdminProduct,
 } from '../components/AdminProductForm';
-import { invalidateProductsCache } from '../hooks/useProducts';
 import ConfirmModal from '../components/ConfirmModal';
 import OrderDetailsModal from '../components/OrderDetailsModal';
 import AdminProductDetailsModal from '../components/AdminProductDetailsModal';
@@ -69,6 +68,7 @@ export default function Admin() {
     productsLoadError,
     isLoading: isLoadingProducts,
     loadProducts,
+    upsertProduct,
     hideProduct,
     reactivateProduct,
     deleteProduct,
@@ -632,6 +632,13 @@ export default function Admin() {
           <AdminOverview
             key={session?.user.id ?? 'admin-overview'}
             userId={session?.user.id ?? ''}
+            userName={
+              session?.user.user_metadata?.first_name ??
+              session?.user.user_metadata?.full_name ??
+              session?.user.user_metadata?.name ??
+              session?.user.email?.split('@')[0] ??
+              'Admin'
+            }
             searchQuery={searchQuery}
             onSearchChange={(value) => {
               setSearchQuery(value);
@@ -660,6 +667,12 @@ export default function Admin() {
             productsLoadError={productsLoadError}
             isLoadingOrders={isLoadingOrders}
             isLoadingProducts={isLoadingProducts}
+            activities={activities}
+            isLoadingActivities={isLoadingActivities}
+            onViewAllActivities={() => {
+              setActiveTab('activities');
+              void loadActivities();
+            }}
           />
         )}
 
@@ -769,11 +782,7 @@ export default function Admin() {
           setFormOpen(false);
           setEditing(null);
         }}
-        onSaved={() => {
-          invalidateProductsCache();
-          void loadProducts();
-          void loadActivities();
-        }}
+        onSaved={upsertProduct}
         productToEdit={editing}
         adminRole={admin?.role ?? null}
         storeSlug={

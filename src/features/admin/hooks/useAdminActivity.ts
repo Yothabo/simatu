@@ -15,7 +15,7 @@ import {
 export type AdminActivity = {
   id: string;
   event_type: string;
-  entity_type: 'product' | 'order';
+  entity_type: 'product' | 'order' | 'admin';
   entity_id: string | null;
   description: string;
   actor_email: string | null;
@@ -34,7 +34,11 @@ function isAdminActivities(value: unknown): value is AdminActivity[] {
       return (
         typeof item.id === 'string' &&
         typeof item.event_type === 'string' &&
-        (item.entity_type === 'product' || item.entity_type === 'order') &&
+        (
+          item.entity_type === 'product' ||
+          item.entity_type === 'order' ||
+          item.entity_type === 'admin'
+        ) &&
         (item.entity_id === null || typeof item.entity_id === 'string') &&
         typeof item.description === 'string' &&
         (item.actor_email === null || typeof item.actor_email === 'string') &&

@@ -35,6 +35,15 @@ function normalizeAdminRows(value: unknown): unknown {
 
     const item = product as Record<string, unknown>;
 
+    const supplierCost =
+      item.supplier_cost == null ||
+      (typeof item.supplier_cost === 'string' &&
+        item.supplier_cost.trim() === '')
+        ? null
+        : typeof item.supplier_cost === 'string'
+          ? Number(item.supplier_cost)
+          : item.supplier_cost;
+
     return {
       ...item,
       storefront: item.storefront === 'poshies' ? 'poshies' : 'yotaabo',
@@ -42,6 +51,7 @@ function normalizeAdminRows(value: unknown): unknown {
         typeof item.price === 'string' && item.price.trim() !== ''
           ? Number(item.price)
           : item.price,
+      supplier_cost: supplierCost,
       sort_order:
         typeof item.sort_order === 'string' && item.sort_order.trim() !== ''
           ? Number(item.sort_order)
@@ -63,6 +73,11 @@ function isAdminRows(value: unknown): value is AdminRow[] {
         (item.storefront === 'yotaabo' || item.storefront === 'poshies') &&
         typeof item.name === 'string' &&
         typeof item.price === 'number' &&
+        (item.supplier_cost === undefined ||
+          item.supplier_cost === null ||
+          (typeof item.supplier_cost === 'number' &&
+            Number.isFinite(item.supplier_cost) &&
+            item.supplier_cost >= 0)) &&
         ['His', 'Hers', 'Spaces', 'Lounge'].includes(String(item.category)) &&
         typeof item.subcategory === 'string' &&
         (item.description === null || typeof item.description === 'string') &&
@@ -82,6 +97,8 @@ export function useAdminProducts(
   const adminRef = useRef(isAdmin);
   const userIdRef = useRef(userId);
   const adminGenerationRef = useRef(0);
+  const loadRequestVersionRef = useRef(0);
+  const productsRef = useRef<AdminRow[]>([]);
   const previousScopeRef = useRef({ isAdmin, userId });
 
   if (
@@ -89,6 +106,7 @@ export function useAdminProducts(
     previousScopeRef.current.userId !== userId
   ) {
     adminGenerationRef.current += 1;
+    loadRequestVersionRef.current += 1;
     previousScopeRef.current = { isAdmin, userId };
   }
 
@@ -99,6 +117,11 @@ export function useAdminProducts(
   const [isLoading, setIsLoading] = useState(true);
   const [hasLoadedProducts, setHasLoadedProducts] = useState(false);
   const [productsLoadError, setProductsLoadError] = useState<string | null>(null);
+
+  const updateProducts = useCallback((nextProducts: AdminRow[]) => {
+    productsRef.current = nextProducts;
+    setProducts(nextProducts);
+  }, []);
 
   const productsApi = useCallback(
     async (
@@ -150,10 +173,12 @@ export function useAdminProducts(
     if (!isAdmin || !userId) return;
 
     const requestGeneration = adminGenerationRef.current;
+    const requestVersion = ++loadRequestVersionRef.current;
     const requestUserId = userId;
 
     const isCurrentRequest = () =>
       requestGeneration === adminGenerationRef.current &&
+      requestVersion === loadRequestVersionRef.current &&
       adminRef.current === true &&
       userIdRef.current === requestUserId;
 
@@ -169,7 +194,7 @@ export function useAdminProducts(
 
       if (!isCurrentRequest()) return;
 
-      setProducts(latestProducts);
+      updateProducts(latestProducts);
 
       writeAdminSnapshot(
         ADMIN_STORAGE_KEYS.productsCache,
@@ -190,7 +215,67 @@ export function useAdminProducts(
         setHasLoadedProducts(true);
       }
     }
-  }, [isAdmin, productsApi, userId]);
+  }, [isAdmin, productsApi, updateProducts, userId]);
+
+  const upsertProduct = useCallback(
+    (savedProduct: AdminRow) => {
+      if (!adminRef.current || !userId || userIdRef.current !== userId) {
+        console.error(
+          '[AdminProducts] Ignored product upsert because the admin scope changed.'
+        );
+        return;
+      }
+
+      const normalized = normalizeAdminRows([savedProduct]);
+
+      if (!isAdminRows(normalized) || normalized.length !== 1) {
+        console.error(
+          '[AdminProducts] Ignored product upsert because the saved product response is invalid.'
+        );
+        return;
+      }
+
+      const canonicalProduct = normalized[0];
+
+      // Invalidate any GET request started before this successful save.
+      loadRequestVersionRef.current += 1;
+
+      const currentProducts = productsRef.current;
+      const existingIndex = currentProducts.findIndex(
+        (product) => product.id === canonicalProduct.id
+      );
+
+      let nextProducts: AdminRow[];
+
+      if (existingIndex >= 0) {
+        nextProducts = [...currentProducts];
+        nextProducts[existingIndex] = canonicalProduct;
+      } else {
+        nextProducts = [canonicalProduct, ...currentProducts];
+      }
+
+      updateProducts(nextProducts);
+      invalidateProductsCache();
+
+      if (hasLoadedProducts) {
+        writeAdminSnapshot(
+          ADMIN_STORAGE_KEYS.productsCache,
+          userId,
+          nextProducts
+        );
+      } else {
+        // The list has not been hydrated yet. Fetch the complete canonical list.
+        void loadProducts();
+      }
+
+      console.info('[AdminProducts] Product collection reconciled.', {
+        productId: canonicalProduct.id,
+        operation: existingIndex >= 0 ? 'update' : 'insert',
+        collectionSize: nextProducts.length,
+      });
+    },
+    [hasLoadedProducts, loadProducts, updateProducts, userId]
+  );
 
   const hideProduct = useCallback(
     async (product: AdminRow): Promise<boolean> => {
@@ -319,7 +404,7 @@ export function useAdminProducts(
 
   useLayoutEffect(() => {
     if (isAdmin !== true || !userId) {
-      setProducts([]);
+      updateProducts([]);
       setIsLoading(false);
       setHasLoadedProducts(false);
       setProductsLoadError(null);
@@ -334,17 +419,19 @@ export function useAdminProducts(
     );
 
     if (cachedProducts) {
-      setProducts(normalizeAdminRows(cachedProducts) as AdminRow[]);
+      const normalizedProducts = normalizeAdminRows(cachedProducts) as AdminRow[];
+
+      updateProducts(normalizedProducts);
       setIsLoading(false);
       setHasLoadedProducts(true);
       return;
     }
 
-    setProducts([]);
+    updateProducts([]);
     setIsLoading(true);
     setHasLoadedProducts(false);
     void loadProducts();
-  }, [isAdmin, userId, loadProducts]);
+  }, [isAdmin, userId, loadProducts, updateProducts]);
 
   return {
     products,
@@ -352,6 +439,7 @@ export function useAdminProducts(
     hasLoadedProducts,
     productsLoadError,
     loadProducts,
+    upsertProduct,
     hideProduct,
     reactivateProduct,
     deleteProduct,

@@ -20,19 +20,16 @@ export default function OrderOperations({ data }: Props) {
       </div>
 
       <div
-        className="overflow-hidden rounded-xl border"
+        className="flex flex-col rounded-xl border p-4"
         style={{
           borderColor: 'var(--admin-border-subtle)',
           borderRadius: 'var(--admin-radius-lg, 12px)',
           background: 'var(--admin-surface)',
+          gap: 'var(--admin-space-md)',
         }}
       >
-        <div className="border-b border-solid overview-border px-4 py-3">
-          <h3 className="text-sm font-semibold">Recent orders</h3>
-        </div>
-
         {data.recentOrders.length === 0 ? (
-          <p className="px-4 py-6 text-center text-sm overview-text-muted">
+          <p className="py-6 text-center text-sm overview-text-muted">
             No orders in this period.
           </p>
         ) : (
@@ -40,7 +37,7 @@ export default function OrderOperations({ data }: Props) {
             {data.recentOrders.map((order) => (
               <div
                 key={order.id}
-                className="flex items-center justify-between gap-3 px-4 py-3"
+                className="flex items-center justify-between gap-3 py-3"
               >
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium">
