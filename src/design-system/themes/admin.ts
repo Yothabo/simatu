@@ -1,6 +1,10 @@
 import type { CSSProperties } from 'react';
 
 import { primitives } from '../tokens/primitives';
+import { adminColors } from '../tokens/adminColors';
+import { adminTypography } from '../tokens/adminTypography';
+import { colors } from '../tokens/colors';
+import { adminSpacingVariables } from '../tokens/spacing';
 import { adminTypographyTokens } from '../tokens/adminTypography';
 import { spacing } from '../tokens/spacing';
 import { elevationShadows, radiusTokens } from '../tokens/elevation';
@@ -150,4 +154,75 @@ export function getAdminThemeCssVariables(
   });
 
   return variables as CSSProperties;
+}
+
+/**
+ * Builds the full CSS-variable style object that the admin root element
+ * needs to paint the theme. Extracted from pages/Admin.tsx so the block
+ * isn't duplicated across shells.
+ */
+export function buildAdminThemeStyle(
+  mode: AdminThemeMode,
+): React.CSSProperties {
+  const themeColors = adminColors.themes[mode];
+  const charcoal40 =
+    mode === 'dark' ? 'rgba(244, 241, 236, 0.4)' : colors.opacity.charcoal40;
+  const charcoal50 =
+    mode === 'dark' ? 'rgba(244, 241, 236, 0.5)' : colors.opacity.charcoal50;
+  const charcoal70 =
+    mode === 'dark' ? 'rgba(244, 241, 236, 0.7)' : colors.opacity.charcoal70;
+
+  return {
+    ...getAdminThemeCssVariables(mode),
+    '--admin-bg': themeColors.background,
+    '--admin-surface': themeColors.surface,
+    '--admin-surface-subtle': themeColors.surfaceSubtle,
+    '--admin-surface-raised': themeColors.surfaceRaised,
+    '--admin-text-primary': themeColors.text,
+    '--admin-text-secondary': themeColors.textSecondary,
+    '--admin-text-supporting': themeColors.textSecondary,
+    '--admin-text-muted': themeColors.textMuted,
+    '--admin-text-disabled': themeColors.textDisabled,
+    '--admin-border-subtle': themeColors.border,
+    '--admin-border-strong': themeColors.borderStrong,
+    // HARDCODED — category header background.
+    // Light: #E2E2E2 / Dark: #3A3A3A
+    '--admin-category-header-bg': mode === 'dark' ? '#3A3A3A' : '#E2E2E2',
+    '--admin-hover': themeColors.hover,
+    '--admin-accent': 'var(--admin-text-primary)',
+    '--admin-accent-hover': 'var(--admin-text-secondary)',
+    '--admin-accent-text': themeColors.accentText,
+    '--admin-on-accent': 'var(--admin-bg)',
+    '--admin-focus': themeColors.focus,
+    '--admin-shadow': themeColors.shadow,
+    '--admin-charcoal-40': charcoal40,
+    '--admin-charcoal-50': charcoal50,
+    '--admin-charcoal-70': charcoal70,
+    '--admin-card-order-media-surface': themeColors.surfaceSubtle,
+    '--admin-status-amber': colors.statusPalette.amber,
+    '--admin-status-green': colors.statusPalette.green,
+    '--admin-status-red': colors.statusPalette.red,
+
+    ...adminSpacingVariables,
+
+    '--admin-font-heading': adminTypography.heading,
+    '--admin-font-body': adminTypography.body,
+
+    '--admin-size-page-title': adminTypography.size.pageTitle,
+    '--admin-size-section-title': adminTypography.size.sectionTitle,
+    '--admin-size-card-title': adminTypography.size.cardTitle,
+    '--admin-size-subsection-title': adminTypography.size.subsectionTitle,
+    '--admin-size-body': adminTypography.size.body,
+    '--admin-size-supporting': adminTypography.size.supporting,
+    '--admin-size-micro': adminTypography.size.micro,
+
+    '--admin-weight-normal': adminTypography.weight.normal,
+    '--admin-weight-medium': adminTypography.weight.medium,
+    '--admin-weight-semibold': adminTypography.weight.semibold,
+
+    '--admin-line-tight': adminTypography.lineHeight.tight,
+    '--admin-line-heading': adminTypography.lineHeight.heading,
+    '--admin-line-body': adminTypography.lineHeight.body,
+    '--admin-line-compact': adminTypography.lineHeight.compact,
+  } as React.CSSProperties;
 }

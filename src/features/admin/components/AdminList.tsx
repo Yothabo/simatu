@@ -1,3 +1,10 @@
+import { FiRefreshCw, FiTrash2, FiMail, FiXCircle } from 'react-icons/fi';
+import {
+  AdminButton,
+  AdminSectionHeader,
+  AdminText,
+} from '../../../design-system/components';
+
 export type AdminRecord = {
   id: string;
   email: string;
@@ -24,6 +31,170 @@ type AdminListProps = {
   actionLoadingId: string | null;
 };
 
+type AdminStatus =
+  | 'active'
+  | 'pending'
+  | 'expired'
+  | 'revoked'
+  | 'accepted'
+  | 'inactive';
+
+const STATUS_LABELS: Record<AdminStatus, string> = {
+  active: 'Active',
+  pending: 'Pending',
+  expired: 'Expired',
+  revoked: 'Revoked',
+  accepted: 'Accepted',
+  inactive: 'Inactive',
+};
+
+const STATUS_COLORS: Record<AdminStatus, { bg: string; color: string }> = {
+  active: {
+    bg: 'color-mix(in srgb, var(--admin-status-green) 15%, transparent)',
+    color: 'var(--admin-status-green)',
+  },
+  pending: {
+    bg: 'color-mix(in srgb, var(--admin-status-amber) 15%, transparent)',
+    color: 'var(--admin-status-amber)',
+  },
+  expired: {
+    bg: 'color-mix(in srgb, var(--admin-status-red) 15%, transparent)',
+    color: 'var(--admin-status-red)',
+  },
+  revoked: {
+    bg: 'color-mix(in srgb, var(--admin-status-red) 15%, transparent)',
+    color: 'var(--admin-status-red)',
+  },
+  accepted: {
+    bg: 'color-mix(in srgb, var(--admin-status-green) 15%, transparent)',
+    color: 'var(--admin-status-green)',
+  },
+  inactive: {
+    bg: 'var(--admin-surface-subtle)',
+    color: 'var(--admin-text-secondary)',
+  },
+};
+
+function getStatus(item: AdminRecord): AdminStatus {
+  if (item.is_active) return 'active';
+  if (
+    item.invitation_status === 'pending' &&
+    item.invitation_expires_at &&
+    new Date(item.invitation_expires_at).getTime() <= Date.now()
+  ) {
+    return 'expired';
+  }
+  return (item.invitation_status as AdminStatus) || 'inactive';
+}
+
+function DangerActionButton({
+  onClick,
+  disabled,
+  ariaLabel,
+  icon,
+  children,
+}: {
+  onClick: () => void;
+  disabled: boolean;
+  ariaLabel: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={ariaLabel}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 'var(--admin-space-xxs)',
+        paddingBlock: 'var(--admin-space-xxs)',
+        paddingInline: 'var(--admin-space-sm)',
+        borderRadius: 'var(--ds-radius-lg)',
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderColor: 'var(--admin-status-red)',
+        backgroundColor: 'transparent',
+        color: 'var(--admin-status-red)',
+        fontSize: 'var(--admin-size-micro)',
+        fontWeight: 'var(--admin-weight-medium)',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        opacity: disabled ? 0.5 : 1,
+        transition: 'background-color 150ms ease, color 150ms ease',
+        whiteSpace: 'nowrap',
+      }}
+      onMouseEnter={(e) => {
+        if (disabled) return;
+        e.currentTarget.style.backgroundColor = 'var(--admin-status-red)';
+        e.currentTarget.style.color = 'var(--admin-on-accent)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = 'transparent';
+        e.currentTarget.style.color = 'var(--admin-status-red)';
+      }}
+    >
+      {icon}
+      {children}
+    </button>
+  );
+}
+
+function NeutralActionButton({
+  onClick,
+  disabled,
+  ariaLabel,
+  icon,
+  children,
+}: {
+  onClick: () => void;
+  disabled: boolean;
+  ariaLabel: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={ariaLabel}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 'var(--admin-space-xxs)',
+        paddingBlock: 'var(--admin-space-xxs)',
+        paddingInline: 'var(--admin-space-sm)',
+        borderRadius: 'var(--ds-radius-lg)',
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderColor: 'var(--admin-border-strong)',
+        backgroundColor: 'transparent',
+        color: 'var(--admin-text-secondary)',
+        fontSize: 'var(--admin-size-micro)',
+        fontWeight: 'var(--admin-weight-medium)',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        opacity: disabled ? 0.5 : 1,
+        transition: 'background-color 150ms ease, color 150ms ease',
+        whiteSpace: 'nowrap',
+      }}
+      onMouseEnter={(e) => {
+        if (disabled) return;
+        e.currentTarget.style.backgroundColor = 'var(--admin-surface-subtle)';
+        e.currentTarget.style.color = 'var(--admin-text-primary)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = 'transparent';
+        e.currentTarget.style.color = 'var(--admin-text-secondary)';
+      }}
+    >
+      {icon}
+      {children}
+    </button>
+  );
+}
+
 export default function AdminList({
   admins,
   isLoading,
@@ -35,167 +206,260 @@ export default function AdminList({
   actionLoadingId,
 }: AdminListProps) {
   return (
-    <section className="border border-[var(--admin-border-subtle)] bg-[var(--admin-surface)] p-5">
-      <div className="mb-5 flex items-center justify-between gap-3">
-        <div>
-          <h3 className="admin-type-section-title text-[var(--admin-text-primary)]">
-            Administrators
-          </h3>
-          <p className="admin-type-supporting mt-1 text-sm text-[var(--admin-text-secondary)]">
-            Accounts with access to your administration system.
-          </p>
-        </div>
-
-        <button
-          type="button"
-          onClick={onRefresh}
-          disabled={isLoading}
-          aria-label="Refresh administrators"
-          className="border border-[var(--admin-border-strong)] px-3 py-2 text-xs font-medium text-[var(--admin-text-primary)] hover:bg-[var(--admin-surface-subtle)] disabled:opacity-50"
-        >
-          {isLoading ? 'Loading...' : 'Refresh'}
-        </button>
-      </div>
+    <section
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 'var(--admin-space-md)',
+      }}
+    >
+      <AdminSectionHeader
+        title="Administrators"
+        as="h3"
+        compact
+        action={
+          <AdminButton
+            variant="neutral"
+            shape="circle"
+            ariaLabel={
+              isLoading
+                ? 'Refreshing administrators'
+                : 'Refresh administrators'
+            }
+            onClick={onRefresh}
+            disabled={isLoading}
+          >
+            <FiRefreshCw
+              size={16}
+              aria-hidden="true"
+              className={isLoading ? 'animate-spin' : ''}
+            />
+          </AdminButton>
+        }
+      />
 
       {isLoading ? (
-        <p className="py-6 text-center text-sm text-[var(--admin-text-tertiary)]">
+        <AdminText
+          variant="supporting"
+          as="p"
+          style={{
+            textAlign: 'center',
+            paddingBlock: 'var(--admin-space-lg)',
+          }}
+        >
           Loading administrators...
-        </p>
+        </AdminText>
       ) : loadError ? (
-        <div className="py-4">
-          <p className="text-sm text-red-600">{loadError}</p>
-          <button
-            type="button"
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 'var(--admin-space-sm)',
+            alignItems: 'flex-start',
+          }}
+        >
+          <AdminText
+            variant="supporting"
+            as="p"
+            style={{ color: 'var(--admin-status-red)', margin: 0 }}
+          >
+            {loadError}
+          </AdminText>
+          <AdminButton
+            variant="neutral"
+            shape="pill"
+            ariaLabel="Retry loading administrators"
             onClick={onRefresh}
-            className="mt-3 text-sm font-medium text-[var(--admin-text-primary)] underline"
           >
             Try again
-          </button>
+          </AdminButton>
         </div>
       ) : admins.length === 0 ? (
-        <p className="py-6 text-center text-sm text-[var(--admin-text-tertiary)]">
+        <AdminText
+          variant="supporting"
+          as="p"
+          style={{
+            textAlign: 'center',
+            paddingBlock: 'var(--admin-space-lg)',
+          }}
+        >
           No administrator accounts found.
-        </p>
+        </AdminText>
       ) : (
-        <div className="divide-y divide-[var(--admin-border-subtle)]">
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 'var(--admin-space-md)',
+          }}
+        >
           {admins.map((item) => {
-            const status = item.is_active
-              ? 'active'
-              : item.invitation_status === 'pending' &&
-                  item.invitation_expires_at &&
-                  new Date(item.invitation_expires_at).getTime() <= Date.now()
-                ? 'expired'
-                : item.invitation_status || 'inactive';
-
+            const status = getStatus(item);
             const isActionLoading = actionLoadingId === item.id;
-            const canManageInvitation =
-              !item.is_active &&
-              ['pending', 'expired'].includes(status);
-
-            const statusStyles: Record<string, string> = {
-              active: 'bg-[color-mix(in_srgb,var(--admin-status-green)_14%,transparent)] text-[var(--admin-status-green)]',
-              pending: 'bg-[color-mix(in_srgb,var(--admin-status-amber)_14%,transparent)] text-[var(--admin-status-amber)]',
-              expired: 'bg-[color-mix(in_srgb,var(--admin-status-red)_14%,transparent)] text-[var(--admin-status-red)]',
-              revoked: 'bg-[color-mix(in_srgb,var(--admin-status-red)_14%,transparent)] text-[var(--admin-status-red)]',
-              accepted: 'bg-[color-mix(in_srgb,var(--admin-status-green)_14%,transparent)] text-[var(--admin-status-green)]',
-              inactive: 'bg-[var(--admin-surface-subtle)] text-[var(--admin-text-secondary)]',
-            };
-
-            const statusLabels: Record<string, string> = {
-              active: 'Active',
-              pending: 'Pending',
-              expired: 'Expired',
-              revoked: 'Revoked',
-              accepted: 'Accepted',
-              inactive: 'Inactive',
-            };
+            const canResend = !item.is_active && ['pending', 'expired'].includes(status);
+            const canRevoke = status === 'pending';
+            const colors = STATUS_COLORS[status];
 
             return (
-              <div
+              <article
                 key={item.id}
-                className="flex flex-col gap-3 py-4 first:pt-0 last:pb-0"
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  borderWidth: '1px',
+                  borderStyle: 'solid',
+                  borderColor: 'var(--admin-border-subtle)',
+                  borderRadius: 'var(--ds-radius-lg)',
+                  backgroundColor: 'var(--admin-surface)',
+                  overflow: 'hidden',
+                }}
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="break-all text-sm font-medium text-[var(--admin-text-primary)]">
+                {/* Main info */}
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 'var(--admin-space-xs)',
+                    padding: 'var(--admin-space-md)',
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 'var(--admin-space-xs)',
+                      flexWrap: 'wrap',
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: 'var(--admin-size-body)',
+                        fontWeight: 'var(--admin-weight-semibold)',
+                        color: 'var(--admin-text-primary)',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        minWidth: 0,
+                      }}
+                    >
                       {item.email}
-                    </p>
-                    <p className="mt-1 text-xs text-[var(--admin-text-tertiary)]">
-                      {item.role === 'super_admin'
-                        ? 'Super Admin'
-                        : 'Store Admin'}
-                      {item.role === 'store_admin' && item.store_name
-                        ? ` · ${item.store_name}`
-                        : ''}
-                    </p>
+                    </span>
+
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        paddingBlock: '2px',
+                        paddingInline: 'var(--admin-space-xs)',
+                        borderRadius: 'var(--ds-radius-full)',
+                        backgroundColor: colors.bg,
+                        color: colors.color,
+                        fontSize: 'var(--admin-size-micro)',
+                        fontWeight: 'var(--admin-weight-semibold)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.08em',
+                        flexShrink: 0,
+                      }}
+                    >
+                      {STATUS_LABELS[status]}
+                    </span>
                   </div>
 
                   <span
-                    className={`shrink-0 px-2 py-1 text-[10px] font-medium ${
-                      statusStyles[status] || statusStyles.inactive
-                    }`}
+                    style={{
+                      fontSize: 'var(--admin-size-micro)',
+                      color: 'var(--admin-text-tertiary)',
+                      lineHeight: 1.4,
+                    }}
                   >
-                    {statusLabels[status] || 'Inactive'}
-                  </span>
-                </div>
-
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <p className="text-xs text-[var(--admin-text-primary)]/40">
-                      Added{' '}
-                      {item.created_at
-                        ? new Date(item.created_at).toLocaleDateString()
-                        : 'Unknown'}
-                    </p>
-
+                    {item.role === 'super_admin' ? 'Super Admin' : 'Store Admin'}
+                    {item.role === 'store_admin' && item.store_name
+                      ? ` · ${item.store_name}`
+                      : ''}
+                    {' · Added '}
+                    {item.created_at
+                      ? new Date(item.created_at).toLocaleDateString()
+                      : 'Unknown'}
                     {item.invitation_expires_at &&
                       !item.is_active &&
                       item.invitation_status === 'pending' && (
-                        <p className="mt-1 text-xs text-[var(--admin-text-tertiary)]">
-                          Invitation expires{' '}
-                          {new Date(
-                            item.invitation_expires_at,
-                          ).toLocaleString()}
-                        </p>
+                        <>
+                          {' · Invitation expires '}
+                          {new Date(item.invitation_expires_at).toLocaleString()}
+                        </>
                       )}
-                  </div>
+                  </span>
 
-                  <div className="flex flex-wrap items-center gap-3">
-                    {canManageInvitation && (
-                      <>
-                        <button
-                          type="button"
-                          onClick={() => onResend(item)}
-                          disabled={isActionLoading}
-                          className="text-xs font-medium text-[var(--admin-text-primary)] underline disabled:opacity-50"
-                        >
-                          {isActionLoading ? 'Please wait...' : 'Resend invitation'}
-                        </button>
+                  {canResend && (
+                    <div style={{ marginTop: 'var(--admin-space-xs)' }}>
+                      <NeutralActionButton
+                        onClick={() => onResend(item)}
+                        disabled={isActionLoading}
+                        ariaLabel={`Resend invitation to ${item.email}`}
+                        icon={<FiMail size={12} aria-hidden="true" />}
+                      >
+                        Resend invitation
+                      </NeutralActionButton>
+                    </div>
+                  )}
+                </div>
 
-                        {status === 'pending' && (
-                          <button
-                            type="button"
-                            onClick={() => onRevoke(item)}
-                            disabled={isActionLoading}
-                            className="text-xs font-medium text-[var(--admin-status-red)] underline disabled:opacity-50"
-                          >
-                            Revoke
-                          </button>
-                        )}
-                      </>
+                {/* Danger zone */}
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: 'var(--admin-space-md)',
+                    flexWrap: 'wrap',
+                    paddingBlock: 'var(--admin-space-sm)',
+                    paddingInline: 'var(--admin-space-md)',
+                    backgroundColor:
+                      'color-mix(in srgb, var(--admin-status-red) 5%, var(--admin-surface))',
+                    borderTop: '1px solid color-mix(in srgb, var(--admin-status-red) 20%, transparent)',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: 'var(--admin-size-micro)',
+                      fontWeight: 'var(--admin-weight-semibold)',
+                      color: 'var(--admin-status-red)',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.08em',
+                    }}
+                  >
+                    Danger zone
+                  </span>
+
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 'var(--admin-space-xs)',
+                      flexWrap: 'wrap',
+                    }}
+                  >
+                    {canRevoke && (
+                      <DangerActionButton
+                        onClick={() => onRevoke(item)}
+                        disabled={isActionLoading}
+                        ariaLabel={`Revoke invitation for ${item.email}`}
+                        icon={<FiXCircle size={12} aria-hidden="true" />}
+                      >
+                        Revoke
+                      </DangerActionButton>
                     )}
-
-                    <button
-                      type="button"
+                    <DangerActionButton
                       onClick={() => onDelete(item)}
                       disabled={isActionLoading}
-                      className="text-xs font-medium text-[var(--admin-status-red)] underline disabled:opacity-50"
+                      ariaLabel={`Delete administrator ${item.email}`}
+                      icon={<FiTrash2 size={12} aria-hidden="true" />}
                     >
-                      {isActionLoading ? 'Please wait...' : 'Delete administrator'}
-                    </button>
+                      Delete
+                    </DangerActionButton>
                   </div>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>

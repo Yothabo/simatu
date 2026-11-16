@@ -524,3 +524,30 @@
 .admin-scope .admin-category-header {
   background-color: var(--admin-category-header-bg) !important;
 }
+
+
+/* Card grid pattern - theme-aware visibility.
+   Light: darkens the surface a touch. Dark: lightens it. */
+.admin-scope[data-theme='light'],
+.admin-scope:not([data-theme]) {
+  --admin-card-grid-line: color-mix(in srgb, var(--admin-border-strong) 16%, transparent);
+}
+
+.admin-scope[data-theme='dark'] {
+  --admin-card-grid-line: color-mix(in srgb, var(--admin-border-strong) 32%, transparent);
+}
+
+
+/* Faint text - quieter than muted. For card descriptions and helper copy. */
+.admin-scope[data-theme='light'],
+.admin-scope:not([data-theme]) {
+  /* Light mode: dark grey text at low opacity -> renders as a very pale
+     grey, close to the near-white surface, still readable. */
+  --admin-text-faint: color-mix(in srgb, #4d4d4d 32%, var(--admin-surface));
+}
+
+.admin-scope[data-theme='dark'] {
+  /* Dark mode: pale grey text at low opacity -> renders as a dark grey
+     close to the dark surface, still readable. */
+  --admin-text-faint: color-mix(in srgb, #c2c2c2 38%, var(--admin-surface));
+}

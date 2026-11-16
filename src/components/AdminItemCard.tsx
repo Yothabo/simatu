@@ -23,10 +23,12 @@ export default function AdminItemCard({
   layout = 'default',
   ariaLabel,
   leftContent,
-  leftClassName = 'bg-[#f5f5f5]',
-  statusClassName = 'text-[#4d4d4d]/40',
+  leftClassName = '',
+  statusClassName,
   className = '',
 }: AdminItemCardProps) {
+  const statusColor = statusClassName ?? 'var(--admin-text-tertiary)';
+
   return (
     <div
       onClick={onClick}
@@ -39,54 +41,158 @@ export default function AdminItemCard({
       role="button"
       tabIndex={0}
       aria-label={ariaLabel}
-      className={`admin-item-card flex cursor-pointer items-stretch overflow-hidden admin-font-body ${className}`}
-      style={{ WebkitTapHighlightColor: 'transparent' }}
+      className={`flex cursor-pointer items-stretch overflow-hidden ${className}`}
+      style={{
+        WebkitTapHighlightColor: 'transparent',
+        borderRadius: 'var(--ds-radius-lg)',
+        border: '1px solid var(--admin-border-subtle)',
+        backgroundColor: 'var(--admin-surface)',
+        transition: 'background-color 150ms ease',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.backgroundColor = 'var(--admin-surface-subtle)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = 'var(--admin-surface)';
+      }}
     >
-      <div className={`admin-item-card-media relative shrink-0 overflow-hidden ${leftClassName}`}>
+      <div
+        className={`relative shrink-0 overflow-hidden ${leftClassName}`}
+        style={{
+          width: '96px',
+          height: '96px',
+          borderRight: '1px solid var(--admin-border-subtle)',
+        }}
+      >
         {leftContent}
       </div>
 
-      <div className="admin-item-card-content flex min-w-0 flex-1 flex-col justify-center">
+      <div
+        className="flex min-w-0 flex-1 flex-col justify-center"
+        style={{
+          padding: 'var(--admin-space-sm) var(--admin-space-md)',
+          gap: 'var(--admin-space-xs)',
+        }}
+      >
         {layout === 'product' ? (
-          <div className="admin-item-card-copy">
-            <div className="admin-item-card-row">
-              <p className="admin-type-card-title admin-color-primary admin-item-card-title">
+          <>
+            <div
+              className="flex items-center justify-between"
+              style={{ gap: 'var(--admin-space-xs)' }}
+            >
+              <span
+                style={{
+                  fontSize: 'var(--admin-size-body)',
+                  fontWeight: 'var(--admin-weight-semibold)',
+                  color: 'var(--admin-text-primary)',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  minWidth: 0,
+                }}
+              >
                 {title}
-              </p>
-              <p className="admin-type-card-title admin-color-primary admin-type-price admin-item-card-price">
+              </span>
+              <span
+                style={{
+                  fontSize: 'var(--admin-size-body)',
+                  fontWeight: 'var(--admin-weight-semibold)',
+                  color: 'var(--admin-text-primary)',
+                  fontVariantNumeric: 'tabular-nums',
+                  flexShrink: 0,
+                }}
+              >
                 {price}
-              </p>
+              </span>
             </div>
-
-            <div className="admin-item-card-row admin-item-card-secondary-row">
-              <span className={`admin-type-micro admin-item-card-status ${statusClassName}`}>
+            <div
+              className="flex items-center justify-between"
+              style={{ gap: 'var(--admin-space-xs)' }}
+            >
+              <span
+                style={{
+                  fontSize: 'var(--admin-size-micro)',
+                  fontWeight: 'var(--admin-weight-medium)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                  color: statusColor,
+                }}
+              >
                 {status}
               </span>
-              <p className="admin-type-micro admin-color-muted admin-item-card-meta">
+              <span
+                style={{
+                  fontSize: 'var(--admin-size-micro)',
+                  color: 'var(--admin-text-tertiary)',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  textAlign: 'right',
+                }}
+              >
                 {meta}
-              </p>
+              </span>
             </div>
-          </div>
+          </>
         ) : (
-          <div className="admin-item-card-copy">
-            <div className="admin-item-card-row">
-              <p className="admin-type-card-title admin-color-primary admin-item-card-title">
+          <>
+            <div
+              className="flex items-center justify-between"
+              style={{ gap: 'var(--admin-space-xs)' }}
+            >
+              <span
+                style={{
+                  fontSize: 'var(--admin-size-body)',
+                  fontWeight: 'var(--admin-weight-semibold)',
+                  color: 'var(--admin-text-primary)',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  minWidth: 0,
+                }}
+              >
                 {title}
-              </p>
-              <span className={`admin-type-micro admin-item-card-status ${statusClassName}`}>
+              </span>
+              <span
+                style={{
+                  fontSize: 'var(--admin-size-micro)',
+                  fontWeight: 'var(--admin-weight-medium)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                  color: statusColor,
+                  flexShrink: 0,
+                }}
+              >
                 {status}
               </span>
             </div>
-
-            <div className="admin-item-card-row admin-item-card-secondary-row">
-              <p className="admin-type-price admin-color-disabled admin-item-card-price">
+            <div
+              className="flex items-center justify-between"
+              style={{ gap: 'var(--admin-space-xs)' }}
+            >
+              <span
+                style={{
+                  fontSize: 'var(--admin-size-supporting)',
+                  color: 'var(--admin-text-secondary)',
+                  fontVariantNumeric: 'tabular-nums',
+                }}
+              >
                 {price}
-              </p>
-              <p className="admin-type-micro admin-color-muted admin-item-card-meta">
+              </span>
+              <span
+                style={{
+                  fontSize: 'var(--admin-size-micro)',
+                  color: 'var(--admin-text-tertiary)',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  textAlign: 'right',
+                }}
+              >
                 {meta}
-              </p>
+              </span>
             </div>
-          </div>
+          </>
         )}
       </div>
     </div>

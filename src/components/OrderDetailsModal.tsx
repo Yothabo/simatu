@@ -1,12 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
-import { FiTrash2, FiCheck, FiX, FiMenu } from 'react-icons/fi';
+import { useState } from 'react';
+import { FiTrash2, FiCheck, FiX, FiTruck, FiCircle } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 import { formatPrice } from '../utils/formatPrice';
 import Modal from './Modal';
-import CheckoutItemCard from './CheckoutItemCard';
 import ProductModal from './ProductModal';
 import { getCategoryTheme } from '../utils/categoryTheme';
-import type { AdminProduct } from './AdminProductForm';
+import type { AdminProduct } from '../features/admin/components/AdminProductForm';
 import type { Order } from '../features/admin/types/admin.types';
 
 type PreviewProduct = AdminProduct & { id: string };
@@ -26,12 +25,165 @@ const STATUS_LABELS: Record<Order['status'], string> = {
   cancelled: 'Cancelled',
 };
 
-const STATUS_COLORS: Record<Order['status'], string> = {
-  pending: 'text-[#d97706]',
-  confirmed: 'text-[#8aa89b]',
-  delivered: 'text-[#4d4d4d]/60',
-  cancelled: 'text-red-500',
+const STATUS_BADGE: Record<
+  Order['status'],
+  { bg: string; color: string }
+> = {
+  pending: {
+    bg: 'var(--admin-status-amber)',
+    color: 'var(--admin-on-accent)',
+  },
+  confirmed: {
+    bg: 'var(--admin-accent)',
+    color: 'var(--admin-on-accent)',
+  },
+  delivered: {
+    bg: 'var(--admin-status-green)',
+    color: 'var(--admin-on-accent)',
+  },
+  cancelled: {
+    bg: 'var(--admin-status-red)',
+    color: 'var(--admin-on-accent)',
+  },
 };
+
+const LABEL_STYLE = {
+  fontSize: 'var(--admin-size-micro)',
+  fontWeight: 'var(--admin-weight-medium)' as const,
+  color: 'var(--admin-text-faint)',
+  textTransform: 'uppercase' as const,
+  letterSpacing: '0.08em',
+  lineHeight: 1.2,
+  display: 'block',
+  marginBottom: 'var(--admin-space-xxs)',
+};
+
+const SMALL_VALUE = {
+  fontSize: 'var(--admin-size-body)',
+  fontWeight: 'var(--admin-weight-medium)' as const,
+  color: 'var(--admin-text-primary)',
+  lineHeight: 1.4,
+};
+
+function HeaderIconButton({
+  onClick,
+  ariaLabel,
+  tone = 'neutral',
+  children,
+}: {
+  onClick: () => void;
+  ariaLabel: string;
+  tone?: 'neutral' | 'danger';
+  children: React.ReactNode;
+}) {
+  const isDanger = tone === 'danger';
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={ariaLabel}
+      style={{
+        width: '32px',
+        height: '32px',
+        borderRadius: '50%',
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderColor: isDanger
+          ? 'var(--admin-status-red)'
+          : 'var(--admin-border-strong)',
+        backgroundColor: 'var(--admin-surface)',
+        color: isDanger
+          ? 'var(--admin-status-red)'
+          : 'var(--admin-text-secondary)',
+        cursor: 'pointer',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0,
+        transition: 'background-color 150ms ease, color 150ms ease',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.backgroundColor = isDanger
+          ? 'var(--admin-status-red)'
+          : 'var(--admin-surface-subtle)';
+        e.currentTarget.style.color = isDanger
+          ? 'var(--admin-on-accent)'
+          : 'var(--admin-text-primary)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = 'var(--admin-surface)';
+        e.currentTarget.style.color = isDanger
+          ? 'var(--admin-status-red)'
+          : 'var(--admin-text-secondary)';
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+function WorkflowButton({
+  onClick,
+  tone,
+  icon,
+  children,
+}: {
+  onClick: () => void;
+  tone: 'success' | 'primary' | 'danger';
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  const toneStyles = {
+    success: {
+      bg: 'var(--admin-status-green)',
+      border: 'var(--admin-status-green)',
+      color: 'var(--admin-on-accent)',
+    },
+    primary: {
+      bg: 'var(--admin-text-primary)',
+      border: 'var(--admin-text-primary)',
+      color: 'var(--admin-bg)',
+    },
+    danger: {
+      bg: 'transparent',
+      border: 'var(--admin-status-red)',
+      color: 'var(--admin-status-red)',
+    },
+  } as const;
+
+  const s = toneStyles[tone];
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      style={{
+        flex: '1 1 0',
+        minWidth: 0,
+        height: '40px',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 'var(--admin-space-xs)',
+        paddingInline: 'var(--admin-space-sm)',
+        borderRadius: 'var(--ds-radius-lg)',
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderColor: s.border,
+        backgroundColor: s.bg,
+        color: s.color,
+        fontSize: 'var(--admin-size-supporting)',
+        fontWeight: 'var(--admin-weight-medium)',
+        cursor: 'pointer',
+      }}
+    >
+      {icon}
+      <span style={{ minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+        {children}
+      </span>
+    </button>
+  );
+}
 
 export default function OrderDetailsModal({
   order,
@@ -40,26 +192,9 @@ export default function OrderDetailsModal({
   onStatusChange,
   onDelete,
 }: OrderDetailsModalProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<PreviewProduct | null>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!isMenuOpen) return;
-
-    const handler = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsMenuOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [isMenuOpen]);
-
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [order?.id]);
+  const [selectedProduct, setSelectedProduct] = useState<PreviewProduct | null>(
+    null,
+  );
 
   if (!order) return null;
 
@@ -71,83 +206,144 @@ export default function OrderDetailsModal({
     minute: '2-digit',
   });
 
-  const closeMenu = () => setIsMenuOpen(false);
+  const badge = STATUS_BADGE[order.status];
 
-  const actionClass =
-    'flex min-h-12 w-full items-center gap-3 border-0 border-b border-[#4d4d4d]/10 bg-white px-4 py-3 text-left admin-type-body text-[#4d4d4d]/80 transition-colors hover:bg-[#fafaf9] hover:text-[#4d4d4d]';
+  const handleWhatsApp = () => {
+    window.open(
+      `https://wa.me/${order.customer_phone.replace(/\D/g, '')}`,
+      '_blank',
+      'noopener,noreferrer',
+    );
+  };
 
   return (
     <Modal isOpen={!!order} onClose={onClose} maxWidth="max-w-2xl" scrollable={false}>
-      <div className="relative flex max-h-[85vh] flex-col overflow-hidden">
-        {/* Header */}
-        <div className="relative z-20 flex shrink-0 items-center justify-between gap-4 border-b border-[#4d4d4d]/10 bg-white px-6 py-4 sm:px-8">
-          <h2 className="min-w-0 truncate admin-type-card-title leading-snug text-[#4d4d4d] ">
-            {order.customer_name}
-          </h2>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '85vh',
+          backgroundColor: 'var(--admin-surface)',
+          borderRadius: 'var(--ds-radius-lg)',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Sticky header */}
+        <div
+          className="flex items-center justify-between"
+          style={{
+            padding: 'var(--admin-space-sm) var(--admin-space-md)',
+            borderBottom: '1px solid var(--admin-border-subtle)',
+            flexShrink: 0,
+            gap: 'var(--admin-space-md)',
+          }}
+        >
+          <span
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              paddingBlock: 'var(--admin-space-xxs)',
+              paddingInline: 'var(--admin-space-sm)',
+              borderRadius: 'var(--ds-radius-full)',
+              backgroundColor: badge.bg,
+              color: badge.color,
+              fontSize: 'var(--admin-size-micro)',
+              fontWeight: 'var(--admin-weight-semibold)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+              flexShrink: 0,
+            }}
+          >
+            {STATUS_LABELS[order.status]}
+          </span>
 
-<button
-              type="button"
-              onClick={onClose}
-              aria-label="Close order details"
-              className="flex h-10 w-10 items-center justify-center border-0 bg-transparent text-[#4d4d4d] transition-colors hover:bg-[#f5f5f5]"
-            >
-              <FiX size={22} />
-            </button>
+          <div
+            className="flex items-center"
+            style={{ gap: 'var(--admin-space-xs)', flexShrink: 0 }}
+          >
+            <HeaderIconButton onClick={handleWhatsApp} ariaLabel="Contact customer on WhatsApp">
+              <FaWhatsapp size={14} aria-hidden="true" />
+            </HeaderIconButton>
+
+            <div
+              style={{
+                width: '1px',
+                height: '20px',
+                backgroundColor: 'var(--admin-border-subtle)',
+                marginInline: 'var(--admin-space-xxs)',
+              }}
+            />
+
+            <HeaderIconButton onClick={onClose} ariaLabel="Close">
+              <FiX size={14} aria-hidden="true" />
+            </HeaderIconButton>
+          </div>
         </div>
 
-        {/* Scrollable order details */}
-        <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6 sm:px-8 sm:py-8">
-          <div className="flex flex-col gap-4">
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <span className="mb-1.5 block admin-type-micro font-semibold uppercase tracking-widest text-[var(--admin-charcoal-40)]">
-                  Order number
-                </span>
-                <div className="w-full bg-[var(--admin-surface)] px-4 py-3 admin-type-body admin-color-primary">
-                  {order.order_number}
-                </div>
-              </div>
-
-              <div>
-                <span className="mb-1.5 block admin-type-micro font-semibold uppercase tracking-widest text-[var(--admin-charcoal-40)]">
-                  Order date
-                </span>
-                <div className="w-full bg-[var(--admin-surface)] px-4 py-3 admin-type-body admin-color-primary">
-                  {formattedDate}
-                </div>
-              </div>
+        {/* Scrollable body */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 'var(--admin-space-lg)',
+            padding: 'var(--admin-space-lg)',
+            overflowY: 'auto',
+            flex: 1,
+            minHeight: 0,
+          }}
+        >
+          {/* Order number + placed date */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr auto',
+              gap: 'var(--admin-space-md)',
+              alignItems: 'flex-end',
+            }}
+          >
+            <div>
+              <span style={LABEL_STYLE}>Order number</span>
+              <div style={SMALL_VALUE}>{order.order_number}</div>
             </div>
+            <div style={{ textAlign: 'right' }}>
+              <span style={LABEL_STYLE}>Placed</span>
+              <div style={SMALL_VALUE}>{formattedDate}</div>
+            </div>
+          </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="min-w-0">
-                <span className="mb-1.5 block admin-type-micro font-semibold uppercase tracking-widest text-[var(--admin-charcoal-40)]">
-                  Phone
-                </span>
-                <div className="w-full truncate bg-[var(--admin-surface)] px-4 py-3 admin-type-body admin-color-primary">
-                  {order.customer_phone}
-                </div>
-              </div>
-
-              <div className="min-w-0">
-                <span className="mb-1.5 block admin-type-micro font-semibold uppercase tracking-widest text-[var(--admin-charcoal-40)]">
-                  Status
-                </span>
-                <div className="w-full bg-[var(--admin-surface)] px-4 py-3 admin-type-body admin-color-primary">
-                  <span className={STATUS_COLORS[order.status]}>
-                    {STATUS_LABELS[order.status]}
-                  </span>
-                </div>
-              </div>
+          {/* Customer name + phone */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: 'var(--admin-space-md)',
+            }}
+          >
+            <div>
+              <span style={LABEL_STYLE}>Customer</span>
+              <div style={SMALL_VALUE}>{order.customer_name}</div>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <span style={LABEL_STYLE}>Phone</span>
+              <div style={SMALL_VALUE}>{order.customer_phone}</div>
             </div>
           </div>
 
           {/* Items */}
-          <div className="mt-6">
-            <h3 className="mb-3 admin-type-micro uppercase tracking-widest text-[#4d4d4d]/40">
-              Items
-            </h3>
-
-            <div className="admin-order-items flex flex-col gap-2">
+          <div>
+            <span style={LABEL_STYLE}>Items</span>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                borderColor: 'var(--admin-border-subtle)',
+                borderRadius: 'var(--ds-radius-lg)',
+                overflow: 'hidden',
+                marginTop: 'var(--admin-space-xs)',
+              }}
+            >
               {order.items.map((item, index) => {
                 const matchedProduct = products.find(
                   (product) =>
@@ -155,141 +351,218 @@ export default function OrderDetailsModal({
                     item.name.trim().toLowerCase(),
                 );
 
+                const isClickable = Boolean(matchedProduct);
+
                 return (
-                <CheckoutItemCard
-                  key={`${order.id}-${index}`}
-                  variant="admin"
-                  name={item.name}
-                  onClick={
-                    matchedProduct
-                      ? () => setSelectedProduct(matchedProduct)
-                      : undefined
-                  }
-                  leftContent={
-                    <>
-                      <span className="admin-type-body">{item.qty}</span>
-                      {' × '}
-                      <span className="admin-type-body admin-color-primary">
-                        {formatPrice(item.price)}
-                      </span>
-                    </>
-                  }
-                  rightContent={<span className="admin-type-body admin-color-primary">{formatPrice(item.price * item.qty)}</span>}
-                />
+                  <div
+                    key={`${order.id}-${index}`}
+                    onClick={
+                      matchedProduct
+                        ? () => setSelectedProduct(matchedProduct)
+                        : undefined
+                    }
+                    role={isClickable ? 'button' : undefined}
+                    tabIndex={isClickable ? 0 : undefined}
+                    onKeyDown={
+                      matchedProduct
+                        ? (e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              setSelectedProduct(matchedProduct);
+                            }
+                          }
+                        : undefined
+                    }
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'minmax(0, 1fr) auto auto',
+                      alignItems: 'center',
+                      gap: 'var(--admin-space-md)',
+                      padding: 'var(--admin-space-sm) var(--admin-space-md)',
+                      borderTop:
+                        index > 0
+                          ? '1px solid var(--admin-border-subtle)'
+                          : 'none',
+                      cursor: isClickable ? 'pointer' : 'default',
+                      transition: 'background-color 150ms ease',
+                    }}
+                    onMouseEnter={
+                      isClickable
+                        ? (e) => {
+                            e.currentTarget.style.backgroundColor =
+                              'var(--admin-surface-subtle)';
+                          }
+                        : undefined
+                    }
+                    onMouseLeave={
+                      isClickable
+                        ? (e) => {
+                            e.currentTarget.style.backgroundColor =
+                              'transparent';
+                          }
+                        : undefined
+                    }
+                  >
+                    <div
+                      style={{
+                        fontSize: 'var(--admin-size-body)',
+                        fontWeight: 'var(--admin-weight-medium)',
+                        color: 'var(--admin-text-primary)',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {item.name}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: 'var(--admin-size-supporting)',
+                        color: 'var(--admin-text-secondary)',
+                        fontVariantNumeric: 'tabular-nums',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {item.qty} × {formatPrice(item.price)}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: 'var(--admin-size-body)',
+                        fontWeight: 'var(--admin-weight-semibold)',
+                        color: 'var(--admin-text-primary)',
+                        fontVariantNumeric: 'tabular-nums',
+                        whiteSpace: 'nowrap',
+                        textAlign: 'right',
+                        minWidth: '80px',
+                      }}
+                    >
+                      {formatPrice(item.price * item.qty)}
+                    </div>
+                  </div>
                 );
               })}
             </div>
+          </div>
 
-            <div className="mt-4 flex items-center justify-between">
-              <p className="admin-type-micro uppercase tracking-widest text-[#4d4d4d]/40">
-                Subtotal
-              </p>
-              <p className="admin-type-body admin-color-primary">
-                {formatPrice(order.subtotal)}
-              </p>
+          {/* Subtotal */}
+          <div
+            className="flex items-baseline justify-between"
+            style={{ gap: 'var(--admin-space-md)' }}
+          >
+            <span style={LABEL_STYLE}>Subtotal</span>
+            <div
+              style={{
+                fontSize: 'var(--admin-size-section-title)',
+                fontWeight: 'var(--admin-weight-semibold)',
+                color: 'var(--admin-text-primary)',
+                lineHeight: 1.1,
+                fontVariantNumeric: 'tabular-nums',
+              }}
+            >
+              {formatPrice(order.subtotal)}
             </div>
           </div>
-        </div>
 
-        {/* Sticky footer and upward-opening menu */}
-        <div className="relative z-30 shrink-0 border-t border-[#4d4d4d]/10 bg-white px-6 py-4 sm:px-8">
-          <div ref={menuRef} className="relative mx-auto w-full max-w-sm">
-            {isMenuOpen && (
+          {/* Workflow actions — only what's valid for the current status */}
+          {(order.status === 'pending' || order.status === 'confirmed') && (
+            <div>
+              <span style={LABEL_STYLE}>Actions</span>
               <div
-                role="menu"
-                className="absolute bottom-full left-1/2 z-40 mb-2 w-64 -translate-x-1/2 border border-[#4d4d4d]/15 bg-white shadow-lg"
+                className="flex flex-wrap"
+                style={{
+                  gap: 'var(--admin-space-xs)',
+                  marginTop: 'var(--admin-space-xs)',
+                }}
               >
                 {order.status === 'pending' && (
-                  <button
-                    type="button"
-                    role="menuitem"
-                    onClick={() => {
-                      closeMenu();
-                      onStatusChange(order, 'confirmed');
-                    }}
-                    className={actionClass}
+                  <WorkflowButton
+                    onClick={() => onStatusChange(order, 'confirmed')}
+                    tone="primary"
+                    icon={<FiCheck size={14} aria-hidden="true" />}
                   >
-                    <FiCheck size={14} />
                     Confirm order
-                  </button>
+                  </WorkflowButton>
                 )}
-
                 {order.status === 'confirmed' && (
-                  <button
-                    type="button"
-                    role="menuitem"
-                    onClick={() => {
-                      closeMenu();
-                      onStatusChange(order, 'delivered');
-                    }}
-                    className={actionClass}
+                  <WorkflowButton
+                    onClick={() => onStatusChange(order, 'delivered')}
+                    tone="success"
+                    icon={<FiTruck size={14} aria-hidden="true" />}
                   >
-                    <FiCheck size={14} />
                     Mark delivered
-                  </button>
+                  </WorkflowButton>
                 )}
-
-                {(order.status === 'pending' || order.status === 'confirmed') && (
-                  <button
-                    type="button"
-                    role="menuitem"
-                    onClick={() => {
-                      closeMenu();
-                      onStatusChange(order, 'cancelled');
-                    }}
-                    className="flex min-h-12 w-full items-center gap-3 border-0 border-b border-[#4d4d4d]/10 bg-white px-4 py-3 text-left admin-type-body text-red-500/80 transition-colors hover:bg-[#fafaf9] hover:text-red-600"
-                  >
-                    <FiX size={14} />
-                    Unable to complete
-                  </button>
-                )}
-
-                <button
-                  type="button"
-                  role="menuitem"
-                  onClick={() => {
-                    closeMenu();
-                    onDelete(order);
-                  }}
-                  className="flex min-h-12 w-full items-center gap-3 border-0 bg-white px-4 py-3 text-left admin-type-body text-red-500/80 transition-colors hover:bg-[#fafaf9] hover:text-red-600"
+                <WorkflowButton
+                  onClick={() => onStatusChange(order, 'cancelled')}
+                  tone="danger"
+                  icon={<FiCircle size={14} aria-hidden="true" />}
                 >
-                  <FiTrash2 size={14} />
-                  Delete permanently
-                </button>
+                  Cancel order
+                </WorkflowButton>
               </div>
-            )}
-
-            <div className="flex w-full items-stretch gap-2">
-              <button
-                type="button"
-                onClick={() => setIsMenuOpen((open) => !open)}
-                className="flex h-12 min-w-0 flex-1 items-center justify-center gap-2 border-0 bg-[#f5f5f5] admin-type-body text-[#4d4d4d] transition-colors hover:bg-[#e5e5e5]"
-                aria-expanded={isMenuOpen}
-                aria-haspopup="menu"
-                aria-label="Order actions menu"
-              >
-                <FiMenu size={18} />
-                Menu
-              </button>
-
-              <button
-                type="button"
-                onClick={() =>
-                  window.open(
-                    `https://wa.me/${order.customer_phone.replace(/\D/g, '')}`,
-                    '_blank',
-                    'noopener,noreferrer',
-                  )
-                }
-                className="flex h-12 w-12 shrink-0 items-center justify-center border-0 bg-[#f5f5f5] text-[#4d4d4d] transition-colors hover:bg-[#e5e5e5]"
-                aria-label="Contact customer on WhatsApp"
-              >
-                <FaWhatsapp size={22} />
-              </button>
             </div>
-          </div>
+          )}
+        </div>
+
+        {/* Sticky footer */}
+        <div
+          className="flex"
+          style={{
+            padding: 'var(--admin-space-md) var(--admin-space-lg)',
+            borderTop: '1px solid var(--admin-border-subtle)',
+            flexShrink: 0,
+            gap: 'var(--admin-space-xs)',
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => onDelete(order)}
+            style={{
+              flex: '1 1 0',
+              height: '44px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 'var(--admin-space-xs)',
+              borderRadius: 'var(--ds-radius-xl)',
+              borderWidth: '1px',
+              borderStyle: 'solid',
+              borderColor: 'var(--admin-status-red)',
+              backgroundColor: 'transparent',
+              color: 'var(--admin-status-red)',
+              fontSize: 'var(--admin-size-supporting)',
+              fontWeight: 'var(--admin-weight-medium)',
+              cursor: 'pointer',
+            }}
+          >
+            <FiTrash2 size={14} aria-hidden="true" />
+            Delete
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            style={{
+              flex: '1 1 0',
+              height: '44px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 'var(--ds-radius-xl)',
+              borderWidth: '1px',
+              borderStyle: 'solid',
+              borderColor: 'var(--admin-text-primary)',
+              backgroundColor: 'var(--admin-text-primary)',
+              color: 'var(--admin-bg)',
+              fontSize: 'var(--admin-size-supporting)',
+              fontWeight: 'var(--admin-weight-medium)',
+              cursor: 'pointer',
+            }}
+          >
+            Close
+          </button>
         </div>
       </div>
+
       <ProductModal
         product={
           selectedProduct

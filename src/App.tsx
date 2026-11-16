@@ -14,7 +14,6 @@ import ViewCatalog from './pages/ViewCatalog';
 import Admin from './pages/Admin';
 import UpdatePassword from './pages/UpdatePassword';
 import CartPage from './pages/CartPage';
-import DesignSystemTest from './pages/DesignSystemTest';
 
 function AppToaster() {
   const { primaryAccent } = useStorefront();
@@ -74,7 +73,6 @@ export default function App() {
           {/* Shared operational routes */}
           <Route path="/admin" element={<Admin />} />
           <Route path="/update-password" element={<UpdatePassword />} />
-          <Route path="/test" element={<DesignSystemTest />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <AppToaster />

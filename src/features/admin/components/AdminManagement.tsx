@@ -10,7 +10,13 @@ export default function AdminManagement({ accessToken }: AdminManagementProps) {
   const m = useAdminManagement({ accessToken });
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--admin-space-lg)' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 'var(--admin-space-2xl)',
+      }}
+    >
       <AdminInviteForm
         email={m.email}
         setEmail={m.setEmail}
