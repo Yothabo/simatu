@@ -12,7 +12,6 @@ import CheckoutCustomerForm from './checkout/CheckoutCustomerForm';
 import CheckoutSuccess from './checkout/CheckoutSuccess';
 import CheckoutErrorModal from './checkout/CheckoutErrorModal';
 import {
-  createReceiptPdf,
   getReceiptFileName,
   getReceiptText,
 } from './checkout/checkoutReceipt';
@@ -194,34 +193,48 @@ export default function CheckoutModal({
 
   const getReceiptTextForOrder = () => getReceiptText(name, createdOrder);
 
-  const createReceiptPdfForOrder = () =>
-    createReceiptPdf(name, primaryAccent, createdOrder);
+  const createReceiptPdfForOrder = async () => {
+    if (!createdOrder) return null;
+
+    const { createReceiptPdf } = await import('./checkout/checkoutReceiptPdf');
+    return createReceiptPdf(name, primaryAccent, createdOrder);
+  };
 
   const getReceiptFileNameForOrder = () =>
     getReceiptFileName(name, createdOrder);
 
-  const downloadReceipt = () => {
-    const pdf = createReceiptPdfForOrder();
-    if (!pdf || !createdOrder) return;
+  const downloadReceipt = async () => {
+    if (!createdOrder) return;
 
-    pdf.save(getReceiptFileNameForOrder());
-    handleContinueShopping();
+    try {
+      const pdf = await createReceiptPdfForOrder();
+      if (!pdf) return;
+
+      pdf.save(getReceiptFileNameForOrder());
+      handleContinueShopping();
+    } catch (error) {
+      console.error('Unable to generate order receipt PDF:', error);
+    }
   };
 
   const shareReceipt = async () => {
     if (!createdOrder) return;
 
-    const pdf = createReceiptPdfForOrder();
-    if (!pdf) return;
-
-    const file = new File(
-      [pdf.output('blob')],
-      getReceiptFileNameForOrder(),
-      { type: 'application/pdf' }
-    );
+    const receiptText = getReceiptTextForOrder();
+    const pdf = await createReceiptPdfForOrder().catch((error: unknown) => {
+      console.error('Unable to generate order receipt PDF:', error);
+      return null;
+    });
+    const file = pdf
+      ? new File(
+          [pdf.output('blob')],
+          getReceiptFileNameForOrder(),
+          { type: 'application/pdf' }
+        )
+      : null;
 
     try {
-      if (navigator.share && navigator.canShare?.({ files: [file] })) {
+      if (file && navigator.share && navigator.canShare?.({ files: [file] })) {
         await navigator.share({
           title: `${name} order confirmation`,
           text: `Order ${createdOrder.order_number}`,
@@ -230,14 +243,14 @@ export default function CheckoutModal({
       } else if (navigator.share) {
         await navigator.share({
           title: `${name} order confirmation`,
-          text: getReceiptTextForOrder(),
+          text: receiptText,
         });
       } else {
-        await navigator.clipboard.writeText(getReceiptTextForOrder());
+        await navigator.clipboard.writeText(receiptText);
       }
     } catch (error) {
       if (!(error instanceof Error && error.name === 'AbortError')) {
-        await navigator.clipboard.writeText(getReceiptTextForOrder());
+        await navigator.clipboard.writeText(receiptText);
       }
     } finally {
       handleContinueShopping();
