@@ -1,9 +1,5 @@
 import { useState } from 'react';
-import {
-  FiDownload,
-  FiPlus,
-  FiRefreshCw,
-} from 'react-icons/fi';
+import { FiPlus } from 'react-icons/fi';
 import {
   AdminButton,
   AdminSectionHeader,
@@ -17,10 +13,10 @@ import {
   InventorySalesSection,
   InventoryStockSection,
 } from './sections';
-import AddMenu from './shared/AddMenu';
+import InventoryPageHeader from './InventoryPageHeader';
+import InventorySectionNavigation from './InventorySectionNavigation';
 import StockActionModal from './shared/StockActionModal';
 import type { InventoryProps, InventorySection } from './types';
-import { exportInventoryCsv } from './utils';
 
 export default function AdminInventory({
   storefrontFilter,
@@ -52,7 +48,6 @@ export default function AdminInventory({
     applyInventoryResponse,
     setLoadError,
   });
-
   const activeSection = SECTIONS.find((item) => item.id === section)!;
 
   return (
@@ -60,48 +55,12 @@ export default function AdminInventory({
       className="flex w-full flex-col"
       style={{ gap: 'var(--admin-space-xl)' }}
     >
-      <AdminSectionHeader
-        title="Inventory"
-        as="h1"
-        action={
-          <div
-            className="flex items-center flex-wrap"
-            style={{ gap: 'var(--admin-space-xs)' }}
-          >
-            <AdminButton
-              variant="neutral"
-              shape="circle"
-              ariaLabel="Export inventory report"
-              onClick={() => {
-                if (isLoading || loadError) return;
-                exportInventoryCsv(inventory, storefrontFilter);
-              }}
-              disabled={isLoading || !!loadError || inventory.length === 0}
-            >
-              <FiDownload size={18} aria-hidden="true" />
-            </AdminButton>
-
-            <AdminButton
-              variant="neutral"
-              shape="circle"
-              ariaLabel={
-                isLoading ? 'Refreshing inventory' : 'Refresh inventory'
-              }
-              onClick={() => {
-                if (isLoading) return;
-                void refreshInventory();
-              }}
-            >
-              <FiRefreshCw
-                size={18}
-                aria-hidden="true"
-                className={isLoading ? 'animate-spin' : ''}
-              />
-            </AdminButton>
-
-            <AddMenu />
-          </div>
-        }
+      <InventoryPageHeader
+        inventory={inventory}
+        storefrontFilter={storefrontFilter}
+        isLoading={isLoading}
+        loadError={loadError}
+        onRefresh={refreshInventory}
       />
 
       <div className="overview-store-row">
@@ -111,30 +70,10 @@ export default function AdminInventory({
         />
       </div>
 
-      <nav
-        aria-label="Inventory sections"
-        className="grid grid-cols-2 sm:grid-cols-4"
-        style={{ gap: 'var(--admin-space-xs)' }}
-      >
-        {SECTIONS.map(({ id, label, Icon }) => {
-          const selected = section === id;
-
-          return (
-            <AdminButton
-              key={id}
-              variant={selected ? 'primary' : 'neutral'}
-              shape="pill"
-              ariaLabel={label}
-              ariaCurrent={selected ? 'page' : undefined}
-              onClick={() => setSection(id)}
-              fullWidth
-            >
-              <Icon size={16} aria-hidden="true" />
-              <span>{label}</span>
-            </AdminButton>
-          );
-        })}
-      </nav>
+      <InventorySectionNavigation
+        section={section}
+        onSectionChange={setSection}
+      />
 
       <AdminSectionHeader
         title={activeSection.label}

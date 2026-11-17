@@ -3,15 +3,16 @@ import type {
   InventoryItem,
   StockAction,
   StorefrontFilter,
+  InventoryResponse,
 } from '../types';
-import { isInventoryResponse } from '../utils';
+import { fetchInventorySnapshot, submitStockMovement } from './stockAction.api';
 
 type Args = {
   inventory: InventoryItem[];
   storefrontFilter: StorefrontFilter;
   accessToken: string;
   applyInventoryResponse: (
-    data: import('../types').InventoryResponse,
+    data: InventoryResponse,
     persistSnapshot?: boolean,
   ) => void;
   setLoadError: (message: string) => void;
@@ -106,27 +107,14 @@ export function useStockAction({
       setSubmitError('');
 
       try {
-        const response = await fetch('/api/inventory', {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            storefront: storefrontFilter,
-            product_id: selectedProduct.product_id,
-            action,
-            quantity: parsedQuantity,
-            reason: reason.trim(),
-          }),
+        await submitStockMovement({
+          accessToken,
+          storefront: storefrontFilter,
+          productId: selectedProduct.product_id,
+          action,
+          quantity: parsedQuantity,
+          reason: reason.trim(),
         });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data?.error || 'Unable to save the stock movement.');
-        }
 
         // The stock movement is committed. Close the form before refreshing
         // so a refresh failure cannot lead to the same movement being submitted again.
@@ -137,28 +125,10 @@ export function useStockAction({
         setAdjustmentDirection('increase');
 
         try {
-          const refreshResponse = await fetch(
-            `/api/inventory?storefront=${encodeURIComponent(storefrontFilter)}`,
-            {
-              method: 'GET',
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-                Accept: 'application/json',
-              },
-            },
-          );
-
-          const refreshData = await refreshResponse.json();
-
-          if (!refreshResponse.ok) {
-            throw new Error(
-              refreshData?.error || 'The inventory refresh failed.',
-            );
-          }
-
-          if (!isInventoryResponse(refreshData)) {
-            throw new Error('The inventory response has an invalid format.');
-          }
+          const refreshData = await fetchInventorySnapshot({
+            accessToken,
+            storefront: storefrontFilter,
+          });
 
           applyInventoryResponse(refreshData);
           setLoadError('');
