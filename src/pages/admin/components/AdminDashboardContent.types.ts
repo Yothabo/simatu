@@ -5,6 +5,8 @@ import type {
   Tab,
   Order,
   Storefront,
+  CategoryFilter,
+  OrderFilter,
 } from '../../../features/admin/types/admin.types';
 
 import type { useAdminProducts } from '../../../features/admin/hooks/useAdminProducts';
@@ -15,7 +17,7 @@ type Products = ReturnType<typeof useAdminProducts>['products'];
 type Orders = ReturnType<typeof useAdminOrders>['orders'];
 type Activities = ReturnType<typeof useAdminActivity>['activities'];
 
-interface AdminDashboardContentProps {
+export interface AdminDashboardContentProps {
   activeTab: Tab;
   setActiveTab: Dispatch<SetStateAction<Tab>>;
 
