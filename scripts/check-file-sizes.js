@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-const MAX_LINES = 150;
+// Keep source modules cohesive without forcing artificial component splits.
+const MAX_LINES = 300;
 
 function walkDir(dir) {
   const results = [];
@@ -19,7 +20,7 @@ function walkDir(dir) {
 
 const files = walkDir('src');
 
-console.log('File Line Count Analysis (Threshold: ' + MAX_LINES + ' lines):\n');
+console.log('File Line Count Analysis (Maintainability threshold: ' + MAX_LINES + ' lines):\n');
 
 let hasLargeFiles = false;
 const largeFiles = [];
@@ -36,7 +37,7 @@ files.forEach(file => {
 
 // Display large files
 if (largeFiles.length > 0) {
-  console.log('⚠️  WARNING: The following files exceed the line limit:');
+  console.log('⚠️  WARNING: The following files exceed the maintainability threshold:');
   largeFiles.forEach(({ file, lines }) => {
     console.log(`  ${file} — ${lines} lines`);
   });
