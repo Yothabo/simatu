@@ -113,9 +113,7 @@ function renderOverview(initialStore: 'all' | Storefront = 'all') {
     return (
       <AdminOverview
         userId={USER_ID}
-        searchQuery=""
-        onSearchChange={vi.fn()}
-        onSearchFocus={vi.fn()}
+        userName="Test Admin"
         onAddProduct={vi.fn()}
         orders={orders}
         products={[]}
@@ -131,6 +129,9 @@ function renderOverview(initialStore: 'all' | Storefront = 'all') {
         productsLoadError={null}
         isLoadingOrders={false}
         isLoadingProducts={false}
+        activities={[]}
+        isLoadingActivities={false}
+        onViewAllActivities={vi.fn()}
       />
     );
   }
