@@ -174,6 +174,7 @@ async function saveProduct(body, isUpdate, admin, requestId) {
       subcategory.id,
       product.supplier_cost,
       product.sku,
+      product.sizes,
     ];
 
     if (isUpdate) {
@@ -192,10 +193,11 @@ async function saveProduct(body, isUpdate, admin, requestId) {
              category_id = $11,
              subcategory_id = $12,
              supplier_cost = $13,
-             sku = $14
-         WHERE id = $15
-           AND ($16::text IS NULL OR storefront = $16)
-         RETURNING id, name, price, supplier_cost, sku,
+             sku = $14,
+             sizes = $15
+         WHERE id = $16
+           AND ($17::text IS NULL OR storefront = $17)
+         RETURNING id, name, price, supplier_cost, sku, sizes,
                    category, subcategory, description, image_url,
                    is_active, sort_order, storefront, store_id,
                    category_id, subcategory_id, created_at`,
@@ -210,9 +212,9 @@ async function saveProduct(body, isUpdate, admin, requestId) {
         `INSERT INTO public.products
            (name, price, category, subcategory, description, image_url,
             is_active, sort_order, storefront, store_id, category_id,
-            subcategory_id, supplier_cost, sku)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-         RETURNING id, name, price, supplier_cost, sku,
+            subcategory_id, supplier_cost, sku, sizes)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+         RETURNING id, name, price, supplier_cost, sku, sizes,
                    category, subcategory, description, image_url,
                    is_active, sort_order, storefront, store_id,
                    category_id, subcategory_id, created_at`,
@@ -308,6 +310,7 @@ async function listProducts(request) {
         is_active,
         sort_order,
         order_count,
+        sizes,
         created_at
       `;
 

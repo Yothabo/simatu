@@ -3,6 +3,11 @@ import App from './App';
 import './index.css';
 
 function showRuntimeError(title: string, detail: unknown) {
+  if (!import.meta.env.DEV) {
+    console.error(title, detail);
+    return;
+  }
+
   const root = document.getElementById('root');
   if (!root) return;
 

@@ -58,6 +58,7 @@ describe('validateProduct: valid input', () => {
         price: 199.99,
         supplier_cost: null,
         sku: null,
+        sizes: [],
         category: 'His',
         category_id: null,
         subcategory: 'Eau de Parfum',
@@ -611,6 +612,61 @@ describe('validateProduct: image URL boundaries', () => {
       ...validProduct(),
       image_url: 'a'.repeat(2049),
     }).error).toBe('Product image URL is too long.');
+  });
+});
+
+
+describe('validateProduct: sizes', () => {
+  it('preserves trimmed size labels', () => {
+    const result = validateProduct({
+      ...validProduct(),
+      sizes: [' S ', 'M', ' L '],
+    });
+
+    expect(result.product?.sizes).toEqual(['S', 'M', 'L']);
+  });
+
+  it('defaults omitted sizes to an empty list', () => {
+    expect(validateProduct(validProduct()).product?.sizes).toEqual([]);
+  });
+
+  it('rejects a non-array sizes value', () => {
+    expect(validateProduct({
+      ...validProduct(),
+      sizes: 'S,M,L',
+    }).error).toBe('Product sizes must be a list of up to 50 labels.');
+  });
+
+  it('rejects non-string size labels', () => {
+    expect(validateProduct({
+      ...validProduct(),
+      sizes: ['S', 10],
+    }).error).toBe('Each product size must be a text label.');
+  });
+
+  it('rejects blank and overlong size labels', () => {
+    expect(validateProduct({
+      ...validProduct(),
+      sizes: ['   '],
+    }).error).toBe('Product size labels must contain 1 to 80 characters.');
+    expect(validateProduct({
+      ...validProduct(),
+      sizes: ['S'.repeat(81)],
+    }).error).toBe('Product size labels must contain 1 to 80 characters.');
+  });
+
+  it('rejects duplicate labels regardless of case', () => {
+    expect(validateProduct({
+      ...validProduct(),
+      sizes: ['Medium', ' medium '],
+    }).error).toBe('Product sizes cannot contain duplicates.');
+  });
+
+  it('rejects more than 50 size labels', () => {
+    expect(validateProduct({
+      ...validProduct(),
+      sizes: Array.from({ length: 51 }, (_, index) => `Size ${index}`),
+    }).error).toBe('Product sizes must be a list of up to 50 labels.');
   });
 });
 

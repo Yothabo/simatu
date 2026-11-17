@@ -57,7 +57,14 @@ export function useInventoryData({
     [storefrontFilter, userId],
   );
 
+  const requestVersionRef = useRef(0);
+  const requestControllerRef = useRef<AbortController | null>(null);
+
   const refreshInventory = useCallback(async () => {
+    requestControllerRef.current?.abort();
+    requestControllerRef.current = null;
+    const requestVersion = ++requestVersionRef.current;
+
     if (storefrontFilter === 'all' || !userId) {
       setInventory([]);
       setMovements([]);
@@ -70,9 +77,12 @@ export function useInventoryData({
     const token = accessTokenRef.current;
     if (!token) {
       setIsLoading(false);
+      setLoadError('Your admin session has expired. Please sign in again.');
       return;
     }
 
+    const controller = new AbortController();
+    requestControllerRef.current = controller;
     setIsLoading(true);
     setLoadError('');
 
@@ -82,13 +92,20 @@ export function useInventoryData({
         {
           method: 'GET',
           headers: {
-            Authorization: `Bearer ${accessTokenRef.current}`,
+            Authorization: `Bearer ${token}`,
             Accept: 'application/json',
           },
+          cache: 'no-store',
+          signal: controller.signal,
         },
       );
 
       const data = await response.json();
+
+      if (
+        controller.signal.aborted ||
+        requestVersion !== requestVersionRef.current
+      ) return;
 
       if (!response.ok) {
         throw new Error(data?.error || 'Unable to load inventory.');
@@ -101,11 +118,21 @@ export function useInventoryData({
       applyInventoryResponse(data);
       setLoadError('');
     } catch (error) {
+      if (
+        controller.signal.aborted ||
+        requestVersion !== requestVersionRef.current
+      ) return;
+
       setLoadError(
         error instanceof Error ? error.message : 'Unable to load inventory.',
       );
     } finally {
-      setIsLoading(false);
+      if (requestVersion === requestVersionRef.current) {
+        setIsLoading(false);
+        if (requestControllerRef.current === controller) {
+          requestControllerRef.current = null;
+        }
+      }
     }
   }, [applyInventoryResponse, storefrontFilter, userId]);
 
@@ -116,25 +143,33 @@ export function useInventoryData({
       setAggregates({ received: 0, adjusted: 0 });
       setLoadError('');
       setIsLoading(false);
-      return;
+    } else {
+      const storageKey = `${ADMIN_STORAGE_KEYS.inventoryCache}:${storefrontFilter}`;
+      const cachedInventory = readAdminSnapshot(
+        storageKey,
+        userId,
+        isInventoryResponse,
+      );
+
+      if (cachedInventory) {
+        applyInventoryResponse(cachedInventory, false);
+      } else {
+        setInventory([]);
+        setMovements([]);
+        setAggregates({ received: 0, adjusted: 0 });
+      }
+
+      // Cached data is displayed immediately, then refreshed from the
+      // authoritative API. The request version prevents stale responses
+      // from replacing data for a newer storefront or administrator.
+      void refreshInventory();
     }
 
-    const storageKey = `${ADMIN_STORAGE_KEYS.inventoryCache}:${storefrontFilter}`;
-
-    const cachedInventory = readAdminSnapshot(
-      storageKey,
-      userId,
-      isInventoryResponse,
-    );
-
-    if (cachedInventory) {
-      applyInventoryResponse(cachedInventory, false);
-      setLoadError('');
-      setIsLoading(false);
-      return;
-    }
-
-    void refreshInventory();
+    return () => {
+      requestVersionRef.current += 1;
+      requestControllerRef.current?.abort();
+      requestControllerRef.current = null;
+    };
   }, [applyInventoryResponse, storefrontFilter, userId, refreshInventory]);
 
   const stockSummary = useMemo<StockSummary>(

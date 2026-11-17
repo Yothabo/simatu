@@ -110,6 +110,34 @@ export function validateProduct(body) {
 
   const isActive = body?.is_active;
   const sortOrder = parseInteger(body?.sort_order ?? 0);
+  const rawSizes = body?.sizes ?? [];
+
+  if (!Array.isArray(rawSizes) || rawSizes.length > 50) {
+    return { error: 'Product sizes must be a list of up to 50 labels.' };
+  }
+
+  const sizes = [];
+  const seenSizes = new Set();
+
+  for (const value of rawSizes) {
+    if (typeof value !== 'string') {
+      return { error: 'Each product size must be a text label.' };
+    }
+
+    const size = value.trim();
+    const normalizedSize = size.toLocaleLowerCase();
+
+    if (!size || size.length > 80) {
+      return { error: 'Product size labels must contain 1 to 80 characters.' };
+    }
+
+    if (seenSizes.has(normalizedSize)) {
+      return { error: 'Product sizes cannot contain duplicates.' };
+    }
+
+    seenSizes.add(normalizedSize);
+    sizes.push(size);
+  }
 
   if (name.length < 1 || name.length > 160) {
     return {
@@ -192,6 +220,7 @@ export function validateProduct(body) {
         ? null
         : Math.round(supplierCost * 100) / 100,
       sku,
+      sizes,
       category,
       category_id: categoryId,
       subcategory,

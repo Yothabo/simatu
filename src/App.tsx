@@ -1,5 +1,9 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import MetaTags from './components/MetaTags';
+import ScrollToHash from './components/ScrollToHash';
+import { useTouchSelection } from './utils/useTouchSelection';
 
 import CorporateHome from './pages/CorporateHome';
 import { CartProvider } from './context/CartContext';
@@ -15,34 +19,40 @@ const AdminPage = React.lazy(() => import('./pages/admin/AdminPage'));
 
 class AdminErrorBoundary extends React.Component<
   { children: React.ReactNode },
-  { error: string | null }
+  { hasError: boolean }
 > {
-  state = { error: null as string | null };
+  state = { hasError: false };
 
-  static getDerivedStateFromError(error: Error) {
-    return { error: error.stack || error.message };
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, info: React.ErrorInfo) {
+    console.error('Admin page rendering failed:', error, info.componentStack);
   }
 
   render() {
-    if (this.state.error) {
+    if (this.state.hasError) {
       return (
-        <pre
+        <main
+          role="alert"
           style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 999999,
+            minHeight: '100vh',
+            display: 'grid',
+            placeContent: 'center',
+            gap: 16,
+            padding: 24,
             background: '#fff',
-            color: '#b00020',
-            padding: 20,
-            overflow: 'auto',
-            whiteSpace: 'pre-wrap',
-            fontSize: 13,
+            color: '#202124',
+            textAlign: 'center',
           }}
         >
-          ADMIN ERROR
-
-          {this.state.error}
-        </pre>
+          <h1>Admin could not be loaded</h1>
+          <p>Something went wrong while opening the admin dashboard.</p>
+          <button type="button" onClick={() => window.location.reload()}>
+            Reload admin
+          </button>
+        </main>
       );
     }
 
@@ -51,10 +61,14 @@ class AdminErrorBoundary extends React.Component<
 }
 
 function App() {
+  useTouchSelection();
+
   return (
     <BrowserRouter>
       <CartProvider>
-      <Routes>
+        <ScrollToHash />
+        <MetaTags />
+        <Routes>
         <Route path="/" element={<CorporateHome />} />
 
         <Route path="/yotaabo" element={<Home />} />
@@ -91,7 +105,11 @@ function App() {
         />
 
         <Route path="*" element={<NotFound />} />
-      </Routes>
+        </Routes>
+        <Toaster
+          position="top-right"
+          containerStyle={{ top: 90, right: 20 }}
+        />
       </CartProvider>
     </BrowserRouter>
   );
