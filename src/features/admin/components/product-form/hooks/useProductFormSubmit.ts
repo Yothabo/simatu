@@ -10,7 +10,7 @@ type UseProductFormSubmitArgs = {
   form: AdminProduct;
   statusValue: string;
   isLoadingCategories: boolean;
-  categoryLoadError: string;
+  categoryLoadError: string | null;
   productToEdit?: AdminProduct | null;
   onSaved: (product: AdminRow) => void;
   handleClose: () => void;
