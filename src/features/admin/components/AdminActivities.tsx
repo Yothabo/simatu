@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { FiDownload } from 'react-icons/fi';
 import CustomDropdown from '../../../components/CustomDropdown';
-import type { AdminActivity } from '../hooks/useAdminActivity';
+import type { AdminActivity } from '../hooks/adminActivity.types';
 import {
   escapeCsvCell,
   getActivityDescription,
