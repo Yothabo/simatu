@@ -1,4 +1,3 @@
-import { jsPDF } from 'jspdf';
 import type { CreatedOrder } from './types';
 
 export const getReceiptText = (
