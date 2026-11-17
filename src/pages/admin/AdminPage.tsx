@@ -8,28 +8,17 @@ import '../../design-system/styles/admin-theme.css';
 import '../../design-system/components/AdminButton/AdminButton.css';
 import '../../design-system/components/AdminRow/AdminRow.css';
 
-import type {
-  AdminRow,
-  Tab,
-  OrderStatus,
-  Order,
-  Storefront,
-} from '../../features/admin/types/admin.types';
-
+import type { Tab, Storefront } from '../../features/admin/types/admin.types';
 import AdminBottomNavigation from '../../features/admin/components/AdminBottomNavigation';
-
 import { useAdminAuth } from '../../features/admin/hooks/useAdminAuth';
 import { useAdminProducts } from '../../features/admin/hooks/useAdminProducts';
 import { useAdminOrders } from '../../features/admin/hooks/useAdminOrders';
 import { useAdminActivity } from '../../features/admin/hooks/useAdminActivity';
-
 import { getAdminPageAuthScreen } from './components/AdminPageAuthScreen';
 import AdminPageHeader from './components/AdminPageHeader';
 import AdminPageModals from './components/AdminPageModals';
-import AdminDashboardContent from './components/AdminDashboardContent';
-
-import { useProductFormSession } from './hooks/useProductFormSession';
-import { useProductActions } from './hooks/useProductActions';
+import AdminPageDashboard from './components/AdminPageDashboard';
+import { useAdminPageActions } from './hooks/useAdminPageActions';
 import { useAdminPageFilters } from './hooks/useAdminPageFilters';
 
 export default function AdminPage() {
@@ -47,68 +36,12 @@ export default function AdminPage() {
     logout,
   } = useAdminAuth();
 
-  const {
-    products,
-    productsLoadError,
-    isLoading: isLoadingProducts,
-    loadProducts,
-    upsertProduct,
-    hideProduct,
-    reactivateProduct,
-    deleteProduct,
-  } = useAdminProducts(isAdmin, session?.user.id ?? null);
-
-  const {
-    activities,
-    isLoadingActivities,
-    loadActivities,
-  } = useAdminActivity(isAdmin, session?.user.id ?? null);
-
-  const {
-    orders,
-    isLoadingOrders,
-    ordersLoadError,
-    loadOrders,
-    changeOrderStatus,
-    deleteOrder,
-  } = useAdminOrders(isAdmin, session?.user.id ?? null);
+  const productData = useAdminProducts(isAdmin, session?.user.id ?? null);
+  const orderData = useAdminOrders(isAdmin, session?.user.id ?? null);
+  const activityData = useAdminActivity(isAdmin, session?.user.id ?? null);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const formUserId = isAdmin === true ? session?.user.id ?? null : null;
-
-  const {
-    formOpen,
-    editing,
-    openCreateForm,
-    openEditForm,
-    closeForm,
-  } = useProductFormSession({ formUserId });
-
-  const [viewingProduct, setViewingProduct] = useState<AdminRow | null>(null);
-  const [viewingOrder, setViewingOrder] = useState<Order | null>(null);
-  const [confirmDeleteOrder, setConfirmDeleteOrder] =
-    useState<Order | null>(null);
-
-  const {
-    confirmDelete,
-    setConfirmDelete,
-    confirmPermanentDelete,
-    setConfirmPermanentDelete,
-    isHidingProduct,
-    isDeletingProduct,
-    handleHideProduct,
-    handlePermanentDeleteProduct,
-    handleReactivateProduct,
-  } = useProductActions({
-    hideProduct,
-    reactivateProduct,
-    deleteProduct,
-    loadActivities,
-    onProductClosed: () => setViewingProduct(null),
-  });
-
   const [activeTab, setActiveTab] = useState<Tab>('overview');
 
   const [adminTheme, setAdminTheme] = useState<'light' | 'dark'>(() => {
@@ -129,7 +62,10 @@ export default function AdminPage() {
     }
   }, [adminTheme]);
 
-  const filters = useAdminPageFilters({ products, orders });
+  const filters = useAdminPageFilters({
+    products: productData.products,
+    orders: orderData.orders,
+  });
 
   useEffect(() => {
     if (admin?.role === 'store_admin' && admin.storeSlug) {
@@ -148,27 +84,20 @@ export default function AdminPage() {
     await login(email, password);
   }
 
-  async function handleOrderStatusChange(
-    order: Order,
-    newStatus: OrderStatus,
-  ) {
-    const success = await changeOrderStatus(order, newStatus);
+  const formUserId = isAdmin === true ? session?.user.id ?? null : null;
+  const storeSlug =
+    admin?.storeSlug === 'yotaabo' || admin?.storeSlug === 'poshies'
+      ? admin.storeSlug
+      : null;
 
-    if (success) {
-      setViewingOrder(null);
-      void loadActivities();
-    }
-  }
-
-  async function handleDeleteOrder(order: Order) {
-    const success = await deleteOrder(order);
-
-    if (success) {
-      setConfirmDeleteOrder(null);
-      setViewingOrder(null);
-      void loadActivities();
-    }
-  }
+  const pageActions = useAdminPageActions({
+    formUserId,
+    adminRole: admin?.role ?? null,
+    storeSlug,
+    productData,
+    orderData,
+    loadActivities: activityData.loadActivities,
+  });
 
   const authScreen = getAdminPageAuthScreen({
     session,
@@ -188,16 +117,7 @@ export default function AdminPage() {
   });
 
   if (authScreen) return authScreen;
-
-  const storeSlugForForm =
-    admin?.storeSlug === 'yotaabo' || admin?.storeSlug === 'poshies'
-      ? admin.storeSlug
-      : null;
-
-  const productsWithId = products.filter(
-    (product): product is AdminRow & { id: string } =>
-      typeof product.id === 'string',
-  );
+  if (!session) return null;
 
   const userName =
     session.user.user_metadata?.first_name ??
@@ -221,61 +141,23 @@ export default function AdminPage() {
         onLogout={logout}
       />
 
-      <div className="admin-page-shell mx-auto">
-        <AdminDashboardContent
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          adminRole={admin?.role}
-          adminStoreSlug={admin?.storeSlug ?? undefined}
-          storeCreatedAt={admin?.storeCreatedAt ?? {}}
-          adminTheme={adminTheme}
-          setAdminTheme={setAdminTheme}
-          userId={session.user.id ?? ''}
-          userName={userName}
-          accessToken={session.access_token ?? ''}
-          products={products}
-          orders={orders}
-          activities={activities}
-          productsLoadError={productsLoadError}
-          ordersLoadError={ordersLoadError}
-          isLoadingProducts={isLoadingProducts}
-          isLoadingOrders={isLoadingOrders}
-          isLoadingActivities={isLoadingActivities}
-          loadProducts={loadProducts}
-          loadOrders={loadOrders}
-          loadActivities={loadActivities}
-          onAddProduct={openCreateForm}
-          onSelectProduct={setViewingProduct}
-          onSelectOrder={setViewingOrder}
-          storefrontFilter={filters.storefrontFilter}
-          setStorefrontFilter={filters.setStorefrontFilter}
-          categoryFilter={filters.categoryFilter}
-          setCategoryFilter={filters.setCategoryFilter}
-          searchQuery={filters.searchQuery}
-          setSearchQuery={filters.setSearchQuery}
-          currentPage={filters.currentPage}
-          setCurrentPage={filters.setCurrentPage}
-          filteredProducts={filters.filteredProducts}
-          paginatedProducts={filters.paginatedProducts}
-          totalPages={filters.totalPages}
-          orderFilter={filters.orderFilter}
-          setOrderFilter={filters.setOrderFilter}
-          orderSearch={filters.orderSearch}
-          setOrderSearch={filters.setOrderSearch}
-          orderPage={filters.orderPage}
-          setOrderPage={filters.setOrderPage}
-          filteredOrders={filters.filteredOrders}
-          paginatedOrders={filters.paginatedOrders}
-          totalOrderPages={filters.totalOrderPages}
-          onStorefrontChange={() => {
-            setViewingProduct(null);
-            setViewingOrder(null);
-            setConfirmDelete(null);
-            setConfirmPermanentDelete(null);
-            setConfirmDeleteOrder(null);
-          }}
-        />
-      </div>
+      <AdminPageDashboard
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        admin={admin}
+        session={session}
+        adminTheme={adminTheme}
+        setAdminTheme={setAdminTheme}
+        userName={userName}
+        productData={productData}
+        orderData={orderData}
+        activityData={activityData}
+        filters={filters}
+        onAddProduct={pageActions.openCreateForm}
+        onSelectProduct={pageActions.setViewingProduct}
+        onSelectOrder={pageActions.setViewingOrder}
+        onStorefrontChange={pageActions.clearSelectionForStorefrontChange}
+      />
 
       <AdminBottomNavigation
         activeTab={activeTab}
@@ -283,37 +165,8 @@ export default function AdminPage() {
       />
 
       <AdminPageModals
-        viewingProduct={viewingProduct}
-        onCloseViewingProduct={() => setViewingProduct(null)}
-        onEditProduct={openEditForm}
-        onRequestHide={setConfirmDelete}
-        onReactivate={handleReactivateProduct}
-        onRequestPermanentDelete={setConfirmPermanentDelete}
-        formOpen={formOpen}
-        editing={editing}
-        onCloseForm={closeForm}
-        onSavedProduct={upsertProduct}
-        adminRole={admin?.role ?? null}
-        storeSlug={storeSlugForForm}
-        confirmDelete={confirmDelete}
-        isHiding={isHidingProduct}
-        onConfirmHide={handleHideProduct}
-        onCancelHide={() => setConfirmDelete(null)}
-        confirmPermanentDelete={confirmPermanentDelete}
-        isDeleting={isDeletingProduct}
-        onConfirmPermanentDelete={handlePermanentDeleteProduct}
-        onCancelPermanentDelete={() => setConfirmPermanentDelete(null)}
-        viewingOrder={viewingOrder}
-        onCloseViewingOrder={() => setViewingOrder(null)}
-        products={productsWithId}
-        onStatusChange={handleOrderStatusChange}
-        onRequestDelete={(order) => {
-          setViewingOrder(null);
-          setConfirmDeleteOrder(order);
-        }}
-        confirmDeleteOrder={confirmDeleteOrder}
-        onConfirmDelete={handleDeleteOrder}
-        onCancelDelete={() => setConfirmDeleteOrder(null)}
+        productProps={pageActions.productModalProps}
+        orderProps={pageActions.orderModalProps}
       />
     </main>
   );

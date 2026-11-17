@@ -2,15 +2,19 @@ import type { ComponentProps } from 'react';
 import AdminProductModals from './AdminProductModals';
 import AdminOrderModals from './AdminOrderModals';
 
-type ProductModalProps = ComponentProps<typeof AdminProductModals>;
-type OrderModalProps = ComponentProps<typeof AdminOrderModals>;
-type AdminPageModalsProps = ProductModalProps & OrderModalProps;
+type AdminPageModalsProps = {
+  productProps: ComponentProps<typeof AdminProductModals>;
+  orderProps: ComponentProps<typeof AdminOrderModals>;
+};
 
-export default function AdminPageModals(props: AdminPageModalsProps) {
+export default function AdminPageModals({
+  productProps,
+  orderProps,
+}: AdminPageModalsProps) {
   return (
     <>
-      <AdminProductModals {...props} />
-      <AdminOrderModals {...props} />
+      <AdminProductModals {...productProps} />
+      <AdminOrderModals {...orderProps} />
     </>
   );
 }
