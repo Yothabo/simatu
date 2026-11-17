@@ -1,0 +1,109 @@
+/* Recharts — strip default browser focus outlines so the chart
+   renders clean (lines + grid only). Tooltips unaffected. */
+.admin-scope .recharts-wrapper,
+.admin-scope .recharts-wrapper:focus,
+.admin-scope .recharts-wrapper:focus-visible,
+.admin-scope .recharts-surface,
+.admin-scope .recharts-surface:focus,
+.admin-scope .recharts-surface:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.admin-scope .recharts-layer:focus,
+.admin-scope .recharts-layer:focus-visible {
+  outline: none !important;
+}
+
+
+/* Recharts defensive — strip ALL borders, outlines, shadows from
+   any recharts internal element or the wrapper div. Tooltips unaffected
+   (they're rendered in a portal outside the chart wrapper). */
+.admin-scope .admin-revenue-chart,
+.admin-scope .admin-revenue-chart *:not(.recharts-tooltip-wrapper):not(.recharts-tooltip-wrapper *) {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+
+/* Products trend line — draw-in animation on mount. */
+@keyframes admin-trend-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+
+/* Card background — theme-aware. Light: grey surface-subtle. Dark: surface. */
+.admin-scope .admin-card-bg {
+  background-color: var(--admin-surface);
+}
+
+
+/* Theme toggle icon animation */
+@keyframes admin-toggle-fade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* Modal — admin-scoped, theme-aware backdrop + panel. */
+.admin-scope [data-modal-backdrop] {
+  background-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.admin-scope [data-modal-panel] {
+  background-color: var(--admin-surface) !important;
+  border-radius: var(--ds-radius-lg) !important;
+  border: 1px solid var(--admin-border-subtle) !important;
+}
+
+.admin-scope[data-theme='dark'] [data-modal-backdrop] {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+}
+
+
+
+/* Category header row — visible background over card gradient */
+.admin-scope .admin-category-header {
+  background-color: var(--admin-category-header-bg) !important;
+}
+
+
+/* Card grid pattern - theme-aware visibility.
+   Light: darkens the surface a touch. Dark: lightens it. */
+.admin-scope[data-theme='light'],
+.admin-scope:not([data-theme]) {
+  --admin-card-grid-line: color-mix(in srgb, var(--admin-border-strong) 16%, transparent);
+}
+
+.admin-scope[data-theme='dark'] {
+  --admin-card-grid-line: color-mix(in srgb, var(--admin-border-strong) 32%, transparent);
+}
+
+
+/* Faint text - quieter than muted. For card descriptions and helper copy. */
+.admin-scope[data-theme='light'],
+.admin-scope:not([data-theme]) {
+  /* Light mode: dark grey text at low opacity -> renders as a very pale
+     grey, close to the near-white surface, still readable. */
+  --admin-text-faint: color-mix(in srgb, #4d4d4d 32%, var(--admin-surface));
+}
+
+.admin-scope[data-theme='dark'] {
+  /* Dark mode: pale grey text at low opacity -> renders as a dark grey
+     close to the dark surface, still readable. */
+  --admin-text-faint: color-mix(in srgb, #c2c2c2 38%, var(--admin-surface));
+}
+
