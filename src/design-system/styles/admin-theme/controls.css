@@ -1,0 +1,259 @@
+/* =========================================================
+   AccentButton — unified button chrome across admin UI.
+   Variants: accent (orange), neutral (soft grey), dark (charcoal).
+   Shapes: pill, circle, tab.
+   All colors from tokens. No hex literals.
+   ========================================================= */
+.admin-scope .admin-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--admin-border-strong);
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease,
+    border-color 150ms ease, opacity 150ms ease;
+  white-space: nowrap;
+  font-family: var(--admin-font-body);
+}
+
+.admin-scope .admin-btn:focus-visible {
+  outline: 2px solid var(--admin-focus);
+  outline-offset: 2px;
+}
+
+/* ---- variants ---- */
+
+.admin-scope .admin-btn-neutral {
+  background-color: var(--admin-surface);
+  color: var(--admin-text-secondary);
+}
+
+.admin-scope .admin-btn-neutral:hover {
+  background-color: var(--admin-surface-subtle);
+  color: var(--admin-text-primary);
+}
+
+.admin-scope .admin-btn-transparent {
+  background-color: transparent;
+  color: var(--admin-text-secondary);
+  border-color: transparent;
+}
+
+.admin-scope .admin-btn-transparent:hover {
+  background-color: var(--admin-surface-subtle);
+  color: var(--admin-text-primary);
+}
+
+.admin-scope .admin-btn-accent {
+  background-color: var(--admin-accent);
+  color: var(--admin-on-accent);
+  border-color: var(--admin-accent);
+}
+
+.admin-scope .admin-btn-accent:hover {
+  background-color: var(--admin-accent-hover);
+  border-color: var(--admin-accent-hover);
+}
+
+.admin-scope .admin-btn-active {
+  background-color: var(--btn-active-bg, var(--admin-text-primary));
+  color: var(--admin-on-accent);
+  border-color: var(--btn-active-bg, var(--admin-text-primary));
+}
+
+.admin-scope .admin-btn-active:hover {
+  opacity: 0.9;
+}
+
+.admin-scope .admin-btn-dark {
+  background-color: var(--admin-text-primary);
+  color: var(--admin-bg);
+  border-color: var(--admin-text-primary);
+}
+
+.admin-scope .admin-btn-dark:hover {
+  opacity: 0.9;
+}
+
+/* ---- shapes ---- */
+
+.admin-scope .admin-btn-pill {
+  height: 44px;
+  min-width: var(--admin-chip-width, 140px);
+  padding-inline: var(--admin-space-lg);
+  border-radius: var(--ds-radius-xl);
+  font-size: var(--admin-size-supporting);
+  font-weight: var(--admin-weight-medium);
+}
+
+.admin-scope .admin-btn-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  padding: 0;
+}
+
+.admin-scope .admin-btn-segment {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  padding: 0;
+  border-radius: 0;
+  border: 0;
+}
+
+/* Compact segment — scoped to cards. Smaller height, muted type. */
+.admin-scope .admin-btn-segment-compact {
+  width: auto;
+  height: var(--admin-control-height-compact, 32px);
+  min-width: var(--admin-control-height-compact, 32px);
+  padding-inline: var(--admin-space-sm);
+  border-radius: 0;
+  border: 0;
+  font-size: var(--admin-size-supporting);
+  font-weight: var(--admin-weight-normal);
+}
+
+/* Compact segment — variant-aware color, higher specificity than base variants. */
+.admin-scope .admin-btn-neutral.admin-btn-segment-compact {
+  color: var(--admin-text-secondary);
+}
+
+.admin-scope .admin-btn-neutral.admin-btn-segment-compact:hover {
+  color: var(--admin-text-primary);
+}
+
+.admin-scope .admin-btn-dark.admin-btn-segment-compact {
+  color: var(--admin-bg);
+}
+
+.admin-scope .admin-btn-active.admin-btn-segment-compact {
+  color: var(--admin-bg);
+}
+
+.admin-scope .admin-btn-tab {
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--admin-space-xxs);
+  padding: var(--admin-space-xs);
+  border: 0;
+  border-radius: var(--ds-radius-lg);
+  font-size: var(--admin-size-micro);
+}
+
+/* ---- store chip hover/focus — category color border ---- */
+
+.admin-scope .admin-btn[data-store-color]:hover,
+.admin-scope .admin-btn[data-store-color]:focus-visible {
+  border-color: var(--store-chip-color) !important;
+}
+
+
+/* Segmented store pill — two halves sharing one outline. */
+.admin-scope .admin-segmented {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--admin-border-strong);
+  border-radius: var(--ds-radius-xl);
+  overflow: hidden;
+  height: 44px;
+  background-color: var(--admin-surface);
+}
+
+/* Compact variant — scoped to cards that opt in via .admin-segmented-compact */
+.admin-scope .admin-segmented-compact {
+  border-radius: var(--ds-radius-lg);
+  height: var(--admin-control-height-compact, 32px);
+}
+
+.admin-scope .admin-segmented > .admin-btn {
+  border: 0;
+  border-radius: 0;
+  min-width: 0;
+  height: 100%;
+}
+
+.admin-scope .admin-segmented > .admin-btn + .admin-btn {
+  border-left: 1px solid var(--admin-border-strong);
+}
+
+.admin-scope .admin-segmented-left {
+  border-top-left-radius: var(--ds-radius-xl);
+  border-bottom-left-radius: var(--ds-radius-xl);
+}
+
+.admin-scope .admin-segmented-compact .admin-segmented-left {
+  border-top-left-radius: var(--ds-radius-lg);
+  border-bottom-left-radius: var(--ds-radius-lg);
+}
+
+.admin-scope .admin-segmented-right {
+  border-top-right-radius: var(--ds-radius-xl);
+  border-bottom-right-radius: var(--ds-radius-xl);
+}
+
+.admin-scope .admin-segmented-compact .admin-segmented-right {
+  border-top-right-radius: var(--ds-radius-lg);
+  border-bottom-right-radius: var(--ds-radius-lg);
+}
+
+/* Horizontal scroll for filter rows on narrow viewports. */
+.admin-scope .admin-filter-row {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.admin-scope .admin-filter-row::-webkit-scrollbar {
+  display: none;
+}
+
+
+/* Month strip — segmented container, buttons are compact AccentButtons. */
+.admin-scope .admin-month-strip .admin-btn {
+  font-size: var(--admin-size-micro);
+  font-weight: var(--admin-weight-medium);
+  color: var(--admin-border-strong);
+  padding-inline: var(--admin-space-xs);
+}
+
+.admin-scope .admin-month-strip .admin-btn:hover,
+.admin-scope .admin-month-strip .admin-btn:focus-visible {
+  color: var(--admin-text-primary);
+}
+
+.admin-scope .admin-month-strip .admin-btn.admin-month-active {
+  background-color: var(--admin-text-primary);
+  color: var(--admin-on-accent);
+  font-weight: var(--admin-weight-semibold);
+}
+
+
+/* Month strip — no dividers between month buttons. */
+.admin-scope .admin-month-strip .admin-btn + .admin-btn {
+  border-left: none;
+}
+
+
+/* Month strip — first/last buttons follow the strip's rounded corners
+   even when the strip has internal padding. */
+.admin-scope .admin-month-strip > .admin-segmented-left {
+  border-top-left-radius: var(--ds-radius-lg);
+  border-bottom-left-radius: var(--ds-radius-lg);
+}
+
+.admin-scope .admin-month-strip > .admin-segmented-right {
+  border-top-right-radius: var(--ds-radius-lg);
+  border-bottom-right-radius: var(--ds-radius-lg);
+}
+
+
+/* Filter segmented pill — equal-width buttons across all tabs. */
+.admin-scope .admin-filter-segmented > .admin-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+}
+
+
