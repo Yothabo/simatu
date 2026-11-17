@@ -16,8 +16,6 @@ import type {
   Storefront,
 } from '../../features/admin/types/admin.types';
 
-import AdminLoginScreen from '../../features/admin/components/AdminLoginScreen';
-import AdminTopBar from '../../features/admin/components/AdminTopBar';
 import AdminBottomNavigation from '../../features/admin/components/AdminBottomNavigation';
 
 import { useAdminAuth } from '../../features/admin/hooks/useAdminAuth';
@@ -25,14 +23,9 @@ import { useAdminProducts } from '../../features/admin/hooks/useAdminProducts';
 import { useAdminOrders } from '../../features/admin/hooks/useAdminOrders';
 import { useAdminActivity } from '../../features/admin/hooks/useAdminActivity';
 
-import AdminLoadingScreen from './AdminLoadingScreen';
-import {
-  AdminVerificationErrorScreen,
-  AdminAccessDeniedScreen,
-} from './AdminDeniedScreens';
-
-import AdminProductModals from './components/AdminProductModals';
-import AdminOrderModals from './components/AdminOrderModals';
+import { getAdminPageAuthScreen } from './components/AdminPageAuthScreen';
+import AdminPageHeader from './components/AdminPageHeader';
+import AdminPageModals from './components/AdminPageModals';
 import AdminDashboardContent from './components/AdminDashboardContent';
 
 import { useProductFormSession } from './hooks/useProductFormSession';
@@ -177,42 +170,24 @@ export default function AdminPage() {
     }
   }
 
-  if (isChecking && (!session || isAdmin !== true) && !authError) {
-    return <AdminLoadingScreen />;
-  }
+  const authScreen = getAdminPageAuthScreen({
+    session,
+    isAdmin,
+    isChecking,
+    authError,
+    email,
+    password,
+    loginError,
+    isLoggingIn,
+    onEmailChange: setEmail,
+    onPasswordChange: setPassword,
+    onLogin: handleLogin,
+    onClearLoginError: clearLoginError,
+    onRetryAuthorization: retryAuthorization,
+    onLogout: logout,
+  });
 
-  if (!session) {
-    return (
-      <AdminLoginScreen
-        email={email}
-        password={password}
-        loginError={loginError}
-        isLoggingIn={isLoggingIn}
-        isResolving={false}
-        showAuthIndicator={false}
-        isTransitioning={false}
-        onTransitionComplete={() => {}}
-        onEmailChange={setEmail}
-        onPasswordChange={setPassword}
-        onLogin={handleLogin}
-        onClearLoginError={clearLoginError}
-      />
-    );
-  }
-
-  if (session && authError && isAdmin !== true) {
-    return (
-      <AdminVerificationErrorScreen
-        authError={authError}
-        onRetry={retryAuthorization}
-        onLogout={logout}
-      />
-    );
-  }
-
-  if (!isChecking && isAdmin === false) {
-    return <AdminAccessDeniedScreen onLogout={logout} />;
-  }
+  if (authScreen) return authScreen;
 
   const storeSlugForForm =
     admin?.storeSlug === 'yotaabo' || admin?.storeSlug === 'poshies'
@@ -237,20 +212,13 @@ export default function AdminPage() {
       data-theme={adminTheme}
       style={buildAdminThemeStyle(adminTheme)}
     >
-      <AdminTopBar
+      <AdminPageHeader
         email={session.user.email?.split('@')[0] || 'Admin'}
-        onLogout={logout}
-        onBack={
-          activeTab === 'activities'
-            ? () => setActiveTab('overview')
-            : undefined
-        }
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
         adminTheme={adminTheme}
-        onToggleTheme={() =>
-          setAdminTheme((current) =>
-            current === 'light' ? 'dark' : 'light',
-          )
-        }
+        setAdminTheme={setAdminTheme}
+        onLogout={logout}
       />
 
       <div className="admin-page-shell mx-auto">
@@ -314,7 +282,7 @@ export default function AdminPage() {
         onTabChange={setActiveTab}
       />
 
-      <AdminProductModals
+      <AdminPageModals
         viewingProduct={viewingProduct}
         onCloseViewingProduct={() => setViewingProduct(null)}
         onEditProduct={openEditForm}
@@ -335,9 +303,6 @@ export default function AdminPage() {
         isDeleting={isDeletingProduct}
         onConfirmPermanentDelete={handlePermanentDeleteProduct}
         onCancelPermanentDelete={() => setConfirmPermanentDelete(null)}
-      />
-
-      <AdminOrderModals
         viewingOrder={viewingOrder}
         onCloseViewingOrder={() => setViewingOrder(null)}
         products={productsWithId}
