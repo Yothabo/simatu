@@ -1,4 +1,4 @@
-import type { AdminActivity } from '../hooks/useAdminActivity';
+import type { AdminActivity } from '../hooks/adminActivity.types';
 
 export type ActivityPeriod = 'day' | 'month' | 'year';
 
@@ -53,7 +53,7 @@ export function getGroupLabel(key: string, period: ActivityPeriod): string {
 export function escapeCsvCell(value: unknown): string {
   let text = String(value ?? '');
 
-  if (/^[\\s]*[=+\\-@]/.test(text)) {
+  if (/^\s*[=+\-@]/.test(text)) {
     text = `'${text}`;
   }
 
