@@ -1,7 +1,8 @@
-import { Effect } from 'postprocessing';
+import type { Effect } from 'postprocessing';
 import * as THREE from 'three';
 
 export function createLiquidEffect(
+  EffectConstructor: typeof Effect,
   texture: THREE.Texture,
   opts?: { strength?: number; freq?: number },
 ) {
@@ -24,7 +25,7 @@ export function createLiquidEffect(
       uv += vec2(vx, vy) * amt;
     }
   `;
-  return new Effect('LiquidEffect', fragment, {
+  return new EffectConstructor('LiquidEffect', fragment, {
     uniforms: new Map<string, THREE.Uniform>([
       ['uTexture', new THREE.Uniform(texture)],
       ['uStrength', new THREE.Uniform(opts?.strength ?? 0.025)],

@@ -9,18 +9,22 @@ export default function CorporateBackground() {
   useEffect(() => {
     let isMounted = true;
 
-    void import('../../components/PixelBlast')
-      .then(({ default: PixelBlastComponent }) => {
-        if (isMounted) {
-          setPixelBlast(() => PixelBlastComponent);
-        }
-      })
-      .catch((error: unknown) => {
-        console.warn('[CorporateBackground] PixelBlast failed to load:', error);
-      });
+    // Let the initial page render before loading the optional WebGL background.
+    const timeoutId = window.setTimeout(() => {
+      void import('../../components/PixelBlast')
+        .then(({ default: PixelBlastComponent }) => {
+          if (isMounted) {
+            setPixelBlast(() => PixelBlastComponent);
+          }
+        })
+        .catch((error: unknown) => {
+          console.warn('[CorporateBackground] PixelBlast failed to load:', error);
+        });
+    }, 250);
 
     return () => {
       isMounted = false;
+      window.clearTimeout(timeoutId);
     };
   }, []);
 

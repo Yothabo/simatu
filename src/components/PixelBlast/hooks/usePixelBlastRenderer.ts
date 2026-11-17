@@ -1,10 +1,5 @@
 import { useEffect, useRef } from 'react';
-import {
-  Effect,
-  EffectComposer,
-  EffectPass,
-  RenderPass,
-} from 'postprocessing';
+import type { Effect, EffectComposer } from 'postprocessing';
 import * as THREE from 'three';
 import type { PixelBlastProps, ReinitConfig, ThreeUniforms } from '../types';
 import {
@@ -225,49 +220,82 @@ export function usePixelBlastRenderer({
       let touch: ReturnType<typeof createTouchTexture> | undefined;
       let liquidEffect: Effect | undefined;
 
-      if (liquid) {
-        touch = createTouchTexture();
-        touch.radiusScale = liquidRadius;
-        composer = new EffectComposer(renderer);
-        const renderPass = new RenderPass(scene, camera);
-        liquidEffect = createLiquidEffect(touch.texture, {
-          strength: liquidStrength,
-          freq: liquidWobbleSpeed,
-        });
-        const effectPass = new EffectPass(camera, liquidEffect);
-        effectPass.renderToScreen = true;
-        composer.addPass(renderPass);
-        composer.addPass(effectPass);
-      }
+      // Load postprocessing only when an optional visual effect is enabled.
+      if (liquid || noiseAmount > 0) {
+        void import('postprocessing')
+          .then(
+            ({
+              Effect: EffectConstructor,
+              EffectComposer: EffectComposerConstructor,
+              EffectPass,
+              RenderPass,
+            }) => {
+              // The component may have unmounted while the optional chunk loaded.
+              if (threeRef.current?.renderer !== renderer) return;
 
-      if (noiseAmount > 0) {
-        if (!composer) {
-          composer = new EffectComposer(renderer);
-          composer.addPass(new RenderPass(scene, camera));
-        }
-        const noiseEffect = new Effect(
-          'NoiseEffect',
-          `uniform float uTime; uniform float uAmount; float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453);} void mainUv(inout vec2 uv){} void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){ float n=hash(floor(uv*vec2(1920.0,1080.0))+floor(uTime*60.0)); float g=(n-0.5)*uAmount; outputColor=inputColor+vec4(vec3(g),0.0);} `,
-          {
-            uniforms: new Map<string, THREE.Uniform>([
-              ['uTime', new THREE.Uniform(0)],
-              ['uAmount', new THREE.Uniform(noiseAmount)],
-            ]),
-          },
-        );
-        const noisePass = new EffectPass(camera, noiseEffect);
-        noisePass.renderToScreen = true;
-        if (composer && composer.passes.length > 0) {
-          composer.passes.forEach((p) => {
-            const pass = p as { renderToScreen?: boolean };
-            pass.renderToScreen = false;
+              let nextComposer: EffectComposer | undefined;
+              let nextTouch: ReturnType<typeof createTouchTexture> | undefined;
+              let nextLiquidEffect: Effect | undefined;
+
+              if (liquid) {
+                nextTouch = createTouchTexture();
+                nextTouch.radiusScale = liquidRadius;
+                nextComposer = new EffectComposerConstructor(renderer);
+                const renderPass = new RenderPass(scene, camera);
+                nextLiquidEffect = createLiquidEffect(EffectConstructor, nextTouch.texture, {
+                  strength: liquidStrength,
+                  freq: liquidWobbleSpeed,
+                });
+                const effectPass = new EffectPass(camera, nextLiquidEffect);
+                effectPass.renderToScreen = true;
+                nextComposer.addPass(renderPass);
+                nextComposer.addPass(effectPass);
+              }
+
+              if (noiseAmount > 0) {
+                if (!nextComposer) {
+                  nextComposer = new EffectComposerConstructor(renderer);
+                  nextComposer.addPass(new RenderPass(scene, camera));
+                }
+                const noiseEffect = new EffectConstructor(
+                  'NoiseEffect',
+                  `uniform float uTime; uniform float uAmount; float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453);} void mainUv(inout vec2 uv){} void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){ float n=hash(floor(uv*vec2(1920.0,1080.0))+floor(uTime*60.0)); float g=(n-0.5)*uAmount; outputColor=inputColor+vec4(vec3(g),0.0);} `,
+                  {
+                    uniforms: new Map<string, THREE.Uniform>([
+                      ['uTime', new THREE.Uniform(0)],
+                      ['uAmount', new THREE.Uniform(noiseAmount)],
+                    ]),
+                  },
+                );
+                const noisePass = new EffectPass(camera, noiseEffect);
+                noisePass.renderToScreen = true;
+                nextComposer.passes.forEach((pass) => {
+                  (pass as { renderToScreen?: boolean }).renderToScreen = false;
+                });
+                nextComposer.addPass(noisePass);
+              }
+
+              nextComposer?.setSize(
+                renderer.domElement.width,
+                renderer.domElement.height,
+              );
+
+              composer = nextComposer;
+              touch = nextTouch;
+              liquidEffect = nextLiquidEffect;
+
+              const currentState = threeRef.current;
+              if (currentState?.renderer === renderer) {
+                currentState.composer = composer;
+                currentState.touch = touch;
+                currentState.liquidEffect = liquidEffect;
+              }
+            },
+          )
+          .catch((error: unknown) => {
+            // Keep the base WebGL background running if an optional effect fails.
+            console.warn('[PixelBlast] Optional postprocessing failed to load:', error);
           });
-        }
-        composer.addPass(noisePass);
-      }
-
-      if (composer) {
-        composer.setSize(renderer.domElement.width, renderer.domElement.height);
       }
 
       let raf = 0;
