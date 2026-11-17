@@ -1,4 +1,4 @@
-import type { AdminActivity } from '../hooks/useAdminActivity';
+import type { AdminActivity } from '../hooks/adminActivity.types';
 import type { ReactNode } from 'react';
 import type { AdminProduct } from '../components/AdminProductForm';
 
