@@ -1,7 +1,29 @@
+import { useEffect, useState } from 'react';
+import type { ComponentType } from 'react';
 import { createPortal } from 'react-dom';
-import PixelBlast from '../../components/PixelBlast';
+import type { PixelBlastProps } from '../../components/PixelBlast/types';
 
 export default function CorporateBackground() {
+  const [PixelBlast, setPixelBlast] = useState<ComponentType<PixelBlastProps> | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    void import('../../components/PixelBlast')
+      .then(({ default: PixelBlastComponent }) => {
+        if (isMounted) {
+          setPixelBlast(() => PixelBlastComponent);
+        }
+      })
+      .catch((error: unknown) => {
+        console.warn('[CorporateBackground] PixelBlast failed to load:', error);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   if (typeof document === 'undefined') return null;
 
   return createPortal(
@@ -18,19 +40,21 @@ export default function CorporateBackground() {
         overflow: 'hidden',
       }}
     >
-      <PixelBlast
-        variant="circle"
-        pixelSize={4}
-        color="#F97316"
-        patternScale={2.5}
-        patternDensity={1.2}
-        pixelSizeJitter={0.4}
-        enableRipples={false}
-        transparent={true}
-        speed={0.3}
-        antialias={true}
-        edgeFade={0.6}
-      />
+      {PixelBlast && (
+        <PixelBlast
+          variant="circle"
+          pixelSize={4}
+          color="#F97316"
+          patternScale={2.5}
+          patternDensity={1.2}
+          pixelSizeJitter={0.4}
+          enableRipples={false}
+          transparent={true}
+          speed={0.3}
+          antialias={true}
+          edgeFade={0.6}
+        />
+      )}
     </div>,
     document.body,
   );

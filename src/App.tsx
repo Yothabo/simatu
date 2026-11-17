@@ -5,16 +5,16 @@ import MetaTags from './components/MetaTags';
 import ScrollToHash from './components/ScrollToHash';
 import { useTouchSelection } from './utils/useTouchSelection';
 
-import CorporateHome from './pages/CorporateHome';
 import { CartProvider } from './context/CartContext';
-import Home from './pages/Home';
-import ServicesPage from './pages/ServicesPage';
-import ViewCatalog from './pages/ViewCatalog';
-import About from './pages/About';
-import CartPage from './pages/CartPage';
-import NotFound from './pages/NotFound';
-import UpdatePassword from './pages/UpdatePassword';
 
+const CorporateHome = React.lazy(() => import('./pages/CorporateHome'));
+const Home = React.lazy(() => import('./pages/Home'));
+const ServicesPage = React.lazy(() => import('./pages/ServicesPage'));
+const ViewCatalog = React.lazy(() => import('./pages/ViewCatalog'));
+const About = React.lazy(() => import('./pages/About'));
+const CartPage = React.lazy(() => import('./pages/CartPage'));
+const NotFound = React.lazy(() => import('./pages/NotFound'));
+const UpdatePassword = React.lazy(() => import('./pages/UpdatePassword'));
 const AdminPage = React.lazy(() => import('./pages/admin/AdminPage'));
 
 class AdminErrorBoundary extends React.Component<
@@ -60,6 +60,25 @@ class AdminErrorBoundary extends React.Component<
   }
 }
 
+function RouteLoadingFallback() {
+  return (
+    <main
+      role="status"
+      aria-live="polite"
+      style={{
+        minHeight: '100vh',
+        display: 'grid',
+        placeContent: 'center',
+        padding: 24,
+        background: '#fff',
+        color: '#4d4d4d',
+      }}
+    >
+      Loading page...
+    </main>
+  );
+}
+
 function App() {
   useTouchSelection();
 
@@ -68,44 +87,46 @@ function App() {
       <CartProvider>
         <ScrollToHash />
         <MetaTags />
-        <Routes>
-        <Route path="/" element={<CorporateHome />} />
+        <Suspense fallback={<RouteLoadingFallback />}>
+          <Routes>
+          <Route path="/" element={<CorporateHome />} />
 
-        <Route path="/yotaabo" element={<Home />} />
-        <Route path="/yotaabo/services" element={<ServicesPage />} />
-        <Route path="/yotaabo/catalog" element={<ViewCatalog />} />
-        <Route path="/yotaabo/about" element={<About />} />
-        <Route path="/yotaabo/cart" element={<CartPage />} />
-        <Route path="/yotaabo/*" element={<NotFound />} />
+          <Route path="/yotaabo" element={<Home />} />
+          <Route path="/yotaabo/services" element={<ServicesPage />} />
+          <Route path="/yotaabo/catalog" element={<ViewCatalog />} />
+          <Route path="/yotaabo/about" element={<About />} />
+          <Route path="/yotaabo/cart" element={<CartPage />} />
+          <Route path="/yotaabo/*" element={<NotFound />} />
 
-        <Route path="/poshies" element={<Home />} />
-        <Route path="/poshies/services" element={<ServicesPage />} />
-        <Route path="/poshies/catalog" element={<ViewCatalog />} />
-        <Route path="/poshies/about" element={<About />} />
-        <Route path="/poshies/cart" element={<CartPage />} />
-        <Route path="/poshies/*" element={<NotFound />} />
+          <Route path="/poshies" element={<Home />} />
+          <Route path="/poshies/services" element={<ServicesPage />} />
+          <Route path="/poshies/catalog" element={<ViewCatalog />} />
+          <Route path="/poshies/about" element={<About />} />
+          <Route path="/poshies/cart" element={<CartPage />} />
+          <Route path="/poshies/*" element={<NotFound />} />
 
-        <Route path="/update-password" element={<UpdatePassword />} />
+          <Route path="/update-password" element={<UpdatePassword />} />
 
-        <Route
-          path="/admin"
-          element={
-            <AdminErrorBoundary>
-              <Suspense
-                fallback={
-                  <div style={{ color: 'white', padding: 30 }}>
-                    Loading admin module...
-                  </div>
-                }
-              >
-                <AdminPage />
-              </Suspense>
-            </AdminErrorBoundary>
-          }
-        />
+          <Route
+            path="/admin"
+            element={
+              <AdminErrorBoundary>
+                <Suspense
+                  fallback={
+                    <div style={{ color: 'white', padding: 30 }}>
+                      Loading admin module...
+                    </div>
+                  }
+                >
+                  <AdminPage />
+                </Suspense>
+              </AdminErrorBoundary>
+            }
+          />
 
-        <Route path="*" element={<NotFound />} />
-        </Routes>
+          <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
         <Toaster
           position="top-right"
           containerStyle={{ top: 90, right: 20 }}
