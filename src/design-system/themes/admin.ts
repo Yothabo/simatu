@@ -1,7 +1,6 @@
 import type { CSSProperties } from 'react';
 
 import { primitives } from '../tokens/primitives';
-import { adminColors } from '../tokens/adminColors';
 import { adminTypography } from '../tokens/adminTypography';
 import { colors } from '../tokens/colors';
 import { adminSpacingVariables } from '../tokens/spacing';
@@ -164,7 +163,24 @@ export function getAdminThemeCssVariables(
 export function buildAdminThemeStyle(
   mode: AdminThemeMode,
 ): React.CSSProperties {
-  const themeColors = adminColors.themes[mode];
+  const semanticTheme = adminThemes[mode];
+  const themeColors = {
+    background: semanticTheme.colorBg,
+    surface: semanticTheme.colorBgSurface,
+    surfaceSubtle: semanticTheme.colorBgSurfaceSecondary,
+    surfaceRaised: semanticTheme.colorBgSurface,
+    text: semanticTheme.colorTextPrimary,
+    textSecondary: semanticTheme.colorTextSecondary,
+    textMuted: semanticTheme.colorTextTertiary,
+    textDisabled: semanticTheme.colorTextPrimaryDisabled,
+    border: semanticTheme.colorBorderSecondary,
+    borderStrong: semanticTheme.colorBorderPrimary,
+    hover: semanticTheme.colorBgSurfaceSecondaryHover,
+    accentText: semanticTheme.colorTextAccent,
+    focus: semanticTheme.colorFocusRing,
+    shadow: mode === 'dark' ? elevationShadows.darkSm : elevationShadows.sm,
+  };
+
   const charcoal40 =
     mode === 'dark' ? 'rgba(244, 241, 236, 0.4)' : colors.opacity.charcoal40;
   const charcoal50 =
