@@ -96,6 +96,7 @@ export function useAdminActivity(
     const requestId = createAdminRequestId();
     const flowId = getAdminFlowId();
     const totalStartedAt = startAdminTimer();
+    let totalTimingLogged = false;
 
     try {
       const sessionStartedAt = startAdminTimer();
@@ -142,6 +143,7 @@ export function useAdminActivity(
           httpStatus: response.status,
           outcome: 'http_error',
         });
+        totalTimingLogged = true;
         throw new Error(data.error || 'Unable to load activities.');
       }
 
@@ -157,16 +159,19 @@ export function useAdminActivity(
         httpStatus: response.status,
         outcome: 'success',
       });
+      totalTimingLogged = true;
       writeAdminSnapshot(
         ADMIN_STORAGE_KEYS.activitiesCache,
         requestUserId,
         data.activities
       );
     } catch (error) {
-      logAdminTiming('admin.activity.total', requestId, totalStartedAt, {
-        outcome: 'error',
-        errorName: error instanceof Error ? error.name : 'UnknownError',
-      });
+      if (!totalTimingLogged) {
+        logAdminTiming('admin.activity.total', requestId, totalStartedAt, {
+          outcome: 'error',
+          errorName: error instanceof Error ? error.name : 'UnknownError',
+        });
+      }
       if (isCurrentRequest()) {
         toast.error(
           error instanceof Error

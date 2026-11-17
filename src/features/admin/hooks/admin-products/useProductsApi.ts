@@ -43,17 +43,29 @@ export function useProductsApi(userId: string | null) {
 
       const url = adminScope ? '/api/products?scope=admin' : '/api/products';
       const fetchStartedAt = startAdminTimer();
-      const response = await fetch(url, {
-        method,
-        headers: {
-          Authorization: `Bearer ${currentSession.access_token}`,
-          Accept: 'application/json',
-          'X-Request-ID': requestId,
-          'X-Admin-Flow-ID': flowId,
-          ...(body ? { 'Content-Type': 'application/json' } : {}),
-        },
-        ...(body ? { body: JSON.stringify(body) } : {}),
-      });
+      let response: Response;
+      try {
+        const response = await fetch(url, {
+          method,
+          headers: {
+            Authorization: `Bearer ${currentSession.access_token}`,
+            Accept: 'application/json',
+            'X-Request-ID': requestId,
+            'X-Admin-Flow-ID': flowId,
+            ...(body ? { 'Content-Type': 'application/json' } : {}),
+          },
+          ...(body ? { body: JSON.stringify(body) } : {}),
+        });
+  
+  
+      } catch (error) {
+        logAdminTiming('admin.products.total', requestId, totalStartedAt, {
+          method,
+          outcome: 'network_error',
+          errorName: error instanceof Error ? error.name : 'UnknownError',
+        });
+        throw error;
+      }
 
       logAdminTiming('admin.products.fetch', requestId, fetchStartedAt, {
         method,

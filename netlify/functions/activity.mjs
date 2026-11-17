@@ -14,7 +14,8 @@ function json(data, status = 200, requestId) {
       'Cache-Control': 'private, no-store',
       ...(requestId ? { 'X-Request-ID': requestId } : {}),
     },
-  });}
+  });
+}
 
 export default async (request) => {
   const requestId = request.headers.get('x-request-id') || globalThis.crypto.randomUUID();
