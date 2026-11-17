@@ -21,6 +21,17 @@ vi.mock('../../src/features/admin/auth/adminRequestTelemetry', () => ({
 
 import { requestAdminApi } from '../../src/features/admin/auth/adminApiRequest';
 
+function mockJsonResponse(
+  payload: unknown,
+  status = 200,
+): Response {
+  return {
+    ok: status >= 200 && status < 300,
+    status,
+    json: vi.fn().mockResolvedValue(payload),
+  } as unknown as Response;
+}
+
 describe('requestAdminApi', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -38,10 +49,7 @@ describe('requestAdminApi', () => {
 
   it('sends the authenticated request and returns parsed endpoint data', async () => {
     vi.mocked(fetch).mockResolvedValue(
-      new Response(JSON.stringify({ products: [{ id: 'product-1' }] }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      }),
+      mockJsonResponse({ products: [{ id: 'product-1' }] }),
     );
 
     const result = await requestAdminApi({
@@ -106,10 +114,7 @@ describe('requestAdminApi', () => {
 
   it('uses the endpoint error message for non-success responses', async () => {
     vi.mocked(fetch).mockResolvedValue(
-      new Response(JSON.stringify({ error: 'Access denied.' }), {
-        status: 403,
-        headers: { 'Content-Type': 'application/json' },
-      }),
+      mockJsonResponse({ error: 'Access denied.' }, 403),
     );
 
     await expect(
