@@ -1,14 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
 import {
   FiDownload,
-  FiFileText,
   FiFilter,
-  FiPlus,
   FiRefreshCw,
-  FiShoppingCart,
 } from 'react-icons/fi';
 import type { Storefront } from '../../../types/admin.types';
 import AccentButton from '../../AccentButton';
+import OverviewAddMenu from './OverviewAddMenu';
 import AdminDropdown from '../../AdminDropdown';
 import OverviewToolbar from '../shared/OverviewToolbar';
 import OverviewStoreSelector from './OverviewStoreSelector';
@@ -28,18 +25,6 @@ type OverviewHeaderProps = {
   onAdd: () => void;
 };
 
-type AddAction = 'direct-sale' | 'new-product' | 'receipt';
-
-const ADD_ACTIONS: {
-  key: AddAction;
-  label: string;
-  icon: typeof FiPlus;
-}[] = [
-  { key: 'direct-sale', label: 'Register a direct sale', icon: FiShoppingCart },
-  { key: 'new-product', label: 'Add new product', icon: FiPlus },
-  { key: 'receipt', label: 'Create a receipt', icon: FiFileText },
-];
-
 export default function OverviewHeader({
   greeting,
   userName,
@@ -54,35 +39,6 @@ export default function OverviewHeader({
   onRefresh,
   onAdd,
 }: OverviewHeaderProps) {
-  const [isAddOpen, setIsAddOpen] = useState(false);
-  const addRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!isAddOpen) return;
-
-    const handleMouseDown = (e: MouseEvent) => {
-      if (addRef.current && !addRef.current.contains(e.target as Node)) {
-        setIsAddOpen(false);
-      }
-    };
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsAddOpen(false);
-    };
-
-    document.addEventListener('mousedown', handleMouseDown);
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('mousedown', handleMouseDown);
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isAddOpen]);
-
-  const handleAddAction = (_action: AddAction) => {
-    setIsAddOpen(false);
-    // Actions not wired yet — just close the menu.
-  };
 
   return (
     <header
@@ -154,74 +110,7 @@ export default function OverviewHeader({
           triggerIcon={<FiFilter size={18} aria-hidden="true" />}
         />
 
-        <div className="relative" ref={addRef}>
-          <AccentButton
-            variant="neutral"
-            shape="circle"
-            ariaLabel="Add"
-            ariaCurrent={isAddOpen ? 'true' : undefined}
-            onClick={() => setIsAddOpen((v) => !v)}
-          >
-            <FiPlus size={18} aria-hidden="true" />
-          </AccentButton>
-
-          {isAddOpen && (
-            <div
-              role="menu"
-              aria-label="Add action menu"
-              style={{
-                position: 'absolute',
-                top: 'calc(100% + 4px)',
-                right: 0,
-                width: '220px',
-                zIndex: 100,
-                backgroundColor: 'var(--admin-surface)',
-                boxShadow: 'var(--admin-shadow)',
-                borderWidth: '1px',
-                borderStyle: 'solid',
-                borderColor: 'var(--admin-border-subtle)',
-                borderRadius: 'var(--ds-radius-lg)',
-                overflow: 'hidden',
-              }}
-            >
-              {ADD_ACTIONS.map((action) => {
-                const Icon = action.icon;
-                return (
-                  <button
-                    key={action.key}
-                    type="button"
-                    role="menuitem"
-                    onClick={() => handleAddAction(action.key)}
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 'var(--admin-space-sm)',
-                      padding: '10px 16px',
-                      border: 'none',
-                      background: 'transparent',
-                      color: 'var(--admin-text-primary)',
-                      fontSize: 'var(--admin-size-body)',
-                      textAlign: 'left',
-                      cursor: 'pointer',
-                      transition: 'background-color 150ms ease',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor =
-                        'var(--admin-surface-subtle)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                    }}
-                  >
-                    <Icon size={14} aria-hidden="true" />
-                    <span>{action.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
-        </div>
+        <OverviewAddMenu />
       </OverviewToolbar>
 
       {canSwitchStore && (

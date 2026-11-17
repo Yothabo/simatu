@@ -1,21 +1,19 @@
 import { useCallback, useState } from 'react';
-import toast from 'react-hot-toast';
 import {
   AdminFormModal,
 } from '../../../design-system/components';
-import { supabase } from '../../../utils/supabase';
 import { EMPTY_PRODUCT } from './product-form/constants';
 import { ProductFormFields } from './product-form/components';
 import {
   useProductCategories,
   useProductDraft,
   useProductImageUpload,
+  useProductFormSubmit,
 } from './product-form/hooks';
 import type {
   AdminProduct,
   AdminProductFormProps,
 } from './product-form/types';
-import { getProductStoragePath } from './product-form/utils';
 
 // Re-export so existing imports of AdminProduct from this file keep working.
 // (Admin.tsx and admin.types.ts import `AdminProduct` from here.)
@@ -135,127 +133,16 @@ export default function AdminProductForm({
     }));
   }, []);
 
-  const handleSubmit = useCallback(async () => {
-    if (!form.name.trim()) return toast.error('Name is required');
-    if (form.price <= 0) return toast.error('Price must be greater than 0');
-    if (
-      form.supplier_cost != null &&
-      (!Number.isFinite(form.supplier_cost) || form.supplier_cost < 0)
-    )
-      return toast.error('Supplier cost must be zero or greater');
-    if (!statusValue) return toast.error('Status is required');
-    if (isLoadingCategories) return toast.error('Categories are still loading');
-    if (categoryLoadError) return toast.error('Categories could not be loaded');
-    if (!form.category_id) return toast.error('Select a valid category');
-    if (!form.subcategory_id) return toast.error('Select a valid subcategory');
-
-    setIsSaving(true);
-
-    const payload = {
-      storefront: form.storefront,
-      name: form.name.trim(),
-      price: form.price,
-      supplier_cost: form.supplier_cost ?? null,
-      sku: form.sku?.trim().toUpperCase() || null,
-      category: form.category,
-      category_id: form.category_id,
-      subcategory: form.subcategory,
-      subcategory_id: form.subcategory_id,
-      description: form.description?.trim() || null,
-      image_url: form.image_url?.trim() || null,
-      is_active: form.is_active,
-      sort_order: form.sort_order,
-      sizes: form.sizes,
-      order_count: form.order_count,
-    };
-
-    try {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      if (!session?.access_token) {
-        throw new Error('Your session has expired. Please sign in again.');
-      }
-
-      const response = await fetch('/api/products', {
-        method: productToEdit?.id ? 'PATCH' : 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify({
-          ...payload,
-          ...(productToEdit?.id ? { id: productToEdit.id } : {}),
-        }),
-      });
-
-      const responseText = await response.text();
-      let data: {
-        error?: string;
-        product?: import('../types/admin.types').AdminRow;
-      } = {};
-
-      if (responseText.trim()) {
-        try {
-          data = JSON.parse(responseText);
-        } catch {
-          // Handle non-JSON server responses below.
-        }
-      }
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Unable to save the product.');
-      }
-
-      if (!data.product) {
-        throw new Error('The server did not confirm the saved product.');
-      }
-
-      if (
-        productToEdit?.image_url &&
-        productToEdit.image_url !== payload.image_url
-      ) {
-        const oldImagePath = getProductStoragePath(productToEdit.image_url);
-
-        if (oldImagePath) {
-          const { error: deleteError } = await supabase.storage
-            .from('products')
-            .remove([oldImagePath]);
-
-          if (deleteError) {
-            console.error(
-              'Previous product image could not be deleted:',
-              deleteError,
-            );
-            toast.error(
-              'Product saved, but the previous image could not be deleted.',
-            );
-          }
-        }
-      }
-
-      toast.success(productToEdit ? 'Product updated' : 'Product added');
-      onSaved(data.product);
-      handleClose();
-    } catch (error) {
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : 'Unable to save the product.',
-      );
-    } finally {
-      setIsSaving(false);
-    }
-  }, [
-    categoryLoadError,
+  const handleSubmit = useProductFormSubmit({
     form,
-    handleClose,
-    isLoadingCategories,
-    onSaved,
-    productToEdit,
     statusValue,
-  ]);
+    isLoadingCategories,
+    categoryLoadError,
+    productToEdit,
+    onSaved,
+    handleClose,
+    setIsSaving,
+  });
 
   return (
     <AdminFormModal
