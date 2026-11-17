@@ -1,100 +1,14 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { supabase } from '../../../utils/supabase';
 
-export type CatalogueSubcategory = {
-  id: string;
-  name: string;
-  slug: string;
-  sort_order: number;
-  is_active: boolean;
-};
+import {
+  isValidCatalogueCategories,
+  readCategoriesCache,
+  writeCategoriesCache,
+} from './adminCategoriesCache.storage';
+import type { CatalogueCategory } from './adminCategoriesCache.storage';
 
-export type CatalogueCategory = {
-  id: string;
-  name: string;
-  slug: string;
-  sort_order: number;
-  is_active: boolean;
-  subcategories: CatalogueSubcategory[];
-};
-
-const CACHE_PREFIX = 'yotaabo-admin-categories-cache';
-const CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
-
-type CacheEntry = {
-  userId: string;
-  savedAt: number;
-  data: CatalogueCategory[];
-};
-
-function cacheKey(userId: string, storefront: string): string {
-  return `${CACHE_PREFIX}:${userId}:${storefront}`;
-}
-
-function readCache(
-  userId: string,
-  storefront: string,
-): CatalogueCategory[] | null {
-  try {
-    const raw = sessionStorage.getItem(cacheKey(userId, storefront));
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as Partial<CacheEntry>;
-    if (
-      typeof parsed.userId !== 'string' ||
-      typeof parsed.savedAt !== 'number' ||
-      !Array.isArray(parsed.data)
-    ) {
-      sessionStorage.removeItem(cacheKey(userId, storefront));
-      return null;
-    }
-    if (parsed.userId !== userId) return null;
-    const age = Date.now() - parsed.savedAt;
-    if (age < 0 || age > CACHE_TTL_MS) {
-      sessionStorage.removeItem(cacheKey(userId, storefront));
-      return null;
-    }
-    return parsed.data;
-  } catch {
-    return null;
-  }
-}
-
-function writeCache(
-  userId: string,
-  storefront: string,
-  data: CatalogueCategory[],
-): void {
-  try {
-    sessionStorage.setItem(
-      cacheKey(userId, storefront),
-      JSON.stringify({
-        userId,
-        savedAt: Date.now(),
-        data,
-      } satisfies CacheEntry),
-    );
-  } catch {
-    // Storage unavailable; ignore.
-  }
-}
-
-function isValidCategories(
-  value: unknown,
-): value is CatalogueCategory[] {
-  if (!Array.isArray(value)) return false;
-  return value.every((cat) => {
-    if (!cat || typeof cat !== 'object') return false;
-    const c = cat as Record<string, unknown>;
-    return (
-      typeof c.id === 'string' &&
-      typeof c.name === 'string' &&
-      typeof c.slug === 'string' &&
-      typeof c.sort_order === 'number' &&
-      typeof c.is_active === 'boolean' &&
-      Array.isArray(c.subcategories)
-    );
-  });
-}
+export type { CatalogueCategory, CatalogueSubcategory } from './adminCategoriesCache.storage';
 
 type Args = {
   userId: string | null;
@@ -158,14 +72,14 @@ export function useAdminCategoriesCache({
         throw new Error(data.error || 'Unable to load categories.');
       }
 
-      if (!isValidCategories(data.categories)) {
+      if (!isValidCatalogueCategories(data.categories)) {
         throw new Error('The categories response is invalid.');
       }
 
       if (!isCurrent()) return;
 
       setCategories(data.categories);
-      writeCache(requestUserId!, requestStorefront, data.categories);
+      writeCategoriesCache(requestUserId!, requestStorefront, data.categories);
     } catch (err) {
       if (!isCurrent()) return;
       setError(
@@ -186,7 +100,7 @@ export function useAdminCategoriesCache({
       return;
     }
 
-    const cached = readCache(userId, storefront);
+    const cached = readCategoriesCache(userId, storefront);
     if (cached) {
       setCategories(cached);
       setIsLoading(false);
