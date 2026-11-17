@@ -52,7 +52,6 @@ export default function AccentButton({
       ? {
           '--btn-active-bg': activeColor || 'var(--admin-text-primary)',
           backgroundColor: activeColor || 'var(--admin-text-primary)',
-          borderColor: activeColor || 'var(--admin-text-primary)',
           color: 'var(--admin-on-accent)',
         }
       : {}),
