@@ -1,0 +1,154 @@
+.admin-font-heading {
+  font-family: var(--admin-font-heading);
+  font-weight: 400;
+}
+
+.admin-font-body {
+  font-family: var(--admin-font-body);
+}
+
+/* Legacy typography compatibility inside Admin only */
+.admin-scope .font-heading {
+  font-family: var(--admin-font-heading);
+}
+
+.admin-scope .font-body {
+  font-family: var(--admin-font-body);
+}
+
+
+/* Admin semantic typography hierarchy */
+
+.admin-scope .admin-type-page-title {
+  font-family: var(--admin-font-heading);
+  font-size: var(--admin-size-page-title);
+  font-weight: var(--admin-weight-normal);
+  line-height: var(--admin-line-tight);
+}
+
+.admin-scope .admin-type-section-title {
+  font-family: var(--admin-font-heading);
+  font-size: var(--admin-size-section-title);
+  font-weight: var(--admin-weight-normal);
+  line-height: var(--admin-line-heading);
+}
+
+.admin-scope .admin-type-card-title {
+  font-family: var(--admin-font-heading);
+  font-size: var(--admin-size-card-title);
+  font-weight: var(--admin-weight-normal);
+  line-height: var(--admin-line-heading);
+}
+
+.admin-scope .admin-type-subsection-title {
+  font-family: var(--admin-font-body);
+  font-size: var(--admin-size-subsection-title);
+  font-weight: var(--admin-weight-semibold);
+  line-height: var(--admin-line-heading);
+}
+
+.admin-scope .admin-type-body {
+  font-family: var(--admin-font-body);
+  font-size: var(--admin-size-body);
+  font-weight: var(--admin-weight-normal);
+  line-height: var(--admin-line-body);
+}
+
+.admin-scope .admin-type-supporting {
+  font-family: var(--admin-font-body);
+  font-size: var(--admin-size-supporting);
+  font-weight: var(--admin-weight-normal);
+  line-height: var(--admin-line-compact);
+}
+
+.admin-scope .admin-type-micro {
+  font-family: var(--admin-font-body);
+  font-size: var(--admin-size-micro);
+  font-weight: var(--admin-weight-normal);
+  line-height: var(--admin-line-compact);
+}
+
+.admin-scope .admin-type-metric {
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-scope .admin-type-price {
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-scope .admin-type-numeric {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Admin order items: scoped overrides for the shared CheckoutItemCard */
+.admin-scope .admin-order-items > * > p:first-child {
+  font-family: var(--admin-font-heading);
+  font-size: var(--admin-size-card-title);
+  font-weight: var(--admin-weight-normal);
+  line-height: var(--admin-line-heading);
+}
+
+.admin-scope .admin-order-items > * > div > p:first-child {
+  font-family: var(--admin-font-body);
+  font-size: var(--admin-size-supporting);
+  font-weight: var(--admin-weight-normal);
+  line-height: var(--admin-line-compact);
+}
+
+.admin-scope .admin-order-items > * > div > p:last-child {
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* Centralized mapping for existing charcoal text utilities.
+   Scoped to authenticated Admin content only. */
+.admin-scope .text-\[\#4d4d4d\] {
+  color: var(--admin-text-primary);
+}
+
+.admin-scope .text-\[\#4d4d4d\]\/40 {
+  color: var(--admin-charcoal-40);
+}
+
+.admin-scope .text-\[\#4d4d4d\]\/45 {
+  color: var(--admin-text-muted);
+}
+
+.admin-scope .text-\[\#4d4d4d\]\/50 {
+  color: var(--admin-charcoal-50);
+}
+
+.admin-scope .text-\[\#4d4d4d\]\/60 {
+  color: var(--admin-text-supporting);
+}
+
+.admin-scope .text-\[\#4d4d4d\]\/70 {
+  color: var(--admin-charcoal-70);
+}
+
+.admin-scope .text-\[\#4d4d4d\]\/80 {
+  color: var(--admin-text-secondary);
+}
+
+/* Semantic Admin text colours */
+.admin-scope .admin-color-primary {
+  color: var(--admin-text-primary);
+}
+
+.admin-scope .admin-color-secondary {
+  color: var(--admin-text-secondary);
+}
+
+.admin-scope .admin-color-supporting {
+  color: var(--admin-text-supporting);
+}
+
+.admin-scope .admin-color-muted {
+  color: var(--admin-text-muted);
+}
+
+.admin-scope .admin-color-disabled {
+  color: var(--admin-text-disabled);
+}
+
+
