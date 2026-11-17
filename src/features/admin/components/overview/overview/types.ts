@@ -3,7 +3,7 @@ import type {
   Order,
   Storefront,
 } from '../../../types/admin.types';
-import type { AdminActivity } from '../../../hooks/useAdminActivity';
+import type { AdminActivity } from '../../../hooks/adminActivity.types';
 
 export type AdminOverviewProps = {
   userId: string;
