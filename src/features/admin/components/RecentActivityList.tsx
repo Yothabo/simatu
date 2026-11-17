@@ -1,5 +1,5 @@
 import { FiActivity, FiArrowUpRight, FiList, FiPackage, FiShoppingBag } from 'react-icons/fi';
-import type { AdminActivity } from '../hooks/useAdminActivity';
+import type { AdminActivity } from '../hooks/adminActivity.types';
 
 type RecentActivityProps = {
   activities: AdminActivity[];
