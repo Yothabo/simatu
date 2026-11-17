@@ -261,7 +261,7 @@ async function saveProduct(body, isUpdate, admin, requestId) {
   );
 }
 
-async function listProducts(request) {
+async function listProducts(request, requestId) {
   const url = new URL(request.url);
   const isAdminRequest = url.searchParams.get('scope') === 'admin';
   let requestedStorefront = url.searchParams.get('storefront')?.trim().toLowerCase() || null;
@@ -271,10 +271,19 @@ async function listProducts(request) {
   }
 
   if (isAdminRequest) {
+    const authStartedAt = Date.now();
     const admin = await requireAdmin(request, pool);
+    console.info('[admin-data-timing]', JSON.stringify({
+      requestId,
+      flowId: request.headers.get('x-admin-flow-id') || null,
+      endpoint: 'products',
+      stage: 'admin_authorization',
+      durationMs: Date.now() - authStartedAt,
+      outcome: admin ? 'authorized' : 'denied',
+    }));
 
     if (!admin) {
-      return json({ error: 'You are not authorised to view products.' }, 401);
+      return json({ error: 'You are not authorised to view products.' }, 401, { 'x-request-id': requestId });
     }
 
     if (admin.role === 'store_admin') {
@@ -314,6 +323,7 @@ async function listProducts(request) {
         created_at
       `;
 
+  const queryStartedAt = Date.now();
   const result = await pool.query(
     `SELECT ${selectedColumns}
      FROM public.products
@@ -321,11 +331,20 @@ async function listProducts(request) {
      ORDER BY category ASC, sort_order ASC, created_at DESC`,
     queryValues
   );
+  console.info('[admin-data-timing]', JSON.stringify({
+    requestId,
+    flowId: request.headers.get('x-admin-flow-id') || null,
+    endpoint: 'products',
+    stage: 'products_select',
+    durationMs: Date.now() - queryStartedAt,
+    rowCount: result.rowCount,
+  }));
 
   return new Response(JSON.stringify({ products: result.rows }), {
     status: 200,
     headers: {
       'Content-Type': 'application/json',
+      'X-Request-ID': requestId,
       'Cache-Control': isAdminRequest
         ? 'private, no-store'
         : 'public, max-age=30, s-maxage=300, stale-while-revalidate=600',
@@ -427,7 +446,14 @@ export default async (request) => {
 
   try {
     if (request.method === 'GET') {
-      return await listProducts(request);
+      const response = await listProducts(request, requestId);
+      console.info('[products] request completed', JSON.stringify({
+        requestId,
+        method: request.method,
+        status: response.status,
+        totalDurationMs: Date.now() - requestStartedAt,
+      }));
+      return response;
     }
 
     if (!['POST', 'PATCH', 'DELETE'].includes(request.method)) {
