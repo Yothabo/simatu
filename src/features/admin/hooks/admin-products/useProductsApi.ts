@@ -45,7 +45,7 @@ export function useProductsApi(userId: string | null) {
       const fetchStartedAt = startAdminTimer();
       let response: Response;
       try {
-        const response = await fetch(url, {
+        response = await fetch(url, {
           method,
           headers: {
             Authorization: `Bearer ${currentSession.access_token}`,
@@ -56,8 +56,6 @@ export function useProductsApi(userId: string | null) {
           },
           ...(body ? { body: JSON.stringify(body) } : {}),
         });
-  
-  
       } catch (error) {
         logAdminTiming('admin.products.total', requestId, totalStartedAt, {
           method,
