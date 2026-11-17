@@ -152,7 +152,7 @@ function metricValue(label: string): string {
     throw new Error(`Metric article not found for "${label}".`);
   }
 
-  const value = article.querySelector('strong');
+  const value = article.querySelector(':scope > span');
 
   if (!value) {
     throw new Error(`Metric value not found for "${label}".`);
@@ -164,21 +164,17 @@ function metricValue(label: string): string {
 async function openDateFilter(user: ReturnType<typeof userEvent.setup>) {
   await user.click(
     screen.getByRole('button', {
-      name: 'Open reporting period filters',
+      name: 'Filter overview by date',
     }),
   );
 
-  return screen.getByRole('dialog', { name: 'Filter' });
+  return screen.getByRole('listbox');
 }
 
-async function openStoreFilter(user: ReturnType<typeof userEvent.setup>) {
-  await user.click(
-    screen.getByRole('button', {
-      name: /Select store/,
-    }),
-  );
-
-  return screen.getByRole('dialog', { name: 'Select store' });
+function getStoreFilterGroup() {
+  return screen.getByRole('group', {
+    name: 'Filter overview by storefront',
+  });
 }
 
 beforeEach(() => {
@@ -214,10 +210,10 @@ describe('AdminOverview reporting-period interactions', () => {
     const dialog = await openDateFilter(user);
 
     await user.click(
-      within(dialog).getByRole('button', { name: 'Last 7 days' }),
+      within(dialog).getByRole('option', { name: 'Last 7 days' }),
     );
 
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
     expect(metricValue('Orders received')).toBe('3');
     expect(metricValue('Recorded sales value')).toContain('300');
     expect(metricValue('Delivered orders')).toBe('2');
@@ -266,10 +262,10 @@ describe('AdminOverview reporting-period interactions', () => {
       const dialog = await openDateFilter(user);
 
       await user.click(
-        within(dialog).getByRole('button', { name: action }),
+        within(dialog).getByRole('option', { name: action }),
       );
 
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
       expect(metricValue('Orders received')).toBe(expectedOrders);
       expect(metricValue('Recorded sales value')).toContain(sales);
       expect(metricValue('Delivered orders')).toBe(delivered);
@@ -288,63 +284,56 @@ describe('AdminOverview reporting-period interactions', () => {
     const dialog = await openDateFilter(user);
 
     await user.click(
-      within(dialog).getByRole('button', { name: '2026' }),
+      within(dialog).getByRole('option', { name: '2026' }),
     );
 
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
     expect(metricValue('Orders received')).toBe('8');
     expect(metricValue('Recorded sales value')).toContain('490');
     expect(metricValue('Delivered orders')).toBe('6');
   });
 
-  it('keeps the reporting-period modal separate from the store selector', async () => {
+  it('keeps the reporting-period dropdown separate from the store selector', async () => {
     const user = userEvent.setup({
       advanceTimers: vi.advanceTimersByTime,
     });
 
     renderOverview();
 
-    await openDateFilter(user);
+    const listbox = await openDateFilter(user);
+    expect(getStoreFilterGroup()).toBeInTheDocument();
 
+    await user.click(
+      within(listbox).getByRole('option', { name: 'Last 7 days' }),
+    );
+
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    expect(getStoreFilterGroup()).toBeInTheDocument();
     expect(
-      screen.queryByRole('dialog', { name: 'Select store' }),
-    ).not.toBeInTheDocument();
-
-    await user.click(screen.getByRole('presentation'));
-
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-
-    await openStoreFilter(user);
-
-    expect(
-      screen.queryByRole('dialog', { name: 'Filter' }),
-    ).not.toBeInTheDocument();
+      within(getStoreFilterGroup()).getByRole('button', {
+        name: 'Filter by All',
+      }),
+    ).toHaveAttribute('aria-current', 'page');
   });
 });
 
 describe('AdminOverview store-filter interactions', () => {
-  it('opens the custom store modal instead of a native select', async () => {
-    const user = userEvent.setup({
-      advanceTimers: vi.advanceTimersByTime,
-    });
-
+  it('renders accessible segmented store filters instead of a native select', () => {
     renderOverview();
 
-    const dialog = await openStoreFilter(user);
+    const group = getStoreFilterGroup();
 
-    expect(within(dialog).getByRole('button', { name: 'All' })).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    );
     expect(
-      within(dialog).getByRole('button', { name: 'Yotaabo' }),
-    ).toHaveAttribute('aria-pressed', 'false');
+      within(group).getByRole('button', { name: 'Filter by All' }),
+    ).toHaveAttribute('aria-current', 'page');
     expect(
-      within(dialog).getByRole('button', { name: 'Poshies' }),
-    ).toHaveAttribute('aria-pressed', 'false');
+      within(group).getByRole('button', { name: 'Filter by Yotaabo' }),
+    ).not.toHaveAttribute('aria-current', 'page');
+    expect(
+      within(group).getByRole('button', { name: 'Filter by Poshies' }),
+    ).not.toHaveAttribute('aria-current', 'page');
 
-    expect(screen.queryByRole('combobox', { name: 'Switch store' }))
-      .not.toBeInTheDocument();
+    expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
   });
 
   it('switches to Yotaabo and updates the dashboard figures', async () => {
@@ -354,16 +343,17 @@ describe('AdminOverview store-filter interactions', () => {
 
     renderOverview();
 
-    const dialog = await openStoreFilter(user);
-
     await user.click(
-      within(dialog).getByRole('button', { name: 'Yotaabo' }),
+      within(getStoreFilterGroup()).getByRole('button', {
+        name: 'Filter by Yotaabo',
+      }),
     );
 
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /Current store: Yotaabo/ }),
-    ).toBeInTheDocument();
+      within(getStoreFilterGroup()).getByRole('button', {
+        name: 'Filter by Yotaabo',
+      }),
+    ).toHaveAttribute('aria-current', 'page');
 
     expect(metricValue('Orders received')).toBe('4');
     expect(metricValue('Recorded sales value')).toContain('200');
@@ -379,16 +369,17 @@ describe('AdminOverview store-filter interactions', () => {
 
     renderOverview();
 
-    const dialog = await openStoreFilter(user);
-
     await user.click(
-      within(dialog).getByRole('button', { name: 'Poshies' }),
+      within(getStoreFilterGroup()).getByRole('button', {
+        name: 'Filter by Poshies',
+      }),
     );
 
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /Current store: Poshies/ }),
-    ).toBeInTheDocument();
+      within(getStoreFilterGroup()).getByRole('button', {
+        name: 'Filter by Poshies',
+      }),
+    ).toHaveAttribute('aria-current', 'page');
 
     expect(metricValue('Orders received')).toBe('4');
     expect(metricValue('Recorded sales value')).toContain('290');
@@ -406,37 +397,39 @@ describe('AdminOverview store-filter interactions', () => {
 
     expect(metricValue('Orders received')).toBe('4');
 
-    const dialog = await openStoreFilter(user);
-
     await user.click(
-      within(dialog).getByRole('button', { name: 'All' }),
+      within(getStoreFilterGroup()).getByRole('button', {
+        name: 'Filter by All',
+      }),
     );
 
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /Current store: All/ }),
-    ).toBeInTheDocument();
+      within(getStoreFilterGroup()).getByRole('button', {
+        name: 'Filter by All',
+      }),
+    ).toHaveAttribute('aria-current', 'page');
 
     expect(metricValue('Orders received')).toBe('8');
     expect(metricValue('Recorded sales value')).toContain('490');
     expect(metricValue('Delivered orders')).toBe('6');
   });
 
-  it('closes the store modal when the backdrop is clicked without changing the store', async () => {
+  it('preserves the selected store when the reporting period changes', async () => {
     const user = userEvent.setup({
       advanceTimers: vi.advanceTimersByTime,
     });
 
-    renderOverview();
+    renderOverview('yotaabo');
 
-    await openStoreFilter(user);
+    const listbox = await openDateFilter(user);
+    await user.click(
+      within(listbox).getByRole('option', { name: 'Last 7 days' }),
+    );
 
-    await user.click(screen.getByRole('presentation'));
-
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /Current store: All/ }),
-    ).toBeInTheDocument();
-    expect(metricValue('Orders received')).toBe('8');
+      within(getStoreFilterGroup()).getByRole('button', {
+        name: 'Filter by Yotaabo',
+      }),
+    ).toHaveAttribute('aria-current', 'page');
   });
 });
