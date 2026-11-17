@@ -1,6 +1,7 @@
 import { useCallback, useLayoutEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { ADMIN_STORAGE_KEYS } from '../../constants/admin.constants';
+import { markAdminDatasetReady } from '../../auth/adminRequestTelemetry';
 import {
   readAdminSnapshot,
   writeAdminSnapshot,
@@ -63,6 +64,7 @@ export function useAdminOrdersLoader({
       if (!isCurrentRequest()) return;
 
       setOrders(latestOrders);
+      markAdminDatasetReady('orders', latestOrders.length, 'network');
 
       writeAdminSnapshot(
         ADMIN_STORAGE_KEYS.ordersCache,
@@ -102,6 +104,7 @@ export function useAdminOrdersLoader({
 
     if (cachedOrders) {
       setOrders(cachedOrders as Order[]);
+      markAdminDatasetReady('orders', cachedOrders.length, 'cache');
       setIsLoadingOrders(false);
       setHasLoadedOrders(true);
       return;

@@ -3,6 +3,12 @@ import { supabase } from '../../../utils/supabase';
 import { updateAppSession } from '../auth/adminSession.api';
 import type { UseAdminAuthResult } from '../auth/adminAuth.types';
 import { useAdminAuthorization } from './useAdminAuthorization';
+import {
+  beginAdminFlow,
+  clearAdminFlow,
+  logAdminTiming,
+  startAdminTimer,
+} from '../auth/adminRequestTelemetry';
 import { useAdminSessionHeartbeat } from './useAdminSessionHeartbeat';
 
 export function useAdminAuth(): UseAdminAuthResult {
@@ -21,6 +27,8 @@ export function useAdminAuth(): UseAdminAuthResult {
     setLoginError(null);
     authorization.clearAuthError();
     setIsLoggingIn(true);
+    const flowId = beginAdminFlow();
+    const loginStartedAt = startAdminTimer();
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -29,6 +37,11 @@ export function useAdminAuth(): UseAdminAuthResult {
       });
 
       if (error) {
+        logAdminTiming('supabase.sign_in', flowId, loginStartedAt, {
+          outcome: 'rejected',
+          errorCode: error.code ?? null,
+          httpStatus: error.status ?? null,
+        });
         setLoginError(
           error.message.toLowerCase().includes('invalid login')
             ? 'The email or password you entered is incorrect.'
@@ -37,8 +50,16 @@ export function useAdminAuth(): UseAdminAuthResult {
         return false;
       }
 
-      return Boolean(data.session);
+      const success = Boolean(data.session);
+      logAdminTiming('supabase.sign_in', flowId, loginStartedAt, {
+        outcome: success ? 'success' : 'no_session',
+      });
+      return success;
     } catch (error) {
+      logAdminTiming('supabase.sign_in', flowId, loginStartedAt, {
+        outcome: 'error',
+        errorName: error instanceof Error ? error.name : 'UnknownError',
+      });
       setLoginError(
         error instanceof Error
           ? error.message
@@ -80,6 +101,7 @@ export function useAdminAuth(): UseAdminAuthResult {
     if (error) throw error;
 
     authorization.resetAfterLogout();
+    clearAdminFlow();
   }
 
   return {

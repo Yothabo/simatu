@@ -1,6 +1,7 @@
 import { useCallback, useLayoutEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { ADMIN_STORAGE_KEYS } from '../../constants/admin.constants';
+import { markAdminDatasetReady } from '../../auth/adminRequestTelemetry';
 import {
   readAdminSnapshot,
   writeAdminSnapshot,
@@ -73,6 +74,7 @@ export function useAdminProductsLoader({
       if (!isCurrentRequest()) return;
 
       updateProducts(latestProducts);
+      markAdminDatasetReady('products', latestProducts.length, 'network');
 
       writeAdminSnapshot(
         ADMIN_STORAGE_KEYS.productsCache,
@@ -126,6 +128,7 @@ export function useAdminProductsLoader({
       ) as AdminRow[];
 
       updateProducts(normalizedProducts);
+      markAdminDatasetReady('products', normalizedProducts.length, 'cache');
       setIsLoading(false);
       setHasLoadedProducts(true);
       return;

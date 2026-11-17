@@ -3,6 +3,7 @@ import type { Session } from '@supabase/supabase-js';
 import { supabase } from '../../../utils/supabase';
 import type { AdminContext } from '../auth/adminAuth.types';
 import { verifyAdminContext } from '../auth/adminAuthorization.api';
+import { logAdminMilestone } from '../auth/adminRequestTelemetry';
 import {
   clearAdminStorage,
   getSessionIdentity,
@@ -99,6 +100,7 @@ export function useAdminAuthorization(): UseAdminAuthorizationResult {
             const result = await verifyAdminContext(
               currentSession,
               controller.signal,
+              attempt + 1,
             );
 
             if (!active || requestVersion !== requestVersionRef.current) {
@@ -126,6 +128,7 @@ export function useAdminAuthorization(): UseAdminAuthorizationResult {
             verifiedIdentityRef.current = identity;
 
             setIsAdmin(true);
+            logAdminMilestone('admin.authorization.ready', { outcome: 'authorized' });
             setAuthError(null);
             setIsChecking(false);
             return;

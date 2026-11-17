@@ -5,6 +5,13 @@ import {
   useState,
 } from 'react';
 import { supabase } from '../../../utils/supabase';
+import {
+  createAdminRequestId,
+  getAdminFlowId,
+  logAdminTiming,
+  markAdminDatasetReady,
+  startAdminTimer,
+} from '../auth/adminRequestTelemetry';
 import toast from 'react-hot-toast';
 import { ADMIN_STORAGE_KEYS } from '../constants/admin.constants';
 import {
@@ -86,11 +93,20 @@ export function useAdminActivity(
       adminRef.current === true &&
       userIdRef.current === requestUserId;
 
+    const requestId = createAdminRequestId();
+    const flowId = getAdminFlowId();
+    const totalStartedAt = startAdminTimer();
+
     try {
+      const sessionStartedAt = startAdminTimer();
       const {
         data: { session },
         error: sessionError,
       } = await supabase.auth.getSession();
+
+      logAdminTiming('admin.activity.session_lookup', requestId, sessionStartedAt, {
+        outcome: sessionError ? 'error' : session ? 'session_found' : 'missing_session',
+      });
 
       if (
         sessionError ||
@@ -102,16 +118,30 @@ export function useAdminActivity(
         );
       }
 
+      const fetchStartedAt = startAdminTimer();
       const response = await fetch('/api/activity', {
         headers: {
           Authorization: `Bearer ${session.access_token}`,
           Accept: 'application/json',
+          'X-Request-ID': requestId,
+          'X-Admin-Flow-ID': flowId,
         },
       });
+      logAdminTiming('admin.activity.fetch', requestId, fetchStartedAt, {
+        httpStatus: response.status,
+      });
 
+      const parseStartedAt = startAdminTimer();
       const data = await response.json();
+      logAdminTiming('admin.activity.parse', requestId, parseStartedAt, {
+        rowCount: Array.isArray(data.activities) ? data.activities.length : null,
+      });
 
       if (!response.ok) {
+        logAdminTiming('admin.activity.total', requestId, totalStartedAt, {
+          httpStatus: response.status,
+          outcome: 'http_error',
+        });
         throw new Error(data.error || 'Unable to load activities.');
       }
 
@@ -122,12 +152,21 @@ export function useAdminActivity(
       if (!isCurrentRequest()) return;
 
       setActivities(data.activities);
+      markAdminDatasetReady('activities', data.activities.length, 'network');
+      logAdminTiming('admin.activity.total', requestId, totalStartedAt, {
+        httpStatus: response.status,
+        outcome: 'success',
+      });
       writeAdminSnapshot(
         ADMIN_STORAGE_KEYS.activitiesCache,
         requestUserId,
         data.activities
       );
     } catch (error) {
+      logAdminTiming('admin.activity.total', requestId, totalStartedAt, {
+        outcome: 'error',
+        errorName: error instanceof Error ? error.name : 'UnknownError',
+      });
       if (isCurrentRequest()) {
         toast.error(
           error instanceof Error
@@ -157,6 +196,7 @@ export function useAdminActivity(
 
     if (cachedActivities) {
       setActivities(cachedActivities);
+      markAdminDatasetReady('activities', cachedActivities.length, 'cache');
       setIsLoadingActivities(false);
       return;
     }
