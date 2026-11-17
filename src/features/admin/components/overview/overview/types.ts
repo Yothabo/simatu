@@ -7,7 +7,7 @@ import type { AdminActivity } from '../../../hooks/useAdminActivity';
 
 export type AdminOverviewProps = {
   userId: string;
-  userName: string;
+  userName?: string | null;
   onAddProduct: () => void;
   orders: Order[];
   products: AdminRow[];

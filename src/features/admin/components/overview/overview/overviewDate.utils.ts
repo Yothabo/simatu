@@ -3,8 +3,8 @@ import { getOverviewDateKey } from '../../../utils/overview/dateRanges';
 import { getOverviewQuickActionDates } from '../../../utils/overview/quickActions';
 import { QUICK_ACTIONS } from './overview.constants';
 
-export function getFirstName(userName: string): string {
-  const firstName = userName.trim().split(/[\s._-]+/)[0];
+export function getFirstName(userName?: string | null): string {
+  const firstName = userName?.trim().split(/[\s._-]+/)[0] ?? '';
 
   if (!firstName) return 'Admin';
 
