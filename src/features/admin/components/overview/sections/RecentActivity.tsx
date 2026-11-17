@@ -1,5 +1,5 @@
 import { FiArrowUpRight } from 'react-icons/fi';
-import type { AdminActivity } from '../../../hooks/useAdminActivity';
+import type { AdminActivity } from '../../../hooks/adminActivity.types';
 import {
   AdminButton,
   AdminSectionHeader,
