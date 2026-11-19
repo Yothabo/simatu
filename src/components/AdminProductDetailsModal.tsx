@@ -1,4 +1,4 @@
-import { getCategoryTheme } from '../shared/utilities/categoryTheme';
+import { getAdminProductPlaceholderColor } from '../features/admin/utils/adminProductCategoryTheme';
 import Modal from '../shared/components/Modal';
 import type { AdminRow } from '../features/admin/types/admin.types';
 import ProductDetailsHeader from './admin-product-details/components/ProductDetailsHeader';
@@ -68,7 +68,7 @@ export default function AdminProductDetailsModal({
           {/* Image */}
           <ProductDetailsImage
             product={product}
-            placeholderColor={theme.placeholderColor}
+            placeholderColor={placeholderColor}
           />
 
           {/* Name */}
