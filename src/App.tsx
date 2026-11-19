@@ -7,7 +7,9 @@ import { useTouchSelection } from './utils/useTouchSelection';
 
 import { CartProvider } from './context/CartContext';
 
-const CorporateHome = React.lazy(() => import('./pages/CorporateHome'));
+const HomepageHero = React.lazy(
+  () => import('./pages/homepage/hero/Hero')
+);
 const Home = React.lazy(() => import('./pages/Home'));
 const ServicesPage = React.lazy(() => import('./pages/ServicesPage'));
 const ViewCatalog = React.lazy(() => import('./pages/ViewCatalog'));
@@ -87,46 +89,49 @@ function App() {
       <CartProvider>
         <ScrollToHash />
         <MetaTags />
+
         <Suspense fallback={<RouteLoadingFallback />}>
           <Routes>
-          <Route path="/" element={<CorporateHome />} />
+            <Route path="/" element={<HomepageHero />} />
 
-          <Route path="/yotaabo" element={<Home />} />
-          <Route path="/yotaabo/services" element={<ServicesPage />} />
-          <Route path="/yotaabo/catalog" element={<ViewCatalog />} />
-          <Route path="/yotaabo/about" element={<About />} />
-          <Route path="/yotaabo/cart" element={<CartPage />} />
-          <Route path="/yotaabo/*" element={<NotFound />} />
 
-          <Route path="/poshies" element={<Home />} />
-          <Route path="/poshies/services" element={<ServicesPage />} />
-          <Route path="/poshies/catalog" element={<ViewCatalog />} />
-          <Route path="/poshies/about" element={<About />} />
-          <Route path="/poshies/cart" element={<CartPage />} />
-          <Route path="/poshies/*" element={<NotFound />} />
+            <Route path="/yotaabo" element={<Home />} />
+            <Route path="/yotaabo/services" element={<ServicesPage />} />
+            <Route path="/yotaabo/catalog" element={<ViewCatalog />} />
+            <Route path="/yotaabo/about" element={<About />} />
+            <Route path="/yotaabo/cart" element={<CartPage />} />
+            <Route path="/yotaabo/*" element={<NotFound />} />
 
-          <Route path="/update-password" element={<UpdatePassword />} />
+            <Route path="/poshies" element={<Home />} />
+            <Route path="/poshies/services" element={<ServicesPage />} />
+            <Route path="/poshies/catalog" element={<ViewCatalog />} />
+            <Route path="/poshies/about" element={<About />} />
+            <Route path="/poshies/cart" element={<CartPage />} />
+            <Route path="/poshies/*" element={<NotFound />} />
 
-          <Route
-            path="/admin"
-            element={
-              <AdminErrorBoundary>
-                <Suspense
-                  fallback={
-                    <div style={{ color: 'white', padding: 30 }}>
-                      Loading admin module...
-                    </div>
-                  }
-                >
-                  <AdminPage />
-                </Suspense>
-              </AdminErrorBoundary>
-            }
-          />
+            <Route path="/update-password" element={<UpdatePassword />} />
 
-          <Route path="*" element={<NotFound />} />
+            <Route
+              path="/admin"
+              element={
+                <AdminErrorBoundary>
+                  <Suspense
+                    fallback={
+                      <div style={{ color: 'white', padding: 30 }}>
+                        Loading admin module...
+                      </div>
+                    }
+                  >
+                    <AdminPage />
+                  </Suspense>
+                </AdminErrorBoundary>
+              }
+            />
+
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
+
         <Toaster
           position="top-right"
           containerStyle={{ top: 90, right: 20 }}

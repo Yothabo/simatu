@@ -1,0 +1,16 @@
+:root {
+  --hp-shadow-glow:
+    0 0 12px 4px rgba(174, 116, 255, 0.7),
+    0 0 35px 10px rgba(174, 116, 255, 0.25);
+
+  --hp-shadow-image:
+    inset 0 0 80px rgba(9, 7, 15, 0.6),
+    0 0 100px rgba(145, 83, 224, 0.13);
+
+  --hp-blur-small: 13px;
+  --hp-blur-medium: 20px;
+  --hp-blur-large: 45px;
+
+  --hp-border-subtle: 1px solid rgba(255, 255, 255, 0.075);
+  --hp-border-accent: 1px solid rgba(200, 168, 255, 0.42);
+}
