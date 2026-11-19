@@ -1,5 +1,5 @@
 import { jsPDF } from 'jspdf';
-import type { CreatedOrder } from './types';
+import type { CreatedOrder } from './types.ts';
 
 export const createReceiptPdf = (
   name: string,
