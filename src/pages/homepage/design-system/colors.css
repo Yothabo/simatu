@@ -1,0 +1,19 @@
+:root {
+  --hp-color-background: #08070d;
+  --hp-color-surface: #100e18;
+  --hp-color-surface-raised: #171021;
+
+  --hp-color-primary: #a879ff;
+  --hp-color-primary-light: #c8a8ff;
+  --hp-color-primary-soft: rgba(168, 121, 255, 0.15);
+
+  --hp-color-text: #f7f3ff;
+  --hp-color-text-muted: rgba(247, 243, 255, 0.58);
+  --hp-color-text-subtle: rgba(255, 255, 255, 0.67);
+
+  --hp-color-border: rgba(255, 255, 255, 0.13);
+  --hp-color-border-strong: rgba(255, 255, 255, 0.19);
+
+  --hp-color-overlay: rgba(8, 7, 13, 0.76);
+  --hp-color-glow: rgba(145, 83, 224, 0.22);
+}

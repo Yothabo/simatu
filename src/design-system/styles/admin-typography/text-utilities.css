@@ -1,0 +1,91 @@
+/* AdminText - one CSS class per level. Rendered by AdminText.tsx.
+   These classes are the ONLY way font sizes are expressed in admin code. */
+
+.admin-scope .admin-text {
+  margin: 0;
+  font-family: var(--admin-font-body);
+}
+
+.admin-scope .admin-text-display {
+  font-size: var(--admin-text-display-size);
+  font-weight: var(--admin-text-display-weight);
+  line-height: var(--admin-text-display-line);
+  color: var(--admin-text-display-color);
+}
+
+.admin-scope .admin-text-page-title {
+  font-size: var(--admin-text-page-title-size);
+  font-weight: var(--admin-text-page-title-weight);
+  line-height: var(--admin-text-page-title-line);
+  color: var(--admin-text-page-title-color);
+  letter-spacing: -0.01em;
+}
+
+.admin-scope .admin-text-metric {
+  font-size: var(--admin-text-metric-size);
+  font-weight: var(--admin-text-metric-weight);
+  line-height: var(--admin-text-metric-line);
+  color: var(--admin-text-metric-color);
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-scope .admin-text-metric-label {
+  font-size: var(--admin-text-metric-label-size);
+  font-weight: var(--admin-text-metric-label-weight);
+  line-height: var(--admin-text-metric-label-line);
+  color: var(--admin-text-metric-label-color);
+}
+
+.admin-scope .admin-text-metric-description {
+  font-size: var(--admin-text-metric-description-size);
+  font-weight: var(--admin-text-metric-description-weight);
+  line-height: var(--admin-text-metric-description-line);
+  color: var(--admin-text-metric-description-color);
+}
+
+.admin-scope .admin-text-section-title {
+  font-size: var(--admin-text-section-title-size);
+  font-weight: var(--admin-text-section-title-weight);
+  line-height: var(--admin-text-section-title-line);
+  color: var(--admin-text-section-title-color);
+  letter-spacing: -0.01em;
+}
+
+.admin-scope .admin-text-card-title {
+  font-size: var(--admin-text-card-title-size);
+  font-weight: var(--admin-text-card-title-weight);
+  line-height: var(--admin-text-card-title-line);
+  color: var(--admin-text-card-title-color);
+}
+
+.admin-scope .admin-text-body {
+  font-size: var(--admin-text-body-size);
+  font-weight: var(--admin-text-body-weight);
+  line-height: var(--admin-text-body-line);
+  color: var(--admin-text-body-color);
+}
+
+.admin-scope .admin-text-supporting {
+  font-size: var(--admin-text-supporting-size);
+  font-weight: var(--admin-text-supporting-weight);
+  line-height: var(--admin-text-supporting-line);
+  color: var(--admin-text-supporting-color);
+}
+
+.admin-scope .admin-text-micro {
+  font-size: var(--admin-text-micro-size);
+  font-weight: var(--admin-text-micro-weight);
+  line-height: var(--admin-text-micro-line);
+  color: var(--admin-text-micro-color);
+}
+
+/* Uppercase modifier - opt-in only. For eyebrows and table headers. */
+.admin-scope .admin-text-uppercase {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.admin-scope .admin-text-numeric {
+  font-variant-numeric: var(--admin-text-numeric-variant);
+}
+

@@ -128,34 +128,7 @@ export default function AdminSettingsTab({
 
       {/* Admin Management — only for super admin */}
       {isSuperAdmin && accessToken && (
-        <section className="flex w-full flex-col" style={{ gap: 'var(--admin-space-md)' }}>
-          <div className="flex flex-col" style={{ gap: 'var(--admin-space-xs)' }}>
-            <h2
-              style={{
-                fontSize: 'var(--admin-size-heading-2)',
-                fontWeight: 'var(--admin-weight-semibold)',
-                color: 'var(--admin-text-primary)',
-                margin: 0,
-              }}
-            >
-              Admin Management
-            </h2>
-            <p
-              style={{
-                fontSize: 'var(--admin-size-supporting)',
-                color: 'var(--admin-text-secondary)',
-                margin: 0,
-                lineHeight: 1.5,
-              }}
-            >
-              Manage administrator access and storefront assignments.
-            </p>
-          </div>
-
-          <div className="admin-card-bg" style={CARD_CHROME}>
-            <AdminManagement accessToken={accessToken} />
-          </div>
-        </section>
+        <AdminManagement accessToken={accessToken} />
       )}
 
       {/* New request form — floats over the whole section */}

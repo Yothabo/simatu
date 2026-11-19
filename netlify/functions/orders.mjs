@@ -13,12 +13,12 @@ const pool = new Pool({
 const statuses = ['pending', 'confirmed', 'delivered', 'cancelled'];
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-function json(data, status = 200) {
-  return Response.json(data, { status });
+function json(data, status = 200, headers = {}) {
+  return Response.json(data, { status, headers });
 }
 
-function error(message, status = 400) {
-  return json({ error: message }, status);
+function error(message, status = 400, headers = {}) {
+  return json({ error: message }, status, headers);
 }
 
 function orderNumber() {
@@ -148,7 +148,8 @@ async function createOrder(body) {
   }
 }
 
-async function listOrders(admin) {
+async function listOrders(admin, requestId, flowId) {
+  const ordersQueryStartedAt = Date.now();
   const result = await pool.query(
     `SELECT id, order_number, customer_name, customer_phone,
             subtotal, status, storefront, created_at, updated_at
@@ -157,10 +158,19 @@ async function listOrders(admin) {
      ORDER BY created_at DESC`,
     [admin.role === 'store_admin' ? admin.store_slug : null]
   );
+  console.info('[admin-data-timing]', JSON.stringify({
+    requestId,
+    flowId,
+    endpoint: 'orders',
+    stage: 'orders_select',
+    durationMs: Date.now() - ordersQueryStartedAt,
+    rowCount: result.rowCount,
+  }));
 
-  if (!result.rowCount) return json({ orders: [] });
+  if (!result.rowCount) return json({ orders: [] }, 200, { 'x-request-id': requestId });
 
   const ids = result.rows.map((order) => order.id);
+  const itemsQueryStartedAt = Date.now();
   const itemResult = await pool.query(
     `SELECT order_id, product_id, product_name, unit_price, quantity
      FROM public.order_items
@@ -168,6 +178,15 @@ async function listOrders(admin) {
      ORDER BY created_at ASC`,
     [ids]
   );
+  console.info('[admin-data-timing]', JSON.stringify({
+    requestId,
+    flowId,
+    endpoint: 'orders',
+    stage: 'order_items_select',
+    durationMs: Date.now() - itemsQueryStartedAt,
+    orderCount: result.rowCount,
+    itemRowCount: itemResult.rowCount,
+  }));
 
   const itemsByOrder = new Map();
 
@@ -188,10 +207,14 @@ async function listOrders(admin) {
       subtotal: Number(order.subtotal),
       items: itemsByOrder.get(order.id) || [],
     })),
-  });
+  }, 200, { 'x-request-id': requestId });
 }
 
 export default async (request) => {
+  const requestId = request.headers.get('x-request-id') || globalThis.crypto.randomUUID();
+  const flowId = request.headers.get('x-admin-flow-id') || null;
+  const requestStartedAt = Date.now();
+
   try {
     if (!process.env.SUPABASE_DB_URL) {
       return error('Order service is not configured.', 500);
@@ -215,10 +238,18 @@ export default async (request) => {
     }
 
     const admin = await requireAdmin(request, pool);
-    if (!admin) return error('You are not authorised to manage orders.', 401);
+    if (!admin) return error('You are not authorised to manage orders.', 401, { 'x-request-id': requestId });
 
     if (method === 'GET') {
-      return await listOrders(admin);
+      const response = await listOrders(admin, requestId, flowId);
+      console.info('[orders] request completed', JSON.stringify({
+        requestId,
+        flowId,
+        method,
+        status: response.status,
+        totalDurationMs: Date.now() - requestStartedAt,
+      }));
+      return response;
     }
 
     const body = await request.json();

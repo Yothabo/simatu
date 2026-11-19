@@ -1,5 +1,9 @@
 import { FiArrowUpRight } from 'react-icons/fi';
-import type { AdminActivity } from '../../../hooks/useAdminActivity';
+import type { AdminActivity } from '../../../hooks/adminActivity.types';
+import {
+  AdminButton,
+  AdminSectionHeader,
+} from '../../../../../design-system/components';
 
 type Props = {
   activities: AdminActivity[];
@@ -58,57 +62,94 @@ export default function RecentActivity({
     .sort(
       (a, b) =>
         new Date(b.created_at).getTime() -
-        new Date(a.created_at).getTime()
+        new Date(a.created_at).getTime(),
     )
-    .slice(0, 4);
+    .slice(0, 10);
 
   return (
-    <section className="w-full" aria-labelledby="overview-recent-activity-title">
-      <div className="mb-4 flex items-center justify-between gap-3">
-        <div>
-          <h2
-            id="overview-recent-activity-title"
-            className="admin-section-header-title admin-type-page-title text-[#4d4d4d]"
+    <section
+      className="flex w-full flex-col"
+      style={{ gap: 'var(--admin-space-md)' }}
+    >
+      <AdminSectionHeader
+        title="Recent activities"
+        description="Latest store updates"
+        action={
+          <AdminButton
+            variant="neutral"
+            shape="pill"
+            ariaLabel="View all activities"
+            onClick={onViewAll}
           >
-            Recent Activities
-          </h2>
-          <p className="mt-1 text-xs text-[#4d4d4d]/65">
-            Latest store updates
-          </p>
-        </div>
-
-        <button
-          type="button"
-          onClick={onViewAll}
-          className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-[#4d4d4d] transition-opacity hover:opacity-65"
-        >
-          View all
-          <FiArrowUpRight size={15} aria-hidden="true" />
-        </button>
-      </div>
+            <span>View all</span>
+            <FiArrowUpRight size={14} aria-hidden="true" />
+          </AdminButton>
+        }
+      />
 
       {isLoading && recentActivities.length === 0 ? (
-        <p className="px-4 py-8 text-sm text-[#4d4d4d]/50">
+        <p
+          style={{
+            padding: 'var(--admin-space-lg) var(--admin-space-md)',
+            textAlign: 'center',
+            fontSize: 'var(--admin-size-supporting)',
+            color: 'var(--admin-text-tertiary)',
+            margin: 0,
+          }}
+        >
           Loading activities...
         </p>
       ) : recentActivities.length === 0 ? (
-        <p className="px-4 py-8 text-sm text-[#4d4d4d]/50">
+        <p
+          style={{
+            padding: 'var(--admin-space-lg) var(--admin-space-md)',
+            textAlign: 'center',
+            fontSize: 'var(--admin-size-supporting)',
+            color: 'var(--admin-text-tertiary)',
+            margin: 0,
+          }}
+        >
           No activities found.
         </p>
       ) : (
-        <div className="space-y-2">
+        <div
+          className="flex flex-col"
+          style={{ gap: 'var(--admin-space-xs)' }}
+        >
           {recentActivities.map((activity) => (
             <article
               key={activity.id}
-              className="flex items-center justify-between gap-3 rounded-[5px] border border-[#4d4d4d]/[0.10] bg-[#f5f5f5] px-4 py-2.5 shadow-[0_1px_3px_rgba(0,0,0,0.035)]"
+              className="flex items-center justify-between"
+              style={{
+                padding: 'var(--admin-space-sm) var(--admin-space-md)',
+                gap: 'var(--admin-space-md)',
+                borderRadius: 'var(--ds-radius-lg)',
+                backgroundColor: 'var(--admin-surface)',
+              }}
             >
-              <p className="min-w-0 text-sm leading-relaxed text-[#4d4d4d]/45">
+              <p
+                style={{
+                  minWidth: 0,
+                  margin: 0,
+                  fontSize: 'var(--admin-size-body)',
+                  color: 'var(--admin-text-primary)',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
                 {getDescription(activity)}
               </p>
 
               <time
                 dateTime={activity.created_at}
-                className="shrink-0 whitespace-nowrap text-right text-xs text-[#4d4d4d]/45"
+                style={{
+                  flexShrink: 0,
+                  whiteSpace: 'nowrap',
+                  textAlign: 'right',
+                  fontSize: 'var(--admin-size-micro)',
+                  color: 'var(--admin-text-tertiary)',
+                }}
               >
                 {formatActivityDate(activity.created_at)}
               </time>

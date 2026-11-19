@@ -174,6 +174,7 @@ async function saveProduct(body, isUpdate, admin, requestId) {
       subcategory.id,
       product.supplier_cost,
       product.sku,
+      product.sizes,
     ];
 
     if (isUpdate) {
@@ -192,10 +193,11 @@ async function saveProduct(body, isUpdate, admin, requestId) {
              category_id = $11,
              subcategory_id = $12,
              supplier_cost = $13,
-             sku = $14
-         WHERE id = $15
-           AND ($16::text IS NULL OR storefront = $16)
-         RETURNING id, name, price, supplier_cost, sku,
+             sku = $14,
+             sizes = $15
+         WHERE id = $16
+           AND ($17::text IS NULL OR storefront = $17)
+         RETURNING id, name, price, supplier_cost, sku, sizes,
                    category, subcategory, description, image_url,
                    is_active, sort_order, storefront, store_id,
                    category_id, subcategory_id, created_at`,
@@ -210,9 +212,9 @@ async function saveProduct(body, isUpdate, admin, requestId) {
         `INSERT INTO public.products
            (name, price, category, subcategory, description, image_url,
             is_active, sort_order, storefront, store_id, category_id,
-            subcategory_id, supplier_cost, sku)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-         RETURNING id, name, price, supplier_cost, sku,
+            subcategory_id, supplier_cost, sku, sizes)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+         RETURNING id, name, price, supplier_cost, sku, sizes,
                    category, subcategory, description, image_url,
                    is_active, sort_order, storefront, store_id,
                    category_id, subcategory_id, created_at`,
@@ -259,7 +261,7 @@ async function saveProduct(body, isUpdate, admin, requestId) {
   );
 }
 
-async function listProducts(request) {
+async function listProducts(request, requestId) {
   const url = new URL(request.url);
   const isAdminRequest = url.searchParams.get('scope') === 'admin';
   let requestedStorefront = url.searchParams.get('storefront')?.trim().toLowerCase() || null;
@@ -269,10 +271,19 @@ async function listProducts(request) {
   }
 
   if (isAdminRequest) {
+    const authStartedAt = Date.now();
     const admin = await requireAdmin(request, pool);
+    console.info('[admin-data-timing]', JSON.stringify({
+      requestId,
+      flowId: request.headers.get('x-admin-flow-id') || null,
+      endpoint: 'products',
+      stage: 'admin_authorization',
+      durationMs: Date.now() - authStartedAt,
+      outcome: admin ? 'authorized' : 'denied',
+    }));
 
     if (!admin) {
-      return json({ error: 'You are not authorised to view products.' }, 401);
+      return json({ error: 'You are not authorised to view products.' }, 401, { 'x-request-id': requestId });
     }
 
     if (admin.role === 'store_admin') {
@@ -308,9 +319,11 @@ async function listProducts(request) {
         is_active,
         sort_order,
         order_count,
+        sizes,
         created_at
       `;
 
+  const queryStartedAt = Date.now();
   const result = await pool.query(
     `SELECT ${selectedColumns}
      FROM public.products
@@ -318,11 +331,20 @@ async function listProducts(request) {
      ORDER BY category ASC, sort_order ASC, created_at DESC`,
     queryValues
   );
+  console.info('[admin-data-timing]', JSON.stringify({
+    requestId,
+    flowId: request.headers.get('x-admin-flow-id') || null,
+    endpoint: 'products',
+    stage: 'products_select',
+    durationMs: Date.now() - queryStartedAt,
+    rowCount: result.rowCount,
+  }));
 
   return new Response(JSON.stringify({ products: result.rows }), {
     status: 200,
     headers: {
       'Content-Type': 'application/json',
+      'X-Request-ID': requestId,
       'Cache-Control': isAdminRequest
         ? 'private, no-store'
         : 'public, max-age=30, s-maxage=300, stale-while-revalidate=600',
@@ -424,7 +446,14 @@ export default async (request) => {
 
   try {
     if (request.method === 'GET') {
-      return await listProducts(request);
+      const response = await listProducts(request, requestId);
+      console.info('[products] request completed', JSON.stringify({
+        requestId,
+        method: request.method,
+        status: response.status,
+        totalDurationMs: Date.now() - requestStartedAt,
+      }));
+      return response;
     }
 
     if (!['POST', 'PATCH', 'DELETE'].includes(request.method)) {

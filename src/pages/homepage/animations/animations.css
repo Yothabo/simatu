@@ -1,0 +1,163 @@
+:root {
+  --hp-transition-fast: 0.3s ease;
+  --hp-transition-normal: 0.45s ease;
+  --hp-transition-slow: 1.2s ease;
+
+  --hp-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --hp-ease-smooth: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  --hp-animation-orbit: 55s linear infinite;
+  --hp-animation-symbol: 18s linear infinite;
+  --hp-animation-glow: 3s ease-in-out infinite;
+  --hp-image-rotation-interval: 5500ms;
+}
+
+/* Entrance animations */
+
+@keyframes hp-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes hp-fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes hp-fade-down {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -20px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes hp-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Ambient animations */
+
+@keyframes hp-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -14px, 0); }
+}
+
+@keyframes hp-drift {
+  0%, 100% { transform: translate3d(-2%, 0, 0); }
+  50% { transform: translate3d(2%, -1%, 0); }
+}
+
+@keyframes hp-pulse {
+  0%, 100% { opacity: 0.65; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.06); }
+}
+
+@keyframes hp-glow {
+  0%, 100% { opacity: 0.55; filter: blur(18px); }
+  50% { opacity: 1; filter: blur(28px); }
+}
+
+@keyframes hp-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes hp-shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+/* Reusable animation classes */
+
+.hp-animate-fade-in {
+  animation: hp-fade-in 0.8s var(--hp-ease-out) both;
+}
+
+.hp-animate-fade-up {
+  animation: hp-fade-up 0.9s var(--hp-ease-out) both;
+}
+
+.hp-animate-fade-down {
+  animation: hp-fade-down 0.8s var(--hp-ease-out) both;
+}
+
+.hp-animate-scale-in {
+  animation: hp-scale-in 0.9s var(--hp-ease-out) both;
+}
+
+.hp-animate-float {
+  animation: hp-float 6s ease-in-out infinite;
+}
+
+.hp-animate-drift {
+  animation: hp-drift 12s ease-in-out infinite;
+}
+
+.hp-animate-pulse {
+  animation: hp-pulse 3s ease-in-out infinite;
+}
+
+.hp-animate-glow {
+  animation: hp-glow 3s ease-in-out infinite;
+}
+
+.hp-animate-rotate {
+  animation: hp-rotate 18s linear infinite;
+}
+
+.hp-delay-1 { animation-delay: 0.15s; }
+.hp-delay-2 { animation-delay: 0.3s; }
+.hp-delay-3 { animation-delay: 0.45s; }
+.hp-delay-4 { animation-delay: 0.6s; }
+
+.hp-hover-lift {
+  transition: transform var(--hp-transition-normal);
+}
+
+.hp-hover-lift:hover {
+  transform: translateY(-5px);
+}
+
+.hp-hover-glow {
+  transition: box-shadow var(--hp-transition-normal);
+}
+
+.hp-hover-glow:hover {
+  box-shadow: var(--hp-shadow-glow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hp-animate-fade-in,
+  .hp-animate-fade-up,
+  .hp-animate-fade-down,
+  .hp-animate-scale-in,
+  .hp-animate-float,
+  .hp-animate-drift,
+  .hp-animate-pulse,
+  .hp-animate-glow,
+  .hp-animate-rotate {
+    animation: none !important;
+  }
+
+  .hp-hover-lift,
+  .hp-hover-glow {
+    transition: none !important;
+  }
+}

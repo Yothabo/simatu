@@ -14,6 +14,7 @@ export type Product = {
   is_active: boolean;
   sort_order: number;
   order_count: number;
+  sizes?: string[];
   created_at: string;
 };
 

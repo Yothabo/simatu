@@ -1,0 +1,173 @@
+/* Admin-only spacing and layout primitives. */
+
+
+/* Shared admin item cards. Dimensions and spacing resolve through tokens. */
+.admin-scope {
+  --admin-card-media-size: 6rem;
+  --admin-card-media-size-wide: 7rem;
+  --admin-card-padding: var(--admin-space-sm);
+  --admin-card-padding-wide: var(--admin-space-md);
+  --admin-card-row-gap: var(--admin-space-xs);
+  --admin-card-column-gap: var(--admin-space-sm);
+  --admin-card-border: var(--admin-border-subtle);
+  --admin-card-surface: var(--admin-surface);
+  --admin-card-surface-hover: var(--admin-surface-subtle);
+}
+
+.admin-scope .admin-item-card {
+  border: var(--admin-card-border);
+  background: var(--admin-card-surface);
+  transition: background-color 150ms ease;
+}
+
+.admin-scope .admin-item-card:hover {
+  background: var(--admin-card-surface-hover);
+}
+
+.admin-scope .admin-item-card-media {
+  width: var(--admin-card-media-size);
+  height: var(--admin-card-media-size);
+  border-right: var(--admin-card-border);
+}
+
+.admin-scope .admin-item-card-content {
+  padding: var(--admin-card-padding);
+  background: var(--admin-surface);
+}
+
+.admin-scope .admin-item-card-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--admin-card-row-gap);
+}
+
+.admin-scope .admin-item-card-row {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: var(--admin-card-column-gap);
+}
+
+.admin-scope .admin-item-card-title,
+.admin-scope .admin-item-card-price,
+.admin-scope .admin-item-card-status,
+.admin-scope .admin-item-card-meta {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.admin-scope .admin-item-card-status {
+  text-transform: uppercase;
+}
+
+.admin-scope .admin-item-card-media.admin-item-card-order-media {
+  background-color: var(--admin-card-order-media-surface);
+}
+
+.admin-scope .admin-item-card-title,
+.admin-scope .admin-item-card-meta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-scope .admin-item-card-title {
+  flex: 1 1 auto;
+}
+
+.admin-scope .admin-item-card-price,
+.admin-scope .admin-item-card-status {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.admin-scope .admin-item-card-meta {
+  flex: 0 1 48%;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+@media (min-width: 640px) {
+  .admin-scope .admin-item-card-media {
+    width: var(--admin-card-media-size-wide);
+    height: var(--admin-card-media-size-wide);
+  }
+
+  .admin-scope .admin-item-card-content {
+    padding: var(--admin-card-padding-wide);
+  }
+}
+
+
+
+.admin-scope .admin-page-container {
+  width: 100%;
+  max-width: var(--admin-layout-content-width);
+  margin-inline: auto;
+  padding-inline: var(--admin-layout-page-gutter);
+}
+
+.admin-scope .admin-page-container-wide {
+  width: 100%;
+  max-width: var(--admin-layout-content-width-wide);
+  margin-inline: auto;
+  padding-inline: var(--admin-layout-page-gutter);
+}
+
+.admin-scope .admin-page-content {
+  padding-top: var(--admin-space-xs);
+  padding-bottom: var(--admin-layout-page-bottom);
+}
+
+.admin-scope .admin-section-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--admin-space-2xl);
+}
+
+.admin-scope .admin-form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--admin-space-md);
+}
+
+.admin-scope .admin-modal-padding {
+  padding: var(--admin-space-xl);
+}
+
+.admin-scope .admin-field-label-spacing {
+  margin-bottom: var(--admin-space-xxs);
+}
+
+.admin-scope .admin-control-padding {
+  padding: var(--admin-space-sm) var(--admin-space-md);
+}
+
+.admin-scope .admin-inline-gap {
+  gap: var(--admin-space-sm);
+}
+
+.admin-scope .admin-control-height {
+  min-height: 48px;
+}
+
+@media (min-width: 640px) {
+  .admin-scope .admin-page-container,
+  .admin-scope .admin-page-container-wide {
+    padding-inline: var(--admin-layout-page-gutter-wide);
+  }
+
+  .admin-scope .admin-page-content {
+    padding-top: var(--admin-space-sm);
+    padding-bottom: var(--admin-layout-page-bottom-wide);
+  }
+
+  .admin-scope .admin-modal-padding {
+    padding: var(--admin-space-2xl);
+  }
+}
+
+

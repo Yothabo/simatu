@@ -14,8 +14,8 @@ export const CARD_CHROME: CSSProperties = {
   backgroundImage: [
     'linear-gradient(to bottom, var(--admin-surface) 0%, transparent 30%)',
     'linear-gradient(to top, var(--admin-surface) 0%, transparent 30%)',
-    'linear-gradient(to right, color-mix(in srgb, var(--admin-border-strong) 8%, transparent) 1px, transparent 1px)',
-    'linear-gradient(to bottom, color-mix(in srgb, var(--admin-border-strong) 8%, transparent) 1px, transparent 1px)',
+    'linear-gradient(to right, var(--admin-card-grid-line) 1px, transparent 1px)',
+    'linear-gradient(to bottom, var(--admin-card-grid-line) 1px, transparent 1px)',
   ].join(','),
   backgroundSize: [
     '100% 100%',

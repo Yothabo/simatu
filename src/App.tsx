@@ -1,84 +1,144 @@
+import React, { Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { useTouchSelection } from './utils/useTouchSelection';
-import { CartProvider } from './context/CartContext';
-import useStorefront from './hooks/useStorefront';
 import MetaTags from './components/MetaTags';
 import ScrollToHash from './components/ScrollToHash';
-import Home from './pages/Home';
-import CorporateHome from './pages/CorporateHome';
-import About from './pages/About';
-import ServicesPage from './pages/ServicesPage';
-import NotFound from './pages/NotFound';
-import ViewCatalog from './pages/ViewCatalog';
-import Admin from './pages/Admin';
-import UpdatePassword from './pages/UpdatePassword';
-import CartPage from './pages/CartPage';
-import DesignSystemTest from './pages/DesignSystemTest';
+import { useTouchSelection } from './utils/useTouchSelection';
 
-function AppToaster() {
-  const { primaryAccent } = useStorefront();
+import { CartProvider } from './context/CartContext';
 
+const HomepageHero = React.lazy(
+  () => import('./pages/homepage/hero/Hero')
+);
+const Home = React.lazy(() => import('./pages/Home'));
+const ServicesPage = React.lazy(() => import('./pages/ServicesPage'));
+const ViewCatalog = React.lazy(() => import('./pages/ViewCatalog'));
+const About = React.lazy(() => import('./pages/About'));
+const CartPage = React.lazy(() => import('./pages/CartPage'));
+const NotFound = React.lazy(() => import('./pages/NotFound'));
+const UpdatePassword = React.lazy(() => import('./pages/UpdatePassword'));
+const AdminPage = React.lazy(() => import('./pages/admin/AdminPage'));
+
+class AdminErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean }
+> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, info: React.ErrorInfo) {
+    console.error('Admin page rendering failed:', error, info.componentStack);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <main
+          role="alert"
+          style={{
+            minHeight: '100vh',
+            display: 'grid',
+            placeContent: 'center',
+            gap: 16,
+            padding: 24,
+            background: '#fff',
+            color: '#202124',
+            textAlign: 'center',
+          }}
+        >
+          <h1>Admin could not be loaded</h1>
+          <p>Something went wrong while opening the admin dashboard.</p>
+          <button type="button" onClick={() => window.location.reload()}>
+            Reload admin
+          </button>
+        </main>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+function RouteLoadingFallback() {
   return (
-    <Toaster
-      position="top-right"
-      containerStyle={{ top: 90, right: 20 }}
-      toastOptions={{
-        style: {
-          background: primaryAccent,
-          color: "#fff",
-          borderRadius: 0,
-          fontFamily: "inherit",
-          fontSize: "14px",
-          border: 'none'
-        },
-        success: {
-          iconTheme: {
-            primary: '#ffffff',
-            secondary: primaryAccent,
-          },
-        },
+    <main
+      role="status"
+      aria-live="polite"
+      style={{
+        minHeight: '100vh',
+        display: 'grid',
+        placeContent: 'center',
+        padding: 24,
+        background: '#fff',
+        color: '#4d4d4d',
       }}
-    />
+    >
+      Loading page...
+    </main>
   );
 }
 
-
-export default function App() {
+function App() {
   useTouchSelection();
+
   return (
     <BrowserRouter>
       <CartProvider>
         <ScrollToHash />
         <MetaTags />
-        <Routes>
-          {/* Simatu Cooperative corporate homepage */}
-          <Route path="/" element={<CorporateHome />} />
 
-          {/* Yotaabo storefront */}
-          <Route path="/yotaabo" element={<Home />} />
-          <Route path="/yotaabo/about" element={<About />} />
-          <Route path="/yotaabo/services" element={<ServicesPage />} />
-          <Route path="/yotaabo/catalog" element={<ViewCatalog />} />
-          <Route path="/yotaabo/cart" element={<CartPage />} />
-          <Route path="/yotaabo/*" element={<NotFound />} />
+        <Suspense fallback={<RouteLoadingFallback />}>
+          <Routes>
+            <Route path="/" element={<HomepageHero />} />
 
-          {/* Poshies storefront */}
-          <Route path="/poshies" element={<Home />} />
-          <Route path="/poshies/about" element={<About />} />
-          <Route path="/poshies/services" element={<ServicesPage />} />
-          <Route path="/poshies/catalog" element={<ViewCatalog />} />
-          <Route path="/poshies/cart" element={<CartPage />} />
-          <Route path="/poshies/*" element={<NotFound />} />
 
-          {/* Shared operational routes */}
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/update-password" element={<UpdatePassword />} />
-          <Route path="/test" element={<DesignSystemTest />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <AppToaster />
+            <Route path="/yotaabo" element={<Home />} />
+            <Route path="/yotaabo/services" element={<ServicesPage />} />
+            <Route path="/yotaabo/catalog" element={<ViewCatalog />} />
+            <Route path="/yotaabo/about" element={<About />} />
+            <Route path="/yotaabo/cart" element={<CartPage />} />
+            <Route path="/yotaabo/*" element={<NotFound />} />
+
+            <Route path="/poshies" element={<Home />} />
+            <Route path="/poshies/services" element={<ServicesPage />} />
+            <Route path="/poshies/catalog" element={<ViewCatalog />} />
+            <Route path="/poshies/about" element={<About />} />
+            <Route path="/poshies/cart" element={<CartPage />} />
+            <Route path="/poshies/*" element={<NotFound />} />
+
+            <Route path="/update-password" element={<UpdatePassword />} />
+
+            <Route
+              path="/admin"
+              element={
+                <AdminErrorBoundary>
+                  <Suspense
+                    fallback={
+                      <div style={{ color: 'white', padding: 30 }}>
+                        Loading admin module...
+                      </div>
+                    }
+                  >
+                    <AdminPage />
+                  </Suspense>
+                </AdminErrorBoundary>
+              }
+            />
+
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+
+        <Toaster
+          position="top-right"
+          containerStyle={{ top: 90, right: 20 }}
+        />
       </CartProvider>
     </BrowserRouter>
   );
 }
+
+export default App;

@@ -598,7 +598,8 @@ describe('products API: product updates', () => {
     );
 
     expect(lookup?.[1]).toEqual([validId, 'yotaabo']);
-    expect(update?.[1][15]).toBe('yotaabo');
+    expect(update?.[1][15]).toBe(validId);
+    expect(update?.[1][16]).toBe('yotaabo');
     expect(mocks.clientQuery).toHaveBeenCalledWith('COMMIT');
     expect(mocks.release).toHaveBeenCalledOnce();
   });

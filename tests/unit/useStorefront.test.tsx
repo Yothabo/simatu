@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { renderHook } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import useStorefront from '../../src/hooks/useStorefront'
@@ -14,6 +14,9 @@ function renderStorefront(path: string) {
 }
 
 describe('useStorefront', () => {
+  beforeEach(() => {
+    window.sessionStorage.clear()
+  })
   it('selects Yotaabo for the root path', () => {
     const { result } = renderStorefront('/')
 

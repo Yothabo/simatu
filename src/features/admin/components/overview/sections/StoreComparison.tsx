@@ -1,7 +1,11 @@
 import type { OverviewStorePerformance } from '../../../types/overview.types';
 import { formatOverviewCurrency } from '../../../utils/overview/currency';
-import OverviewMetric from '../shared/OverviewMetric';
-import OverviewSection from '../shared/OverviewSection';
+import { getCategoryTheme } from '../../../../../utils/categoryTheme';
+import {
+  AdminCard,
+  AdminMetric,
+  AdminSectionHeader,
+} from '../../../../../design-system/components';
 
 type Props = {
   data: OverviewStorePerformance[];
@@ -11,38 +15,95 @@ export default function StoreComparison({ data }: Props) {
   if (data.length < 2) return null;
 
   return (
-    <OverviewSection
-      title="Store comparison"
-      description="Same date range and delivered-order definitions for both storefronts."
+    <section
+      className="flex w-full flex-col"
+      style={{ gap: 'var(--admin-space-md)' }}
     >
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-        {data.map((store) => (
-          <div
-            key={store.storefront}
-            className="flex flex-col rounded-xl border p-4"
-            style={{
-              borderColor: 'var(--admin-border-subtle)',
-              borderRadius: 'var(--admin-radius-lg, 12px)',
-              background: 'var(--admin-surface)',
-              gap: 'var(--admin-space-md)',
-            }}
-          >
-            <h3 className="text-sm font-semibold">
-              {store.storefront === 'yotaabo' ? 'Yotaabo' : 'Poshies'}
-            </h3>
+      <AdminSectionHeader
+        title="Store comparison"
+        description="Same date range and delivered-order definitions for both storefronts."
+      />
 
-            <div className="grid grid-cols-2 gap-3">
-              <OverviewMetric label="Orders received" value={store.orders} />
-              <OverviewMetric label="Delivered orders" value={store.deliveredOrders} />
-              <OverviewMetric
-                label="Recorded sales"
-                value={formatOverviewCurrency(store.recordedSalesValue)}
-              />
-              <OverviewMetric label="Units sold" value={store.unitsSold} />
-            </div>
-          </div>
-        ))}
+      <div
+        className="grid grid-cols-1 md:grid-cols-2"
+        style={{ gap: 'var(--admin-space-md)' }}
+      >
+        {data.map((store) => {
+          const storeLabel =
+            store.storefront === 'yotaabo' ? 'Yotaabo' : 'Poshies';
+          const storeColor =
+            store.storefront === 'yotaabo'
+              ? getCategoryTheme('His').hexColor
+              : getCategoryTheme('Hers').hexColor;
+
+          return (
+            <AdminCard
+              key={store.storefront}
+              padding="none"
+              borderless
+              transparent
+            >
+              <div
+                style={{
+                  width: '100%',
+                  backgroundColor: storeColor,
+                  paddingInline: 'var(--admin-space-md)',
+                  paddingBlock: 'var(--admin-space-sm)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  borderRadius: 'var(--ds-radius-lg)',
+                }}
+              >
+                <h3
+                  style={{
+                    fontSize: 'var(--admin-size-body)',
+                    fontWeight: 'var(--admin-weight-semibold)',
+                    color: 'var(--admin-on-accent)',
+                    margin: 0,
+                    lineHeight: 1.2,
+                  }}
+                >
+                  {storeLabel} storefront
+                </h3>
+              </div>
+
+              <div
+                className="grid grid-cols-2"
+                style={{
+                  padding: 'var(--admin-space-md)',
+                  gap: 'var(--admin-space-lg)',
+                }}
+              >
+                <AdminMetric
+                  transparent
+                  label="Orders received"
+                  value={store.orders}
+                  size="sm"
+                />
+                <AdminMetric
+                  transparent
+                  label="Delivered orders"
+                  value={store.deliveredOrders}
+                  size="sm"
+                />
+                <AdminMetric
+                  transparent
+                  label="Recorded sales"
+                  value={formatOverviewCurrency(store.recordedSalesValue)}
+                  size="sm"
+                />
+                <AdminMetric
+                  transparent
+                  label="Units sold"
+                  value={store.unitsSold}
+                  size="sm"
+                />
+              </div>
+            </AdminCard>
+          );
+        })}
       </div>
-    </OverviewSection>
+    </section>
   );
 }

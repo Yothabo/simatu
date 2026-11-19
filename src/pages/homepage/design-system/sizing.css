@@ -1,0 +1,20 @@
+:root {
+  --hp-size-content: 1200px;
+  --hp-size-content-wide: 1440px;
+
+  --hp-size-hero-min-height: 780px;
+  --hp-size-hero-max-height: 1100px;
+
+  --hp-size-navigation-height: 104px;
+  --hp-size-navigation-height-tablet: 82px;
+  --hp-size-navigation-height-mobile: 74px;
+
+  --hp-size-button-height: 44px;
+  --hp-size-icon: 32px;
+
+  --hp-radius-small: 2px;
+  --hp-radius-medium: 4px;
+  --hp-radius-large: 12px;
+  --hp-radius-pill: 999px;
+  --hp-radius-circle: 50%;
+}

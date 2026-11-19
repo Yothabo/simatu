@@ -1,4 +1,11 @@
 import type { FormEvent } from 'react';
+import {
+  AdminButton,
+  AdminField,
+  AdminInput,
+  AdminSectionHeader,
+  AdminSelect,
+} from '../../../design-system/components';
 
 type AdminInviteFormProps = {
   email: string;
@@ -18,58 +25,68 @@ export default function AdminInviteForm({
   onSubmit,
 }: AdminInviteFormProps) {
   return (
-    <section className="border border-[var(--admin-border-subtle)] bg-[var(--admin-surface)] p-5">
-      <div className="mb-5">
-        <h3 className="admin-type-section-title text-[var(--admin-text-primary)]">
-          Invite Store Administrator
-        </h3>
-        <p className="admin-type-supporting mt-1 text-sm text-[var(--admin-text-secondary)]">
-          Invite an administrator to manage one assigned storefront.
-        </p>
-      </div>
+    <section
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 'var(--admin-space-md)',
+      }}
+    >
+      <AdminSectionHeader
+        title="Invite Store Administrator"
+        as="h3"
+        compact
+      />
 
-      <form onSubmit={onSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="new-admin-email" className="mb-2 block text-sm font-medium text-[var(--admin-text-primary)]">
-            Email address
-          </label>
-          <input
-            id="new-admin-email"
+      <form
+        onSubmit={onSubmit}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 'var(--admin-space-md)',
+        }}
+      >
+        <AdminField label="Email address" htmlFor="new-admin-email" required>
+          <AdminInput
             type="email"
             value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="admin@example.com"
             autoComplete="email"
             required
             maxLength={254}
             disabled={isInviting}
-            className="w-full rounded-none border border-[var(--admin-border-strong)] bg-[var(--admin-surface)] px-3 py-3 text-sm text-[var(--admin-text-primary)] outline-none focus:border-[var(--admin-focus)] disabled:opacity-50"
+            id="new-admin-email"
           />
-        </div>
+        </AdminField>
 
-        <div>
-          <label htmlFor="new-admin-store" className="mb-2 block text-sm font-medium text-[var(--admin-text-primary)]">
-            Assign storefront
-          </label>
-          <select
+        <AdminField label="Assign storefront" htmlFor="new-admin-store">
+          <AdminSelect
             id="new-admin-store"
             value={storeSlug}
-            onChange={(event) => setStoreSlug(event.target.value as 'yotaabo' | 'poshies')}
+            onChange={(e) =>
+              setStoreSlug(e.target.value as 'yotaabo' | 'poshies')
+            }
+            options={[
+              { value: 'yotaabo', label: 'Yotaabo' },
+              { value: 'poshies', label: 'Poshies' },
+            ]}
             disabled={isInviting}
-            className="w-full rounded-none border border-[var(--admin-border-strong)] bg-[var(--admin-surface)] px-3 py-3 text-sm text-[var(--admin-text-primary)] outline-none focus:border-[var(--admin-focus)] disabled:opacity-50"
-          >
-            <option value="yotaabo">Yotaabo</option>
-            <option value="poshies">Poshies</option>
-          </select>
-        </div>
+          />
+        </AdminField>
 
-        <button
-          type="submit"
-          disabled={isInviting || !email.trim()}
-          className="w-full bg-[var(--admin-text-primary)] px-4 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {isInviting ? 'Sending invitation...' : 'Send invitation'}
-        </button>
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <AdminButton
+            variant="primary"
+            shape="pill"
+            type="submit"
+            ariaLabel={isInviting ? 'Sending invitation' : 'Send invitation'}
+            disabled={isInviting || !email.trim()}
+            loading={isInviting}
+          >
+            Send invitation
+          </AdminButton>
+        </div>
       </form>
     </section>
   );

@@ -1,15 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
-import { FiTrash2, FiCheck, FiX, FiMenu } from 'react-icons/fi';
-import { FaWhatsapp } from 'react-icons/fa';
-import { formatPrice } from '../utils/formatPrice';
+import { useState } from 'react';
 import Modal from './Modal';
-import CheckoutItemCard from './CheckoutItemCard';
-import ProductModal from './ProductModal';
-import { getCategoryTheme } from '../utils/categoryTheme';
-import type { AdminProduct } from './AdminProductForm';
 import type { Order } from '../features/admin/types/admin.types';
-
-type PreviewProduct = AdminProduct & { id: string };
+import OrderDetailsHeader from './order-details/components/OrderDetailsHeader';
+import OrderDetailsSummary from './order-details/components/OrderDetailsSummary';
+import OrderItems, {
+  type PreviewProduct,
+} from './order-details/components/OrderItems';
+import OrderSubtotal from './order-details/components/OrderSubtotal';
+import OrderWorkflowActions from './order-details/components/OrderWorkflowActions';
+import OrderDetailsFooter from './order-details/components/OrderDetailsFooter';
+import OrderProductPreview from './order-details/components/OrderProductPreview';
 
 type OrderDetailsModalProps = {
   order: Order | null;
@@ -19,18 +19,26 @@ type OrderDetailsModalProps = {
   onDelete: (order: Order) => void;
 };
 
-const STATUS_LABELS: Record<Order['status'], string> = {
-  pending: 'Pending',
-  confirmed: 'Confirmed',
-  delivered: 'Delivered',
-  cancelled: 'Cancelled',
-};
-
-const STATUS_COLORS: Record<Order['status'], string> = {
-  pending: 'text-[#d97706]',
-  confirmed: 'text-[#8aa89b]',
-  delivered: 'text-[#4d4d4d]/60',
-  cancelled: 'text-red-500',
+const STATUS_BADGE: Record<
+  Order['status'],
+  { bg: string; color: string }
+> = {
+  pending: {
+    bg: 'var(--admin-status-amber)',
+    color: 'var(--admin-on-accent)',
+  },
+  confirmed: {
+    bg: 'var(--admin-accent)',
+    color: 'var(--admin-on-accent)',
+  },
+  delivered: {
+    bg: 'var(--admin-status-green)',
+    color: 'var(--admin-on-accent)',
+  },
+  cancelled: {
+    bg: 'var(--admin-status-red)',
+    color: 'var(--admin-on-accent)',
+  },
 };
 
 export default function OrderDetailsModal({
@@ -40,26 +48,9 @@ export default function OrderDetailsModal({
   onStatusChange,
   onDelete,
 }: OrderDetailsModalProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<PreviewProduct | null>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!isMenuOpen) return;
-
-    const handler = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsMenuOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [isMenuOpen]);
-
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [order?.id]);
+  const [selectedProduct, setSelectedProduct] = useState<PreviewProduct | null>(
+    null,
+  );
 
   if (!order) return null;
 
@@ -71,250 +62,78 @@ export default function OrderDetailsModal({
     minute: '2-digit',
   });
 
-  const closeMenu = () => setIsMenuOpen(false);
+  const badge = STATUS_BADGE[order.status];
 
-  const actionClass =
-    'flex min-h-12 w-full items-center gap-3 border-0 border-b border-[#4d4d4d]/10 bg-white px-4 py-3 text-left admin-type-body text-[#4d4d4d]/80 transition-colors hover:bg-[#fafaf9] hover:text-[#4d4d4d]';
+  const handleWhatsApp = () => {
+    window.open(
+      `https://wa.me/${order.customer_phone.replace(/\D/g, '')}`,
+      '_blank',
+      'noopener,noreferrer',
+    );
+  };
 
   return (
     <Modal isOpen={!!order} onClose={onClose} maxWidth="max-w-2xl" scrollable={false}>
-      <div className="relative flex max-h-[85vh] flex-col overflow-hidden">
-        {/* Header */}
-        <div className="relative z-20 flex shrink-0 items-center justify-between gap-4 border-b border-[#4d4d4d]/10 bg-white px-6 py-4 sm:px-8">
-          <h2 className="min-w-0 truncate admin-type-card-title leading-snug text-[#4d4d4d] ">
-            {order.customer_name}
-          </h2>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '85vh',
+          backgroundColor: 'var(--admin-surface)',
+          borderRadius: 'var(--ds-radius-lg)',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Sticky header */}
+        <OrderDetailsHeader
+          order={order}
+          badge={badge}
+          onClose={onClose}
+          onWhatsApp={handleWhatsApp}
+        />
 
-<button
-              type="button"
-              onClick={onClose}
-              aria-label="Close order details"
-              className="flex h-10 w-10 items-center justify-center border-0 bg-transparent text-[#4d4d4d] transition-colors hover:bg-[#f5f5f5]"
-            >
-              <FiX size={22} />
-            </button>
+        {/* Scrollable body */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 'var(--admin-space-lg)',
+            padding: 'var(--admin-space-lg)',
+            overflowY: 'auto',
+            flex: 1,
+            minHeight: 0,
+          }}
+        >
+          <OrderDetailsSummary
+            order={order}
+            formattedDate={formattedDate}
+          />
+
+          <OrderItems
+            orderId={order.id}
+            items={order.items}
+            products={products}
+            onSelectProduct={setSelectedProduct}
+          />
+
+          <OrderSubtotal subtotal={order.subtotal} />
+
+          <OrderWorkflowActions
+            order={order}
+            onStatusChange={onStatusChange}
+          />
         </div>
 
-        {/* Scrollable order details */}
-        <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6 sm:px-8 sm:py-8">
-          <div className="flex flex-col gap-4">
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <span className="mb-1.5 block admin-type-micro font-semibold uppercase tracking-widest text-[var(--admin-charcoal-40)]">
-                  Order number
-                </span>
-                <div className="w-full bg-[var(--admin-surface)] px-4 py-3 admin-type-body admin-color-primary">
-                  {order.order_number}
-                </div>
-              </div>
-
-              <div>
-                <span className="mb-1.5 block admin-type-micro font-semibold uppercase tracking-widest text-[var(--admin-charcoal-40)]">
-                  Order date
-                </span>
-                <div className="w-full bg-[var(--admin-surface)] px-4 py-3 admin-type-body admin-color-primary">
-                  {formattedDate}
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div className="min-w-0">
-                <span className="mb-1.5 block admin-type-micro font-semibold uppercase tracking-widest text-[var(--admin-charcoal-40)]">
-                  Phone
-                </span>
-                <div className="w-full truncate bg-[var(--admin-surface)] px-4 py-3 admin-type-body admin-color-primary">
-                  {order.customer_phone}
-                </div>
-              </div>
-
-              <div className="min-w-0">
-                <span className="mb-1.5 block admin-type-micro font-semibold uppercase tracking-widest text-[var(--admin-charcoal-40)]">
-                  Status
-                </span>
-                <div className="w-full bg-[var(--admin-surface)] px-4 py-3 admin-type-body admin-color-primary">
-                  <span className={STATUS_COLORS[order.status]}>
-                    {STATUS_LABELS[order.status]}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Items */}
-          <div className="mt-6">
-            <h3 className="mb-3 admin-type-micro uppercase tracking-widest text-[#4d4d4d]/40">
-              Items
-            </h3>
-
-            <div className="admin-order-items flex flex-col gap-2">
-              {order.items.map((item, index) => {
-                const matchedProduct = products.find(
-                  (product) =>
-                    product.name.trim().toLowerCase() ===
-                    item.name.trim().toLowerCase(),
-                );
-
-                return (
-                <CheckoutItemCard
-                  key={`${order.id}-${index}`}
-                  variant="admin"
-                  name={item.name}
-                  onClick={
-                    matchedProduct
-                      ? () => setSelectedProduct(matchedProduct)
-                      : undefined
-                  }
-                  leftContent={
-                    <>
-                      <span className="admin-type-body">{item.qty}</span>
-                      {' × '}
-                      <span className="admin-type-body admin-color-primary">
-                        {formatPrice(item.price)}
-                      </span>
-                    </>
-                  }
-                  rightContent={<span className="admin-type-body admin-color-primary">{formatPrice(item.price * item.qty)}</span>}
-                />
-                );
-              })}
-            </div>
-
-            <div className="mt-4 flex items-center justify-between">
-              <p className="admin-type-micro uppercase tracking-widest text-[#4d4d4d]/40">
-                Subtotal
-              </p>
-              <p className="admin-type-body admin-color-primary">
-                {formatPrice(order.subtotal)}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Sticky footer and upward-opening menu */}
-        <div className="relative z-30 shrink-0 border-t border-[#4d4d4d]/10 bg-white px-6 py-4 sm:px-8">
-          <div ref={menuRef} className="relative mx-auto w-full max-w-sm">
-            {isMenuOpen && (
-              <div
-                role="menu"
-                className="absolute bottom-full left-1/2 z-40 mb-2 w-64 -translate-x-1/2 border border-[#4d4d4d]/15 bg-white shadow-lg"
-              >
-                {order.status === 'pending' && (
-                  <button
-                    type="button"
-                    role="menuitem"
-                    onClick={() => {
-                      closeMenu();
-                      onStatusChange(order, 'confirmed');
-                    }}
-                    className={actionClass}
-                  >
-                    <FiCheck size={14} />
-                    Confirm order
-                  </button>
-                )}
-
-                {order.status === 'confirmed' && (
-                  <button
-                    type="button"
-                    role="menuitem"
-                    onClick={() => {
-                      closeMenu();
-                      onStatusChange(order, 'delivered');
-                    }}
-                    className={actionClass}
-                  >
-                    <FiCheck size={14} />
-                    Mark delivered
-                  </button>
-                )}
-
-                {(order.status === 'pending' || order.status === 'confirmed') && (
-                  <button
-                    type="button"
-                    role="menuitem"
-                    onClick={() => {
-                      closeMenu();
-                      onStatusChange(order, 'cancelled');
-                    }}
-                    className="flex min-h-12 w-full items-center gap-3 border-0 border-b border-[#4d4d4d]/10 bg-white px-4 py-3 text-left admin-type-body text-red-500/80 transition-colors hover:bg-[#fafaf9] hover:text-red-600"
-                  >
-                    <FiX size={14} />
-                    Unable to complete
-                  </button>
-                )}
-
-                <button
-                  type="button"
-                  role="menuitem"
-                  onClick={() => {
-                    closeMenu();
-                    onDelete(order);
-                  }}
-                  className="flex min-h-12 w-full items-center gap-3 border-0 bg-white px-4 py-3 text-left admin-type-body text-red-500/80 transition-colors hover:bg-[#fafaf9] hover:text-red-600"
-                >
-                  <FiTrash2 size={14} />
-                  Delete permanently
-                </button>
-              </div>
-            )}
-
-            <div className="flex w-full items-stretch gap-2">
-              <button
-                type="button"
-                onClick={() => setIsMenuOpen((open) => !open)}
-                className="flex h-12 min-w-0 flex-1 items-center justify-center gap-2 border-0 bg-[#f5f5f5] admin-type-body text-[#4d4d4d] transition-colors hover:bg-[#e5e5e5]"
-                aria-expanded={isMenuOpen}
-                aria-haspopup="menu"
-                aria-label="Order actions menu"
-              >
-                <FiMenu size={18} />
-                Menu
-              </button>
-
-              <button
-                type="button"
-                onClick={() =>
-                  window.open(
-                    `https://wa.me/${order.customer_phone.replace(/\D/g, '')}`,
-                    '_blank',
-                    'noopener,noreferrer',
-                  )
-                }
-                className="flex h-12 w-12 shrink-0 items-center justify-center border-0 bg-[#f5f5f5] text-[#4d4d4d] transition-colors hover:bg-[#e5e5e5]"
-                aria-label="Contact customer on WhatsApp"
-              >
-                <FaWhatsapp size={22} />
-              </button>
-            </div>
-          </div>
-        </div>
+        {/* Sticky footer */}
+        <OrderDetailsFooter
+          order={order}
+          onDelete={onDelete}
+          onClose={onClose}
+        />
       </div>
-      <ProductModal
-        product={
-          selectedProduct
-            ? {
-                id: selectedProduct.id,
-                name: selectedProduct.name,
-                price: String(selectedProduct.price),
-                description: selectedProduct.description,
-                image_url: selectedProduct.image_url,
-              }
-            : null
-        }
-        bgColor="bg-white"
-        placeholderColor={
-          selectedProduct
-            ? getCategoryTheme(selectedProduct.category).placeholderColor
-            : ''
-        }
-        accentColor={
-          selectedProduct
-            ? getCategoryTheme(selectedProduct.category).accentColor
-            : 'text-[#8aa89b]'
-        }
-        isDark={false}
-        mode="preview"
+
+      <OrderProductPreview
+        product={selectedProduct}
         onClose={() => setSelectedProduct(null)}
       />
     </Modal>
