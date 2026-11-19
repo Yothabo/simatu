@@ -29,7 +29,7 @@ export default function AdminProductDetailsModal({
 }: AdminProductDetailsModalProps) {
   if (!product) return null;
 
-  const theme = getCategoryTheme(product.category);
+  const placeholderColor = getAdminProductPlaceholderColor(product.category);
   const addedDate = formatProductAddedDate(product.created_at);
 
   return (
