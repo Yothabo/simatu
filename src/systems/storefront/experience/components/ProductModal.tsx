@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { FiX, FiMinus, FiPlus, FiTrash2 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import { useCart } from '../../core/context/CartContext.tsx';
-import RippleButton from '../../../../shared/components/RippleButton.tsx';
+import RippleButton from './RippleButton.tsx';
 import useStorefront from '../../core/hooks/useStorefront.ts';
 import ConfirmModal from '../../../../shared/components/ConfirmModal.tsx';
 
