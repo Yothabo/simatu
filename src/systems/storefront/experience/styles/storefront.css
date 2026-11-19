@@ -85,3 +85,18 @@
     display: none;
   }
 }
+
+/* Storefront wordmarks: keep the SVG canvas and its pseudo-elements transparent.
+   Scoped here so the independent Homepage Hero remains unchanged. */
+.storefront-wordmark,
+.storefront-wordmark::before,
+.storefront-wordmark::after,
+.storefront-wordmark svg {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+.storefront-wordmark::before,
+.storefront-wordmark::after {
+  content: none !important;
+}
