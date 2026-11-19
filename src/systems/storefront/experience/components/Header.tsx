@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiArrowUpRight, FiX } from 'react-icons/fi';
-import MenuIcon from '../../../../components/MenuIcon.tsx';
+import MenuIcon from './MenuIcon';
 import { FaOpencart } from 'react-icons/fa';
 import { TiArrowBack } from 'react-icons/ti';
 import { useCart } from '../../core/context/CartContext.tsx';

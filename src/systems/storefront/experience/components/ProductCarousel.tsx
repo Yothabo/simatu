@@ -9,7 +9,7 @@ import 'swiper/css/pagination';
 
 import ProductModal from './ProductModal.tsx';
 import ProductCardSkeleton from './ProductCardSkeleton.tsx';
-import { getCategoryTheme } from '../../../../utils/categoryTheme.ts';
+import { getCategoryTheme } from '../../../../shared/utilities/categoryTheme';
 import type { ProductCategory } from '../../core/hooks/useProducts.ts';
 
 type CarouselProduct = {

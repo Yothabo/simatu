@@ -1,4 +1,4 @@
-import ProductCarousel from '../../../../components/ProductCarousel.tsx';
+import ProductCarousel from './ProductCarousel';
 import useStorefront from '../../core/hooks/useStorefront.ts';
 import {
   useProducts,
