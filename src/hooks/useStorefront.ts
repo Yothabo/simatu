@@ -1,10 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { STOREFRONTS } from '../systems/storefront/core';
-import type {
-  StorefrontCategory,
-  StorefrontKey,
-} from '../systems/storefront/core';
+import type { StorefrontKey } from '../systems/storefront/core';
 
 export type { StorefrontCategory } from '../systems/storefront/core';
 
