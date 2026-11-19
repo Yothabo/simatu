@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { FiX, FiMinus, FiPlus, FiTrash2 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
-import { useCart } from '../context/CartContext';
-import RippleButton from './RippleButton';
-import useStorefront from '../hooks/useStorefront';
-import ConfirmModal from './ConfirmModal';
+import { useCart } from '../../core/context/CartContext.tsx';
+import RippleButton from '../../../../shared/components/RippleButton.tsx';
+import useStorefront from '../../core/hooks/useStorefront.ts';
+import ConfirmModal from '../../../../shared/components/ConfirmModal.tsx';
 
 type Product = {
   id: string;
