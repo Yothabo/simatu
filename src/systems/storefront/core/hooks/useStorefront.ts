@@ -46,5 +46,5 @@ export default function useStorefront() {
     return cleanPath ? `${store.basePath}/${cleanPath}` : store.basePath;
   };
 
-  return { ...store, pathFor, hasStorefrontContext };
+  return { ...store, storeKey, pathFor, hasStorefrontContext };
 }

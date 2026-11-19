@@ -6,9 +6,10 @@ import ScrollToHash from './components/ScrollToHash';
 import { useTouchSelection } from '../shared/hooks/useTouchSelection';
 
 import { CartProvider } from '../systems/storefront/core/context/CartContext';
+import StorefrontThemeProvider from '../systems/storefront/core/components/StorefrontThemeProvider';
 
 const HomepageHero = React.lazy(
-  () => import('../systems/homepage/hero/Hero')
+  () => import('../systems/homepage/pages/HomePage')
 );
 const Home = React.lazy(() => import('../systems/storefront/experience/pages/HomePage'));
 const ServicesPage = React.lazy(() => import('../systems/storefront/experience/pages/ServicesPage'));
@@ -94,7 +95,7 @@ function App() {
           <Route path="/" element={<HomepageHero />} />
 
 
-          <Route element={<CartProvider><Outlet /></CartProvider>}>
+          <Route element={<CartProvider><StorefrontThemeProvider><Outlet /></StorefrontThemeProvider></CartProvider>}>
             <Route path="/yotaabo" element={<Home />} />
             <Route path="/yotaabo/services" element={<ServicesPage />} />
             <Route path="/yotaabo/catalog" element={<ViewCatalog />} />
