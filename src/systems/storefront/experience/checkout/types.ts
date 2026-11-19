@@ -1,4 +1,4 @@
-import type { CartItem } from '../../context/CartContext';
+import type { CartItem } from '../../../../context/CartContext.tsx';
 
 export type CreatedOrder = {
   order_number: string;
