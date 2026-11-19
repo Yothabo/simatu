@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import { useCart } from '../../core/context/CartContext';
 import { FiTrash2, FiPlus, FiMinus } from 'react-icons/fi';
 import { FaOpencart } from 'react-icons/fa';
-import RippleButton from '../../../../shared/components/RippleButton';
+import RippleButton from '../components/RippleButton';
 import toast from 'react-hot-toast';
 import ConfirmModal from '../../../../shared/components/ConfirmModal';
 import ProductModal from '../components/ProductModal';
