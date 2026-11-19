@@ -1,4 +1,4 @@
-import Modal from '../Modal';
+import Modal from '../../../../shared/components/Modal.tsx';
 
 type CheckoutErrorModalProps = {
   submitError: string;

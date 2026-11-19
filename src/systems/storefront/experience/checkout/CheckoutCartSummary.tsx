@@ -1,5 +1,5 @@
-import CheckoutItemCard from '../CheckoutItemCard';
-import type { CartItem } from '../../context/CartContext';
+import CheckoutItemCard from '../../../../components/CheckoutItemCard.tsx';
+import type { CartItem } from '../../../../context/CartContext.tsx';
 
 type CheckoutCartSummaryProps = {
   cartItems: CartItem[];
