@@ -43,7 +43,7 @@ export default function Services() {
       placeholderColor: 'bg-[#8aa89b]',
       overlayColor: '#000000',
       hasImage: true,
-      imageSrc: '/images/hisimage.webp',
+      imageSrc: '/systems/storefront/shared/images/hisimage.webp',
       isDark: false,
       collectionTitle: isYotaabo ? 'His Collection' : 'Him Collection',
       productCategory: 'His',
@@ -61,7 +61,7 @@ export default function Services() {
       placeholderColor: 'bg-[#ff1493]',
       overlayColor: '#f2e9d8',
       hasImage: true,
-      imageSrc: '/images/herimage.webp',
+      imageSrc: '/systems/storefront/shared/images/herimage.webp',
       isDark: false,
       collectionTitle: 'Her Collection',
       productCategory: 'Hers',
@@ -182,7 +182,7 @@ export default function Services() {
               {/* Image Overlay */}
               {category.hasImage && (
                 <img
-                  src={category.imageSrc || "/images/hisimage.webp"}
+                  src={category.imageSrc || "/systems/storefront/shared/images/hisimage.webp"}
                   alt={`${category.title} collection`}
                   className="pointer-events-none absolute bottom-[15%] right-0 z-40 h-[35vh] w-auto object-contain object-right-bottom drop-shadow-2xl sm:bottom-[20%]"
                 />

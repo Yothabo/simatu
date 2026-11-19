@@ -39,7 +39,7 @@ export default function MetaTags({
         ? 'Discover fragrances that match your mood, define your style, and leave a lasting impression.'
         : 'Discover intimate wear, everyday underwear and comfortable sleepwear at Poshies.');
 
-  const pageImage = image ?? (isCorporate ? '/simatu.png' : isYotaabo ? '/images/hisimage.webp' : undefined);
+  const pageImage = image ?? (isCorporate ? '/simatu.png' : isYotaabo ? '/systems/storefront/shared/images/hisimage.webp' : undefined);
 
   const keywords = isCorporate
     ? 'Simatu Cooperative, multi-brand commerce group, retail businesses, South Africa'
