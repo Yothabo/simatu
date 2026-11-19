@@ -133,11 +133,10 @@ function App() {
           </Routes>
         </Suspense>
 
-        <Toaster
-          position="top-right"
-          containerStyle={{ top: 90, right: 20 }}
-        />
-      </CartProvider>
+      <Toaster
+        position="top-right"
+        containerStyle={{ top: 90, right: 20 }}
+      />
     </BrowserRouter>
   );
 }
