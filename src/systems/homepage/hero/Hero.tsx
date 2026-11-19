@@ -26,7 +26,7 @@ export default function AuralisCreativeHero() {
 
 
   return (
-    <main className="novae-page">
+    <main className="w-full min-h-screen overflow-x-clip bg-[#242424] text-[#F5F5F5] [font-family:var(--novae-font)]">
       <Header />
 
       <section

@@ -15,30 +15,7 @@
   --novae-font: 'DM Sans', sans-serif;
 }
 
-.novae-page {
-  width: 100%;
-  min-height: 100vh;
-  overflow-x: clip;
-  overflow-y: visible;
-  background: var(--novae-bg);
-  color: var(--novae-text);
-  font-family: var(--novae-font);
-}
-
-.novae-page *,
-.novae-page *::before,
-.novae-page *::after {
-  box-sizing: border-box;
-}
-
-.novae-page a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.novae-page button {
-  font: inherit;
-}
+/* Root layout and typography are provided by Tailwind utilities in Hero.tsx. */
 
 /* =========================================
    HERO FOUNDATION
