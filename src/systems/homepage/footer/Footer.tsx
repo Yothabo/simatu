@@ -24,7 +24,7 @@ export default function Footer() {
 
       <img
         className="footer-wordmark"
-        src="/images/simatu-wordmark.svg"
+        src="/systems/homepage/images/simatu-wordmark.svg"
         alt="Simatu"
       />
     </footer>
