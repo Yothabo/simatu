@@ -1,5 +1,5 @@
 import PhoneInput from 'react-phone-number-input';
-import type { CheckoutCustomerFormProps } from '../../../../components/checkout/types.ts';
+import type { CheckoutCustomerFormProps } from './types';
 
 export default function CheckoutCustomerForm({
   fullName,
