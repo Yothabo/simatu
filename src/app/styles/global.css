@@ -28,13 +28,13 @@
 html {
   min-width: 320px;
   scroll-behavior: smooth;
-  background: var(--color-paper);
+  background: #181715;
 }
 
 body {
   min-width: 320px;
   margin: 0;
-  background: var(--color-paper);
+  background: #181715;
   color: var(--color-black);
   font-family: var(--font-body);
   font-size: 15px;
@@ -43,13 +43,11 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Only anchor tags inherit a color — buttons no longer auto-styled */
 a {
   color: inherit;
   text-decoration: none;
 }
 
-/* Button reset — all button styling comes from Tailwind classes */
 button {
   cursor: pointer;
   font: inherit;
@@ -61,11 +59,6 @@ button {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-}
-
-button:focus-visible {
-  outline: 2px solid var(--color-grey);
-  outline-offset: 4px;
 }
 
 button:focus-visible,
@@ -100,38 +93,35 @@ img, svg {
   }
 }
 
-/* Typography helpers */
 .font-heading { font-family: var(--font-heading), serif; font-style: normal; }
 .font-body { font-family: var(--font-body), sans-serif; font-style: normal; }
 .font-accent { font-family: var(--font-accent), cursive; font-style: normal; }
 
-/* Prevent tap flash */
 html, body, * { -webkit-tap-highlight-color: transparent; }
 
-/* Lock background scroll when modal is open */
 body:has([data-modal-open="true"]) { overflow: hidden; }
 
-/* Toast animations */
 @keyframes cart-pop-in {
   0% { transform: translateY(20px) scale(0.1); opacity: 0; }
   50% { opacity: 1; }
   100% { transform: translateY(0) scale(1); opacity: 1; }
 }
+
 @keyframes cart-pop-out {
   0% { transform: translateY(0) scale(1); opacity: 1; }
   100% { transform: translateY(20px) scale(0.1); opacity: 0; }
 }
+
 .animate-cart-pop-in { animation: cart-pop-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; transform-origin: top right; }
 .animate-cart-pop-out { animation: cart-pop-out 0.25s ease-in forwards; transform-origin: top right; }
 
-/* Ripple */
 @keyframes ripple {
   0% { transform: scale(0); opacity: 0.6; }
   100% { transform: scale(1); opacity: 0; }
 }
+
 .animate-ripple { animation: ripple 0.6s ease-out forwards; }
 
-/* Autofill override */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -141,11 +131,11 @@ input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
 }
 
-/* Loading dots */
 @keyframes dot-bounce {
   0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
   40% { transform: scale(1); opacity: 1; }
 }
+
 .loading-dot {
   display: inline-block;
   width: 5px;
@@ -154,11 +144,7 @@ input:-webkit-autofill:active {
   background-color: currentColor;
   animation: dot-bounce 1.2s infinite ease-in-out both;
 }
+
 .loading-dot:nth-child(1) { animation-delay: -0.32s; }
 .loading-dot:nth-child(2) { animation-delay: -0.16s; }
 .loading-dot:nth-child(3) { animation-delay: 0s; }
-
-
-html, body {
-  background-color: #181715;
-}
