@@ -5,7 +5,8 @@ export type {
   StorefrontDesignSystem,
   StorefrontKey,
 } from './types/storefront';
-\nexport { CartProvider, useCart } from './context/CartContext';
+
+export { CartProvider, useCart } from './context/CartContext';
 export { default as useStorefront } from './hooks/useStorefront';
 export {
   useProducts,
