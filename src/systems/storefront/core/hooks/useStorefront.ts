@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { STOREFRONTS } from '..';
-import type { StorefrontKey } from '..';
+import { STOREFRONTS } from '../../../..';
+import type { StorefrontKey } from '../../../..';
 
-export type { StorefrontCategory } from '..';
+export type { StorefrontCategory } from '../../../..';
 
 const STORAGE_KEY = 'simatu:last-storefront';
 
