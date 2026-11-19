@@ -27,6 +27,7 @@ type ServiceCategory = {
 export default function Services() {
   const { products, isLoading, error } = useProducts();
   const { categoryOrder, name: storeName, pathFor } = useStorefront();
+  const orderedCategoryTypes: readonly ProductCategory[] = categoryOrder;
   const isYotaabo = storeName === 'Yotaabo';
 
   const categories: ServiceCategory[] = [
@@ -102,8 +103,8 @@ export default function Services() {
       .filter((category) => category.productCategory)
       .sort(
         (a, b) =>
-          categoryOrder.indexOf(a.productCategory!) -
-          categoryOrder.indexOf(b.productCategory!)
+          orderedCategoryTypes.indexOf(a.productCategory!) -
+          orderedCategoryTypes.indexOf(b.productCategory!)
       ),
     ...categories.filter((category) => !category.productCategory),
   ];
@@ -157,10 +158,36 @@ export default function Services() {
               <div className="pointer-events-none absolute inset-0 z-20">
                 {category.id === 'about' ? (
                   /* About: Bottom-Right, not rotated */
-                  <div className="absolute bottom-20 right-6 sm:bottom-32 sm:right-12">
-                    <span className={`whitespace-nowrap font-accent text-[clamp(80px,12vw,160px)] font-normal leading-[0.7] tracking-normal ${category.accentColor}`}>
-                      {storeName.toLowerCase()}
-                    </span>
+                  <div className="absolute bottom-20 inset-x-0 w-full min-w-0 sm:bottom-32">
+                    {storeName === 'Poshies' ? (
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 100 100"
+                        preserveAspectRatio="none"
+                        className="block h-[clamp(80px,12vw,160px)] w-full max-w-none"
+                      >
+                        <text
+                          x="50"
+                          y="50%"
+                          dominantBaseline="middle"
+                          textAnchor="middle"
+                          textLength="100"
+                          lengthAdjust="spacingAndGlyphs"
+                          style={{
+                            fontFamily: '"Anton", sans-serif',
+                            fontWeight: 400,
+                            fill: '#ff1493',
+                          }}
+                          fontSize="100"
+                        >
+                          poshies
+                        </text>
+                      </svg>
+                    ) : (
+                      <span className={`whitespace-nowrap font-accent text-[clamp(80px,12vw,160px)] font-normal leading-[0.7] tracking-normal ${category.accentColor}`}>
+                        {storeName.toLowerCase()}
+                      </span>
+                    )}
                   </div>
                 ) : (
                   /* Other sections: Rotated on the left */

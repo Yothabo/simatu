@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { getCategoryTheme } from '../../../../../utils/categoryTheme';
+import { getCategoryTheme } from '../../../../../systems/storefront/core/configuration/categoryTheme';
 import type { CategorySortMenuProps } from './types';
 
 export default function CategorySortMenu({

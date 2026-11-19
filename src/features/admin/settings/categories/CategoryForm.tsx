@@ -1,4 +1,4 @@
-import Modal from '../../../../components/Modal';
+import Modal from '../../../../shared/components/Modal';
 import AccentButton from '../../components/AccentButton';
 import CategoryFormHeader from './category-form/CategoryFormHeader';
 import CategoryCurrentState from './category-form/CategoryCurrentState';

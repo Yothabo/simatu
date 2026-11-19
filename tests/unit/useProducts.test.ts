@@ -3,7 +3,7 @@ import {
   getCategoryProducts,
   getFeaturedProducts,
   type Product
-} from '../../src/hooks/useProducts'
+} from '../../src/systems/storefront/core'
 
 const createProduct = (
   overrides: Partial<Product> = {}

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import type { Order, AdminRow } from '../types/admin.types';
 import type { RevenueSeries } from '../components/RevenueChart';
-import { getCategoryTheme } from '../../../utils/categoryTheme';
+import { getCategoryTheme } from '../../../systems/storefront/core/configuration/categoryTheme';
 
 type Args = {
   orders: Order[];

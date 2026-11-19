@@ -1,4 +1,4 @@
-import { invalidateProductsCache } from '../../../../../hooks/useProducts';
+import { invalidateProductsCache } from '../../../../../systems/storefront/core/hooks/useProducts';
 import { ADMIN_STORAGE_KEYS } from '../../../constants/admin.constants';
 import { writeAdminSnapshot } from '../../../utils/adminSnapshot';
 import type { AdminRow } from '../../../types/admin.types';

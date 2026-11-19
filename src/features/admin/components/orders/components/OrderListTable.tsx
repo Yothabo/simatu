@@ -1,4 +1,4 @@
-import { formatPrice } from '../../../../../utils/formatPrice';
+import { formatPrice } from '../../../../../shared/utilities/formatPrice';
 import type { Order } from '../../../types/admin.types';
 
 type Props = {

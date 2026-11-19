@@ -27,7 +27,7 @@ export default function Hero() {
     >
       {/* Hero Wordmark */}
       <div className="relative isolate mb-12 flex min-h-[45vh] w-full items-center justify-center overflow-hidden px-6">
-        <div className="storefront-wordmark relative z-10 w-full max-w-[1120px]">
+        <div className="storefront-wordmark relative z-10 w-full max-w-none">
           <svg
             aria-hidden="true"
             viewBox="0 0 100 100"

@@ -1,7 +1,7 @@
 import type { Order, AdminRow } from '../types/admin.types';
 import RevenueChart from './RevenueChart';
 import { useRevenueSeries } from '../hooks/useRevenueSeries';
-import { getCategoryTheme } from '../../../utils/categoryTheme';
+import { getCategoryTheme } from '../../../systems/storefront/core/configuration/categoryTheme';
 
 type StorePerformanceCardProps = {
   orders?: Order[];

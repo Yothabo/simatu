@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import useStorefront from '../../systems/storefront/core/hooks/useStorefront';
+import { useStorefront } from '../../systems/storefront/core';
 
 interface MetaTagsProps {
   title?: string;

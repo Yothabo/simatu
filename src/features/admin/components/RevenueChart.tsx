@@ -8,7 +8,7 @@ import {
   Tooltip,
   Legend,
 } from 'recharts';
-import { getCategoryTheme } from '../../../utils/categoryTheme';
+import { getCategoryTheme } from '../../../systems/storefront/core/configuration/categoryTheme';
 
 const MONTHS = [
   'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',

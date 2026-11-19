@@ -42,7 +42,7 @@ export default function useStorefront() {
   const store = STOREFRONTS[storeKey];
 
   const pathFor = (path = '') => {
-    const cleanPath = path.replace(/^\\/+/, '');
+    const cleanPath = path.replace(/^\/+/, '');
     return cleanPath ? `${store.basePath}/${cleanPath}` : store.basePath;
   };
 

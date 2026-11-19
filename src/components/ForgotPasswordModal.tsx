@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
-import Modal from './Modal';
+import Modal from '../shared/components/Modal';
 
 type ForgotPasswordModalProps = {
   isOpen: boolean;

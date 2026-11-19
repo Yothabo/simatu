@@ -1,5 +1,5 @@
 import type { AdminRow } from '../../../features/admin/types/admin.types';
-import { formatPrice } from '../../../utils/formatPrice';
+import { formatPrice } from '../../../shared/utilities/formatPrice';
 import {
   BIG_VALUE,
   LABEL_STYLE,

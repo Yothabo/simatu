@@ -5,7 +5,7 @@ import {
   invalidateProductsCache,
   useProducts,
   type Product
-} from '../../src/hooks/useProducts'
+} from '../../src/systems/storefront/core'
 
 let fetchMock: ReturnType<typeof vi.fn>
 
