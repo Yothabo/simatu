@@ -124,14 +124,14 @@ function App() {
                   }
                 >
                   <AdminPage />
-              </Suspense>
+                </Suspense>
               </AdminErrorBoundary>
             }
           />
 
           <Route path="*" element={<NotFound />} />
         </Routes>
-        </Suspense>
+      </Suspense>
 
       <Toaster
         position="top-right"
