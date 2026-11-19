@@ -95,19 +95,19 @@ function App() {
 
 
           <Route element={<CartProvider><Outlet /></CartProvider>}>
-          <Route path="/yotaabo" element={<Home />} />
-          <Route path="/yotaabo/services" element={<ServicesPage />} />
-          <Route path="/yotaabo/catalog" element={<ViewCatalog />} />
-          <Route path="/yotaabo/about" element={<About />} />
-          <Route path="/yotaabo/cart" element={<CartPage />} />
-          <Route path="/yotaabo/*" element={<NotFound />} />
+            <Route path="/yotaabo" element={<Home />} />
+            <Route path="/yotaabo/services" element={<ServicesPage />} />
+            <Route path="/yotaabo/catalog" element={<ViewCatalog />} />
+            <Route path="/yotaabo/about" element={<About />} />
+            <Route path="/yotaabo/cart" element={<CartPage />} />
+            <Route path="/yotaabo/*" element={<NotFound />} />
 
-          <Route path="/poshies" element={<Home />} />
-          <Route path="/poshies/services" element={<ServicesPage />} />
-          <Route path="/poshies/catalog" element={<ViewCatalog />} />
-          <Route path="/poshies/about" element={<About />} />
-          <Route path="/poshies/cart" element={<CartPage />} />
-          <Route path="/poshies/*" element={<NotFound />} />
+            <Route path="/poshies" element={<Home />} />
+            <Route path="/poshies/services" element={<ServicesPage />} />
+            <Route path="/poshies/catalog" element={<ViewCatalog />} />
+            <Route path="/poshies/about" element={<About />} />
+            <Route path="/poshies/cart" element={<CartPage />} />
+            <Route path="/poshies/*" element={<NotFound />} />
           </Route>
 
           <Route path="/update-password" element={<UpdatePassword />} />
@@ -124,7 +124,7 @@ function App() {
                   }
                 >
                   <AdminPage />
-                </Suspense>
+              </Suspense>
               </AdminErrorBoundary>
             }
           />
