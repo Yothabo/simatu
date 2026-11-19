@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import { FiArrowUpRight } from 'react-icons/fi';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import useStorefront from '../hooks/useStorefront';
+import Header from '../../../../components/Header.tsx';
+import Footer from '../../../../components/Footer.tsx';
+import useStorefront from '../../../../hooks/useStorefront.ts';
 
 export default function About() {
   const { name: storeName, pathFor } = useStorefront();

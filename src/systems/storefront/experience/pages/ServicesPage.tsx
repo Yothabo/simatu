@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import Services from '../components/Services';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Services from '../../../../components/Services.tsx';
+import Header from '../../../../components/Header.tsx';
+import Footer from '../../../../components/Footer.tsx';
 
 export default function ServicesPage() {
   return (
