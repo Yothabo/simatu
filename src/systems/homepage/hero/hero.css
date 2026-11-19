@@ -22,15 +22,6 @@
 ========================================= */
 
 .novae-hero {
-  position: relative;
-  isolation: isolate;
-  display: flex;
-  width: 100%;
-  min-height: 780px;
-  height: calc(100svh - 104px);
-  max-height: 1100px;
-  overflow: hidden;
-  align-items: center;
   background:
     radial-gradient(
       ellipse at 68% 45%,
@@ -346,14 +337,7 @@
    HERO COPY
 ========================================= */
 
-.hero-copy {
-  position: relative;
-  z-index: 6;
-  width: 58%;
-  margin-top: 35px;
-  margin-left: 10.5%;
-  pointer-events: none;
-}
+/* copy base migrated to Tailwind utilities in Hero.tsx. */
 
 .eyebrow {
   display: flex;
@@ -367,16 +351,7 @@
   text-transform: uppercase;
 }
 
-.hero-copy h1 {
-  max-width: 850px;
-  margin: 0;
-  color: var(--novae-text);
-  font-size: clamp(52px, 7.2vw, 108px);
-  font-weight: 500;
-  line-height: 0.99;
-  letter-spacing: -0.085em;
-  text-wrap: balance;
-}
+/* heading base migrated to Tailwind utilities in Hero.tsx. */
 
 .hero-copy h1 br {
   display: block;
@@ -386,36 +361,15 @@
    HERO DESCRIPTION
 ========================================= */
 
-.hero-description {
-  position: absolute;
-  z-index: 6;
-  right: 8%;
-  bottom: 19%;
-  width: min(300px, 25%);
-}
+/* description base migrated to Tailwind utilities in Hero.tsx. */
 
-.hero-description p {
-  margin: 0;
-  color: rgba(245, 245, 245, 0.67);
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 1.75;
-  letter-spacing: 0.1px;
-}
+/* description text base migrated to Tailwind utilities in Hero.tsx. */
 
 /* =========================================
    IMAGE SELECTOR
 ========================================= */
 
-.image-selector {
-  position: absolute;
-  z-index: 8;
-  right: 8%;
-  bottom: 7%;
-  display: flex;
-  align-items: center;
-  gap: 17px;
-}
+/* selector base migrated to Tailwind utilities in Hero.tsx. */
 
 .selector-controls {
   position: relative;
@@ -510,19 +464,9 @@
    SOCIAL PROOF (icons only — text removed)
 ========================================= */
 
-.social-proof {
-  position: relative;
-  z-index: 7;
-  width: fit-content;
-  margin-bottom: 24px;
-  pointer-events: auto;
-}
+/* social base migrated to Tailwind utilities in Hero.tsx. */
 
-.social-icons {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-}
+/* icons base migrated to Tailwind utilities in Hero.tsx. */
 
 .social-icons a {
   display: grid;
