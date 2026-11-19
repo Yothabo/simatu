@@ -1,4 +1,4 @@
-import type { CreatedOrder } from './types';
+import type { CreatedOrder } from '../../../../components/checkout/types.ts';
 
 type CheckoutSuccessProps = {
   createdOrder: CreatedOrder;

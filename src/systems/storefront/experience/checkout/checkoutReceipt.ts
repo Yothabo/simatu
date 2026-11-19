@@ -1,4 +1,4 @@
-import type { CreatedOrder } from './types';
+import type { CreatedOrder } from '../../../../components/checkout/types.ts';
 
 export const getReceiptText = (
   name: string,
