@@ -1,0 +1,6 @@
+/* Poshies identity overrides. Shared storefront foundations remain intact. */
+:root[data-storefront='poshies'] {
+  --storefront-accent: #ff1493;
+  --storefront-surface: #ffffff;
+  --storefront-text: #4d4d4d;
+}

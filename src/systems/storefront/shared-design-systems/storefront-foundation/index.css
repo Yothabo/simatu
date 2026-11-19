@@ -1,0 +1,9 @@
+/* Shared storefront foundations. Brand identity is layered by each store. */
+:root {
+  --storefront-accent: #8aa89b;
+  --storefront-surface: #ffffff;
+  --storefront-text: #4d4d4d;
+  --storefront-border: rgba(0, 0, 0, 0.12);
+  --storefront-font-body: var(--font-body, 'Manrope', sans-serif);
+  --storefront-font-heading: var(--font-heading, 'Cormorant Garamond', serif);
+}
