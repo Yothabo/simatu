@@ -7,15 +7,15 @@ import ConfirmModal from '../../../../shared/components/ConfirmModal.tsx';
 import ProductModal from './ProductModal.tsx';
 import useStorefront from '../../core/hooks/useStorefront.ts';
 import type { CartItem } from '../../core/context/CartContext.tsx';
-import CheckoutCartSummary from '../../../../components/checkout/CheckoutCartSummary.tsx';
-import CheckoutCustomerForm from '../../../../components/checkout/CheckoutCustomerForm.tsx';
-import CheckoutSuccess from '../../../../components/checkout/CheckoutSuccess.tsx';
-import CheckoutErrorModal from '../../../../components/checkout/CheckoutErrorModal.tsx';
+import CheckoutCartSummary from '../checkout/CheckoutCartSummary';
+import CheckoutCustomerForm from '../checkout/CheckoutCustomerForm';
+import CheckoutSuccess from '../checkout/CheckoutSuccess';
+import CheckoutErrorModal from '../checkout/CheckoutErrorModal';
 import {
   getReceiptFileName,
   getReceiptText,
-} from '../../../../components/checkout/checkoutReceipt.ts';
-import type { CreatedOrder } from '../../../../components/checkout/types.ts';
+} from '../checkout/checkoutReceipt';
+import type { CreatedOrder } from '../checkout/types';
 
 type CheckoutModalProps = {
   isOpen: boolean;
@@ -196,7 +196,7 @@ export default function CheckoutModal({
   const createReceiptPdfForOrder = async () => {
     if (!createdOrder) return null;
 
-    const { createReceiptPdf } = await import('../../../../components/checkout/checkoutReceiptPdf.ts');
+    const { createReceiptPdf } = await import('../checkout/checkoutReceiptPdf');
     return createReceiptPdf(name, primaryAccent, createdOrder);
   };
 
