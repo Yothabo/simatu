@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useProducts, Product } from '../../core/hooks/useProducts';
 import { formatPrice } from '../../../../shared/utilities/formatPrice';
-import { getCategoryTheme } from '../../../../shared/utilities/categoryTheme';
+import { getCategoryTheme } from '../../core/configuration/categoryTheme';
 import ProductCardSkeleton from '../components/ProductCardSkeleton';
 import Header from '../components/Header';
 import ProductModal from '../components/ProductModal';
