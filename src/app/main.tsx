@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import '../index.css';
+import './styles/global.css';
+import '../systems/storefront/experience/styles/storefront.css';
 
 function showRuntimeError(title: string, detail: unknown) {
   if (!import.meta.env.DEV) {
