@@ -1,5 +1,5 @@
-import ProductModal from '../../ProductModal';
-import { getCategoryTheme } from '../../../utils/categoryTheme';
+import ProductModal from '../../../systems/storefront/experience/components/ProductModal';
+import { getCategoryTheme } from '../../../shared/utilities/categoryTheme';
 import type { PreviewProduct } from './OrderItems';
 
 type OrderProductPreviewProps = {

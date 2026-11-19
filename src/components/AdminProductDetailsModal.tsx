@@ -1,5 +1,5 @@
-import { getCategoryTheme } from '../utils/categoryTheme';
-import Modal from './Modal';
+import { getCategoryTheme } from '../shared/utilities/categoryTheme';
+import Modal from '../shared/components/Modal';
 import type { AdminRow } from '../features/admin/types/admin.types';
 import ProductDetailsHeader from './admin-product-details/components/ProductDetailsHeader';
 import ProductDetailsImage from './admin-product-details/components/ProductDetailsImage';

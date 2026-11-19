@@ -1,4 +1,4 @@
-import { formatPrice } from '../../../utils/formatPrice';
+import { formatPrice } from '../../../shared/utilities/formatPrice';
 import type { AdminProduct } from '../../../features/admin/components/AdminProductForm';
 
 export type PreviewProduct = AdminProduct & { id: string };

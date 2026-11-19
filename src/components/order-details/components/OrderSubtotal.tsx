@@ -1,4 +1,4 @@
-import { formatPrice } from '../../../utils/formatPrice';
+import { formatPrice } from '../../../shared/utilities/formatPrice';
 import type { Order } from '../../../features/admin/types/admin.types';
 import { LABEL_STYLE } from '../styles/orderDetails.styles';
 
