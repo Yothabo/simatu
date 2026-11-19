@@ -4,18 +4,18 @@ import { isValidPhoneNumber } from 'libphonenumber-js';
 import 'react-phone-number-input/style.css';
 import Modal from './Modal';
 import ConfirmModal from './ConfirmModal';
-import ProductModal from './ProductModal';
+import ProductModal from './ProductModal.tsx';
 import useStorefront from '../hooks/useStorefront';
 import type { CartItem } from '../context/CartContext';
-import CheckoutCartSummary from './checkout/CheckoutCartSummary';
-import CheckoutCustomerForm from './checkout/CheckoutCustomerForm';
-import CheckoutSuccess from './checkout/CheckoutSuccess';
-import CheckoutErrorModal from './checkout/CheckoutErrorModal';
+import CheckoutCartSummary from '../../../../components/checkout/CheckoutCartSummary.tsx';
+import CheckoutCustomerForm from '../../../../components/checkout/CheckoutCustomerForm.tsx';
+import CheckoutSuccess from '../../../../components/checkout/CheckoutSuccess.tsx';
+import CheckoutErrorModal from '../../../../components/checkout/CheckoutErrorModal.tsx';
 import {
   getReceiptFileName,
   getReceiptText,
-} from './checkout/checkoutReceipt';
-import type { CreatedOrder } from './checkout/types';
+} from '../../../../components/checkout/checkoutReceipt.ts';
+import type { CreatedOrder } from '../../../../components/checkout/types.ts';
 
 type CheckoutModalProps = {
   isOpen: boolean;
@@ -196,7 +196,7 @@ export default function CheckoutModal({
   const createReceiptPdfForOrder = async () => {
     if (!createdOrder) return null;
 
-    const { createReceiptPdf } = await import('./checkout/checkoutReceiptPdf');
+    const { createReceiptPdf } = await import('../../../../components/checkout/checkoutReceiptPdf.ts');
     return createReceiptPdf(name, primaryAccent, createdOrder);
   };
 
