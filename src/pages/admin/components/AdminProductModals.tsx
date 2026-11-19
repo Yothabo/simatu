@@ -2,7 +2,7 @@ import AdminProductForm, {
   type AdminProduct,
 } from '../../../features/admin/components/AdminProductForm';
 import AdminProductDetailsModal from '../../../components/AdminProductDetailsModal';
-import ConfirmModal from '../../../components/ConfirmModal';
+import ConfirmModal from '../../../shared/components/ConfirmModal';
 import type { AdminRow } from '../../../features/admin/types/admin.types';
 
 type AdminRole = 'super_admin' | 'store_admin' | null;
