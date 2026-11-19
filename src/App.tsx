@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import MetaTags from './components/MetaTags';
 import ScrollToHash from './components/ScrollToHash';
@@ -86,15 +86,15 @@ function App() {
 
   return (
     <BrowserRouter>
-      <CartProvider>
-        <ScrollToHash />
-        <MetaTags />
+      <ScrollToHash />
+      <MetaTags />
 
-        <Suspense fallback={<RouteLoadingFallback />}>
+      <Suspense fallback={<RouteLoadingFallback />}>
           <Routes>
             <Route path="/" element={<HomepageHero />} />
 
 
+            <Route element={<CartProvider><Outlet /></CartProvider>}>
             <Route path="/yotaabo" element={<Home />} />
             <Route path="/yotaabo/services" element={<ServicesPage />} />
             <Route path="/yotaabo/catalog" element={<ViewCatalog />} />
@@ -108,6 +108,7 @@ function App() {
             <Route path="/poshies/about" element={<About />} />
             <Route path="/poshies/cart" element={<CartPage />} />
             <Route path="/poshies/*" element={<NotFound />} />
+            </Route>
 
             <Route path="/update-password" element={<UpdatePassword />} />
 
