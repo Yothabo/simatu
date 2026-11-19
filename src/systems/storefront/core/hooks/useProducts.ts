@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import useStorefront from './useStorefront';
+import useStorefront from './useStorefront.ts';
 
 export type ProductCategory = 'His' | 'Hers' | 'Spaces' | 'Lounge';
 

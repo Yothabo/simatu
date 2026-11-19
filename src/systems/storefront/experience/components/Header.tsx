@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiArrowUpRight, FiX } from 'react-icons/fi';
-import MenuIcon from './MenuIcon';
+import MenuIcon from '../../../../components/MenuIcon.tsx';
 import { FaOpencart } from 'react-icons/fa';
 import { TiArrowBack } from 'react-icons/ti';
-import { useCart } from '../context/CartContext';
-import useStorefront from '../hooks/useStorefront';
+import { useCart } from '../../core/context/CartContext.tsx';
+import useStorefront from '../../core/hooks/useStorefront.ts';
 
 type HeaderProps = {
   sticky?: boolean;

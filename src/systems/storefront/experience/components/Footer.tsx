@@ -1,5 +1,5 @@
 import { FaInstagram, FaTiktok, FaWhatsapp, FaEnvelope } from 'react-icons/fa';
-import useStorefront from '../hooks/useStorefront';
+import useStorefront from '../../core/hooks/useStorefront.ts';
 
 export default function Footer() {
   const { name: storeName } = useStorefront();

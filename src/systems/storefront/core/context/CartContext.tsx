@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import useStorefront from '../hooks/useStorefront';
+import useStorefront from '../hooks/useStorefront.ts';
 
 export type CartItem = {
   id: string;
