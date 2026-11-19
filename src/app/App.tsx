@@ -1,23 +1,23 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import MetaTags from './components/MetaTags';
-import ScrollToHash from './components/ScrollToHash';
-import { useTouchSelection } from './utils/useTouchSelection';
+import MetaTags from '../components/MetaTags';
+import ScrollToHash from '../components/ScrollToHash';
+import { useTouchSelection } from '../utils/useTouchSelection';
 
-import { CartProvider } from './context/CartContext';
+import { CartProvider } from '../context/CartContext';
 
 const HomepageHero = React.lazy(
-  () => import('./systems/homepage/hero/Hero')
+  () => import('../systems/homepage/hero/Hero')
 );
-const Home = React.lazy(() => import('./pages/Home'));
-const ServicesPage = React.lazy(() => import('./pages/ServicesPage'));
-const ViewCatalog = React.lazy(() => import('./pages/ViewCatalog'));
-const About = React.lazy(() => import('./pages/About'));
-const CartPage = React.lazy(() => import('./pages/CartPage'));
-const NotFound = React.lazy(() => import('./pages/NotFound'));
-const UpdatePassword = React.lazy(() => import('./pages/UpdatePassword'));
-const AdminPage = React.lazy(() => import('./pages/admin/AdminPage'));
+const Home = React.lazy(() => import('../pages/Home'));
+const ServicesPage = React.lazy(() => import('../pages/ServicesPage'));
+const ViewCatalog = React.lazy(() => import('../pages/ViewCatalog'));
+const About = React.lazy(() => import('../pages/About'));
+const CartPage = React.lazy(() => import('../pages/CartPage'));
+const NotFound = React.lazy(() => import('../pages/NotFound'));
+const UpdatePassword = React.lazy(() => import('../pages/UpdatePassword'));
+const AdminPage = React.lazy(() => import('../pages/admin/AdminPage'));
 
 class AdminErrorBoundary extends React.Component<
   { children: React.ReactNode },

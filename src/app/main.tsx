@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import './index.css';
+import '../index.css';
 
 function showRuntimeError(title: string, detail: unknown) {
   if (!import.meta.env.DEV) {
