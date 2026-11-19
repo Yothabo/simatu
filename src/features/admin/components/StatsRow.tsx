@@ -1,5 +1,5 @@
 import type { Order, AdminRow } from '../types/admin.types';
-import { getCategoryTheme } from '../../../utils/categoryTheme';
+import { getCategoryTheme } from '../../../systems/storefront/core/configuration/categoryTheme';
 import StatsHeader from './stats/StatsHeader';
 import OrdersStatCard from './stats/OrdersStatCard';
 import ProductsStatCard from './stats/ProductsStatCard';

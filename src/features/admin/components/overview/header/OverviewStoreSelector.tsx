@@ -1,5 +1,5 @@
 import type { Storefront } from '../../../types/admin.types';
-import { getCategoryTheme } from '../../../../../utils/categoryTheme';
+import { getCategoryTheme } from '../../../../../systems/storefront/core/configuration/categoryTheme';
 import AccentButton from '../../AccentButton';
 
 type OverviewStoreSelectorProps = {

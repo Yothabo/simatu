@@ -1,0 +1,102 @@
+/* Storefront-only toast and product carousel presentation. */
+
+/* Toast styling */
+.yotaabo-toast {
+  border: 1px solid rgba(0, 0, 0, 0.16) !important;
+  border-radius: 2px !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+  font-family: var(--font-body) !important;
+  font-size: 12px !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.1) !important;
+}
+.yotaabo-toast--success { border-left: 3px solid #536d5a !important; }
+.yotaabo-toast--error { border-left: 3px solid #a33b3b !important; }
+
+/* Yotaabo Swiper carousels */
+.yotaabo-product-swiper {
+  width: 100%;
+  overflow: hidden;
+  padding: 0 24px 42px !important;
+}
+
+.yotaabo-product-swiper .swiper-slide {
+  height: auto;
+}
+
+.yotaabo-product-swiper .swiper-button-next,
+.yotaabo-product-swiper .swiper-button-prev {
+  top: 42%;
+  width: 36px;
+  height: 36px;
+  margin-top: 0;
+  border: 1px solid rgba(77, 77, 77, 0.16);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--swiper-theme-color);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.yotaabo-product-swiper .swiper-button-next {
+  right: 28px;
+}
+
+.yotaabo-product-swiper .swiper-button-prev {
+  left: 28px;
+}
+
+.yotaabo-product-swiper .swiper-button-next::after,
+.yotaabo-product-swiper .swiper-button-prev::after {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.yotaabo-product-swiper .swiper-button-disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.yotaabo-product-swiper .swiper-pagination {
+  bottom: 8px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+.yotaabo-product-swiper .swiper-pagination-bullet {
+  width: 6px;
+  height: 6px;
+  margin: 0 !important;
+  border-radius: 999px;
+  background: rgba(77, 77, 77, 0.24);
+  opacity: 1;
+  transition: width 180ms ease, background-color 180ms ease;
+}
+
+.yotaabo-product-swiper .swiper-pagination-bullet-active {
+  width: 20px;
+  background: var(--swiper-theme-color);
+}
+
+@media (max-width: 639px) {
+  .yotaabo-product-swiper .swiper-button-next,
+  .yotaabo-product-swiper .swiper-button-prev {
+    display: none;
+  }
+}
+
+/* Storefront wordmarks: keep the SVG canvas and its pseudo-elements transparent.
+   Scoped here so the independent Homepage Hero remains unchanged. */
+.storefront-wordmark,
+.storefront-wordmark::before,
+.storefront-wordmark::after,
+.storefront-wordmark svg {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+.storefront-wordmark::before,
+.storefront-wordmark::after {
+  content: none !important;
+}

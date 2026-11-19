@@ -1,5 +1,5 @@
 import OrderDetailsModal from '../../../components/OrderDetailsModal';
-import ConfirmModal from '../../../components/ConfirmModal';
+import ConfirmModal from '../../../shared/components/ConfirmModal';
 import type {
   AdminRow,
   Order,

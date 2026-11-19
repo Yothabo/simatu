@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   getReceiptFileName,
   getReceiptText,
-} from '../../src/components/checkout/checkoutReceipt';
-import type { CreatedOrder } from '../../src/components/checkout/types';
+} from '../../src/systems/storefront/experience/checkout/checkoutReceipt';
+import type { CreatedOrder } from '../../src/systems/storefront/experience/checkout/types';
 
 const createdOrder: CreatedOrder = {
   order_number: 'SIM-2026-001',

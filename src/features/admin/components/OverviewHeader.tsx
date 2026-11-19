@@ -1,5 +1,5 @@
 import { FiPlus } from 'react-icons/fi';
-import { getCategoryTheme } from '../../../utils/categoryTheme';
+import { getCategoryTheme } from '../../../systems/storefront/core/configuration/categoryTheme';
 import AccentButton from './AccentButton';
 import TimeRangePicker from './TimeRangePicker';
 import type { TimeRange } from '../types/admin.types';

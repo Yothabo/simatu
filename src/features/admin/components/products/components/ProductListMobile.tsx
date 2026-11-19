@@ -1,6 +1,6 @@
 import AdminItemCard from '../../../../../components/AdminItemCard';
-import { formatPrice } from '../../../../../utils/formatPrice';
-import { getCategoryTheme } from '../../../../../utils/categoryTheme';
+import { formatPrice } from '../../../../../shared/utilities/formatPrice';
+import { getCategoryTheme } from '../../../../../systems/storefront/core/configuration/categoryTheme';
 import type { AdminRow } from '../../../types/admin.types';
 
 type Props = {

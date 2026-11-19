@@ -1,0 +1,5 @@
+@import "./colors.css";
+@import "./spacing.css";
+@import "./sizing.css";
+@import "./effects.css";
+@import "../animations/animations.css";

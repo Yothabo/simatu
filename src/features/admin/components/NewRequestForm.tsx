@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FiX } from 'react-icons/fi';
-import Modal from '../../../components/Modal';
+import Modal from '../../../shared/components/Modal';
 import AccentButton from './AccentButton';
 import AdminDropdown from './AdminDropdown';
 import type {

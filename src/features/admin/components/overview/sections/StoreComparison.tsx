@@ -1,6 +1,6 @@
 import type { OverviewStorePerformance } from '../../../types/overview.types';
 import { formatOverviewCurrency } from '../../../utils/overview/currency';
-import { getCategoryTheme } from '../../../../../utils/categoryTheme';
+import { getCategoryTheme } from '../../../../../systems/storefront/core/configuration/categoryTheme';
 import {
   AdminCard,
   AdminMetric,

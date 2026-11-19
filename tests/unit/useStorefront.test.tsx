@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { renderHook } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import useStorefront from '../../src/hooks/useStorefront'
+import { useStorefront } from '../../src/systems/storefront/core'
 
 function renderStorefront(path: string) {
   return renderHook(() => useStorefront(), {

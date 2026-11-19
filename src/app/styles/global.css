@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Allura&family=Anton&family=Big+Shoulders+Display:wght@700;800;900&family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Roboto:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --color-black: #000000;
+  --color-paper: #f5f5f2;
+  --color-white: #ffffff;
+  --color-silver: #C2CBD3;
+  --color-grey: #929BA5;
+  --color-border: rgba(0, 0, 0, 0.14);
+  --color-surface: #ffffff;
+  --font-body: 'Manrope', sans-serif;
+  --font-heading: 'Cormorant Garamond', serif;
+  --font-accent: 'Allura', cursive;
+  --content-width: 1120px;
+  --page-gutter: 24px;
+  --section-space: 96px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+  background: var(--color-paper);
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-black);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Only anchor tags inherit a color — buttons no longer auto-styled */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Button reset — all button styling comes from Tailwind classes */
+button {
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--color-grey);
+  outline-offset: 4px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-grey);
+  outline-offset: 4px;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+::selection {
+  background: var(--color-silver);
+  color: var(--color-black);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Typography helpers */
+.font-heading { font-family: var(--font-heading), serif; font-style: normal; }
+.font-body { font-family: var(--font-body), sans-serif; font-style: normal; }
+.font-accent { font-family: var(--font-accent), cursive; font-style: normal; }
+
+/* Prevent tap flash */
+html, body, * { -webkit-tap-highlight-color: transparent; }
+
+/* Lock background scroll when modal is open */
+body:has([data-modal-open="true"]) { overflow: hidden; }
+
+/* Toast animations */
+@keyframes cart-pop-in {
+  0% { transform: translateY(20px) scale(0.1); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes cart-pop-out {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(20px) scale(0.1); opacity: 0; }
+}
+.animate-cart-pop-in { animation: cart-pop-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; transform-origin: top right; }
+.animate-cart-pop-out { animation: cart-pop-out 0.25s ease-in forwards; transform-origin: top right; }
+
+/* Ripple */
+@keyframes ripple {
+  0% { transform: scale(0); opacity: 0.6; }
+  100% { transform: scale(1); opacity: 0; }
+}
+.animate-ripple { animation: ripple 0.6s ease-out forwards; }
+
+/* Autofill override */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #f5f5f5 inset !important;
+  -webkit-text-fill-color: #000 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Loading dots */
+@keyframes dot-bounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+  40% { transform: scale(1); opacity: 1; }
+}
+.loading-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: currentColor;
+  animation: dot-bounce 1.2s infinite ease-in-out both;
+}
+.loading-dot:nth-child(1) { animation-delay: -0.32s; }
+.loading-dot:nth-child(2) { animation-delay: -0.16s; }
+.loading-dot:nth-child(3) { animation-delay: 0s; }
+
+
+html, body {
+  background-color: #181715;
+}

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Modal from './Modal';
+import Modal from '../shared/components/Modal';
 import type { Order } from '../features/admin/types/admin.types';
 import OrderDetailsHeader from './order-details/components/OrderDetailsHeader';
 import OrderDetailsSummary from './order-details/components/OrderDetailsSummary';

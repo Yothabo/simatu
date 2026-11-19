@@ -1,5 +1,5 @@
 import { supabase } from '../../../../../utils/supabase';
-import { invalidateProductsCache } from '../../../../../hooks/useProducts';
+import { invalidateProductsCache } from '../../../../../systems/storefront/core/hooks/useProducts';
 import toast from 'react-hot-toast';
 import { getProductStoragePath } from '../../../components/product-form/utils';
 import type { AdminRow } from '../../../types/admin.types';

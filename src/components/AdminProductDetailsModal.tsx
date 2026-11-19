@@ -1,5 +1,5 @@
-import { getCategoryTheme } from '../utils/categoryTheme';
-import Modal from './Modal';
+import { getAdminProductPlaceholderColor } from '../features/admin/utils/adminProductCategoryTheme';
+import Modal from '../shared/components/Modal';
 import type { AdminRow } from '../features/admin/types/admin.types';
 import ProductDetailsHeader from './admin-product-details/components/ProductDetailsHeader';
 import ProductDetailsImage from './admin-product-details/components/ProductDetailsImage';
@@ -29,7 +29,7 @@ export default function AdminProductDetailsModal({
 }: AdminProductDetailsModalProps) {
   if (!product) return null;
 
-  const theme = getCategoryTheme(product.category);
+  const placeholderColor = getAdminProductPlaceholderColor(product.category);
   const addedDate = formatProductAddedDate(product.created_at);
 
   return (
@@ -68,7 +68,7 @@ export default function AdminProductDetailsModal({
           {/* Image */}
           <ProductDetailsImage
             product={product}
-            placeholderColor={theme.placeholderColor}
+            placeholderColor={placeholderColor}
           />
 
           {/* Name */}

@@ -1,4 +1,4 @@
-import { invalidateProductsCache } from '../../../../../hooks/useProducts';
+import { invalidateProductsCache } from '../../../../../systems/storefront/core/hooks/useProducts';
 import toast from 'react-hot-toast';
 import type { AdminRow } from '../../../types/admin.types';
 
