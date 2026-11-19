@@ -5,17 +5,16 @@ import MetaTags from './components/MetaTags';
 import ScrollToHash from './components/ScrollToHash';
 import { useTouchSelection } from '../shared/hooks/useTouchSelection';
 
-import { CartProvider } from '../systems/storefront/core/context/CartContext';
-import StorefrontThemeProvider from '../systems/storefront/core/components/StorefrontThemeProvider';
+import { CartProvider, StorefrontThemeProvider } from '../systems/storefront/core';
 
 const HomepageHero = React.lazy(
-  () => import('../systems/homepage/pages/HomePage')
+  () => import('../systems/homepage').then(({ HomePage }) => ({ default: HomePage }))
 );
-const Home = React.lazy(() => import('../systems/storefront/experience/pages/HomePage'));
-const ServicesPage = React.lazy(() => import('../systems/storefront/experience/pages/ServicesPage'));
-const ViewCatalog = React.lazy(() => import('../systems/storefront/experience/pages/CatalogPage'));
-const About = React.lazy(() => import('../systems/storefront/experience/pages/AboutPage'));
-const CartPage = React.lazy(() => import('../systems/storefront/experience/pages/CartPage'));
+const Home = React.lazy(() => import('../systems/storefront/experience').then(({ HomePage }) => ({ default: HomePage })));
+const ServicesPage = React.lazy(() => import('../systems/storefront/experience').then(({ ServicesPage }) => ({ default: ServicesPage })));
+const ViewCatalog = React.lazy(() => import('../systems/storefront/experience').then(({ CatalogPage }) => ({ default: CatalogPage })));
+const About = React.lazy(() => import('../systems/storefront/experience').then(({ AboutPage }) => ({ default: AboutPage })));
+const CartPage = React.lazy(() => import('../systems/storefront/experience').then(({ CartPage }) => ({ default: CartPage })));
 const NotFound = React.lazy(() => import('../pages/NotFound'));
 const UpdatePassword = React.lazy(() => import('../pages/UpdatePassword'));
 const AdminPage = React.lazy(() => import('../pages/admin/AdminPage'));
