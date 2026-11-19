@@ -59,7 +59,7 @@ export default function OrderProductPreview({ product, onClose }: OrderProductPr
         </div>
         <div className="grid grid-cols-[1fr_auto] items-center gap-3 border-b border-black/10 px-5 py-3">
           <span className="block truncate font-heading text-2xl italic leading-none text-black">{product.name}</span>
-          <span className={`block font-heading text-xl leading-none ${getAdminProductAccentColor(product.category)}`}>R {Number(product.price).toFixed(2)}</span>
+          <span className={`block font-heading text-xl leading-none ${getAdminProductAccentColor(product.category)}`}>{String(product.price)}</span>
         </div>
         <div className="px-5 py-4">
           <p className="font-heading text-sm leading-relaxed text-[#4d4d4d]/70">{product.description || 'No product description available.'}</p>
