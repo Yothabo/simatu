@@ -17,7 +17,7 @@ function collectFiles(directory) {
 }
 
 function importsIn(source) {
-  const pattern = /(?:from\s*|import\s*\\(|import\s*)(['"])([^'"]+)\1/g;
+  const pattern = /(?:from\s*|import\s*\(|import\s*)(['"])([^'"]+)\1/g;
   return [...source.matchAll(pattern)].map((match) => match[2]);
 }
 
