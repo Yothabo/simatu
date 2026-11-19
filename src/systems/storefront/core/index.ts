@@ -1,3 +1,6 @@
+export { CATEGORY_THEMES, getCategoryTheme } from './configuration/categoryTheme';
+export type { CategoryTheme } from './configuration/categoryTheme';
+
 export { STOREFRONTS, isStorefrontKey } from './configuration/storefronts';
 export type {
   StorefrontCategory,
