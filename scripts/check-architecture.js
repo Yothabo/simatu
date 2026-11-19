@@ -4,7 +4,7 @@ import path from 'node:path';
 const sourceRoot = path.resolve('src');
 const systemsRoot = path.join(sourceRoot, 'systems');
 const systemNames = new Set(['homepage', 'storefront', 'admin']);
-const sourceExtensions = new Set(['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs']);
+const sourceExtensions = new Set(['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.css']);
 const errors = [];
 
 function collectFiles(directory) {
@@ -17,7 +17,7 @@ function collectFiles(directory) {
 }
 
 function importsIn(source) {
-  const pattern = /(?:from\s*|import\s*\(|import\s*)(['"])([^'"]+)\1/g;
+  const pattern = /(?:from\s*|import\s*\(|import\s*|@import\s*(?:url\s*\()?)((['"])[^'"]+\2)/g;
   return [...source.matchAll(pattern)].map((match) => match[2]);
 }
 
