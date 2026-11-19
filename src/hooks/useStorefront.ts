@@ -1,24 +1,12 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { STOREFRONTS } from '../systems/storefront/core';
+import type {
+  StorefrontCategory,
+  StorefrontKey,
+} from '../systems/storefront/core';
 
-export type StorefrontCategory = 'His' | 'Hers' | 'Spaces' | 'Lounge';
-
-const STOREFRONTS = {
-  yotaabo: {
-    name: 'Yotaabo',
-    basePath: '/yotaabo',
-    primaryAccent: '#8aa89b',
-    categoryOrder: ['His', 'Hers', 'Spaces'] as StorefrontCategory[],
-  },
-  poshies: {
-    name: 'Poshies',
-    basePath: '/poshies',
-    primaryAccent: '#ff1493',
-    categoryOrder: ['Hers', 'His', 'Lounge'] as StorefrontCategory[],
-  },
-} as const;
-
-type StorefrontKey = keyof typeof STOREFRONTS;
+export type { StorefrontCategory } from '../systems/storefront/core';
 
 const STORAGE_KEY = 'simatu:last-storefront';
 
@@ -43,8 +31,7 @@ export default function useStorefront() {
     }
   }, [activeStorefront]);
 
-  const rememberedStorefront =
-    window.sessionStorage.getItem(STORAGE_KEY);
+  const rememberedStorefront = window.sessionStorage.getItem(STORAGE_KEY);
 
   const hasStorefrontContext =
     activeStorefront !== null ||
@@ -58,10 +45,8 @@ export default function useStorefront() {
   const store = STOREFRONTS[storeKey];
 
   const pathFor = (path = '') => {
-    const cleanPath = path.replace(/^\/+/, '');
-    return cleanPath
-      ? `${store.basePath}/${cleanPath}`
-      : store.basePath;
+    const cleanPath = path.replace(/^\\/+/, '');
+    return cleanPath ? `${store.basePath}/${cleanPath}` : store.basePath;
   };
 
   return { ...store, pathFor, hasStorefrontContext };
