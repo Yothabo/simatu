@@ -17,8 +17,8 @@ function collectFiles(directory) {
 }
 
 function importsIn(source) {
-  const pattern = /(?:from\s*|import\s*\(|import\s*|@import\s*(?:url\s*\()?)((['"])[^'"]+\2)/g;
-  return [...source.matchAll(pattern)].map((match) => match[2]);
+  const pattern = /(?:from\s*|import\s*\(|import\s*|@import\s*(?:url\s*\()?)['"]([^'"]+)['"]/g;
+  return [...source.matchAll(pattern)].map((match) => match[1]);
 }
 
 function systemTarget(fromFile, specifier) {
