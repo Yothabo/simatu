@@ -90,47 +90,47 @@ function App() {
       <MetaTags />
 
       <Suspense fallback={<RouteLoadingFallback />}>
-          <Routes>
-            <Route path="/" element={<HomepageHero />} />
+        <Routes>
+          <Route path="/" element={<HomepageHero />} />
 
 
-            <Route element={<CartProvider><Outlet /></CartProvider>}>
-            <Route path="/yotaabo" element={<Home />} />
-            <Route path="/yotaabo/services" element={<ServicesPage />} />
-            <Route path="/yotaabo/catalog" element={<ViewCatalog />} />
-            <Route path="/yotaabo/about" element={<About />} />
-            <Route path="/yotaabo/cart" element={<CartPage />} />
-            <Route path="/yotaabo/*" element={<NotFound />} />
+          <Route element={<CartProvider><Outlet /></CartProvider>}>
+          <Route path="/yotaabo" element={<Home />} />
+          <Route path="/yotaabo/services" element={<ServicesPage />} />
+          <Route path="/yotaabo/catalog" element={<ViewCatalog />} />
+          <Route path="/yotaabo/about" element={<About />} />
+          <Route path="/yotaabo/cart" element={<CartPage />} />
+          <Route path="/yotaabo/*" element={<NotFound />} />
 
-            <Route path="/poshies" element={<Home />} />
-            <Route path="/poshies/services" element={<ServicesPage />} />
-            <Route path="/poshies/catalog" element={<ViewCatalog />} />
-            <Route path="/poshies/about" element={<About />} />
-            <Route path="/poshies/cart" element={<CartPage />} />
-            <Route path="/poshies/*" element={<NotFound />} />
-            </Route>
+          <Route path="/poshies" element={<Home />} />
+          <Route path="/poshies/services" element={<ServicesPage />} />
+          <Route path="/poshies/catalog" element={<ViewCatalog />} />
+          <Route path="/poshies/about" element={<About />} />
+          <Route path="/poshies/cart" element={<CartPage />} />
+          <Route path="/poshies/*" element={<NotFound />} />
+          </Route>
 
-            <Route path="/update-password" element={<UpdatePassword />} />
+          <Route path="/update-password" element={<UpdatePassword />} />
 
-            <Route
-              path="/admin"
-              element={
-                <AdminErrorBoundary>
-                  <Suspense
-                    fallback={
-                      <div style={{ color: 'white', padding: 30 }}>
-                        Loading admin module...
-                      </div>
-                    }
-                  >
-                    <AdminPage />
-                  </Suspense>
-                </AdminErrorBoundary>
-              }
-            />
+          <Route
+            path="/admin"
+            element={
+              <AdminErrorBoundary>
+                <Suspense
+                  fallback={
+                    <div style={{ color: 'white', padding: 30 }}>
+                      Loading admin module...
+                    </div>
+                  }
+                >
+                  <AdminPage />
+                </Suspense>
+              </AdminErrorBoundary>
+            }
+          />
 
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
         </Suspense>
 
       <Toaster
