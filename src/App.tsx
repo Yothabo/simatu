@@ -8,7 +8,7 @@ import { useTouchSelection } from './utils/useTouchSelection';
 import { CartProvider } from './context/CartContext';
 
 const HomepageHero = React.lazy(
-  () => import('./pages/homepage/hero/Hero')
+  () => import('./systems/homepage/hero/Hero')
 );
 const Home = React.lazy(() => import('./pages/Home'));
 const ServicesPage = React.lazy(() => import('./pages/ServicesPage'));
