@@ -1,10 +1,10 @@
 import ProductCarousel from '../../../../components/ProductCarousel.tsx';
-import useStorefront from '../hooks/useStorefront';
+import useStorefront from '../../core/hooks/useStorefront.ts';
 import {
   useProducts,
   getCategoryProducts,
   type ProductCategory,
-} from '../hooks/useProducts';
+} from '../../core/hooks/useProducts.ts';
 
 type ServiceCategory = {
   id: string;

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { FiArrowUpRight } from 'react-icons/fi';
-import useStorefront from '../hooks/useStorefront';
+import useStorefront from '../../core/hooks/useStorefront.ts';
 
 export default function ContactSection() {
   const { name: storeName, pathFor } = useStorefront();

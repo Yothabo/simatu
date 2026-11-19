@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import useStorefront from '../hooks/useStorefront';
+import useStorefront from '../../core/hooks/useStorefront.ts';
 
 export default function BrandStory() {
   const { name: storeName, pathFor } = useStorefront();
