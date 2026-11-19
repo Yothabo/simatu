@@ -1,6 +1,6 @@
 import { useProducts, getFeaturedProducts } from '../hooks/useProducts';
-import { formatPrice } from '../utils/formatPrice';
-import ProductCarousel from './ProductCarousel';
+import { formatPrice } from '../../../../utils/formatPrice.ts';
+import ProductCarousel from '../../../../components/ProductCarousel.tsx';
 import useStorefront from '../hooks/useStorefront';
 
 const THREADS_COLOR: [number, number, number] = [0.5412, 0.6588, 0.6078];
