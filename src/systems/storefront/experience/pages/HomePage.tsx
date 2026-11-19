@@ -1,7 +1,7 @@
-import Header from "../../../../components/Header.tsx";
-import Hero from "../../../../components/Hero.tsx";
-import Services from "../../../../components/Services.tsx";
-import Footer from "../../../../components/Footer.tsx";
+import Header from "../components/Header";
+import Hero from "../components/Hero";
+import Services from "../components/Services";
+import Footer from "../components/Footer";
 
 export default function Home() {
   return (

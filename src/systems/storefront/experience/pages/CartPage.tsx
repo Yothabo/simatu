@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '../../../../components/Header.tsx';
-import { useCart } from '../../../../context/CartContext.tsx';
+import Header from '../components/Header';
+import { useCart } from '../../core/context/CartContext';
 import { FiTrash2, FiPlus, FiMinus } from 'react-icons/fi';
 import { FaOpencart } from 'react-icons/fa';
 import RippleButton from '../../../../components/RippleButton.tsx';
 import toast from 'react-hot-toast';
 import ConfirmModal from '../../../../components/ConfirmModal.tsx';
-import ProductModal from '../../../../components/ProductModal.tsx';
-import CheckoutModal from '../../../../components/CheckoutModal.tsx';
-import useStorefront from '../../../../hooks/useStorefront.ts';
+import ProductModal from '../components/ProductModal';
+import CheckoutModal from '../components/CheckoutModal';
+import useStorefront from '../../core/hooks/useStorefront';
 
 export default function CartPage() {
   const { name: storeName, pathFor, primaryAccent } = useStorefront();

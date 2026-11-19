@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useProducts, Product } from '../../../../hooks/useProducts.ts';
-import { formatPrice } from '../../../../utils/formatPrice.ts';
-import { getCategoryTheme } from '../../../../utils/categoryTheme.ts';
-import ProductCardSkeleton from '../../../../components/ProductCardSkeleton.tsx';
-import Header from '../../../../components/Header.tsx';
-import ProductModal from '../../../../components/ProductModal.tsx';
+import { useProducts, Product } from '../../core/hooks/useProducts';
+import { formatPrice } from '../../../../shared/utilities/formatPrice';
+import { getCategoryTheme } from '../../../../shared/utilities/categoryTheme';
+import ProductCardSkeleton from '../components/ProductCardSkeleton';
+import Header from '../components/Header';
+import ProductModal from '../components/ProductModal';
 import { FiPlus, FiMinus } from 'react-icons/fi';
-import useStorefront from '../../../../hooks/useStorefront.ts';
+import useStorefront from '../../core/hooks/useStorefront';
 
 export default function ViewCatalog() {
   const { categoryOrder, name: storeName } = useStorefront();
