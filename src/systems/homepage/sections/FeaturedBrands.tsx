@@ -300,10 +300,6 @@ export default function FeaturedBrands() {
             )}
           </article>
         </div>
-
-        <div className="epr-plus-placeholder" aria-label="Placeholder for future action">
-          <span aria-hidden="true">+</span>
-        </div>
       </div>
     </section>
   );
