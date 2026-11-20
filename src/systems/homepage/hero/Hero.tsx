@@ -26,12 +26,12 @@ export default function AuralisCreativeHero() {
 
 
   return (
-    <main className="novae-page">
+    <main className="novae-page relative isolate w-full min-h-screen overflow-x-clip bg-[#242424] text-[#F5F5F5] [font-family:var(--novae-font)]">
       <Header />
 
       <section
         ref={heroRef}
-        className="novae-hero"
+        className="novae-hero relative isolate flex w-full min-h-[780px] h-[calc(100svh-104px)] max-h-[1100px] items-center overflow-hidden"
         onMouseMove={handlePointerMove}
         onMouseLeave={resetPointer}
         onTouchStart={handleTouchStart}
@@ -98,9 +98,9 @@ export default function AuralisCreativeHero() {
           <div className="orbit-highlight" />
         </div>
 
-        <div className="hero-copy">
-          <div className="social-proof">
-            <div className="social-icons">
+        <div className="hero-copy relative z-[6] w-[58%] mt-[35px] ml-[10.5%] pointer-events-none max-[1100px]:w-[66%] max-[1100px]:ml-[7%] max-[820px]:w-[85%] max-[820px]:mt-[-55px] max-[820px]:ml-[7%] max-[520px]:w-[92%] max-[520px]:mt-[-95px] max-[520px]:ml-[6%] min-[1500px]:ml-[12%]">
+          <div className="social-proof relative z-[7] w-fit mb-6 pointer-events-auto">
+            <div className="social-icons flex items-center gap-[11px] max-[520px]:gap-[7px]">
               <a href="#instagram" aria-label="Instagram">
                 <FaInstagram aria-hidden="true" />
               </a>
@@ -116,18 +116,18 @@ export default function AuralisCreativeHero() {
             </div>
           </div>
 
-          <h1 className="hero-copy-title">
+          <h1 className="hero-copy-title block max-w-[850px] m-0 text-[#F5F5F5] text-[clamp(52px,7.2vw,108px)] font-medium leading-[0.99] tracking-[-0.085em] [text-wrap:balance] max-[1100px]:text-[clamp(55px,8vw,88px)] max-[820px]:text-[clamp(52px,10vw,78px)] max-[520px]:text-[clamp(44px,11vw,60px)] max-[520px]:leading-[1.02] max-[520px]:tracking-[-0.075em]">
             {heroCopy.tagline}
           </h1>
         </div>
 
-        <div className="hero-description">
-          <p className="hero-copy-description">
+        <div className="hero-description absolute z-[6] right-[8%] bottom-[19%] w-[min(300px,25%)]">
+          <p className="hero-copy-description m-0 text-[rgba(245,245,245,0.67)] text-base font-normal leading-[1.75] tracking-[0.1px] max-[820px]:text-[15px] max-[520px]:leading-[1.7]">
             {heroCopy.description}
           </p>
         </div>
 
-        <div className="image-selector">
+        <div className="image-selector absolute z-[8] right-[8%] bottom-[7%] flex items-center gap-[17px]">
           <div className="selector-controls">
             {visuals.map((_, index) => (
               <button
