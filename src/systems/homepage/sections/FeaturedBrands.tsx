@@ -24,8 +24,8 @@ const BRANDS: Brand[] = [
     videoSrc: "/videos/brands/yotaabo.mp4",
     name: "Yotaabo",
     description: "Some scents say everything without a single word. Find the fragrance that becomes your signature.",
-    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1800&q=88",
-    imageAlt: "Contemporary fashion retail interior",
+    image: "https://media.macphun.com/img/uploads/customer/blog/1752169898/1752170008686ffe183af522.98492050.jpg?q=85&w=1680",
+    imageAlt: "Atmospheric amber fragrance bottle in dramatic luxury editorial lighting",
     position: "50% 45%",
     href: "/yotaabo",
   },
@@ -146,7 +146,6 @@ export default function FeaturedBrands() {
   const restartAutoplayRef = useRef<() => void>(() => {});
   const isTransitioningRef = useRef(false);
   const sectionVisibleRef = useRef(false);
-  const heroVideoRefs = useRef<Array<HTMLVideoElement | null>>([]);
   const scrollPauseUntilRef = useRef(0);
 
   const activate = useCallback((id: number, fromUser = false) => {
@@ -298,13 +297,6 @@ export default function FeaturedBrands() {
     return `thumb-${distanceBehind - 1}`;
   };
 
-  useEffect(() => {
-    heroVideoRefs.current.forEach((video, index) => {
-      if (!video) return;
-      video.playbackRate = [1, 0.82, 1.08, 0.92][index] ?? 1;
-    });
-  }, [active, sectionVisible]);
-
   const current = BRANDS[active];
   const previous = previousActive === null ? null : BRANDS[previousActive];
 
@@ -348,39 +340,7 @@ export default function FeaturedBrands() {
                 aria-hidden={false}
                 style={{ "--image-position": brand.position } as CSSProperties}
               >
-                {!(slot === "hero" && sectionVisible && brand.videoSrc) && (
-                  <img src={brand.image} alt={brand.imageAlt} draggable={false} loading="eager" decoding="async" fetchPriority={slot === "hero" ? "high" : "low"} />
-                )}
-                {slot === "hero" && sectionVisible && brand.videoSrc && (
-                  <div className="epr-video-mosaic" aria-hidden="true">
-                    <video
-                      ref={(video) => { heroVideoRefs.current[0] = video; }}
-                      className="epr-video-panel epr-video-panel-top"
-                      src={brand.videoSrc}
-                      muted loop autoPlay playsInline preload="none"
-                    />
-                    <video
-                      ref={(video) => { heroVideoRefs.current[1] = video; }}
-                      className="epr-video-panel epr-video-panel-left"
-                      src={brand.videoSrc}
-                      muted loop autoPlay playsInline preload="none"
-                    />
-                    <div className="epr-video-right">
-                      <video
-                        ref={(video) => { heroVideoRefs.current[2] = video; }}
-                        className="epr-video-panel epr-video-panel-square"
-                        src={brand.videoSrc}
-                        muted loop autoPlay playsInline preload="none"
-                      />
-                    </div>
-                    <video
-                      ref={(video) => { heroVideoRefs.current[3] = video; }}
-                      className="epr-video-panel epr-video-panel-bottom"
-                      src={brand.videoSrc}
-                      muted loop autoPlay playsInline preload="none"
-                    />
-                  </div>
-                )}
+                <img src={brand.image} alt={brand.imageAlt} draggable={false} loading="eager" decoding="async" fetchPriority={slot === "hero" ? "high" : "low"} />
                 {slot === "hero" && (
                   <span
                     className="epr-hero-arrow"
