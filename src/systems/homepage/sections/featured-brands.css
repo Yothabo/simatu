@@ -231,11 +231,11 @@
 }
 .epr-description {
   margin: 0;
-  color: var(--hp-color-text-muted);
-  font-size: clamp(12px, 0.9cqw, 16px);
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 1.65;
+  color: var(--hp-color-text-subtle);
+  font-size: var(--hp-value-16_px);
+  font-weight: var(--hp-font-weight-regular);
+  letter-spacing: var(--hp-value-0p1_px);
+  line-height: var(--hp-line-height-relaxed);
   max-width: 42ch;
 }
 .epr-visit {
@@ -378,8 +378,8 @@
   }
   .epr-description {
     margin-top: 0;
-    font-size: 3.5cqw;
-    line-height: 1.25;
+    font-size: var(--hp-value-15_px);
+    line-height: 1.7;
   }
   .epr-visit {
     margin-top: auto;
