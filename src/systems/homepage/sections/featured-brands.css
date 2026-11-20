@@ -372,3 +372,9 @@
     font-size: 2.4cqw !important;
   }
 }
+
+/* Keep carousel animations idle during active page scrolling. */
+.epr-page.is-scrolling,
+.epr-page.is-scrolling * {
+  animation-play-state: paused !important;
+}
