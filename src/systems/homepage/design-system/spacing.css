@@ -1,15 +1,16 @@
 :root {
-  --hp-space-1: 4px;
-  --hp-space-2: 8px;
-  --hp-space-3: 12px;
-  --hp-space-4: 16px;
-  --hp-space-5: 20px;
-  --hp-space-6: 24px;
-  --hp-space-8: 32px;
-  --hp-space-10: 40px;
-  --hp-space-12: 48px;
-  --hp-space-16: 64px;
-  --hp-space-20: 80px;
-  --hp-space-24: 96px;
-  --hp-space-28: 112px;
+  /* 4px base scale */
+  --hp-space-1: 0.25rem;
+  --hp-space-2: 0.5rem; /* proximity: icon/text, label/field, helper */
+  --hp-space-3: 0.75rem;
+  --hp-space-4: 1rem;
+  --hp-space-5: 1.25rem; /* form group separation */
+  --hp-space-6: 1.5rem; /* layout separation */
+  --hp-space-8: 2rem;
+  --hp-space-10: 2.5rem;
+  --hp-space-12: 3rem;
+  --hp-space-16: 4rem;
+  --hp-space-20: 5rem;
+  --hp-space-24: 6rem;
+  --hp-space-28: 7rem;
 }
