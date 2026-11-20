@@ -474,7 +474,7 @@
   inset: 0;
   display: grid;
   grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-  grid-template-rows: 20% min(40cqi, 40%) minmax(25%, 1fr);
+  grid-template-rows: 20% min(40cqi, 40%) minmax(0, 1fr);
   gap: 0;
   overflow: hidden;
   background: var(--hp-palette-grey-900);
