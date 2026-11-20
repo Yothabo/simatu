@@ -148,20 +148,20 @@
   cursor: default;
 }
 .epr-card.thumb-0 {
-  --epr-x: 10.42cqw;
+  --epr-x: -16.6cqw;
   --epr-y: 56svh;
   z-index: 2;
 }
 .epr-card.thumb-1 {
-  --epr-x: 23.85cqw;
+  --epr-x: -3.13cqw;
   --epr-y: 56svh;
 }
 .epr-card.thumb-2 {
-  --epr-x: 37.28cqw;
+  --epr-x: 10.42cqw;
   --epr-y: 56svh;
 }
 .epr-card.thumb-3 {
-  --epr-x: 50.71cqw;
+  --epr-x: 23.85cqw;
   --epr-y: 56svh;
 }
 .epr-card[class*="thumb-"]:hover img,
@@ -328,7 +328,7 @@
     min-height: 650px;
   }
   .epr-card {
-    width: 22cqw;
+    width: 26cqw;
     height: 20svh;
   }
   .epr-card.hero {
@@ -338,19 +338,19 @@
     --epr-scale-y: 2.3;
   }
   .epr-card.thumb-0 {
-    --epr-x: 5cqw;
+    --epr-x: -40cqw;
     --epr-y: 59.5svh;
   }
   .epr-card.thumb-1 {
-    --epr-x: 28cqw;
+    --epr-x: -10cqw;
     --epr-y: 59.5svh;
   }
   .epr-card.thumb-2 {
-    --epr-x: 51cqw;
+    --epr-x: 20cqw;
     --epr-y: 59.5svh;
   }
   .epr-card.thumb-3 {
-    --epr-x: 74cqw;
+    --epr-x: 50cqw;
     --epr-y: 59.5svh;
   }
   .epr-count {
