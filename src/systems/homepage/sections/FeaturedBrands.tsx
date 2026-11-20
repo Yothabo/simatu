@@ -6,7 +6,6 @@ type Brand = {
   id: number;
   name: string;
   description: string;
-  request?: boolean;
   image: string;
   imageAlt: string;
   position: string;
@@ -105,7 +104,6 @@ const BRANDS: Brand[] = [
     position: "50% 45%",
     demo: true,
   },
-  { id: 10, name: "Request a Website", description: "Have a business, brand or idea that deserves its own online home? Request a dedicated website designed around your identity, your products and the people you want to reach. This is a placeholder for the future website-request experience.", image: "", imageAlt: "Website request", position: "50% 50%", request: true },
 ];
 
 const VISIBLE_CARDS = 5;
@@ -227,7 +225,6 @@ export default function FeaturedBrands() {
 
   const current = BRANDS[active];
   const previous = previousActive === null ? null : BRANDS[previousActive];
-  const nextBrand = (active + 1) % BRANDS.length;
 
   return (
     <section className="epr-page" aria-label="Featured brands">
@@ -264,18 +261,13 @@ export default function FeaturedBrands() {
                 key={brand.id}
                 type="button"
                 onClick={() => isThumb && activate(brand.id, true)}
-                disabled={brand.request}
                 tabIndex={isThumb ? 0 : -1}
                 aria-label={isThumb ? `View ${brand.name}` : undefined}
                 aria-hidden={!isThumb}
                 style={{ "--image-position": brand.position } as CSSProperties}
               >
-                {brand.request ? (
-                  <span className="epr-request-mark" aria-hidden="true">+</span>
-                ) : (
-                  <img src={brand.image} alt={brand.imageAlt} draggable={false} loading="eager" decoding="async" fetchPriority={slot === "hero" ? "high" : "low"} />
-                )}
-                {isThumb && !brand.request && (
+                <img src={brand.image} alt={brand.imageAlt} draggable={false} loading="eager" decoding="async" fetchPriority={slot === "hero" ? "high" : "low"} />
+                {isThumb && (
                   <span className="epr-meta" aria-hidden="true">
                     <strong>{brand.name}</strong>
                   </span>
@@ -297,7 +289,7 @@ export default function FeaturedBrands() {
             key={active}
           >
             <p className="epr-description">{current.description}</p>
-            {current.request ? (<button className="epr-visit epr-request-cta" type="button" disabled aria-label="Website request coming soon"><span aria-hidden="true">+</span></button>) : current.href ? (
+            {current.href ? (
               <a className="epr-visit" href={current.href}>
                 Visit {current.name} <span aria-hidden="true">↗</span>
               </a>
@@ -309,14 +301,9 @@ export default function FeaturedBrands() {
           </article>
         </div>
 
-        <button
-          className="epr-next"
-          type="button"
-          aria-label={`Show next brand: ${BRANDS[nextBrand].name}`}
-          onClick={() => activate(nextBrand, true)}
-        >
-          <span aria-hidden="true">›</span>
-        </button>
+        <div className="epr-plus-placeholder" aria-label="Placeholder for future action">
+          <span aria-hidden="true">+</span>
+        </div>
       </div>
     </section>
   );
