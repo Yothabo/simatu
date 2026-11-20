@@ -196,8 +196,8 @@
 .epr-copy {
   position: absolute;
   z-index: 22;
-  top: 35.35%;
-  bottom: 12.8%;
+  top: 12.78%;
+  bottom: 14.34%;
   left: 64.58%;
   width: min(28.2%, 440px);
 }
@@ -355,8 +355,8 @@
     transform-origin: left top;
   }
   .epr-copy {
-    top: 17%;
-    bottom: 16%;
+    top: 9%;
+    bottom: 41%;
     left: 60%;
     width: 35%;
   }
