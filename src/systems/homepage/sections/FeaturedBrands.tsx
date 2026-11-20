@@ -13,13 +13,15 @@ type Brand = {
   demo?: boolean;
   category: string;
   descriptor?: string;
+  videoSrc?: string;
 };
 
 const BRANDS: Brand[] = [
   {
     id: 0,
     category: "Lifestyle",
-    descriptor: "Atmosphere · Elegance",
+    descriptor: "Atmosphere",
+    videoSrc: "https://videos.pexels.com/video-files/33233525/14160278_3840_2160_25fps.mp4",
     name: "Yotaabo",
     description: "Some scents say everything without a single word. Find the fragrance that becomes your signature.",
     image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1800&q=88",
@@ -30,7 +32,8 @@ const BRANDS: Brand[] = [
   {
     id: 1,
     category: "Apparel",
-    descriptor: "Femininity · Self-expression",
+    descriptor: "Femininity",
+    videoSrc: "https://videos.pexels.com/video-files/36082685/15302354_1080_1920_30fps.mp4",
     name: "Poshies",
     description: "No one is perfect. Feel beautiful, comfortable, and confidently yourself in every little detail.",
     image: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1800&q=88",
@@ -41,6 +44,7 @@ const BRANDS: Brand[] = [
   {
     id: 2,
     category: "Apparel",
+    descriptor: "Minimalism",
     name: "FORME",
     description: "Less noise, more style. Explore everyday essentials shaped by simplicity, comfort, and effortless confidence.",
     image: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=1800&q=88",
@@ -51,6 +55,7 @@ const BRANDS: Brand[] = [
   {
     id: 3,
     category: "Home",
+    descriptor: "Serenity",
     name: "NOMA HOME",
     description: "Make room for calm. Thoughtful pieces and soft textures turn everyday spaces into places you love being.",
     image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1800&q=88",
@@ -61,6 +66,7 @@ const BRANDS: Brand[] = [
   {
     id: 4,
     category: "Beauty",
+    descriptor: "Ritual",
     name: "MUSE BEAUTY",
     description: "Your daily dose of feeling good. Beauty essentials that make self-care a moment worth keeping.",
     image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&w=1800&q=88",
@@ -71,6 +77,7 @@ const BRANDS: Brand[] = [
   {
     id: 5,
     category: "Streetwear",
+    descriptor: "Edge",
     name: "OFFCUT",
     description: "Wear your own rules. Street-inspired pieces for individuality, attitude, and unapologetic expression.",
     image: "https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=1800&q=88",
@@ -81,6 +88,7 @@ const BRANDS: Brand[] = [
   {
     id: 6,
     category: "Accessories",
+    descriptor: "Detail",
     name: "ATELIER 09",
     description: "It is all in the details. Accessories that add character, elevate the everyday, and make a look your own.",
     image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1800&q=88",
@@ -91,6 +99,7 @@ const BRANDS: Brand[] = [
   {
     id: 7,
     category: "Outdoor",
+    descriptor: "Adventure",
     name: "FIELD NOTES",
     description: "Take the long way. Essentials made for fresh air, new places, and a little more adventure.",
     image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=1800&q=88",
@@ -101,6 +110,7 @@ const BRANDS: Brand[] = [
   {
     id: 8,
     category: "Home",
+    descriptor: "Purpose",
     name: "STUDIO OBJECT",
     description: "Objects with purpose and personality. Thoughtful design for the spaces and rituals that matter.",
     image: "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=1800&q=88",
@@ -111,6 +121,7 @@ const BRANDS: Brand[] = [
   {
     id: 9,
     category: "Lifestyle",
+    descriptor: "Discovery",
     name: "SUNDAY MARKET",
     description: "Good finds, no rush. Explore everyday pieces with charm, character, and a little unexpected delight.",
     image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1800&q=88",
@@ -126,6 +137,7 @@ const AUTOPLAY_MS = 5600;
 
 export default function FeaturedBrands() {
   const [active, setActive] = useState(0);
+  const [sectionVisible, setSectionVisible] = useState(false);
   const [previousActive, setPreviousActive] = useState<number | null>(null);
   const activeRef = useRef(0);
   const pauseUntil = useRef(0);
@@ -213,6 +225,7 @@ export default function FeaturedBrands() {
 
     const observer = new IntersectionObserver(([entry]) => {
       sectionVisibleRef.current = entry.isIntersecting && entry.intersectionRatio >= 0.1;
+      setSectionVisible(sectionVisibleRef.current);
       section.classList.toggle("is-offscreen", !sectionVisibleRef.current);
     }, { threshold: [0, 0.1] });
     observer.observe(section);
@@ -328,6 +341,18 @@ export default function FeaturedBrands() {
                 style={{ "--image-position": brand.position } as CSSProperties}
               >
                 <img src={brand.image} alt={brand.imageAlt} draggable={false} loading="eager" decoding="async" fetchPriority={slot === "hero" ? "high" : "low"} />
+                {slot === "hero" && sectionVisible && brand.videoSrc && (
+                  <video
+                    className="epr-hero-video"
+                    src={brand.videoSrc}
+                    muted
+                    loop
+                    autoPlay
+                    playsInline
+                    preload="none"
+                    aria-hidden="true"
+                  />
+                )}
                 {slot === "hero" && (
                   <span
                     className="epr-hero-arrow"
