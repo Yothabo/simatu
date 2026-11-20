@@ -5,6 +5,7 @@ import "./featured-brands.css";
 type Brand = {
   id: number;
   name: string;
+  headline?: string;
   description: string;
   image: string;
   imageAlt: string;
@@ -35,7 +36,8 @@ const BRANDS: Brand[] = [
   {
     id: 2,
     name: "Our Brands",
-    description: "Discover Simatu’s growing collection of brands, each created to bring its own style, character, and experience. Explore Poshies and Yotaabo, and find the brand that speaks to you.",
+    headline: "A World of Possibilities",
+    description: "From established names to emerging ventures, discover a diverse range of brands shaped by creativity, innovation and commercial ambition.",
     image: "/simatu.png",
     imageAlt: "Simatu logo",
     position: "50% 50%",
@@ -43,16 +45,16 @@ const BRANDS: Brand[] = [
   },
   {
     id: 3,
-    name: "Coming Soon 01",
-    description: "A new brand experience is on the way. Stay tuned for something special from Simatu.",
+    name: "In Development",
+    description: "A new venture is taking shape behind the scenes. Its debut is forthcoming.",
     image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1800&q=88",
     imageAlt: "Minimal fashion editorial placeholder for an upcoming brand",
     position: "50% 45%",
   },
   {
     id: 4,
-    name: "Coming Soon 02",
-    description: "We’re building something new. Another distinctive brand will be joining the Simatu collection soon.",
+    name: "On the Horizon",
+    description: "The next addition is already in motion. Its introduction will be announced in due course.",
     image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1800&q=88",
     imageAlt: "Fashion editorial placeholder for a future Simatu brand",
     position: "50% 45%",
@@ -202,7 +204,7 @@ export default function FeaturedBrands() {
         </p>
 
         <h2 className="epr-title" key={current.id}>
-          {current.name}
+          {current.headline ?? current.name}
         </h2>
 
         <div className="epr-deck" aria-label="Choose a featured brand">
