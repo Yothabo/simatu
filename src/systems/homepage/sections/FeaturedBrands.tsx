@@ -160,7 +160,6 @@ export default function FeaturedBrands() {
         nextIndex < BRANDS.length
       ) {
         const brand = BRANDS[nextIndex++];
-        if (brand.request) continue;
         const image = new Image();
         image.decoding = "async";
         image.fetchPriority = "low";
@@ -264,7 +263,7 @@ export default function FeaturedBrands() {
                 className={`epr-card ${slot}`}
                 key={brand.id}
                 type="button"
-                onClick={() => isThumb && !brand.request && activate(brand.id, true)}
+                onClick={() => isThumb && activate(brand.id, true)}
                 disabled={brand.request}
                 tabIndex={isThumb ? 0 : -1}
                 aria-label={isThumb ? `View ${brand.name}` : undefined}
