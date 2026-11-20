@@ -25,4 +25,45 @@
   --hp-motion-opacity-muted: 0.13;
   --hp-motion-opacity-medium: 0.25;
   --hp-motion-opacity-strong: 0.7;
+
+  --hp-motion-duration-very-slow: 8s;
+  --hp-motion-duration-extra-slow: 10s;
+  --hp-motion-duration-long: 12s;
+  --hp-motion-duration-18: 18s;
+  --hp-motion-duration-55: 55s;
+  --hp-motion-duration-25: 2.5s;
+  --hp-motion-duration-35: 3.5s;
+  --hp-motion-duration-45: 4.5s;
+  --hp-motion-duration-60: 6s;
+  --hp-motion-duration-80: 8s;
+  --hp-motion-duration-90: 9s;
+  --hp-motion-duration-120: 1.2s;
+  --hp-motion-duration-250: 0.25s;
+  --hp-motion-duration-350: 0.35s;
+  --hp-motion-duration-800: 0.8s;
+  --hp-motion-duration-900: 0.9s;
+  --hp-motion-duration-01: 0.01ms;
+  --hp-motion-blur-8: 8px;
+  --hp-motion-blur-12: 12px;
+  --hp-motion-blur-16: 16px;
+  --hp-motion-blur-45: 45px;
+  --hp-motion-distance-4: 4px;
+  --hp-motion-distance-8: 8px;
+  --hp-motion-distance-12: 12px;
+  --hp-motion-distance-16: 16px;
+  --hp-motion-distance-18: 18px;
+  --hp-motion-distance-22: 22px;
+  --hp-motion-distance-24: 24px;
+  --hp-motion-distance-25: 25px;
+  --hp-motion-distance-30: 30px;
+  --hp-motion-distance-35: 35px;
+  --hp-motion-distance-40: 40px;
+  --hp-motion-distance-50: 50px;
+  --hp-motion-distance-55: 55px;
+  --hp-motion-distance-75: 75px;
+  --hp-motion-distance-100: 100px;
+  --hp-motion-distance-130: 130px;
+  --hp-motion-distance-300: 300px;
+  --hp-motion-distance-550: 550px;
+
 }
