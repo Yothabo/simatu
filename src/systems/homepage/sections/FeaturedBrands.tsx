@@ -21,7 +21,7 @@ const BRANDS: Brand[] = [
     id: 0,
     category: "Lifestyle",
     descriptor: "Atmosphere",
-    videoSrc: "https://videos.pexels.com/video-files/33233525/14160278_3840_2160_25fps.mp4",
+    videoSrc: "/videos/brands/yotaabo.mp4",
     name: "Yotaabo",
     description: "Some scents say everything without a single word. Find the fragrance that becomes your signature.",
     image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1800&q=88",
@@ -33,7 +33,7 @@ const BRANDS: Brand[] = [
     id: 1,
     category: "Apparel",
     descriptor: "Femininity",
-    videoSrc: "https://videos.pexels.com/video-files/36082685/15302354_1080_1920_30fps.mp4",
+    videoSrc: "/videos/brands/poshies.mp4",
     name: "Poshies",
     description: "No one is perfect. Feel beautiful, comfortable, and confidently yourself in every little detail.",
     image: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1800&q=88",
@@ -132,8 +132,8 @@ const BRANDS: Brand[] = [
 ];
 
 const VISIBLE_CARDS = 5;
-const TRANSITION_MS = 1200;
-const AUTOPLAY_MS = 5600;
+const TRANSITION_MS = 900;
+const AUTOPLAY_MS = 12000;
 
 export default function FeaturedBrands() {
   const [active, setActive] = useState(0);
@@ -146,6 +146,7 @@ export default function FeaturedBrands() {
   const restartAutoplayRef = useRef<() => void>(() => {});
   const isTransitioningRef = useRef(false);
   const sectionVisibleRef = useRef(false);
+  const heroVideoRefs = useRef<Array<HTMLVideoElement | null>>([]);
   const scrollPauseUntilRef = useRef(0);
 
   const activate = useCallback((id: number, fromUser = false) => {
@@ -297,6 +298,13 @@ export default function FeaturedBrands() {
     return `thumb-${distanceBehind - 1}`;
   };
 
+  useEffect(() => {
+    heroVideoRefs.current.forEach((video, index) => {
+      if (!video) return;
+      video.playbackRate = index === 1 ? 0.72 : 1;
+    });
+  }, [active, sectionVisible]);
+
   const current = BRANDS[active];
   const previous = previousActive === null ? null : BRANDS[previousActive];
 
@@ -342,16 +350,23 @@ export default function FeaturedBrands() {
               >
                 <img src={brand.image} alt={brand.imageAlt} draggable={false} loading="eager" decoding="async" fetchPriority={slot === "hero" ? "high" : "low"} />
                 {slot === "hero" && sectionVisible && brand.videoSrc && (
-                  <video
-                    className="epr-hero-video"
-                    src={brand.videoSrc}
-                    muted
-                    loop
-                    autoPlay
-                    playsInline
-                    preload="none"
-                    aria-hidden="true"
-                  />
+                  <div className="epr-video-mosaic" aria-hidden="true">
+                    <video
+                      ref={(video) => { heroVideoRefs.current[0] = video; }}
+                      className="epr-video-panel epr-video-panel-main"
+                      src={brand.videoSrc}
+                      muted loop autoPlay playsInline preload="none"
+                    />
+                    <div className="epr-video-panel epr-video-panel-still">
+                      <img src={brand.image} alt="" loading="lazy" decoding="async" />
+                    </div>
+                    <video
+                      ref={(video) => { heroVideoRefs.current[1] = video; }}
+                      className="epr-video-panel epr-video-panel-secondary"
+                      src={brand.videoSrc}
+                      muted loop autoPlay playsInline preload="none"
+                    />
+                  </div>
                 )}
                 {slot === "hero" && (
                   <span
