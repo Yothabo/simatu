@@ -60,7 +60,7 @@ const BRANDS: Brand[] = [
 ];
 
 
-const VISIBLE_CARDS = BRANDS.length;
+const VISIBLE_CARDS = 3;
 const TRANSITION_MS = 900;
 const AUTOPLAY_MS = 9000;
 
@@ -173,7 +173,7 @@ export default function FeaturedBrands() {
   const slotFor = (id: number) => {
     if (id === active) return "hero";
     const distanceBehind = (active - id + BRANDS.length) % BRANDS.length;
-    return `thumb-${distanceBehind - 1}`;
+    return distanceBehind === 1 ? "thumb-2" : "thumb-3";
   };
 
   const current = BRANDS[active];
