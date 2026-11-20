@@ -420,8 +420,6 @@
 }
 
 /* Centered circular brand navigation control inside the expanded image. */
-.epr-hero-arrow { position: absolute; z-index: 20; top: 50%; left: 50%; display: grid; width: 56px; height: 56px; min-width: 56px; min-height: 56px; max-width: 56px; max-height: 56px; aspect-ratio: 1 / 1; box-sizing: border-box; flex-shrink: 0; place-items: center; border: 1px solid rgba(255,255,255,.9); border-radius: 50%; color: #fff; background: transparent; transform: translate(-50%, -50%); transition: background-color 180ms ease, transform 180ms ease; }
-.epr-hero-arrow span { display: block; font-size: clamp(18px, 1.65cqw, 26px); font-weight: 300; line-height: 1; transform: translateX(-1px); transition: transform 180ms ease; }
-.epr-card.hero:hover .epr-hero-arrow { background: rgba(255,255,255,.08); }
-.epr-card.hero:hover .epr-hero-arrow span { transform: translateX(3px); }
+.epr-hero-arrow { position: absolute; z-index: 20; top: 50%; left: 50%; display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 22px; border: 0; border-radius: 2px; color: #fff; background: var(--epr-cta-color, var(--hp-color-primary)); font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; transform: translate(-50%, -50%); transition: filter 180ms ease, transform 180ms ease; }
+.epr-card.hero:hover .epr-hero-arrow { filter: brightness(1.08); transform: translate(-50%, -50%) translateY(-1px); }
 .epr-category-label { display: inline-block; margin-top: auto; padding-bottom: 7px; border-bottom: 1px solid var(--hp-color-border-strong); color: var(--hp-color-text); font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
