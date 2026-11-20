@@ -11,10 +11,10 @@
   background:
     radial-gradient(
       ellipse at 80% 50%,
-      rgba(242, 140, 40, 0.10),
+      color-mix(in srgb, var(--hp-color-primary) 10%, transparent),
       transparent 48%
     ),
-    #262626;
+    var(--hp-color-surface);
 }
 
 .homepage-footer::after {
@@ -24,18 +24,18 @@
   width: 550px;
   height: 550px;
   content: "";
-  border: 1px solid rgba(242, 140, 40, 0.08);
+  border: 1px solid color-mix(in srgb, var(--hp-color-primary) 8%, transparent);
   border-radius: 50%;
   box-shadow:
-    0 0 0 50px rgba(242, 140, 40, 0.018),
-    0 0 0 100px rgba(242, 140, 40, 0.012);
+    0 0 0 50px color-mix(in srgb, var(--hp-color-primary) 1.8%, transparent),
+    0 0 0 100px color-mix(in srgb, var(--hp-color-primary) 1.2%, transparent);
   pointer-events: none;
 }
 
 .homepage-footer h2 {
   max-width: 700px;
   margin: 0 0 22px;
-  color: #fff;
+  color: var(--hp-palette-white);
   font-size: clamp(34px, 5vw, 62px);
   font-weight: 500;
   line-height: 1.08;
@@ -45,7 +45,7 @@
 .footer-content > p {
   max-width: 560px;
   margin: 0;
-  color: rgba(245, 245, 245, 0.67);
+  color: var(--hp-color-text-subtle);
   font-size: 16px;
   font-weight: 400;
   line-height: 1.75;
@@ -65,9 +65,9 @@
   min-height: 42px;
   padding: 0 20px;
   align-items: center;
-  border: 1px solid rgba(242, 140, 40, 0.2);
+  border: 1px solid color-mix(in srgb, var(--hp-color-primary) 20%, transparent);
   border-radius: 30px;
-  color: rgba(255, 255, 255, 0.75);
+  color: color-mix(in srgb, var(--hp-palette-white) 75%, transparent);
   font-size: 14px;
   letter-spacing: 0.7px;
   transition:
@@ -79,8 +79,8 @@
 .footer-service-tags span:hover,
 .footer-service-tags a:hover {
   border-color: var(--novae-purple);
-  background: rgba(242, 140, 40, 0.1);
-  color: #fff;
+  background: color-mix(in srgb, var(--hp-color-primary) 10%, transparent);
+  color: var(--hp-palette-white);
 }
 
 @media (max-width: 768px) {
@@ -212,11 +212,11 @@
 
 /* Homepage-wide photographic background */
 .novae-page {
-  background-color: #242424;
+  background-color: var(--hp-color-background);
   background-image:
     linear-gradient(
-      rgba(20, 20, 20, 0.38),
-      rgba(20, 20, 20, 0.38)
+      color-mix(in srgb, var(--hp-color-background) 38%, transparent),
+      color-mix(in srgb, var(--hp-color-background) 38%, transparent)
     ),
     url("https://images.pexels.com/photos/7169836/pexels-photo-7169836.jpeg?auto=compress&cs=tinysrgb&w=1440");
   background-position: center;
@@ -227,7 +227,7 @@
 
 /* Footer remains solid */
 .homepage-footer {
-  background: #262626;
+  background: var(--hp-color-surface);
 }
 
 /* TEMPORARY: Reveal the homepage background through the footer */
@@ -242,10 +242,10 @@
   background:
     radial-gradient(
       ellipse at 80% 50%,
-      rgba(242, 140, 40, 0.10),
+      color-mix(in srgb, var(--hp-color-primary) 10%, transparent),
       transparent 48%
     ),
-    #262626;
+    var(--hp-color-surface);
 }
 
 /* Move the original decorative circles to the homepage */
@@ -257,11 +257,11 @@
   width: 550px;
   height: 550px;
   content: "";
-  border: 1px solid rgba(242, 140, 40, 0.08);
+  border: 1px solid color-mix(in srgb, var(--hp-color-primary) 8%, transparent);
   border-radius: 50%;
   box-shadow:
-    0 0 0 50px rgba(242, 140, 40, 0.018),
-    0 0 0 100px rgba(242, 140, 40, 0.012);
+    0 0 0 50px color-mix(in srgb, var(--hp-color-primary) 1.8%, transparent),
+    0 0 0 100px color-mix(in srgb, var(--hp-color-primary) 1.2%, transparent);
   pointer-events: none;
 }
 
@@ -279,10 +279,10 @@
   background:
     radial-gradient(
       ellipse at 80% 50%,
-      rgba(242, 140, 40, 0.10),
+      color-mix(in srgb, var(--hp-color-primary) 10%, transparent),
       transparent 48%
     ),
-    #262626;
+    var(--hp-color-surface);
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: cover;
@@ -298,17 +298,17 @@
   width: 550px;
   height: 550px;
   content: "";
-  border: 1px solid rgba(242, 140, 40, 0.08);
+  border: 1px solid color-mix(in srgb, var(--hp-color-primary) 8%, transparent);
   border-radius: 50%;
   box-shadow:
-    0 0 0 50px rgba(242, 140, 40, 0.018),
-    0 0 0 100px rgba(242, 140, 40, 0.012);
+    0 0 0 50px color-mix(in srgb, var(--hp-color-primary) 1.8%, transparent),
+    0 0 0 100px color-mix(in srgb, var(--hp-color-primary) 1.2%, transparent);
   pointer-events: none;
 }
 
 /* Footer: solid dark charcoal background */
 .homepage-footer {
-  background: #1c1c1c;
+  background: var(--hp-color-background);
 }
 
 .homepage-footer::after {
@@ -320,10 +320,10 @@
   background:
     radial-gradient(
       ellipse at 80% 50%,
-      rgba(242, 140, 40, 0.10),
+      color-mix(in srgb, var(--hp-color-primary) 10%, transparent),
       transparent 48%
     ),
-    #262626;
+    var(--hp-color-surface);
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: cover;
@@ -339,11 +339,11 @@
   width: 550px;
   height: 550px;
   content: "";
-  border: 1px solid rgba(242, 140, 40, 0.08);
+  border: 1px solid color-mix(in srgb, var(--hp-color-primary) 8%, transparent);
   border-radius: 50%;
   box-shadow:
-    0 0 0 50px rgba(242, 140, 40, 0.018),
-    0 0 0 100px rgba(242, 140, 40, 0.012);
+    0 0 0 50px color-mix(in srgb, var(--hp-color-primary) 1.8%, transparent),
+    0 0 0 100px color-mix(in srgb, var(--hp-color-primary) 1.2%, transparent);
   pointer-events: none;
 }
 
@@ -358,6 +358,6 @@
 
 /* FINAL FOOTER BACKGROUND OVERRIDE */
 .homepage-footer {
-  background: #1c1c1c !important;
+  background: var(--hp-color-background) !important;
   background-image: none !important;
 }
