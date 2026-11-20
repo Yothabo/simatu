@@ -70,4 +70,23 @@
   --hp-motion-duration-180: 180ms;
   --hp-motion-duration-300: 0.3s;
 
+  --hp-motion-value-1p2_s: 1.2s;
+  --hp-motion-value-2p5_s: 2.5s;
+  --hp-motion-value-8_s: 8s;
+  --hp-motion-value-10_s: 10s;
+  --hp-motion-value-55_s: 55s;
+  --hp-motion-value-3_s: 3s;
+  --hp-motion-value-0p25_s: 0.25s;
+  --hp-motion-value-0p35_s: 0.35s;
+  --hp-motion-value-6_s: 6s;
+  --hp-motion-value-0p3_s: 0.3s;
+  --hp-motion-value-0p01_ms: 0.01ms;
+  --hp-motion-value-0p45_s: 0.45s;
+  --hp-motion-value-18_s: 18s;
+  --hp-motion-value-5500_ms: 5500ms;
+  --hp-motion-value-0p8_s: 0.8s;
+  --hp-motion-value-0p9_s: 0.9s;
+  --hp-motion-value-12_s: 12s;
+  --hp-motion-value-0p15_s: 0.15s;
+  --hp-motion-value-0p6_s: 0.6s;
 }
