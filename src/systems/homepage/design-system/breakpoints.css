@@ -1,0 +1,7 @@
+:root {
+  /* Homepage responsive breakpoints */
+  --hp-breakpoint-mobile: 520px;
+  --hp-breakpoint-tablet: 820px;
+  --hp-breakpoint-desktop: 1024px;
+  --hp-breakpoint-wide: 1440px;
+}
