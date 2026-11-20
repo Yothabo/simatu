@@ -1,0 +1,28 @@
+:root {
+  /* Homepage motion tokens */
+  --hp-motion-duration-fast: 180ms;
+  --hp-motion-duration-base: 300ms;
+  --hp-motion-duration-slow: 450ms;
+  --hp-motion-duration-image: 1200ms;
+  --hp-motion-duration-orbit: 55s;
+  --hp-motion-duration-loop: 18s;
+  --hp-motion-duration-pulse: 3s;
+  --hp-motion-duration-shine: 6s;
+  --hp-motion-duration-rotation: 5500ms;
+  --hp-motion-ease-standard: ease;
+  --hp-motion-ease-out: ease-out;
+  --hp-motion-ease-in-out: ease-in-out;
+  --hp-motion-distance-xs: 3px;
+  --hp-motion-distance-sm: 5px;
+  --hp-motion-distance-md: 14px;
+  --hp-motion-distance-lg: 20px;
+  --hp-motion-distance-xl: 28px;
+  --hp-motion-distance-orbit: 75vw;
+  --hp-motion-blur-sm: 18px;
+  --hp-motion-blur-md: 28px;
+  --hp-motion-blur-lg: 45px;
+  --hp-motion-opacity-soft: 0.075;
+  --hp-motion-opacity-muted: 0.13;
+  --hp-motion-opacity-medium: 0.25;
+  --hp-motion-opacity-strong: 0.7;
+}
