@@ -1,0 +1,13 @@
+:root {
+  /* Our Brands section tokens */
+  --hp-brands-cta-min-height: var(--hp-size-button-height);
+  --hp-brands-cta-padding-inline: var(--hp-space-4);
+  --hp-brands-cta-radius: var(--hp-radius-small);
+  --hp-brands-cta-font-size: var(--hp-font-size-xs);
+  --hp-brands-cta-font-weight: var(--hp-font-weight-semibold);
+  --hp-brands-cta-letter-spacing: var(--hp-letter-spacing-wide);
+  --hp-brands-cta-max-width: 85%;
+  --hp-brands-cta-hover-duration: var(--hp-motion-duration-fast);
+  --hp-brands-cta-hover-offset: var(--hp-motion-distance-xs);
+  --hp-brands-cta-hover-brightness: 1.08;
+}
