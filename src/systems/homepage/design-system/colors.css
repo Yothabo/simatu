@@ -32,6 +32,11 @@
   --hp-color-warning: #b87928;
   --hp-color-danger: #b44d43;
   --hp-color-focus: var(--hp-color-primary);
+  --hp-color-highlight: var(--hp-color-primary);
+  --hp-color-overlay-soft: color-mix(in srgb, var(--hp-color-background) 5%, transparent);
+  --hp-color-overlay-warm: color-mix(in srgb, var(--hp-color-surface) 30%, transparent);
+  --hp-color-border-light: color-mix(in srgb, var(--hp-palette-white) 8%, transparent);
+  --hp-color-white-muted: color-mix(in srgb, var(--hp-palette-white) 45%, transparent);
   --hp-color-on-primary: var(--hp-palette-grey-900);
   --hp-border-subtle-color: color-mix(in srgb, var(--hp-palette-white) 7.5%, transparent);
 }
