@@ -41,10 +41,26 @@ const BRANDS: Brand[] = [
     position: "50% 50%",
     isLogo: true,
   },
+  {
+    id: 3,
+    name: "Coming Soon 01",
+    description: "A new brand experience is on the way. Stay tuned for something special from Simatu.",
+    image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1800&q=88",
+    imageAlt: "Minimal fashion editorial placeholder for an upcoming brand",
+    position: "50% 45%",
+  },
+  {
+    id: 4,
+    name: "Coming Soon 02",
+    description: "We’re building something new. Another distinctive brand will be joining the Simatu collection soon.",
+    image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1800&q=88",
+    imageAlt: "Fashion editorial placeholder for a future Simatu brand",
+    position: "50% 45%",
+  },
 ];
 
 
-const VISIBLE_CARDS = BRANDS.length;
+const VISIBLE_CARDS = 3;
 const TRANSITION_MS = 900;
 const AUTOPLAY_MS = 9000;
 
