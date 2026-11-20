@@ -1259,3 +1259,9 @@
   color: var(--hp-palette-white);
   fill: var(--hp-palette-white);
 }
+
+/* Pause non-essential continuous motion while the user is actively scrolling. */
+.novae-hero.is-scrolling,
+.novae-hero.is-scrolling * {
+  animation-play-state: paused !important;
+}
