@@ -138,20 +138,20 @@
 }
 .epr-card.thumb-0 {
   --epr-x: -16.6cqw;
-  --epr-y: 64.72svh;
+  --epr-y: 61.5svh;
   z-index: 2;
 }
 .epr-card.thumb-1 {
   --epr-x: -3.13cqw;
-  --epr-y: 64.72svh;
+  --epr-y: 61.5svh;
 }
 .epr-card.thumb-2 {
   --epr-x: 10.42cqw;
-  --epr-y: 64.72svh;
+  --epr-y: 61.5svh;
 }
 .epr-card.thumb-3 {
   --epr-x: 23.85cqw;
-  --epr-y: 64.72svh;
+  --epr-y: 61.5svh;
 }
 .epr-card[class*="thumb-"]:hover img,
 .epr-card[class*="thumb-"]:focus-visible img {
@@ -328,19 +328,19 @@
   }
   .epr-card.thumb-0 {
     --epr-x: -40cqw;
-    --epr-y: 69svh;
+    --epr-y: 64.5svh;
   }
   .epr-card.thumb-1 {
     --epr-x: -10cqw;
-    --epr-y: 69svh;
+    --epr-y: 64.5svh;
   }
   .epr-card.thumb-2 {
     --epr-x: 20cqw;
-    --epr-y: 69svh;
+    --epr-y: 64.5svh;
   }
   .epr-card.thumb-3 {
     --epr-x: 50cqw;
-    --epr-y: 69svh;
+    --epr-y: 64.5svh;
   }
   .epr-count {
     top: 4.5%;
