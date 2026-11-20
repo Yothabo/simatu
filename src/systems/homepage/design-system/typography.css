@@ -1,0 +1,18 @@
+:root {
+  --hp-font-family: 'DM Sans', sans-serif;
+  --hp-font-size-xs: 0.625rem;
+  --hp-font-size-sm: 0.8125rem;
+  --hp-font-size-base: 1rem;
+  --hp-font-size-display: clamp(2.75rem, 7.2vw, 6.75rem);
+  --hp-font-weight-regular: 400;
+  --hp-font-weight-medium: 500;
+  --hp-font-weight-semibold: 600;
+  --hp-font-weight-bold: 700;
+  --hp-font-weight-extrabold: 800;
+  --hp-letter-spacing-tight: -0.085em;
+  --hp-letter-spacing-normal: 0;
+  --hp-letter-spacing-wide: 0.09375rem;
+  --hp-line-height-tight: 1;
+  --hp-line-height-normal: 1.25;
+  --hp-line-height-relaxed: 1.75;
+}
