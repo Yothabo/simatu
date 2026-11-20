@@ -8,7 +8,7 @@
   z-index: 100;
   flex-shrink: 0;
   background: color-mix(in srgb, var(--hp-color-background) 88%, transparent);
-  backdrop-filter: blur(18px);
+  backdrop-filter: blur(var(--hp-size-18));
   top: 0;
   left: 0;
   display: flex;
@@ -17,7 +17,7 @@
   padding: 0 7.2%;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--hp-border-subtle-color);
+  border-bottom: var(--hp-border-width) solid var(--hp-border-subtle-color);
 }
 
 .brand {
@@ -25,21 +25,21 @@
   z-index: 2;
   font-size: 27px;
   font-weight: 800;
-  letter-spacing: -1.8px;
+  letter-spacing: -1.var(--hp-size-8);
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: clamp(24px, 3.5vw, 52px);
+  gap: clamp(var(--hp-size-24), 3.5vw, 52px);
 }
 
 .nav-links a {
   position: relative;
   color: var(--hp-color-text-subtle);
-  font-size: 11px;
+  font-size: var(--hp-size-11);
   font-weight: 600;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.var(--hp-size-5);
   text-transform: uppercase;
   transition: color 0.3s ease;
 }
@@ -47,9 +47,9 @@
 .nav-links a::after {
   position: absolute;
   right: 0;
-  bottom: -9px;
+  bottom: -var(--hp-size-9);
   left: 0;
-  height: 1px;
+  height: var(--hp-border-width);
   content: '';
   background: var(--novae-purple-light);
   transform: scaleX(0);
@@ -68,15 +68,15 @@
 
 .contact-button {
   display: inline-flex;
-  min-height: 46px;
-  padding: 0 22px;
+  min-height: var(--hp-size-46);
+  padding: 0 var(--hp-size-22);
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  border: 1px solid color-mix(in srgb, var(--hp-color-primary) 42%, transparent);
-  border-radius: 2px;
+  gap: var(--hp-size-14);
+  border: var(--hp-border-width) solid color-mix(in srgb, var(--hp-color-primary) 42%, transparent);
+  border-radius: var(--hp-size-xs);
   color: var(--hp-palette-white);
-  font-size: 14px;
+  font-size: var(--hp-size-14);
   font-weight: 700;
   letter-spacing: 0.7px;
   transition:
@@ -88,32 +88,32 @@
 .contact-button:hover {
   border-color: var(--novae-purple);
   background: color-mix(in srgb, var(--hp-color-primary) 15%, transparent);
-  transform: translateY(-2px);
+  transform: translateY(-var(--hp-size-xs));
 }
 
 .button-arrow {
   color: var(--novae-purple-light);
-  font-size: 17px;
+  font-size: var(--hp-size-17);
 }
 
 .menu-button {
   display: none;
-  width: 42px;
-  height: 42px;
-  padding: 10px;
+  width: var(--hp-size-42);
+  height: var(--hp-size-42);
+  padding: var(--hp-size-10);
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  border: 1px solid var(--novae-border);
+  gap: var(--hp-size-6);
+  border: var(--hp-border-width) solid var(--novae-border);
   background: transparent;
   cursor: pointer;
 }
 
 .menu-button span {
   display: block;
-  width: 18px;
-  height: 1px;
+  width: var(--hp-size-18);
+  height: var(--hp-border-width);
   background: var(--hp-palette-white);
   transition:
     transform 0.3s ease,
@@ -121,7 +121,7 @@
 }
 
 .menu-button:hover span:last-child {
-  width: 12px;
+  width: var(--hp-size-12);
 }
 
 
@@ -136,7 +136,7 @@
   }
 
   .brand {
-    font-size: 25px;
+    font-size: var(--hp-size-25);
   }
 
   .menu-button {
@@ -150,16 +150,16 @@
     right: 0;
     left: 0;
     display: flex;
-    padding: 25px 7% 30px;
+    padding: var(--hp-size-25) 7% var(--hp-size-30);
     flex-direction: column;
     align-items: flex-start;
-    gap: 24px;
-    border-bottom: 1px solid color-mix(in srgb, var(--hp-palette-white) 10%, transparent);
+    gap: var(--hp-size-24);
+    border-bottom: var(--hp-border-width) solid color-mix(in srgb, var(--hp-palette-white) 10%, transparent);
     background: color-mix(in srgb, var(--hp-color-background) 97%, transparent);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(var(--hp-size-20));
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-10px);
+    transform: translateY(-var(--hp-size-10));
     transition:
       opacity 0.3s ease,
       visibility 0.3s ease,
@@ -173,14 +173,14 @@
   }
 
   .nav-links a {
-    font-size: 12px;
+    font-size: var(--hp-size-12);
   }
 
   .contact-button {
-    margin-left: 15px;
-    padding: 0 16px;
-    min-height: 42px;
-    font-size: 13px;
+    margin-left: var(--hp-size-15);
+    padding: 0 var(--hp-size-16);
+    min-height: var(--hp-size-42);
+    font-size: var(--hp-size-13);
   }
 }
 
@@ -203,11 +203,11 @@
   }
 
   .contact-button {
-    min-height: 40px;
-    margin-left: 10px;
-    padding: 0 12px;
+    min-height: var(--hp-size-40);
+    margin-left: var(--hp-size-10);
+    padding: 0 var(--hp-size-12);
     gap: 7px;
-    font-size: 12px;
+    font-size: var(--hp-size-12);
   }
 
   .menu-button {
