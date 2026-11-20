@@ -387,11 +387,12 @@
   }
 
   /* Counter the expanded card's mobile transform so the CTA remains compact. */
-  .epr-hero-arrow {
+  .epr-page .epr-hero-arrow {
     transform: translate(-50%, -50%) scale(0.578, 0.4);
   }
 
-  .epr-card.hero:hover .epr-hero-arrow {
+
+  .epr-page .epr-card.hero:hover .epr-hero-arrow {
     transform: translate(-50%, -50%) scale(0.578, 0.4)
       translateY(calc(-1 * var(--hp-brands-cta-hover-offset)));
   }
