@@ -195,6 +195,7 @@ export default function FeaturedBrands() {
 
     const observer = new IntersectionObserver(([entry]) => {
       sectionVisibleRef.current = entry.isIntersecting && entry.intersectionRatio >= 0.1;
+      section.classList.toggle("is-offscreen", !sectionVisibleRef.current);
     }, { threshold: [0, 0.1] });
     observer.observe(section);
 
