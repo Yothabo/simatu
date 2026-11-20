@@ -459,3 +459,8 @@
   letter-spacing: var(--hp-letter-spacing-normal);
   text-transform: none;
 }
+
+.epr-category-label.is-descriptor {
+  font-style: italic;
+  white-space: nowrap;
+}
