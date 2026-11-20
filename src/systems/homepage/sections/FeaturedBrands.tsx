@@ -11,11 +11,13 @@ type Brand = {
   position: string;
   href?: string;
   demo?: boolean;
+  category: string;
 };
 
 const BRANDS: Brand[] = [
   {
     id: 0,
+    category: "Lifestyle",
     name: "Yotaabo",
     description: "A considered selection for everyday living, balancing useful essentials with a modern point of view. The brand is built around making daily choices feel intentional, with approachable style, quality and pieces that fit naturally into your routine.",
     image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1800&q=88",
@@ -25,6 +27,7 @@ const BRANDS: Brand[] = [
   },
   {
     id: 1,
+    category: "Apparel",
     name: "Poshies",
     description: "A fashion destination for personal expression, bringing together looks that feel confident, versatile and individual. Find your own style, mix inspiration with practical pieces, and make getting dressed feel like an opportunity.",
     image: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1800&q=88",
@@ -34,6 +37,7 @@ const BRANDS: Brand[] = [
   },
   {
     id: 2,
+    category: "Apparel",
     name: "FORME",
     description: "Modern essentials through clean silhouettes, thoughtful details and pieces designed to work together. Its understated concept is an invitation to build personal style around comfort, simplicity and versatility.",
     image: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=1800&q=88",
@@ -43,6 +47,7 @@ const BRANDS: Brand[] = [
   },
   {
     id: 3,
+    category: "Home",
     name: "NOMA HOME",
     description: "Calm spaces and everyday rituals. Considered textures and uncomplicated forms create a quieter atmosphere, making room for comfort, balance and the small moments that make a space feel like yours.",
     image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1800&q=88",
@@ -52,6 +57,7 @@ const BRANDS: Brand[] = [
   },
   {
     id: 4,
+    category: "Beauty",
     name: "MUSE BEAUTY",
     description: "Routines that help you feel refreshed and confident. Its concept brings beauty essentials into a simple daily ritual, pairing thoughtful presentation with a personal approach to care and self-expression.",
     image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&w=1800&q=88",
@@ -61,6 +67,7 @@ const BRANDS: Brand[] = [
   },
   {
     id: 5,
+    category: "Streetwear",
     name: "OFFCUT",
     description: "Inspired by street culture, individuality and the energy of everyday life. It is built for expressive styling, unexpected combinations and pieces that carry character without chasing every trend.",
     image: "https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=1800&q=88",
@@ -70,6 +77,7 @@ const BRANDS: Brand[] = [
   },
   {
     id: 6,
+    category: "Accessories",
     name: "ATELIER 09",
     description: "Finishing touches that make an outfit feel complete. Its concept highlights accessories, considered materials and detail-led design, bringing together pieces that add personality and remain easy to wear.",
     image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1800&q=88",
@@ -79,6 +87,7 @@ const BRANDS: Brand[] = [
   },
   {
     id: 7,
+    category: "Outdoor",
     name: "FIELD NOTES",
     description: "Inspired by open landscapes, movement and time spent outside. It brings together outdoor-minded essentials for exploring at your own pace and finding inspiration beyond the everyday.",
     image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=1800&q=88",
@@ -88,6 +97,7 @@ const BRANDS: Brand[] = [
   },
   {
     id: 8,
+    category: "Home",
     name: "STUDIO OBJECT",
     description: "Consider the things we choose to keep close. It is a collection of functional, thoughtfully designed objects where utility meets character and everyday items become part of an intentional environment.",
     image: "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=1800&q=88",
@@ -97,6 +107,7 @@ const BRANDS: Brand[] = [
   },
   {
     id: 9,
+    category: "Lifestyle",
     name: "SUNDAY MARKET",
     description: "A relaxed collection of finds for everyday living, bringing together style, discovery and ease. Browse without rush and find pieces that feel useful, distinctive and naturally at home in your life.",
     image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1800&q=88",
@@ -307,10 +318,10 @@ export default function FeaturedBrands() {
                 className={`epr-card ${slot}`}
                 key={brand.id}
                 type="button"
-                onClick={() => isThumb && activate(brand.id, true)}
-                tabIndex={isThumb ? 0 : -1}
-                aria-label={isThumb ? `View ${brand.name}` : undefined}
-                aria-hidden={!isThumb}
+                onClick={() => isThumb ? activate(brand.id, true) : brand.href && window.location.assign(brand.href)}
+                tabIndex={0}
+                aria-label={`View ${brand.name}`}
+                aria-hidden={false}
                 style={{ "--image-position": brand.position } as CSSProperties}
               >
                 <img src={brand.image} alt={brand.imageAlt} draggable={false} loading="eager" decoding="async" fetchPriority={slot === "hero" ? "high" : "low"} />
@@ -323,6 +334,7 @@ export default function FeaturedBrands() {
                     <span className="epr-hero-streak epr-hero-streak-one" />
                     <span className="epr-hero-streak epr-hero-streak-two" />
                     <span className="epr-hero-streak epr-hero-streak-three" />
+                    <span className="epr-hero-arrow" aria-hidden="true"><span>→</span></span>
                   </span>
                 )}
                 {isThumb && (
@@ -347,15 +359,7 @@ export default function FeaturedBrands() {
             key={active}
           >
             <p className="epr-description">{current.description}</p>
-            {current.href ? (
-              <a className="epr-visit" href={current.href}>
-                Visit {current.name} <span aria-hidden="true">↗</span>
-              </a>
-            ) : (
-              <span className="epr-visit is-unavailable" aria-disabled="true">
-                Temporary concept <span aria-hidden="true">—</span>
-              </span>
-            )}
+            <span className="epr-category-label">{current.category}</span>
           </article>
         </div>
       </div>
