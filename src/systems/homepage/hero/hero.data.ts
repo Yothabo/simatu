@@ -6,9 +6,9 @@ export const visuals = [
 ];
 
 export const heroCopy = {
-  tagline: "Imagining Digital Worlds Differently",
+  tagline: "Building Beyond Convention",
   description:
-    "We unite visual storytelling, emerging technology and thoughtful design to create experiences that feel unforgettable.",
+    "Bringing together technology, commerce and creative thinking to shape new ventures, advance established enterprises and unlock opportunities for sustainable growth.",
 };
 
 export const navItems = [
