@@ -315,17 +315,14 @@ export default function FeaturedBrands() {
               >
                 <img src={brand.image} alt={brand.imageAlt} draggable={false} loading="eager" decoding="async" fetchPriority={slot === "hero" ? "high" : "low"} />
                 {slot === "hero" && (
-                  <span className="epr-hero-treatment" aria-hidden="true">
-                    <span className="epr-hero-wash" />
-                    <span className="epr-hero-smear epr-hero-smear-one" style={{ backgroundImage: `url(${brand.image})` }} />
-                    <span className="epr-hero-smear epr-hero-smear-two" style={{ backgroundImage: `url(${brand.image})` }} />
-                    <span className="epr-hero-smear epr-hero-smear-three" style={{ backgroundImage: `url(${brand.image})` }} />
-                    <span className="epr-hero-smear epr-hero-smear-four" style={{ backgroundImage: `url(${brand.image})` }} />
+                  <span
+                    className="epr-hero-treatment"
+                    aria-hidden="true"
+                    style={{ "--epr-streak-color": brand.id === 0 ? "#39E878" : brand.id === 1 ? "#FF3D9E" : "var(--hp-color-primary)" } as CSSProperties}
+                  >
                     <span className="epr-hero-streak epr-hero-streak-one" />
                     <span className="epr-hero-streak epr-hero-streak-two" />
                     <span className="epr-hero-streak epr-hero-streak-three" />
-                    <span className="epr-hero-noise" />
-                    <span className="epr-hero-vignette" />
                   </span>
                 )}
                 {isThumb && (
