@@ -77,7 +77,9 @@ export default function CheckoutModal({
 
   const handleFullNameChange = (value: string) => {
     setFullName(value);
-    if (value.trim()) setErrors((current) => ({ ...current, fullName: '' });
+    if (value.trim()) {
+      setErrors((current) => ({ ...current, fullName: '' }));
+    }
   };
 
   const handlePhoneNumberChange = (value: string) => {
