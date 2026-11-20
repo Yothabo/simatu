@@ -59,6 +59,12 @@ export function useHeroImageRotation() {
     };
   }, []);
 
+  const selectImage = (nextImage: number) => {
+    pauseUntil.current = Date.now() + 6500;
+    setActiveImage(nextImage);
+  };
+
+
   const handleTouchStart = (event: TouchEvent<HTMLElement>) => {
     if (event.touches.length !== 1) {
       touchStart.current = null;
@@ -99,7 +105,7 @@ export function useHeroImageRotation() {
 
   return {
     activeImage,
-    setActiveImage,
+    setActiveImage: selectImage,
     handleTouchStart,
     handleTouchEnd,
     handleTouchCancel,
