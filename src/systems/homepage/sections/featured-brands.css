@@ -467,16 +467,18 @@
 
 
 
-/* Four-video editorial composition: full-width top, tall left, square right, lower-right fill. */
+/* Four-video composition: top strip, aligned middle pair, dominant full-width bottom. */
 .epr-card.hero .epr-video-mosaic {
   position: absolute;
   z-index: 2;
   inset: 0;
   display: grid;
-  grid-template-rows: 20% minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 20% 40cqi minmax(0, 1fr);
   gap: clamp(3px, 0.45cqw, 8px);
   overflow: hidden;
   background: var(--hp-palette-grey-900);
+  container-type: inline-size;
 }
 .epr-video-panel {
   display: block;
@@ -489,47 +491,51 @@
 }
 .epr-video-panel-top {
   grid-row: 1;
-  grid-column: 1 / -1;
+  grid-column: 1;
   object-position: 50% 45%;
 }
-.epr-card.hero .epr-video-mosaic > .epr-video-panel-left {
+.epr-video-panel-left {
   grid-row: 2;
   grid-column: 1;
-  width: 100%;
+  width: calc(60% - (clamp(3px, 0.45cqw, 8px) / 2));
   height: 100%;
   object-position: 42% 50%;
 }
-.epr-card.hero .epr-video-mosaic {
-  grid-template-columns: 44% minmax(0, 1fr);
-}
 .epr-video-right {
   grid-row: 2;
-  grid-column: 2;
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-column: 1;
+  justify-self: end;
+  width: 40%;
+  height: 100%;
   min-width: 0;
   min-height: 0;
   overflow: hidden;
-  gap: clamp(3px, 0.45cqw, 8px);
 }
 .epr-video-panel-square {
   width: 100%;
-  height: auto;
+  height: 100%;
   aspect-ratio: 1 / 1;
   object-position: 58% 45%;
 }
 .epr-video-panel-bottom {
+  grid-row: 3;
+  grid-column: 1;
+  width: 100%;
+  height: 100%;
   min-height: 0;
   object-position: 65% 50%;
 }
 @media (max-aspect-ratio: 4 / 5) {
   .epr-card.hero .epr-video-mosaic {
-    grid-template-rows: 20% minmax(0, 1fr);
-    grid-template-columns: 40% minmax(0, 1fr);
+    grid-template-rows: 20% 40cqi minmax(0, 1fr);
     gap: 2px;
   }
+  .epr-video-panel-left {
+    width: calc(60% - 1px);
+    object-position: 40% 50%;
+  }
   .epr-video-right {
-    gap: 2px;
+    width: 40%;
   }
   .epr-video-panel-top {
     object-position: 48% 50%;
