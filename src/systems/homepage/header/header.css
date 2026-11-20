@@ -9,7 +9,6 @@
   flex-shrink: 0;
   background: color-mix(in srgb, var(--hp-color-background) 88%, transparent);
   backdrop-filter: blur(var(--hp-size-18));
-  top: 0;
   left: 0;
   display: flex;
   width: 100%;
@@ -25,13 +24,13 @@
   z-index: 2;
   font-size: var(--hp-size-27);
   font-weight: 800;
-  letter-spacing: -1.var(--hp-size-8);
+  letter-spacing: var(--hp-letter-spacing-brand);
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: clamp(var(--hp-size-24), var(--hp-size-3-var(--hp-value-5_vw)), var(--hp-size-52));
+  gap: clamp(var(--hp-size-24), var(--hp-size-3-5vw), var(--hp-size-52));
 }
 
 .nav-links a {
@@ -39,7 +38,7 @@
   color: var(--hp-color-text-subtle);
   font-size: var(--hp-size-11);
   font-weight: 600;
-  letter-spacing: 1.var(--hp-size-5);
+  letter-spacing: var(--hp-letter-spacing-wide);
   text-transform: uppercase;
   transition: color var(--hp-motion-duration-300) ease;
 }

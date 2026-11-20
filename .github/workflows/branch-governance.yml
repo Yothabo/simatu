@@ -1,0 +1,68 @@
+name: Simatu Branch Governance
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  branch-policy:
+    name: Enforce Simatu Branch Architecture
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate branch and merge destination
+        env:
+          HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
+          BASE_BRANCH: ${{ github.event.pull_request.base.ref }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          BASE_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "Repository: ${BASE_REPO}"
+          echo "Source branch: ${HEAD_BRANCH}"
+          echo "Destination branch: ${BASE_BRANCH}"
+
+          if [[ "${HEAD_REPO}" != "${BASE_REPO}" ]]; then
+            echo "::error::Fork pull requests are not permitted."
+            exit 1
+          fi
+
+          if [[ "${BASE_BRANCH}" == "main" ]]; then
+            echo "::error::Merging into main is prohibited."
+            exit 1
+          fi
+
+          case "${HEAD_BRANCH}:${BASE_BRANCH}" in
+            Codex/admin-work:Codex/local-work)
+              echo "Admin integration path approved."
+              ;;
+            Codex/storefront-work:Codex/local-work)
+              echo "Storefront integration path approved."
+              ;;
+            Codex/cart-work:Codex/local-work)
+              echo "Cart integration path approved."
+              ;;
+            Codex/homepage-work:Codex/local-work)
+              echo "Homepage integration path approved."
+              ;;
+            Codex/local-work:beta)
+              echo "Integration-to-beta path approved."
+              ;;
+            *)
+              echo "::error::Unauthorized merge path: ${HEAD_BRANCH} -> ${BASE_BRANCH}"
+              exit 1
+              ;;
+          esac
+
+      - name: Governance success
+        run: echo "Simatu branch governance passed."
