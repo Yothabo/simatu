@@ -240,6 +240,7 @@ export default function FeaturedBrands() {
 
     return () => {
       window.clearInterval(timer);
+      if (autoplayTimerRef.current !== null) window.clearInterval(autoplayTimerRef.current);
       autoplayTimerRef.current = null;
       restartAutoplayRef.current = () => {};
       observer.disconnect();
