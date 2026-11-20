@@ -1,4 +1,5 @@
 import SectionHeading from "../components/SectionHeading";
+import FeaturedBrands from "./FeaturedBrands";
 import "./sections.css";
 
 const services = [
@@ -120,54 +121,7 @@ export default function HomepageSections() {
         </div>
       </section>
 
-      <section className="hp-section hp-work" id="work" aria-label="Selected work">
-        <div className="hp-section__inner">
-          <div className="hp-work__heading">
-            <SectionHeading
-              eyebrow="03 / Selected work"
-              title={<>Built around<br /><span>real experiences.</span></>}
-              description="A look at two storefront experiences in the Simatu ecosystem."
-            />
-            <span className="hp-section__side-note">The work is never just the screen.<br />It is the experience around it.</span>
-          </div>
-
-          <div className="hp-work-grid">
-            <a className="hp-work-card hp-work-card--yotaabo" href="/yotaabo" aria-label="Explore the Yotaabo storefront">
-              <div className="hp-work-card__visual" aria-hidden="true">
-                <div className="hp-project-window">
-                  <span className="hp-project-window__top"><i /><i /><i /></span>
-                  <span className="hp-project-window__brand">yotaabo<span>.</span></span>
-                  <span className="hp-project-window__headline">Find your<br />everyday.</span>
-                  <span className="hp-project-window__line" />
-                  <span className="hp-project-window__shape" />
-                </div>
-                <span className="hp-work-card__index">01 / STOREFRONT</span>
-              </div>
-              <div className="hp-work-card__meta">
-                <div><h3>Yotaabo</h3><p>Digital commerce experience</p></div>
-                <span aria-hidden="true">↗</span>
-              </div>
-            </a>
-
-            <a className="hp-work-card hp-work-card--poshies" href="/poshies" aria-label="Explore the Poshies storefront">
-              <div className="hp-work-card__visual" aria-hidden="true">
-                <div className="hp-project-window">
-                  <span className="hp-project-window__top"><i /><i /><i /></span>
-                  <span className="hp-project-window__brand">poshies<span>.</span></span>
-                  <span className="hp-project-window__headline">A little more<br />you.</span>
-                  <span className="hp-project-window__line" />
-                  <span className="hp-project-window__shape" />
-                </div>
-                <span className="hp-work-card__index">02 / STOREFRONT</span>
-              </div>
-              <div className="hp-work-card__meta">
-                <div><h3>Poshies</h3><p>Digital retail experience</p></div>
-                <span aria-hidden="true">↗</span>
-              </div>
-            </a>
-          </div>
-        </div>
-      </section>
+      <FeaturedBrands />
 
       <section className="hp-section hp-approach" id="approach" aria-label="Our approach">
         <div className="hp-section__inner">
