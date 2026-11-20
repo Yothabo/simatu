@@ -1265,3 +1265,9 @@
 .novae-hero.is-scrolling * {
   animation-play-state: paused !important;
 }
+
+/* Pause Hero motion whenever it is not visible in the viewport. */
+.novae-hero.is-offscreen,
+.novae-hero.is-offscreen * {
+  animation-play-state: paused !important;
+}
