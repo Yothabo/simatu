@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import "./featured-brands.css";
 
 type Brand = {
@@ -268,7 +269,7 @@ export default function FeaturedBrands() {
                 tabIndex={isThumb ? 0 : -1}
                 aria-label={isThumb ? `View ${brand.name}` : undefined}
                 aria-hidden={!isThumb}
-                style={{ "--image-position": brand.position } as React.CSSProperties}
+                style={{ "--image-position": brand.position } as CSSProperties}
               >
                 <img src={brand.image} alt="" draggable={false} />
                 <span className="epr-progress" aria-hidden="true" />
