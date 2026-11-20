@@ -64,7 +64,7 @@
 }
 
 .hp-button--primary {
-  color: #08070d;
+  color: var(--hp-color-on-primary);
   background: var(--hp-color-primary-light);
 }
 
