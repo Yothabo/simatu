@@ -446,3 +446,20 @@
   filter: brightness(var(--hp-brands-cta-hover-brightness));
   transform: translate(-50%, -50%) translateY(calc(-1 * var(--hp-brands-cta-hover-offset)));
 }
+
+/* Logo-led Our Brands card: black canvas with the Simatu mark centered. */
+.epr-card.is-logo {
+  background: #000;
+}
+.epr-card.is-logo .epr-logo-image {
+  object-fit: contain;
+  object-position: center;
+  padding: 18%;
+}
+.epr-card.hero.is-logo .epr-logo-image {
+  padding: 20%;
+}
+.epr-card.thumb-2.is-logo .epr-logo-image,
+.epr-card.thumb-3.is-logo .epr-logo-image {
+  padding: 12%;
+}
