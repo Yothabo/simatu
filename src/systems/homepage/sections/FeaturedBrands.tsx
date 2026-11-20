@@ -203,12 +203,10 @@ export default function FeaturedBrands() {
     const handleScroll = () => {
       scrollPauseUntilRef.current = Date.now() + 900;
       section.classList.add("is-scrolling");
-      document.querySelector(".novae-hero")?.classList.add("is-scrolling");
 
       if (scrollResetTimer !== null) window.clearTimeout(scrollResetTimer);
       scrollResetTimer = window.setTimeout(() => {
         section.classList.remove("is-scrolling");
-        document.querySelector(".novae-hero")?.classList.remove("is-scrolling");
         scrollResetTimer = null;
       }, 180);
     };
@@ -234,7 +232,6 @@ export default function FeaturedBrands() {
       window.removeEventListener("scroll", handleScroll);
       if (scrollResetTimer !== null) window.clearTimeout(scrollResetTimer);
       section.classList.remove("is-scrolling");
-      document.querySelector(".novae-hero")?.classList.remove("is-scrolling");
     };
   }, [activate]);
 
