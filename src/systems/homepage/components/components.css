@@ -33,7 +33,7 @@
 }
 
 .hp-section-heading__description {
-  max-width: 620px;
+  max-width: var(--hp-size-620);
   margin: 0;
   color: var(--hp-color-text-muted);
   font-size: var(--hp-font-size-base);
