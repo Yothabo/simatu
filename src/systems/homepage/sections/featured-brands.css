@@ -467,14 +467,13 @@
 
 
 
-/* Three-panel editorial mosaic: a primary video with two contrasting side panels. */
+/* Four-video editorial composition: full-width top, tall left, square right, lower-right fill. */
 .epr-card.hero .epr-video-mosaic {
   position: absolute;
   z-index: 2;
   inset: 0;
   display: grid;
-  grid-template-columns: 1.62fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 20% minmax(0, 1fr);
   gap: clamp(3px, 0.45cqw, 8px);
   overflow: hidden;
   background: var(--hp-palette-grey-900);
@@ -486,52 +485,55 @@
   min-width: 0;
   min-height: 0;
   object-fit: cover;
-  object-position: var(--image-position);
   background: var(--hp-palette-grey-900);
 }
-.epr-video-panel-main {
-  grid-column: 1;
-  grid-row: 1 / span 2;
-  object-position: 48% 50%;
-}
-.epr-video-panel-still {
-  grid-column: 2;
+.epr-video-panel-top {
   grid-row: 1;
-  overflow: hidden;
+  object-position: 50% 45%;
 }
-.epr-video-panel-still img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: var(--image-position);
-}
-.epr-video-panel-secondary {
-  grid-column: 2;
+.epr-card.hero .epr-video-mosaic > .epr-video-panel-left {
   grid-row: 2;
-  object-position: 65% 50%;
-  transform: scaleX(-1);
-}
-.epr-card.hero .epr-hero-video {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
+  grid-column: 1;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: var(--image-position);
-  pointer-events: none;
-  background: transparent;
+  object-position: 42% 50%;
+}
+.epr-card.hero .epr-video-mosaic {
+  grid-template-columns: 44% minmax(0, 1fr);
+}
+.epr-video-right {
+  grid-row: 2;
+  grid-column: 2;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  gap: clamp(3px, 0.45cqw, 8px);
+}
+.epr-video-panel-square {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-position: 58% 45%;
+}
+.epr-video-panel-bottom {
+  min-height: 0;
+  object-position: 65% 50%;
 }
 @media (max-aspect-ratio: 4 / 5) {
   .epr-card.hero .epr-video-mosaic {
-    grid-template-columns: 1.45fr 1fr;
+    grid-template-rows: 20% minmax(0, 1fr);
+    grid-template-columns: 40% minmax(0, 1fr);
     gap: 2px;
   }
-  .epr-video-panel-main {
-    object-position: 42% 50%;
+  .epr-video-right {
+    gap: 2px;
   }
-  .epr-video-panel-secondary {
-    object-position: 62% 50%;
+  .epr-video-panel-top {
+    object-position: 48% 50%;
+  }
+  .epr-video-panel-square {
+    object-position: 55% 50%;
   }
 }
