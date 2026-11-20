@@ -489,6 +489,7 @@
 }
 .epr-video-panel-top {
   grid-row: 1;
+  grid-column: 1 / -1;
   object-position: 50% 45%;
 }
 .epr-card.hero .epr-video-mosaic > .epr-video-panel-left {
