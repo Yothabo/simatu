@@ -17,8 +17,8 @@ const BRANDS: Brand[] = [
   {
     id: 0,
     name: "Poshies",
-    description: "No one is perfect. Feel beautiful, comfortable, and confidently yourself in every little detail.",
-    image: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1800&q=88",
+    description: "Your lingerie. Your rules. From everyday panties to statement thongs, discover lingerie that feels good, fits beautifully, and makes you feel confident in your own skin.",
+    image: "https://images.unsplash.com/photo-1652715256292-bbee70ee04ca?auto=format&fit=crop&w=1800&q=88",
     imageAlt: "Editorial fashion portrait",
     position: "50% 42%",
     href: "/poshies",
@@ -60,7 +60,7 @@ const BRANDS: Brand[] = [
 ];
 
 
-const VISIBLE_CARDS = 3;
+const VISIBLE_CARDS = BRANDS.length;
 const TRANSITION_MS = 900;
 const AUTOPLAY_MS = 9000;
 
@@ -173,7 +173,7 @@ export default function FeaturedBrands() {
   const slotFor = (id: number) => {
     if (id === active) return "hero";
     const distanceBehind = (active - id + BRANDS.length) % BRANDS.length;
-    return distanceBehind === 1 ? "thumb-2" : "thumb-3";
+    return `thumb-${distanceBehind - 1}`;
   };
 
   const current = BRANDS[active];
