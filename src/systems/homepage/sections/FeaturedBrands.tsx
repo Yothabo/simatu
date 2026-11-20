@@ -17,7 +17,7 @@ const BRANDS: Brand[] = [
   {
     id: 0,
     name: "Yotaabo",
-    description: "Yotaabo brings together a considered selection for everyday living, balancing useful essentials with a modern point of view. The brand is built around making daily choices feel intentional, with approachable style, quality and pieces that fit naturally into your routine.",
+    description: "A considered selection for everyday living, balancing useful essentials with a modern point of view. The brand is built around making daily choices feel intentional, with approachable style, quality and pieces that fit naturally into your routine.",
     image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1800&q=88",
     imageAlt: "Contemporary fashion retail interior",
     position: "50% 45%",
@@ -26,7 +26,7 @@ const BRANDS: Brand[] = [
   {
     id: 1,
     name: "Poshies",
-    description: "Poshies is a fashion destination for personal expression, bringing together looks that feel confident, versatile and individual. Find your own style, mix inspiration with practical pieces, and make getting dressed feel like an opportunity.",
+    description: "A fashion destination for personal expression, bringing together looks that feel confident, versatile and individual. Find your own style, mix inspiration with practical pieces, and make getting dressed feel like an opportunity.",
     image: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1800&q=88",
     imageAlt: "Editorial fashion portrait",
     position: "50% 42%",
@@ -35,7 +35,7 @@ const BRANDS: Brand[] = [
   {
     id: 2,
     name: "FORME",
-    description: "FORME explores modern essentials through clean silhouettes, thoughtful details and pieces designed to work together. Its understated concept is an invitation to build personal style around comfort, simplicity and versatility.",
+    description: "Modern essentials through clean silhouettes, thoughtful details and pieces designed to work together. Its understated concept is an invitation to build personal style around comfort, simplicity and versatility.",
     image: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=1800&q=88",
     imageAlt: "Minimal contemporary clothing editorial",
     position: "50% 40%",
@@ -44,7 +44,7 @@ const BRANDS: Brand[] = [
   {
     id: 3,
     name: "NOMA HOME",
-    description: "NOMA HOME is imagined around calm spaces and everyday rituals. Considered textures and uncomplicated forms create a quieter atmosphere, making room for comfort, balance and the small moments that make a space feel like yours.",
+    description: "Calm spaces and everyday rituals. Considered textures and uncomplicated forms create a quieter atmosphere, making room for comfort, balance and the small moments that make a space feel like yours.",
     image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1800&q=88",
     imageAlt: "Quiet, curated contemporary home interior",
     position: "50% 50%",
@@ -53,7 +53,7 @@ const BRANDS: Brand[] = [
   {
     id: 4,
     name: "MUSE BEAUTY",
-    description: "MUSE BEAUTY celebrates routines that help you feel refreshed and confident. Its concept brings beauty essentials into a simple daily ritual, pairing thoughtful presentation with a personal approach to care and self-expression.",
+    description: "Routines that help you feel refreshed and confident. Its concept brings beauty essentials into a simple daily ritual, pairing thoughtful presentation with a personal approach to care and self-expression.",
     image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&w=1800&q=88",
     imageAlt: "Skincare and beauty product arrangement",
     position: "50% 50%",
@@ -62,7 +62,7 @@ const BRANDS: Brand[] = [
   {
     id: 5,
     name: "OFFCUT",
-    description: "OFFCUT takes cues from street culture, individuality and the energy of everyday life. It is built for expressive styling, unexpected combinations and pieces that carry character without chasing every trend.",
+    description: "Inspired by street culture, individuality and the energy of everyday life. It is built for expressive styling, unexpected combinations and pieces that carry character without chasing every trend.",
     image: "https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=1800&q=88",
     imageAlt: "Streetwear apparel editorial",
     position: "50% 45%",
@@ -71,7 +71,7 @@ const BRANDS: Brand[] = [
   {
     id: 6,
     name: "ATELIER 09",
-    description: "ATELIER 09 focuses on the finishing touches that make an outfit feel complete. Its concept highlights accessories, considered materials and detail-led design, bringing together pieces that add personality and remain easy to wear.",
+    description: "Finishing touches that make an outfit feel complete. Its concept highlights accessories, considered materials and detail-led design, bringing together pieces that add personality and remain easy to wear.",
     image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1800&q=88",
     imageAlt: "Leather accessories photographed for a fashion campaign",
     position: "50% 50%",
@@ -80,7 +80,7 @@ const BRANDS: Brand[] = [
   {
     id: 7,
     name: "FIELD NOTES",
-    description: "FIELD NOTES is inspired by open landscapes, movement and time spent outside. It brings together outdoor-minded essentials for exploring at your own pace and finding inspiration beyond the everyday.",
+    description: "Inspired by open landscapes, movement and time spent outside. It brings together outdoor-minded essentials for exploring at your own pace and finding inspiration beyond the everyday.",
     image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=1800&q=88",
     imageAlt: "Open natural landscape",
     position: "50% 50%",
@@ -89,7 +89,7 @@ const BRANDS: Brand[] = [
   {
     id: 8,
     name: "STUDIO OBJECT",
-    description: "STUDIO OBJECT considers the things we choose to keep close. It is a collection of functional, thoughtfully designed objects where utility meets character and everyday items become part of an intentional environment.",
+    description: "Consider the things we choose to keep close. It is a collection of functional, thoughtfully designed objects where utility meets character and everyday items become part of an intentional environment.",
     image: "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=1800&q=88",
     imageAlt: "Curated design objects in a contemporary interior",
     position: "50% 50%",
@@ -98,7 +98,7 @@ const BRANDS: Brand[] = [
   {
     id: 9,
     name: "SUNDAY MARKET",
-    description: "SUNDAY MARKET is a relaxed collection of finds for everyday living, bringing together style, discovery and ease. Browse without rush and find pieces that feel useful, distinctive and naturally at home in your life.",
+    description: "A relaxed collection of finds for everyday living, bringing together style, discovery and ease. Browse without rush and find pieces that feel useful, distinctive and naturally at home in your life.",
     image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1800&q=88",
     imageAlt: "Lifestyle fashion editorial",
     position: "50% 45%",
