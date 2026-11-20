@@ -37,12 +37,10 @@ export function useHeroImageRotation() {
     const handleScroll = () => {
       pauseUntil.current = Date.now() + 900;
       hero.classList.add("is-scrolling");
-      document.querySelector(".epr-page")?.classList.add("is-scrolling");
 
       if (scrollResetTimer !== null) window.clearTimeout(scrollResetTimer);
       scrollResetTimer = window.setTimeout(() => {
         hero.classList.remove("is-scrolling");
-        document.querySelector(".epr-page")?.classList.remove("is-scrolling");
         scrollResetTimer = null;
       }, 180);
     };
@@ -68,7 +66,6 @@ export function useHeroImageRotation() {
       window.removeEventListener("scroll", handleScroll);
       if (scrollResetTimer !== null) window.clearTimeout(scrollResetTimer);
       hero.classList.remove("is-scrolling");
-      document.querySelector(".epr-page")?.classList.remove("is-scrolling");
       window.clearInterval(timer);
     };
   }, []);
