@@ -425,6 +425,17 @@
   }
 
 
+  .epr-plus-placeholder {
+    top: 74%;
+    left: 80%;
+    width: 26cqw;
+    height: 20svh;
+  }
+
+  .epr-plus-placeholder span {
+    font-size: 5cqw;
+  }
+
   .epr-meta {
     display: none;
   }
@@ -446,6 +457,11 @@
 
   .epr-description {
     font-size: clamp(16px, 2.2cqw, 24px);
+  }
+
+  .epr-plus-placeholder {
+    top: 87%;
+    left: 36%;
   }
 
 }
