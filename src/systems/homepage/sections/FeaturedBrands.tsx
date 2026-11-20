@@ -301,7 +301,7 @@ export default function FeaturedBrands() {
   useEffect(() => {
     heroVideoRefs.current.forEach((video, index) => {
       if (!video) return;
-      video.playbackRate = index === 1 ? 0.72 : 1;
+      video.playbackRate = [1, 0.82, 1.08, 0.92][index] ?? 1;
     });
   }, [active, sectionVisible]);
 
@@ -348,24 +348,37 @@ export default function FeaturedBrands() {
                 aria-hidden={false}
                 style={{ "--image-position": brand.position } as CSSProperties}
               >
-                <img src={brand.image} alt={brand.imageAlt} draggable={false} loading="eager" decoding="async" fetchPriority={slot === "hero" ? "high" : "low"} />
+                {!(slot === "hero" && sectionVisible && brand.videoSrc) && (
+                  <img src={brand.image} alt={brand.imageAlt} draggable={false} loading="eager" decoding="async" fetchPriority={slot === "hero" ? "high" : "low"} />
+                )}
                 {slot === "hero" && sectionVisible && brand.videoSrc && (
                   <div className="epr-video-mosaic" aria-hidden="true">
                     <video
                       ref={(video) => { heroVideoRefs.current[0] = video; }}
-                      className="epr-video-panel epr-video-panel-main"
+                      className="epr-video-panel epr-video-panel-top"
                       src={brand.videoSrc}
                       muted loop autoPlay playsInline preload="none"
                     />
-                    <div className="epr-video-panel epr-video-panel-still">
-                      <img src={brand.image} alt="" loading="lazy" decoding="async" />
-                    </div>
                     <video
                       ref={(video) => { heroVideoRefs.current[1] = video; }}
-                      className="epr-video-panel epr-video-panel-secondary"
+                      className="epr-video-panel epr-video-panel-left"
                       src={brand.videoSrc}
                       muted loop autoPlay playsInline preload="none"
                     />
+                    <div className="epr-video-right">
+                      <video
+                        ref={(video) => { heroVideoRefs.current[2] = video; }}
+                        className="epr-video-panel epr-video-panel-square"
+                        src={brand.videoSrc}
+                        muted loop autoPlay playsInline preload="none"
+                      />
+                      <video
+                        ref={(video) => { heroVideoRefs.current[3] = video; }}
+                        className="epr-video-panel epr-video-panel-bottom"
+                        src={brand.videoSrc}
+                        muted loop autoPlay playsInline preload="none"
+                      />
+                    </div>
                   </div>
                 )}
                 {slot === "hero" && (
