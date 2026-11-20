@@ -1,19 +1,35 @@
 :root {
-  --hp-color-background: #08070d;
-  --hp-color-surface: #100e18;
-  --hp-color-surface-raised: #171021;
+  /* Brand palette: neutral foundation */
+  --hp-palette-white: #ffffff;
+  --hp-palette-grey-50: #f5f5f5;
+  --hp-palette-grey-100: #e5e5e5;
+  --hp-palette-grey-400: #a3a3a3;
+  --hp-palette-grey-600: #525252;
+  --hp-palette-grey-700: #404040;
+  --hp-palette-grey-800: #262626;
+  --hp-palette-grey-900: #171717;
+  --hp-palette-orange: #c4471d;
+  --hp-palette-orange-dark: #a93d1a;
 
-  --hp-color-primary: #a879ff;
-  --hp-color-primary-light: #c8a8ff;
-  --hp-color-primary-soft: rgba(168, 121, 255, 0.15);
+  /* Semantic homepage colors */
+  --hp-color-background: var(--hp-palette-grey-900);
+  --hp-color-surface: var(--hp-palette-grey-800);
+  --hp-color-surface-raised: var(--hp-palette-grey-700);
+  --hp-color-primary: var(--hp-palette-orange);
+  --hp-color-primary-light: var(--hp-palette-orange);
+  --hp-color-primary-soft: color-mix(in srgb, var(--hp-color-primary) 15%, transparent);
+  --hp-color-primary-hover: var(--hp-palette-orange-dark);
+  --hp-color-text: var(--hp-palette-white);
+  --hp-color-text-muted: color-mix(in srgb, var(--hp-palette-grey-50) 62%, transparent);
+  --hp-color-text-subtle: color-mix(in srgb, var(--hp-palette-white) 67%, transparent);
+  --hp-color-border: color-mix(in srgb, var(--hp-palette-white) 13%, transparent);
+  --hp-color-border-strong: color-mix(in srgb, var(--hp-palette-white) 19%, transparent);
+  --hp-color-overlay: color-mix(in srgb, var(--hp-palette-grey-900) 76%, transparent);
+  --hp-color-glow: color-mix(in srgb, var(--hp-color-primary) 22%, transparent);
 
-  --hp-color-text: #f7f3ff;
-  --hp-color-text-muted: rgba(247, 243, 255, 0.58);
-  --hp-color-text-subtle: rgba(255, 255, 255, 0.67);
-
-  --hp-color-border: rgba(255, 255, 255, 0.13);
-  --hp-color-border-strong: rgba(255, 255, 255, 0.19);
-
-  --hp-color-overlay: rgba(8, 7, 13, 0.76);
-  --hp-color-glow: rgba(145, 83, 224, 0.22);
+  /* Semantic feedback */
+  --hp-color-success: #4f7d5a;
+  --hp-color-warning: #b87928;
+  --hp-color-danger: #b44d43;
+  --hp-color-focus: var(--hp-color-primary);
 }
