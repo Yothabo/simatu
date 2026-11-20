@@ -12,14 +12,16 @@ type Brand = {
   href?: string;
   demo?: boolean;
   category: string;
+  descriptor?: string;
 };
 
 const BRANDS: Brand[] = [
   {
     id: 0,
     category: "Lifestyle",
+    descriptor: "Atmosphere · Elegance",
     name: "Yotaabo",
-    description: "A considered selection for everyday living, balancing useful essentials with a modern point of view. The brand is built around making daily choices feel intentional, with approachable style, quality and pieces that fit naturally into your routine.",
+    description: "Some scents say everything without a single word. Find the fragrance that becomes your signature.",
     image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1800&q=88",
     imageAlt: "Contemporary fashion retail interior",
     position: "50% 45%",
@@ -28,8 +30,9 @@ const BRANDS: Brand[] = [
   {
     id: 1,
     category: "Apparel",
+    descriptor: "Femininity · Self-expression",
     name: "Poshies",
-    description: "A fashion destination for personal expression, bringing together looks that feel confident, versatile and individual. Find your own style, mix inspiration with practical pieces, and make getting dressed feel like an opportunity.",
+    description: "A little indulgence, a lot of confidence. Intimate pieces made to make you feel beautifully yourself.",
     image: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1800&q=88",
     imageAlt: "Editorial fashion portrait",
     position: "50% 42%",
@@ -354,7 +357,7 @@ export default function FeaturedBrands() {
             key={active}
           >
             <p className="epr-description">{current.description}</p>
-            <span className="epr-category-label">{current.category}</span>
+            <span className={`epr-category-label ${current.descriptor ? "is-descriptor" : ""}`}>{current.descriptor ?? current.category}</span>
           </article>
         </div>
       </div>
