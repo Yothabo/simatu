@@ -3,7 +3,7 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--hp-size-32);
   width: 100%;
-  margin-top: 48px;
+  margin-top: var(--hp-size-48);
   position: relative;
   z-index: 1;
 }
@@ -32,7 +32,7 @@
   font: inherit;
   text-decoration: none;
   opacity: 0.67;
-  transition: opacity 180ms ease;
+  transition: opacity var(--hp-motion-duration-180) ease;
 }
 
 .footer-resource-group a:hover {
@@ -49,7 +49,7 @@
   .footer-resource-links {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--hp-size-28) var(--hp-size-16);
-    margin-top: 36px;
+    margin-top: var(--hp-size-36);
   }
 }
 
