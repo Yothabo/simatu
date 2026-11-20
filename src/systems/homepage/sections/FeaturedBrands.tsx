@@ -264,7 +264,8 @@ export default function FeaturedBrands() {
                 className={`epr-card ${slot}`}
                 key={brand.id}
                 type="button"
-                onClick={() => isThumb && activate(brand.id, true)}
+                onClick={() => isThumb && !brand.request && activate(brand.id, true)}
+                disabled={brand.request}
                 tabIndex={isThumb ? 0 : -1}
                 aria-label={isThumb ? `View ${brand.name}` : undefined}
                 aria-hidden={!isThumb}
@@ -275,10 +276,9 @@ export default function FeaturedBrands() {
                 ) : (
                   <img src={brand.image} alt={brand.imageAlt} draggable={false} loading="eager" decoding="async" fetchPriority={slot === "hero" ? "high" : "low"} />
                 )}
-                {isThumb && (
+                {isThumb && !brand.request && (
                   <span className="epr-meta" aria-hidden="true">
                     <strong>{brand.name}</strong>
-                    <small>{brand.tagline}</small>
                   </span>
                 )}
               </button>
