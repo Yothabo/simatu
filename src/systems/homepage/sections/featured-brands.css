@@ -65,8 +65,8 @@
 .epr-title {
   position: absolute;
   z-index: 30;
-  top: 36.8%;
-  left: 22.85%;
+  top: 34.55%;
+  right: 10.42%;
   max-width: 42svh;
   margin: 0;
   overflow: hidden;
@@ -75,10 +75,11 @@
   font-weight: 600;
   letter-spacing: -0.045em;
   line-height: 1;
+  text-align: right;
   text-overflow: ellipsis;
   white-space: nowrap;
-  transform: rotate(-90deg) translateX(-100%);
-  transform-origin: left top;
+  transform: none;
+  transform-origin: right top;
   animation: epr-title-in var(--hp-motion-duration-slow) cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .epr-deck {
@@ -347,12 +348,14 @@
     font-size: 2.6cqw;
   }
   .epr-title {
-    top: 10%;
-    left: 60%;
+    top: 4.5%;
+    right: 7%;
+    left: auto;
     max-width: 34cqw;
     font-size: 5cqw;
+    text-align: right;
     transform: none;
-    transform-origin: left top;
+    transform-origin: right top;
   }
   .epr-copy {
     top: 9%;
