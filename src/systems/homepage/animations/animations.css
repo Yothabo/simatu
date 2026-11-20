@@ -1,15 +1,15 @@
 :root {
-  --hp-transition-fast: 0.3s ease;
-  --hp-transition-normal: 0.45s ease;
-  --hp-transition-slow: 1.2s ease;
+  --hp-transition-fast: var(--hp-motion-value-0p3_s) ease;
+  --hp-transition-normal: var(--hp-motion-value-0p45_s) ease;
+  --hp-transition-slow: var(--hp-motion-value-1p2_s) ease;
 
   --hp-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --hp-ease-smooth: cubic-bezier(0.2, 0.7, 0.2, 1);
 
-  --hp-animation-orbit: 55s linear infinite;
-  --hp-animation-symbol: 18s linear infinite;
-  --hp-animation-glow: 3s ease-in-out infinite;
-  --hp-image-rotation-interval: 5500ms;
+  --hp-animation-orbit: var(--hp-motion-value-55_s) linear infinite;
+  --hp-animation-symbol: var(--hp-motion-value-18_s) linear infinite;
+  --hp-animation-glow: var(--hp-motion-value-3_s) ease-in-out infinite;
+  --hp-image-rotation-interval: var(--hp-motion-value-5500_ms);
 }
 
 /* Entrance animations */
@@ -22,7 +22,7 @@
 @keyframes hp-fade-up {
   from {
     opacity: 0;
-    transform: translate3d(0, 28px, 0);
+    transform: translate3d(0, var(--hp-value-28_px), 0);
   }
   to {
     opacity: 1;
@@ -33,7 +33,7 @@
 @keyframes hp-fade-down {
   from {
     opacity: 0;
-    transform: translate3d(0, -20px, 0);
+    transform: translate3d(0, -var(--hp-value-20_px), 0);
   }
   to {
     opacity: 1;
@@ -56,7 +56,7 @@
 
 @keyframes hp-float {
   0%, 100% { transform: translate3d(0, 0, 0); }
-  50% { transform: translate3d(0, -14px, 0); }
+  50% { transform: translate3d(0, -var(--hp-value-14_px), 0); }
 }
 
 @keyframes hp-drift {
@@ -70,8 +70,8 @@
 }
 
 @keyframes hp-glow {
-  0%, 100% { opacity: 0.55; filter: blur(18px); }
-  50% { opacity: 1; filter: blur(28px); }
+  0%, 100% { opacity: 0.55; filter: blur(var(--hp-value-18_px)); }
+  50% { opacity: 1; filter: blur(var(--hp-value-28_px)); }
 }
 
 @keyframes hp-rotate {
@@ -87,52 +87,52 @@
 /* Reusable animation classes */
 
 .hp-animate-fade-in {
-  animation: hp-fade-in 0.8s var(--hp-ease-out) both;
+  animation: hp-fade-in var(--hp-motion-value-0p8_s) var(--hp-ease-out) both;
 }
 
 .hp-animate-fade-up {
-  animation: hp-fade-up 0.9s var(--hp-ease-out) both;
+  animation: hp-fade-up var(--hp-motion-value-0p9_s) var(--hp-ease-out) both;
 }
 
 .hp-animate-fade-down {
-  animation: hp-fade-down 0.8s var(--hp-ease-out) both;
+  animation: hp-fade-down var(--hp-motion-value-0p8_s) var(--hp-ease-out) both;
 }
 
 .hp-animate-scale-in {
-  animation: hp-scale-in 0.9s var(--hp-ease-out) both;
+  animation: hp-scale-in var(--hp-motion-value-0p9_s) var(--hp-ease-out) both;
 }
 
 .hp-animate-float {
-  animation: hp-float 6s ease-in-out infinite;
+  animation: hp-float var(--hp-motion-value-6_s) ease-in-out infinite;
 }
 
 .hp-animate-drift {
-  animation: hp-drift 12s ease-in-out infinite;
+  animation: hp-drift var(--hp-motion-value-12_s) ease-in-out infinite;
 }
 
 .hp-animate-pulse {
-  animation: hp-pulse 3s ease-in-out infinite;
+  animation: hp-pulse var(--hp-motion-value-3_s) ease-in-out infinite;
 }
 
 .hp-animate-glow {
-  animation: hp-glow 3s ease-in-out infinite;
+  animation: hp-glow var(--hp-motion-value-3_s) ease-in-out infinite;
 }
 
 .hp-animate-rotate {
-  animation: hp-rotate 18s linear infinite;
+  animation: hp-rotate var(--hp-motion-value-18_s) linear infinite;
 }
 
-.hp-delay-1 { animation-delay: 0.15s; }
-.hp-delay-2 { animation-delay: 0.3s; }
-.hp-delay-3 { animation-delay: 0.45s; }
-.hp-delay-4 { animation-delay: 0.6s; }
+.hp-delay-1 { animation-delay: var(--hp-motion-value-0p15_s); }
+.hp-delay-2 { animation-delay: var(--hp-motion-value-0p3_s); }
+.hp-delay-3 { animation-delay: var(--hp-motion-value-0p45_s); }
+.hp-delay-4 { animation-delay: var(--hp-motion-value-0p6_s); }
 
 .hp-hover-lift {
   transition: transform var(--hp-transition-normal);
 }
 
 .hp-hover-lift:hover {
-  transform: translateY(-5px);
+  transform: translateY(-var(--hp-value-5_px));
 }
 
 .hp-hover-glow {
