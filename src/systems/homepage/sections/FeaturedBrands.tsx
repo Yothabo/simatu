@@ -372,13 +372,13 @@ export default function FeaturedBrands() {
                         src={brand.videoSrc}
                         muted loop autoPlay playsInline preload="none"
                       />
-                      <video
-                        ref={(video) => { heroVideoRefs.current[3] = video; }}
-                        className="epr-video-panel epr-video-panel-bottom"
-                        src={brand.videoSrc}
-                        muted loop autoPlay playsInline preload="none"
-                      />
                     </div>
+                    <video
+                      ref={(video) => { heroVideoRefs.current[3] = video; }}
+                      className="epr-video-panel epr-video-panel-bottom"
+                      src={brand.videoSrc}
+                      muted loop autoPlay playsInline preload="none"
+                    />
                   </div>
                 )}
                 {slot === "hero" && (
