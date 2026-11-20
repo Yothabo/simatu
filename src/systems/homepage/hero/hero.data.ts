@@ -5,7 +5,6 @@ export const visuals = [
   "https://images.pexels.com/photos/7170706/pexels-photo-7170706.jpeg?auto=compress&cs=tinysrgb&w=1440",
 ];
 
-
 export const heroCopy = {
   tagline: "Imagining Digital Worlds Differently",
   description:
@@ -16,6 +15,8 @@ export const navItems = [
   "Vision",
   "Services",
   "Work",
+  "Approach",
   "Journal",
   "About",
+  "Contact",
 ];

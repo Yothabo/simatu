@@ -2,6 +2,8 @@
 .novae-page {
   position: relative;
   isolation: isolate;
+  min-height: var(--hp-value-100_vh);
+  overflow-x: clip;
   background:
     radial-gradient(
       ellipse at 80% 50%,
@@ -13,6 +15,8 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  color: var(--hp-color-text);
+  font-family: var(--hp-font-family);
 }
 
 .novae-page::after {
@@ -29,4 +33,151 @@
     0 0 0 var(--hp-value-50_px) color-mix(in srgb, var(--hp-color-primary) 1.8%, transparent),
     0 0 0 var(--hp-value-100_px) color-mix(in srgb, var(--hp-color-primary) 1.2%, transparent);
   pointer-events: none;
+}
+
+.homepage-footer {
+  position: relative;
+  z-index: 1;
+  padding: clamp(var(--hp-space-16), 9vw, var(--hp-space-28)) clamp(var(--hp-space-6), 7.2vw, var(--hp-space-20)) var(--hp-space-6);
+  overflow: hidden;
+  border-top: var(--hp-border-width) solid var(--hp-color-border);
+  background: color-mix(in srgb, var(--hp-color-surface) 92%, var(--hp-color-background));
+  color: var(--hp-color-text);
+}
+
+.homepage-footer__cta,
+.homepage-footer__resources,
+.homepage-footer__bottom {
+  width: 100%;
+  max-width: var(--hp-size-content-wide);
+  margin-inline: auto;
+}
+
+.homepage-footer__cta {
+  padding-bottom: clamp(var(--hp-space-16), 8vw, var(--hp-space-24));
+}
+
+.homepage-footer__eyebrow {
+  color: var(--hp-color-primary-light);
+  font-size: var(--hp-font-size-xs);
+  font-weight: var(--hp-font-weight-semibold);
+  letter-spacing: var(--hp-letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.homepage-footer__cta h2 {
+  max-width: var(--hp-size-700);
+  margin: var(--hp-space-5) 0 var(--hp-space-4);
+  color: var(--hp-color-text);
+  font-size: var(--hp-font-size-display);
+  font-weight: var(--hp-font-weight-medium);
+  letter-spacing: var(--hp-letter-spacing-tight);
+  line-height: var(--hp-line-height-tight);
+}
+
+.homepage-footer__cta p {
+  max-width: var(--hp-size-620);
+  margin: 0;
+  color: var(--hp-color-text-muted);
+  font-size: var(--hp-font-size-base);
+  line-height: var(--hp-line-height-relaxed);
+}
+
+.homepage-footer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--hp-space-3);
+  margin-top: var(--hp-space-8);
+}
+
+.homepage-footer__actions a {
+  display: inline-flex;
+  min-height: var(--hp-size-button-height);
+  padding: 0 var(--hp-space-6);
+  align-items: center;
+  gap: var(--hp-space-3);
+  border: var(--hp-border-width) solid var(--hp-color-border);
+  border-radius: var(--hp-radius-pill);
+  color: var(--hp-color-text);
+  font-size: var(--hp-font-size-sm);
+  font-weight: var(--hp-font-weight-semibold);
+  text-decoration: none;
+  transition:
+    border-color var(--hp-motion-duration-base) var(--hp-motion-ease-standard),
+    background var(--hp-motion-duration-base) var(--hp-motion-ease-standard),
+    transform var(--hp-motion-duration-base) var(--hp-motion-ease-standard);
+}
+
+.homepage-footer__actions a span {
+  color: var(--hp-color-primary-light);
+}
+
+.homepage-footer__actions a:hover {
+  border-color: var(--hp-color-primary);
+  background: var(--hp-color-primary-soft);
+  transform: translateY(calc(-1 * var(--hp-space-1)));
+}
+
+.homepage-footer__resources {
+  padding-block: var(--hp-space-8);
+  border-top: var(--hp-border-width) solid var(--hp-color-border);
+}
+
+.footer-wordmark {
+  display: block;
+  width: 100%;
+  max-width: var(--hp-size-content-wide);
+  height: clamp(var(--hp-size-150), 32vw, var(--hp-size-480));
+  margin: var(--hp-space-8) auto var(--hp-space-6);
+  object-fit: contain;
+  object-position: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+.homepage-footer__bottom {
+  display: flex;
+  padding-top: var(--hp-space-5);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--hp-space-4);
+  border-top: var(--hp-border-width) solid var(--hp-color-border);
+  color: var(--hp-color-text-muted);
+  font-size: var(--hp-font-size-xs);
+}
+
+.homepage-footer__bottom a {
+  color: var(--hp-color-text);
+  text-decoration: none;
+  transition: color var(--hp-motion-duration-base) var(--hp-motion-ease-standard);
+}
+
+.homepage-footer__bottom a:hover {
+  color: var(--hp-color-primary-light);
+}
+
+@media (max-width: 520px) {
+  .homepage-footer {
+    padding-inline: var(--hp-space-5);
+  }
+
+  .homepage-footer__bottom {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .footer-wordmark {
+    height: var(--hp-size-220);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .homepage-footer__actions a,
+  .homepage-footer__bottom a {
+    transition: none;
+  }
+
+  .homepage-footer__actions a:hover {
+    transform: none;
+  }
 }

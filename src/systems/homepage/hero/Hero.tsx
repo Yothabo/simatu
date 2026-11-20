@@ -1,4 +1,3 @@
-
 import Header from "../header";
 import { visuals, heroCopy } from "./hero.data";
 import {
@@ -6,9 +5,9 @@ import {
   useHeroPointer,
 } from "./hero.hooks";
 import "./hero.css";
-import Footer from "../footer";
 
 import { FaInstagram, FaTwitter, FaFacebookF, FaWhatsapp } from "react-icons/fa";
+
 export default function AuralisCreativeHero() {
   const {
     activeImage,
@@ -24,12 +23,12 @@ export default function AuralisCreativeHero() {
     resetPointer,
   } = useHeroPointer();
 
-
   return (
-    <main className="novae-page relative isolate w-full min-h-screen overflow-x-clip bg-[#242424] text-[#F5F5F5] [font-family:var(--novae-font)]">
+    <>
       <Header />
 
       <section
+        id="top"
         ref={heroRef}
         className="novae-hero relative isolate flex w-full min-h-[780px] h-[calc(100svh-104px)] max-h-[1100px] items-center overflow-hidden"
         onMouseMove={handlePointerMove}
@@ -45,41 +44,18 @@ export default function AuralisCreativeHero() {
             <div
               key={visual}
               role="img"
-              aria-label={
-                index === activeImage
-                  ? "Futuristic creative portrait"
-                  : ""
-              }
-              className={
-                activeImage === index
-                  ? "main-image hero-bg-image active-main-image"
-                  : "main-image hero-bg-image"
-              }
+              aria-label={index === activeImage ? "Futuristic creative portrait" : ""}
+              className={activeImage === index ? "main-image hero-bg-image active-main-image" : "main-image hero-bg-image"}
               style={{ backgroundImage: `url(${visual})` }}
             />
           ))}
 
           <div className="image-wash" />
 
-          <div
-            className="smear smear-one"
-            style={{ backgroundImage: `url(${visuals[activeImage]})` }}
-          />
-
-          <div
-            className="smear smear-two"
-            style={{ backgroundImage: `url(${visuals[activeImage]})` }}
-          />
-
-          <div
-            className="smear smear-three"
-            style={{ backgroundImage: `url(${visuals[activeImage]})` }}
-          />
-
-          <div
-            className="smear smear-four"
-            style={{ backgroundImage: `url(${visuals[activeImage]})` }}
-          />
+          <div className="smear smear-one" style={{ backgroundImage: `url(${visuals[activeImage]})` }} />
+          <div className="smear smear-two" style={{ backgroundImage: `url(${visuals[activeImage]})` }} />
+          <div className="smear smear-three" style={{ backgroundImage: `url(${visuals[activeImage]})` }} />
+          <div className="smear smear-four" style={{ backgroundImage: `url(${visuals[activeImage]})` }} />
 
           <div className="light-streak light-streak-one" />
           <div className="light-streak light-streak-two" />
@@ -101,18 +77,10 @@ export default function AuralisCreativeHero() {
         <div className="hero-copy relative z-[6] w-[58%] mt-[35px] ml-[10.5%] pointer-events-none max-[1100px]:w-[66%] max-[1100px]:ml-[7%] max-[820px]:w-[85%] max-[820px]:mt-[-55px] max-[820px]:ml-[7%] max-[520px]:w-[92%] max-[520px]:mt-[-95px] max-[520px]:ml-[6%] min-[1500px]:ml-[12%]">
           <div className="social-proof relative z-[7] w-fit mb-6 pointer-events-auto">
             <div className="social-icons flex items-center gap-[11px] max-[520px]:gap-[7px]">
-              <a href="#instagram" aria-label="Instagram">
-                <FaInstagram aria-hidden="true" />
-              </a>
-              <a href="#social" aria-label="Twitter">
-                <FaTwitter aria-hidden="true" />
-              </a>
-              <a href="#facebook" aria-label="Facebook">
-                <FaFacebookF aria-hidden="true" />
-              </a>
-              <a href="#whatsapp" aria-label="WhatsApp">
-                <FaWhatsapp aria-hidden="true" />
-              </a>
+              <a href="#instagram" aria-label="Instagram"><FaInstagram aria-hidden="true" /></a>
+              <a href="#social" aria-label="Twitter"><FaTwitter aria-hidden="true" /></a>
+              <a href="#facebook" aria-label="Facebook"><FaFacebookF aria-hidden="true" /></a>
+              <a href="#whatsapp" aria-label="WhatsApp"><FaWhatsapp aria-hidden="true" /></a>
             </div>
           </div>
 
@@ -136,11 +104,7 @@ export default function AuralisCreativeHero() {
                 aria-label={`Show visual ${index + 1}`}
                 aria-pressed={activeImage === index}
                 onClick={() => setActiveImage(index)}
-                className={
-                  activeImage === index
-                    ? "selector-dot active-selector-dot"
-                    : "selector-dot"
-                }
+                className={activeImage === index ? "selector-dot active-selector-dot" : "selector-dot"}
               />
             ))}
           </div>
@@ -149,25 +113,14 @@ export default function AuralisCreativeHero() {
             {visuals.map((visual, index) => (
               <div
                 key={visual}
-                className={
-                  activeImage === index
-                    ? "selector-image selector-bg-image active-selector-image"
-                    : "selector-image selector-bg-image"
-                }
+                className={activeImage === index ? "selector-image selector-bg-image active-selector-image" : "selector-image selector-bg-image"}
                 style={{ backgroundImage: `url(${visual})` }}
               />
             ))}
 
             <div className="selector-overlay" />
             <div className="selector-shine" />
-
-            <a
-              href="#contact"
-              className="selector-cta"
-              aria-label="Let's talk"
-            >
-              ↗
-            </a>
+            <a href="#contact" className="selector-cta" aria-label="Let's talk">↗</a>
           </div>
         </div>
 
@@ -176,8 +129,6 @@ export default function AuralisCreativeHero() {
         <div className="corner corner-bottom-left" />
         <div className="corner corner-bottom-right" />
       </section>
-
-      <Footer />
-    </main>
+    </>
   );
 }
