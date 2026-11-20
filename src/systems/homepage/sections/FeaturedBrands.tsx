@@ -327,15 +327,10 @@ export default function FeaturedBrands() {
                 <img src={brand.image} alt={brand.imageAlt} draggable={false} loading="eager" decoding="async" fetchPriority={slot === "hero" ? "high" : "low"} />
                 {slot === "hero" && (
                   <span
-                    className="epr-hero-treatment"
+                    className="epr-hero-arrow"
                     aria-hidden="true"
-                    style={{ "--epr-streak-color": brand.id === 1 ? "#ff1493" : "#8aa89b", "--epr-cta-color": brand.id === 1 ? "#ff1493" : "#8aa89b" } as CSSProperties}
-                  >
-                    <span className="epr-hero-streak epr-hero-streak-one" />
-                    <span className="epr-hero-streak epr-hero-streak-two" />
-                    <span className="epr-hero-streak epr-hero-streak-three" />
-                    <span className="epr-hero-arrow" aria-hidden="true">Visit Site</span>
-                  </span>
+                    style={{ "--epr-cta-color": brand.id === 1 ? "#ff1493" : "#8aa89b" } as CSSProperties}
+                  >Visit Site</span>
                 )}
                 {isThumb && (
                   <span className="epr-meta" aria-hidden="true">
