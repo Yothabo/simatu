@@ -9,7 +9,7 @@
   --novae-surface: var(--hp-color-surface);
   --novae-purple: var(--hp-color-primary);
   --novae-purple-light: var(--hp-color-primary);
-  --novae-text: #F5F5F5;
+  --novae-text: var(--hp-color-text);
   --novae-muted: var(--hp-color-text-muted);
   --novae-border: var(--hp-color-border);
   --novae-font: var(--hp-font-family);
