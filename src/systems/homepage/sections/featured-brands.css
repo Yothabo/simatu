@@ -475,10 +475,9 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: 20% min(40cqi, 40%) minmax(25%, 1fr);
-  --epr-video-gap: clamp(8px, 0.65cqw, 12px);
-  --epr-video-row-gap: clamp(3px, 0.25cqw, 5px);
+  --epr-video-gap: 8px;
   column-gap: var(--epr-video-gap);
-  row-gap: var(--epr-video-row-gap);
+  row-gap: var(--epr-video-gap);
   overflow: hidden;
   background: var(--hp-palette-grey-900);
   container-type: inline-size;
@@ -535,10 +534,9 @@
 @media (max-aspect-ratio: 4 / 5) {
   .epr-card.hero .epr-video-mosaic {
     grid-template-rows: 20% min(40cqi, 40%) minmax(25%, 1fr);
-    --epr-video-gap: 6px;
-    --epr-video-row-gap: 2px;
+    --epr-video-gap: 8px;
     column-gap: var(--epr-video-gap);
-    row-gap: var(--epr-video-row-gap);
+    row-gap: var(--epr-video-gap);
   }
   .epr-video-panel-left {
     width: calc(60% - var(--epr-video-gap));
