@@ -6,6 +6,8 @@ export function useHeroImageRotation() {
   const [activeImage, setActiveImage] = useState(0);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const pauseUntil = useRef(0);
+  const autoplayTimerRef = useRef<number | null>(null);
+  const restartAutoplayRef = useRef<() => void>(() => {});
   const isPageVisible = useRef(true);
   const isHeroVisible = useRef(true);
 
@@ -48,17 +50,19 @@ export function useHeroImageRotation() {
     document.addEventListener("visibilitychange", handleVisibilityChange);
     window.addEventListener("scroll", handleScroll, { passive: true });
 
-    const timer = window.setInterval(() => {
-      if (
-        !isPageVisible.current ||
-        !isHeroVisible.current ||
-        Date.now() < pauseUntil.current
-      ) {
-        return;
-      }
-
-      setActiveImage((current) => (current + 1) % visuals.length);
-    }, 5500);
+    const scheduleNext = (delay: number) => {
+      if (autoplayTimerRef.current !== null) window.clearTimeout(autoplayTimerRef.current);
+      autoplayTimerRef.current = window.setTimeout(() => {
+        if (!isPageVisible.current || !isHeroVisible.current || Date.now() < pauseUntil.current) {
+          scheduleNext(1000);
+          return;
+        }
+        setActiveImage((current) => (current + 1) % visuals.length);
+        scheduleNext(5500);
+      }, delay);
+    };
+    restartAutoplayRef.current = () => scheduleNext(6500);
+    scheduleNext(5500);
 
     return () => {
       observer.disconnect();
@@ -66,12 +70,15 @@ export function useHeroImageRotation() {
       window.removeEventListener("scroll", handleScroll);
       if (scrollResetTimer !== null) window.clearTimeout(scrollResetTimer);
       hero.classList.remove("is-scrolling");
-      window.clearInterval(timer);
+      if (autoplayTimerRef.current !== null) window.clearTimeout(autoplayTimerRef.current);
+      autoplayTimerRef.current = null;
+      restartAutoplayRef.current = () => {};
     };
   }, []);
 
   const selectImage = (nextImage: number) => {
     pauseUntil.current = Date.now() + 6500;
+    restartAutoplayRef.current();
     setActiveImage(nextImage);
   };
 
@@ -103,6 +110,7 @@ export function useHeroImageRotation() {
     if (Math.abs(deltaX) <= Math.abs(deltaY) * 1.2) return;
 
     pauseUntil.current = Date.now() + 6500;
+    restartAutoplayRef.current();
     setActiveImage((current) =>
       deltaX < 0
         ? (current + 1) % visuals.length
