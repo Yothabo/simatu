@@ -378,3 +378,9 @@
 .epr-page.is-scrolling * {
   animation-play-state: paused !important;
 }
+
+/* Pause Featured Brands motion outside the viewport. */
+.epr-page.is-offscreen,
+.epr-page.is-offscreen * {
+  animation-play-state: paused !important;
+}
