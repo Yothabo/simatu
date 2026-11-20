@@ -329,7 +329,7 @@ export default function FeaturedBrands() {
                   <span
                     className="epr-hero-treatment"
                     aria-hidden="true"
-                    style={{ "--epr-streak-color": brand.id === 0 ? "#39E878" : brand.id === 1 ? "#FF3D9E" : "var(--hp-color-primary)", "--epr-cta-color": brand.id === 0 ? "#39E878" : brand.id === 1 ? "#FF3D9E" : "var(--hp-color-primary)" } as CSSProperties}
+                    style={{ "--epr-streak-color": brand.id === 0 ? "#8aa89b" : brand.id === 1 ? "#ff1493" : "#8aa89b", "--epr-cta-color": brand.id === 0 ? "#39E878" : brand.id === 1 ? "#FF3D9E" : "var(--hp-color-primary)" } as CSSProperties}
                   >
                     <span className="epr-hero-streak epr-hero-streak-one" />
                     <span className="epr-hero-streak epr-hero-streak-two" />
