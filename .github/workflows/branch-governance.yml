@@ -1,0 +1,41 @@
+name: Branch Governance
+
+on:
+  pull_request:
+    branches:
+      - codex/simatu-work
+      - beta
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  branch-policy:
+    name: Enforce integration-only pull requests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate pull request target and source
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          set -eu
+
+          if [ "$BASE_REF" = "beta" ] || [ "$BASE_REF" = "main" ]; then
+            echo "Pull requests into beta and main are prohibited."
+            echo "Promotion to beta must be performed by the developer from the local Simatu branch."
+            exit 1
+          fi
+
+          if [ "$BASE_REF" != "codex/simatu-work" ]; then
+            echo "Remote pull requests must target codex/simatu-work."
+            exit 1
+          fi
+
+          if [ "$HEAD_REF" = "beta" ] || [ "$HEAD_REF" = "main" ]; then
+            echo "beta and main cannot be pull request source branches."
+            exit 1
+          fi
+
+          echo "Branch policy passed: $HEAD_REF -> $BASE_REF"
