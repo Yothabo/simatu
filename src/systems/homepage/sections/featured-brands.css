@@ -6,7 +6,7 @@
   min-height: 680px;
   overflow: hidden;
   color: var(--hp-color-text);
-  background: transparent;
+  background: var(--hp-palette-grey-900);
   font-family: inherit;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -30,6 +30,20 @@
   overflow: hidden;
   background: transparent;
   isolation: isolate;
+  z-index: 1;
+}
+.epr-page::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  background-color: var(--hp-palette-grey-900);
+  background-image:
+    linear-gradient(154deg, transparent 0 27%, color-mix(in srgb, var(--hp-palette-grey-700) 22%, transparent) 27.1%, transparent 27.3% 100%),
+    linear-gradient(154deg, transparent 0 63%, color-mix(in srgb, var(--hp-palette-grey-700) 16%, transparent) 63.1%, transparent 63.3% 100%),
+    linear-gradient(25deg, transparent 0 44%, color-mix(in srgb, var(--hp-palette-grey-800) 65%, transparent) 44.1%, transparent 44.3% 100%);
+  background-size: 100% 100%;
 }
 .epr-count {
   position: absolute;
@@ -385,40 +399,10 @@
   animation-play-state: paused !important;
 }
 
-/* Keep the expanded image clean; only brand-colored sketch streaks overlay it. */
+/* The hero image stays clean; decorative lines belong to the section background. */
 .epr-card.hero img {
   filter: none;
 }
-.epr-hero-treatment {
-  position: absolute;
-  z-index: 1;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.epr-hero-streak {
-  position: absolute;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--epr-streak-color, var(--hp-color-primary)), transparent);
-  box-shadow: 0 0 12px color-mix(in srgb, var(--epr-streak-color, var(--hp-color-primary)) 70%, transparent);
-}
-.epr-hero-streak-one {
-  top: 24%; left: -5%; width: 75%; transform: rotate(-18deg);
-  animation: epr-hero-streak-drift 8s ease-in-out infinite alternate;
-}
-.epr-hero-streak-two {
-  top: 66%; right: -12%; width: 80%; opacity: 0.65;
-  transform: rotate(-25deg);
-  animation: epr-hero-streak-drift 10s ease-in-out infinite alternate-reverse;
-}
-.epr-hero-streak-three {
-  bottom: 18%; left: 10%; width: 65%; opacity: 0.4; transform: rotate(12deg);
-}
-@keyframes epr-hero-streak-drift {
-  from { opacity: 0.25; translate: -2% 0; }
-  to { opacity: 0.9; translate: 2% 0; }
-}
-
 /* Centered circular brand navigation control inside the expanded image. */
 .epr-hero-arrow { position: absolute; z-index: 20; top: 50%; left: 50%; display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 22px; border: 0; border-radius: 2px; color: #fff; background: var(--epr-cta-color, var(--hp-color-primary)); font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; transform: translate(-50%, -50%); transition: filter 180ms ease, transform 180ms ease; }
 .epr-card.hero:hover .epr-hero-arrow { filter: brightness(1.08); transform: translate(-50%, -50%) translateY(-1px); }
