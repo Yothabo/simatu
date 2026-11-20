@@ -116,14 +116,18 @@ export default function FeaturedBrands() {
   const activeRef = useRef(0);
   const pauseUntil = useRef(0);
   const transitionTimerRef = useRef<number | null>(null);
+  const autoplayTimerRef = useRef<number | null>(null);
+  const restartAutoplayRef = useRef<() => void>(() => {});
   const isTransitioningRef = useRef(false);
   const sectionVisibleRef = useRef(false);
   const scrollPauseUntilRef = useRef(0);
 
   const activate = useCallback((id: number, fromUser = false) => {
-    if (id === activeRef.current || isTransitioningRef.current) return;
-
-    if (fromUser) pauseUntil.current = Date.now() + 9000;
+    if (fromUser) {
+      pauseUntil.current = Date.now() + 9000;
+      restartAutoplayRef.current();
+    }
+    if (id === activeRef.current || (isTransitioningRef.current && !fromUser)) return;
 
     isTransitioningRef.current = true;
     setPreviousActive(activeRef.current);
@@ -225,9 +229,19 @@ export default function FeaturedBrands() {
 
       activate((activeRef.current + 1) % BRANDS.length);
     }, AUTOPLAY_MS);
+    autoplayTimerRef.current = timer;
+    restartAutoplayRef.current = () => {
+      if (autoplayTimerRef.current !== null) window.clearInterval(autoplayTimerRef.current);
+      autoplayTimerRef.current = window.setInterval(() => {
+        if (document.visibilityState !== "visible" || !sectionVisibleRef.current || Date.now() < pauseUntil.current || Date.now() < scrollPauseUntilRef.current || isTransitioningRef.current) return;
+        activate((activeRef.current + 1) % BRANDS.length);
+      }, AUTOPLAY_MS);
+    };
 
     return () => {
       window.clearInterval(timer);
+      autoplayTimerRef.current = null;
+      restartAutoplayRef.current = () => {};
       observer.disconnect();
       window.removeEventListener("scroll", handleScroll);
       if (scrollResetTimer !== null) window.clearTimeout(scrollResetTimer);
