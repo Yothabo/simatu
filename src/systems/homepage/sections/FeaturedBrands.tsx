@@ -117,6 +117,8 @@ export default function FeaturedBrands() {
   const pauseUntil = useRef(0);
   const transitionTimerRef = useRef<number | null>(null);
   const isTransitioningRef = useRef(false);
+  const sectionVisibleRef = useRef(false);
+  const scrollPauseUntilRef = useRef(0);
 
   const activate = useCallback((id: number, fromUser = false) => {
     if (id === activeRef.current || isTransitioningRef.current) return;
@@ -188,10 +190,35 @@ export default function FeaturedBrands() {
   }, []);
 
   useEffect(() => {
+    const section = document.querySelector(".epr-page");
+    if (!section) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      sectionVisibleRef.current = entry.isIntersecting && entry.intersectionRatio >= 0.1;
+    }, { threshold: [0, 0.1] });
+    observer.observe(section);
+
+    let scrollResetTimer: number | null = null;
+    const handleScroll = () => {
+      scrollPauseUntilRef.current = Date.now() + 900;
+      section.classList.add("is-scrolling");
+      document.querySelector(".novae-hero")?.classList.add("is-scrolling");
+
+      if (scrollResetTimer !== null) window.clearTimeout(scrollResetTimer);
+      scrollResetTimer = window.setTimeout(() => {
+        section.classList.remove("is-scrolling");
+        document.querySelector(".novae-hero")?.classList.remove("is-scrolling");
+        scrollResetTimer = null;
+      }, 180);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
     const timer = window.setInterval(() => {
       if (
         document.visibilityState !== "visible" ||
+        !sectionVisibleRef.current ||
         Date.now() < pauseUntil.current ||
+        Date.now() < scrollPauseUntilRef.current ||
         isTransitioningRef.current
       ) {
         return;
@@ -200,7 +227,14 @@ export default function FeaturedBrands() {
       activate((activeRef.current + 1) % BRANDS.length);
     }, AUTOPLAY_MS);
 
-    return () => window.clearInterval(timer);
+    return () => {
+      window.clearInterval(timer);
+      observer.disconnect();
+      window.removeEventListener("scroll", handleScroll);
+      if (scrollResetTimer !== null) window.clearTimeout(scrollResetTimer);
+      section.classList.remove("is-scrolling");
+      document.querySelector(".novae-hero")?.classList.remove("is-scrolling");
+    };
   }, [activate]);
 
   useEffect(
