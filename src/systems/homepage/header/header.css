@@ -155,7 +155,7 @@
     align-items: flex-start;
     gap: 24px;
     border-bottom: 1px solid color-mix(in srgb, var(--hp-palette-white) 10%, transparent);
-    background: rgba(36, 36, 36, 0.97);
+    background: color-mix(in srgb, var(--hp-color-background) 97%, transparent);
     backdrop-filter: blur(20px);
     opacity: 0;
     visibility: hidden;
