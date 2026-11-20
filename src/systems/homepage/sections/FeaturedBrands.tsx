@@ -139,6 +139,7 @@ export default function FeaturedBrands() {
               src={brand.image}
               alt={index === activeIndex ? brand.imageAlt : ""}
               loading={index === activeIndex ? "eager" : "lazy"}
+              fetchPriority={index === activeIndex ? "high" : "auto"}
             />
           </div>
         ))}
