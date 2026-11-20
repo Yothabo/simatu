@@ -220,12 +220,12 @@ export default function FeaturedBrands() {
                 style={{ "--image-position": brand.position } as CSSProperties}
               >
                 <img src={brand.image} alt={brand.imageAlt} className={brand.isLogo ? "epr-logo-image" : undefined} draggable={false} loading="eager" decoding="async" fetchPriority={slot === "hero" ? "high" : "low"} />
-                {slot === "hero" && (
+                {slot === "hero" && (brand.id === 0 || brand.id === 1) && (
                   <span
                     className="epr-hero-arrow"
                     aria-hidden="true"
-                    style={{ "--epr-cta-color": brand.id === 2 ? "var(--hp-color-primary)" : brand.id === 1 ? "#ff1493" : "#8aa89b" } as CSSProperties}
-                  >{brand.id === 2 ? "Explore Our Brands" : "Visit Site"}</span>
+                    style={{ "--epr-cta-color": brand.id === 1 ? "#ff1493" : "#8aa89b" } as CSSProperties}
+                  >Visit Site</span>
                 )}
                 {isThumb && (
                   <span className="epr-meta" aria-hidden="true">
