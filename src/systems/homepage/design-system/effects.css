@@ -1,16 +1,9 @@
 :root {
-  --hp-shadow-glow:
-    0 0 12px 4px rgba(174, 116, 255, 0.7),
-    0 0 35px 10px rgba(174, 116, 255, 0.25);
-
-  --hp-shadow-image:
-    inset 0 0 80px rgba(9, 7, 15, 0.6),
-    0 0 100px rgba(145, 83, 224, 0.13);
-
-  --hp-blur-small: 13px;
-  --hp-blur-medium: 20px;
-  --hp-blur-large: 45px;
-
-  --hp-border-subtle: 1px solid rgba(255, 255, 255, 0.075);
-  --hp-border-accent: 1px solid rgba(200, 168, 255, 0.42);
+  --hp-shadow-glow: 0 0 0.75rem 0.25rem color-mix(in srgb, var(--hp-color-primary) 70%, transparent), 0 0 2.1875rem 0.625rem color-mix(in srgb, var(--hp-color-primary) 25%, transparent);
+  --hp-shadow-image: inset 0 0 5rem color-mix(in srgb, var(--hp-palette-grey-900) 60%, transparent), 0 0 6.25rem color-mix(in srgb, var(--hp-color-primary) 13%, transparent);
+  --hp-blur-small: 0.8125rem;
+  --hp-blur-medium: 1.25rem;
+  --hp-blur-large: 2.8125rem;
+  --hp-border-subtle: var(--hp-border-width) solid color-mix(in srgb, var(--hp-palette-white) 7.5%, transparent);
+  --hp-border-accent: var(--hp-border-width) solid color-mix(in srgb, var(--hp-color-primary) 42%, transparent);
 }
