@@ -446,21 +446,3 @@
   filter: brightness(var(--hp-brands-cta-hover-brightness));
   transform: translate(-50%, -50%) translateY(calc(-1 * var(--hp-brands-cta-hover-offset)));
 }
-.epr-category-label {
-  display: inline-block;
-  margin-top: auto;
-  padding-bottom: var(--hp-space-2);
-  border: 0;
-  text-decoration: none;
-  color: var(--hp-color-text);
-  font-family: var(--font-accent, 'Allura'), cursive;
-  font-size: var(--hp-size-20);
-  font-weight: var(--hp-font-weight-medium);
-  letter-spacing: var(--hp-letter-spacing-normal);
-  text-transform: none;
-}
-
-.epr-category-label.is-descriptor {
-  font-style: italic;
-  white-space: nowrap;
-}
