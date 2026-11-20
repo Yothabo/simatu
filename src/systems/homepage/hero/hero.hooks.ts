@@ -5,6 +5,9 @@ import { visuals } from "./hero.data";
 export function useHeroImageRotation() {
   const [activeImage, setActiveImage] = useState(0);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const pauseUntil = useRef(0);
+  const isPageVisible = useRef(true);
+  const isHeroVisible = useRef(true);
 
   useEffect(() => {
     visuals.forEach((source) => {
@@ -15,12 +18,46 @@ export function useHeroImageRotation() {
   }, []);
 
   useEffect(() => {
-    const timeout = window.setTimeout(() => {
+    const hero = document.querySelector(".novae-hero");
+    if (!hero) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isHeroVisible.current = entry.isIntersecting && entry.intersectionRatio >= 0.15;
+      },
+      { threshold: [0, 0.15] },
+    );
+    observer.observe(hero);
+
+    const handleVisibilityChange = () => {
+      isPageVisible.current = document.visibilityState === "visible";
+    };
+    const handleScroll = () => {
+      pauseUntil.current = Date.now() + 900;
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    const timer = window.setInterval(() => {
+      if (
+        !isPageVisible.current ||
+        !isHeroVisible.current ||
+        Date.now() < pauseUntil.current
+      ) {
+        return;
+      }
+
       setActiveImage((current) => (current + 1) % visuals.length);
     }, 5500);
 
-    return () => window.clearTimeout(timeout);
-  }, [activeImage]);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("scroll", handleScroll);
+      window.clearInterval(timer);
+    };
+  }, []);
 
   const handleTouchStart = (event: TouchEvent<HTMLElement>) => {
     if (event.touches.length !== 1) {
@@ -48,6 +85,7 @@ export function useHeroImageRotation() {
     if (Math.abs(deltaX) < 45) return;
     if (Math.abs(deltaX) <= Math.abs(deltaY) * 1.2) return;
 
+    pauseUntil.current = Date.now() + 6500;
     setActiveImage((current) =>
       deltaX < 0
         ? (current + 1) % visuals.length
@@ -70,28 +108,41 @@ export function useHeroImageRotation() {
 
 export function useHeroPointer() {
   const heroRef = useRef<HTMLElement | null>(null);
+  const frameRef = useRef<number | null>(null);
+  const latestPointer = useRef<{ x: number; y: number } | null>(null);
 
-  const handlePointerMove = (
-    event: MouseEvent<HTMLElement>,
-  ) => {
-    const hero = heroRef.current;
+  const handlePointerMove = (event: MouseEvent<HTMLElement>) => {
+    latestPointer.current = { x: event.clientX, y: event.clientY };
 
-    if (!hero) return;
+    if (frameRef.current !== null) return;
 
-    const bounds = hero.getBoundingClientRect();
+    frameRef.current = window.requestAnimationFrame(() => {
+      frameRef.current = null;
+      const hero = heroRef.current;
+      const pointer = latestPointer.current;
+      if (!hero || !pointer) return;
 
-    const x = (event.clientX - bounds.left) / bounds.width - 0.5;
-    const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+      const bounds = hero.getBoundingClientRect();
+      if (!bounds.width || !bounds.height) return;
 
-    hero.style.setProperty("--pointer-x", `${x * 27}px`);
-    hero.style.setProperty("--pointer-y", `${y * 19}px`);
-    hero.style.setProperty("--ring-x", `${x * 16}px`);
-    hero.style.setProperty("--ring-y", `${y * 12}px`);
+      const x = (pointer.x - bounds.left) / bounds.width - 0.5;
+      const y = (pointer.y - bounds.top) / bounds.height - 0.5;
+
+      hero.style.setProperty("--pointer-x", `${x * 27}px`);
+      hero.style.setProperty("--pointer-y", `${y * 19}px`);
+      hero.style.setProperty("--ring-x", `${x * 16}px`);
+      hero.style.setProperty("--ring-y", `${y * 12}px`);
+    });
   };
 
   const resetPointer = () => {
-    const hero = heroRef.current;
+    if (frameRef.current !== null) {
+      window.cancelAnimationFrame(frameRef.current);
+      frameRef.current = null;
+    }
 
+    latestPointer.current = null;
+    const hero = heroRef.current;
     if (!hero) return;
 
     hero.style.setProperty("--pointer-x", "0px");
@@ -99,6 +150,15 @@ export function useHeroPointer() {
     hero.style.setProperty("--ring-x", "0px");
     hero.style.setProperty("--ring-y", "0px");
   };
+
+  useEffect(
+    () => () => {
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current);
+      }
+    },
+    [],
+  );
 
   return {
     heroRef,
