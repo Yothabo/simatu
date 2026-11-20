@@ -935,15 +935,6 @@
     height: 14px;
   }
 
-  .selector-indicator {
-    width: 14px;
-    height: 4px;
-    transform: translate(
-      calc(var(--active-pagination-index, 0) * 21px),
-      -50%
-    );
-  }
-
   /* ---- Social icons: lift above carousel ---- */
 
   .social-proof {
@@ -1042,43 +1033,43 @@
   }
 }
 
-/* Stabilise hero controls during background image transitions */
+/* Consolidated hero-control and thumbnail stabilization */
 .novae-hero .image-selector {
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   will-change: transform;
-}
-
-.novae-hero .image-selector {
   isolation: isolate;
-}
-
-/* PATCH: Stabilise hero thumbnail strip during carousel transitions */
-.novae-hero .image-selector {
   flex-shrink: 0;
 }
-
 .novae-hero .selector-images {
   position: relative;
+  display: flex;
   flex: 0 0 164px;
   width: 164px;
   min-width: 164px;
   height: 57px;
   box-sizing: border-box;
   overflow: hidden;
-  contain: layout paint;
-  transform: translate3d(0, 0, 0);
+  border: 1px solid rgba(255, 255, 255, 0.19);
+  border-radius: 3px;
+  background: #303030;
+  contain: strict;
+  isolation: isolate;
+  transform: translateZ(0);
   backface-visibility: hidden;
+  will-change: contents;
 }
-
 .novae-hero .selector-image {
+  position: relative;
   flex: 0 0 25%;
   width: 25%;
   min-width: 0;
   height: 100%;
   box-sizing: border-box;
+  transition: opacity 0.25s ease !important;
+  transform: none !important;
+  animation: none !important;
 }
-
 @media (max-width: 820px) {
   .novae-hero .selector-images {
     flex: 0 0 64px;
@@ -1087,14 +1078,12 @@
     height: 64px;
   }
 }
-
 @media (max-width: 520px) {
   .novae-hero .selector-images {
     flex-basis: 58px;
     height: 58px;
   }
 }
-
 /* PATCH: Remove thumbnail shine movement and stabilise thumbnail painting */
 .novae-hero .selector-shine {
   animation: none !important;
@@ -1127,13 +1116,6 @@
   flex: 0 0 8px;
 }
 
-.novae-hero .selector-dot.active {
-  width: 24px;
-  height: 8px;
-  min-width: 24px;
-  flex-basis: 24px;
-  border-radius: 999px;
-}
 
 .novae-hero .selector-dot::before {
   border-radius: 999px;
