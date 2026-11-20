@@ -404,6 +404,47 @@
   filter: none;
 }
 /* Centered circular brand navigation control inside the expanded image. */
-.epr-hero-arrow { position: absolute; z-index: 20; top: 50%; left: 50%; display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 22px; border: 0; border-radius: 2px; color: #fff; background: var(--epr-cta-color, var(--hp-color-primary)); font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; transform: translate(-50%, -50%); transition: filter 180ms ease, transform 180ms ease; }
-.epr-card.hero:hover .epr-hero-arrow { filter: brightness(1.08); transform: translate(-50%, -50%) translateY(-1px); }
-.epr-category-label { display: inline-block; margin-top: auto; padding-bottom: 7px; border: 0; text-decoration: none; color: var(--hp-color-text); font-family: 'Cormorant Garamond', 'Brush Script MT', cursive; font-size: 20px; font-weight: 500; letter-spacing: 0; text-transform: none; }
+/* Our Brands CTA uses centralized homepage design-system tokens. */
+.epr-hero-arrow {
+  position: absolute;
+  z-index: 20;
+  top: 50%;
+  left: 50%;
+  display: inline-flex;
+  width: fit-content;
+  max-width: var(--hp-brands-cta-max-width);
+  min-height: var(--hp-brands-cta-min-height);
+  padding-inline: var(--hp-brands-cta-padding-inline);
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--hp-brands-cta-radius);
+  color: var(--hp-color-text);
+  background: var(--epr-cta-color, var(--hp-color-primary));
+  font-size: var(--hp-brands-cta-font-size);
+  font-weight: var(--hp-brands-cta-font-weight);
+  letter-spacing: var(--hp-brands-cta-letter-spacing);
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  transition:
+    filter var(--hp-brands-cta-hover-duration) var(--hp-motion-ease-standard),
+    transform var(--hp-brands-cta-hover-duration) var(--hp-motion-ease-standard);
+}
+.epr-card.hero:hover .epr-hero-arrow {
+  filter: brightness(var(--hp-brands-cta-hover-brightness));
+  transform: translate(-50%, -50%) translateY(calc(-1 * var(--hp-brands-cta-hover-offset)));
+}
+.epr-category-label {
+  display: inline-block;
+  margin-top: auto;
+  padding-bottom: var(--hp-space-2);
+  border: 0;
+  text-decoration: none;
+  color: var(--hp-color-text);
+  font-family: 'Cormorant Garamond', 'Brush Script MT', cursive;
+  font-size: var(--hp-size-20);
+  font-weight: var(--hp-font-weight-medium);
+  letter-spacing: var(--hp-letter-spacing-normal);
+  text-transform: none;
+}
