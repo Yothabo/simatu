@@ -66,4 +66,8 @@
   --hp-motion-distance-300: 300px;
   --hp-motion-distance-550: 550px;
 
+
+  --hp-motion-duration-180: 180ms;
+  --hp-motion-duration-300: 0.3s;
+
 }
