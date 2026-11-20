@@ -11,19 +11,16 @@
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
-
 .epr-page *,
 .epr-page *::before,
 .epr-page *::after {
   box-sizing: border-box;
 }
-
 .epr-page button,
 .epr-page a {
   color: inherit;
   font: inherit;
 }
-
 .epr-stage {
   container-type: inline-size;
   position: absolute;
@@ -34,7 +31,6 @@
   background: transparent;
   isolation: isolate;
 }
-
 .epr-count {
   position: absolute;
   z-index: 30;
@@ -47,7 +43,6 @@
   letter-spacing: 0.02em;
   line-height: 1;
 }
-
 .epr-count-window {
   position: relative;
   display: inline-block;
@@ -56,21 +51,17 @@
   overflow: hidden;
   vertical-align: -0.08em;
 }
-
 .epr-count-number {
   position: absolute;
   inset: 0;
   display: block;
 }
-
 .epr-count-number.is-entering {
   animation: epr-count-in var(--hp-motion-duration-slow) cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-
 .epr-count-number.is-leaving {
   animation: epr-count-out var(--hp-motion-duration-base) ease-in both;
 }
-
 .epr-title {
   position: absolute;
   z-index: 30;
@@ -90,17 +81,13 @@
   transform-origin: left top;
   animation: epr-title-in var(--hp-motion-duration-slow) cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-
 .epr-deck {
   position: absolute;
   inset: 0;
 }
-
-/*
- * Cards keep fixed layout dimensions. Carousel movement and the hero-card
+/* Cards keep fixed layout dimensions. Carousel movement and the hero-card
  * expansion are transform-only, avoiding repeated layout/reflow on every
- * frame of the transition.
- */
+ * frame of the transition. */
 .epr-card {
   --epr-x: 0cqw;
   --epr-y: 0svh;
@@ -129,7 +116,6 @@
     opacity var(--hp-motion-duration-base) ease;
   backface-visibility: hidden;
 }
-
 .epr-card img {
   display: block;
   width: 100%;
@@ -140,7 +126,6 @@
   -webkit-user-drag: none;
   backface-visibility: hidden;
 }
-
 .epr-card.hero {
   --epr-x: 37.29cqw;
   --epr-y: 12.78svh;
@@ -150,38 +135,31 @@
   pointer-events: none;
   cursor: default;
 }
-
 .epr-card.thumb-0 {
   --epr-x: -16.6cqw;
   --epr-y: 64.72svh;
   z-index: 2;
 }
-
 .epr-card.thumb-1 {
   --epr-x: -3.13cqw;
   --epr-y: 64.72svh;
 }
-
 .epr-card.thumb-2 {
   --epr-x: 10.42cqw;
   --epr-y: 64.72svh;
 }
-
 .epr-card.thumb-3 {
   --epr-x: 23.85cqw;
   --epr-y: 64.72svh;
 }
-
 .epr-card[class*="thumb-"]:hover img,
 .epr-card[class*="thumb-"]:focus-visible img {
   opacity: 0.82;
 }
-
 .epr-card[class*="thumb-"]:focus-visible {
   outline: 2px solid var(--hp-color-focus);
   outline-offset: 4px;
 }
-
 .epr-meta {
   position: absolute;
   top: calc(100% + 0.8cqw);
@@ -196,7 +174,6 @@
     opacity var(--hp-motion-duration-fast) ease,
     transform var(--hp-motion-duration-base) cubic-bezier(0.22, 1, 0.36, 1);
 }
-
 .epr-meta strong {
   overflow: hidden;
   color: var(--hp-color-text);
@@ -206,19 +183,16 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 .epr-meta small {
   color: var(--hp-color-text-muted);
   font-size: clamp(7px, 0.43cqw, 10px);
   line-height: 1.2;
 }
-
 .epr-card[class*="thumb-"]:hover .epr-meta,
 .epr-card[class*="thumb-"]:focus-visible .epr-meta {
   opacity: 1;
   transform: translate3d(0, 0, 0);
 }
-
 .epr-copy {
   position: absolute;
   z-index: 22;
@@ -227,7 +201,6 @@
   left: 64.58%;
   width: min(28.2%, 440px);
 }
-
 .epr-copy-layer {
   position: absolute;
   inset: 0;
@@ -237,17 +210,13 @@
   height: 100%;
   margin: 0;
 }
-
 .epr-copy-layer.is-entering {
   animation: epr-copy-in var(--hp-motion-duration-slow) cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-
 .epr-copy-layer.is-leaving {
   pointer-events: none;
   animation: epr-copy-out var(--hp-motion-duration-base) ease-in both;
 }
-
-
 .epr-description {
   margin: 0;
   color: var(--hp-color-text-muted);
@@ -257,7 +226,6 @@
   line-height: 1.65;
   max-width: 42ch;
 }
-
 .epr-visit {
   display: inline-flex;
   min-height: 44px;
@@ -276,29 +244,23 @@
     border-color var(--hp-motion-duration-fast) ease,
     color var(--hp-motion-duration-fast) ease;
 }
-
 .epr-visit:hover {
   gap: 20px;
   border-color: var(--hp-color-primary);
   color: var(--hp-color-primary);
 }
-
 .epr-visit span {
   font-size: 16px;
 }
-
 .epr-visit.is-unavailable {
   color: var(--hp-color-text-muted);
   cursor: default;
 }
-
 .epr-visit.is-unavailable:hover {
   gap: 12px;
   border-color: var(--hp-color-border-strong);
   color: var(--hp-color-text-muted);
 }
-
-
 @keyframes epr-copy-in {
   from {
     opacity: 0;
@@ -309,7 +271,6 @@
     transform: translate3d(0, 0, 0);
   }
 }
-
 @keyframes epr-copy-out {
   from {
     opacity: 1;
@@ -320,7 +281,6 @@
     transform: translate3d(0, -8px, 0);
   }
 }
-
 @keyframes epr-count-in {
   from {
     opacity: 0;
@@ -331,7 +291,6 @@
     transform: translate3d(0, 0, 0);
   }
 }
-
 @keyframes epr-count-out {
   from {
     opacity: 1;
@@ -342,7 +301,6 @@
     transform: translate3d(0, -100%, 0);
   }
 }
-
 @keyframes epr-title-in {
   from {
     opacity: 0;
@@ -353,50 +311,41 @@
     translate: 0 0;
   }
 }
-
 @media (max-aspect-ratio: 4 / 5) {
   .epr-page {
     min-height: 650px;
   }
-
   .epr-card {
     width: 26cqw;
     height: 20svh;
   }
-
   .epr-card.hero {
     --epr-x: 7cqw;
     --epr-y: 9svh;
     --epr-scale-x: 1.731;
     --epr-scale-y: 2.5;
   }
-
   .epr-card.thumb-0 {
     --epr-x: -40cqw;
     --epr-y: 69svh;
   }
-
   .epr-card.thumb-1 {
     --epr-x: -10cqw;
     --epr-y: 69svh;
   }
-
   .epr-card.thumb-2 {
     --epr-x: 20cqw;
     --epr-y: 69svh;
   }
-
   .epr-card.thumb-3 {
     --epr-x: 50cqw;
     --epr-y: 69svh;
   }
-
   .epr-count {
     top: 4.5%;
     left: 7%;
     font-size: 2.6cqw;
   }
-
   .epr-title {
     top: 10%;
     left: 60%;
@@ -405,28 +354,22 @@
     transform: none;
     transform-origin: left top;
   }
-
   .epr-copy {
     top: 17%;
     bottom: 16%;
     left: 60%;
     width: 35%;
   }
-
   .epr-tagline {
     font-size: 2.6cqw;
   }
-
   .epr-description {
     margin-top: 0;
     font-size: 3.5cqw;
     line-height: 1.25;
   }
-
   .epr-visit {
-    margin-top: 4cqw;
+    margin-top: auto;
     font-size: 2.4cqw !important;
   }
-
-
-  
+}
