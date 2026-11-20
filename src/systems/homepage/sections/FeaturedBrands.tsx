@@ -10,24 +10,12 @@ type Brand = {
   imageAlt: string;
   position: string;
   href?: string;
-  demo?: boolean;
-  videoSrc?: string;
+  isLogo?: boolean;
 };
 
 const BRANDS: Brand[] = [
   {
     id: 0,
-    videoSrc: "/videos/brands/yotaabo.mp4",
-    name: "Yotaabo",
-    description: "Some scents say everything without a single word. Find the fragrance that becomes your signature.",
-    image: "https://media.macphun.com/img/uploads/customer/blog/1752169898/1752170008686ffe183af522.98492050.jpg?q=85&w=1680",
-    imageAlt: "Atmospheric amber fragrance bottle in dramatic luxury editorial lighting",
-    position: "50% 45%",
-    href: "/yotaabo",
-  },
-  {
-    id: 1,
-    videoSrc: "/videos/brands/poshies.mp4",
     name: "Poshies",
     description: "No one is perfect. Feel beautiful, comfortable, and confidently yourself in every little detail.",
     image: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1800&q=88",
@@ -36,86 +24,31 @@ const BRANDS: Brand[] = [
     href: "/poshies",
   },
   {
+    id: 1,
+    name: "Yotaabo",
+    description: "Some scents say everything without a single word. Find the fragrance that becomes your signature.",
+    image: "https://media.macphun.com/img/uploads/customer/blog/1752169898/1752170008686ffe183af522.98492050.jpg?q=85&w=1680",
+    imageAlt: "Atmospheric amber fragrance bottle in dramatic luxury editorial lighting",
+    position: "50% 45%",
+    href: "/yotaabo",
+  },
+  {
     id: 2,
-    name: "FORME",
-    description: "Less noise, more style. Explore everyday essentials shaped by simplicity, comfort, and effortless confidence.",
-    image: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=1800&q=88",
-    imageAlt: "Minimal contemporary clothing editorial",
-    position: "50% 40%",
-    demo: true,
-  },
-  {
-    id: 3,
-    name: "NOMA HOME",
-    description: "Make room for calm. Thoughtful pieces and soft textures turn everyday spaces into places you love being.",
-    image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1800&q=88",
-    imageAlt: "Quiet, curated contemporary home interior",
+    name: "Our Brands",
+    description: "Discover Simatu’s growing collection of brands, each created to bring its own style, character, and experience. Explore Poshies and Yotaabo, and find the brand that speaks to you.",
+    image: "/simatu.png",
+    imageAlt: "Simatu logo",
     position: "50% 50%",
-    demo: true,
+    isLogo: true,
   },
-  {
-    id: 4,
-    name: "MUSE BEAUTY",
-    description: "Your daily dose of feeling good. Beauty essentials that make self-care a moment worth keeping.",
-    image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&w=1800&q=88",
-    imageAlt: "Skincare and beauty product arrangement",
-    position: "50% 50%",
-    demo: true,
-  },
-  {
-    id: 5,
-    name: "OFFCUT",
-    description: "Wear your own rules. Street-inspired pieces for individuality, attitude, and unapologetic expression.",
-    image: "https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=1800&q=88",
-    imageAlt: "Streetwear apparel editorial",
-    position: "50% 45%",
-    demo: true,
-  },
-  {
-    id: 6,
-    name: "ATELIER 09",
-    description: "It is all in the details. Accessories that add character, elevate the everyday, and make a look your own.",
-    image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1800&q=88",
-    imageAlt: "Leather accessories photographed for a fashion campaign",
-    position: "50% 50%",
-    demo: true,
-  },
-  {
-    id: 7,
-    name: "FIELD NOTES",
-    description: "Take the long way. Essentials made for fresh air, new places, and a little more adventure.",
-    image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=1800&q=88",
-    imageAlt: "Open natural landscape",
-    position: "50% 50%",
-    demo: true,
-  },
-  {
-    id: 8,
-    name: "STUDIO OBJECT",
-    description: "Objects with purpose and personality. Thoughtful design for the spaces and rituals that matter.",
-    image: "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=1800&q=88",
-    imageAlt: "Curated design objects in a contemporary interior",
-    position: "50% 50%",
-    demo: true,
-  },
-  {
-    id: 9,
-    name: "SUNDAY MARKET",
-    description: "Good finds, no rush. Explore everyday pieces with charm, character, and a little unexpected delight.",
-    image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1800&q=88",
-    imageAlt: "Lifestyle fashion editorial",
-    position: "50% 45%",
-    demo: true,
-  },
-];
 
-const VISIBLE_CARDS = 5;
+
+const VISIBLE_CARDS = BRANDS.length;
 const TRANSITION_MS = 900;
 const AUTOPLAY_MS = 9000;
 
 export default function FeaturedBrands() {
-  const [active, setActive] = useState(0);
-  const [sectionVisible, setSectionVisible] = useState(false);
+  const [active, setActive] = useState(2);
   const [previousActive, setPreviousActive] = useState<number | null>(null);
   const activeRef = useRef(0);
   const pauseUntil = useRef(0);
@@ -149,10 +82,6 @@ export default function FeaturedBrands() {
     }, TRANSITION_MS);
   }, []);
 
-  // The five images in the initial composition are requested immediately by
-  // the rendered cards. Remaining images are fetched two at a time at low
-  // priority so they are cached before the carousel reaches them, without
-  // competing with the hero image or blocking the first page paint.
   useEffect(() => {
     let cancelled = false;
     let nextIndex = VISIBLE_CARDS;
@@ -203,7 +132,6 @@ export default function FeaturedBrands() {
 
     const observer = new IntersectionObserver(([entry]) => {
       sectionVisibleRef.current = entry.isIntersecting && entry.intersectionRatio >= 0.1;
-      setSectionVisible(sectionVisibleRef.current);
       section.classList.toggle("is-offscreen", !sectionVisibleRef.current);
     }, { threshold: [0, 0.1] });
     observer.observe(section);
@@ -272,7 +200,7 @@ export default function FeaturedBrands() {
   const slotFor = (id: number) => {
     if (id === active) return "hero";
     const distanceBehind = (active - id + BRANDS.length) % BRANDS.length;
-    return `thumb-${distanceBehind - 1}`;
+    return distanceBehind === 1 ? "thumb-2" : "thumb-3";
   };
 
   const current = BRANDS[active];
@@ -309,7 +237,7 @@ export default function FeaturedBrands() {
 
             return (
               <button
-                className={`epr-card ${slot}`}
+                className={`epr-card ${slot} ${brand.isLogo ? "is-logo" : ""}`}
                 key={brand.id}
                 type="button"
                 onClick={() => isThumb ? activate(brand.id, true) : brand.href && window.location.assign(brand.href)}
@@ -318,13 +246,13 @@ export default function FeaturedBrands() {
                 aria-hidden={false}
                 style={{ "--image-position": brand.position } as CSSProperties}
               >
-                <img src={brand.image} alt={brand.imageAlt} draggable={false} loading="eager" decoding="async" fetchPriority={slot === "hero" ? "high" : "low"} />
+                <img src={brand.image} alt={brand.imageAlt} className={brand.isLogo ? "epr-logo-image" : undefined} draggable={false} loading="eager" decoding="async" fetchPriority={slot === "hero" ? "high" : "low"} />
                 {slot === "hero" && (
                   <span
                     className="epr-hero-arrow"
                     aria-hidden="true"
-                    style={{ "--epr-cta-color": brand.id === 1 ? "#ff1493" : "#8aa89b" } as CSSProperties}
-                  >Visit Site</span>
+                    style={{ "--epr-cta-color": brand.id === 2 ? "var(--hp-color-primary)" : brand.id === 1 ? "#ff1493" : "#8aa89b" } as CSSProperties}
+                  >{brand.id === 2 ? "Explore Our Brands" : "Visit Site"}</span>
                 )}
                 {isThumb && (
                   <span className="epr-meta" aria-hidden="true">
