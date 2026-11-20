@@ -148,7 +148,7 @@
   cursor: default;
 }
 .epr-card.thumb-0 {
-  --epr-x: -8.5cqw;
+  --epr-x: -3.13cqw;
   --epr-y: 56svh;
   z-index: 2;
 }
@@ -338,7 +338,7 @@
     --epr-scale-y: 2.3;
   }
   .epr-card.thumb-0 {
-    --epr-x: -22cqw;
+    --epr-x: -10cqw;
     --epr-y: 59.5svh;
   }
   .epr-card.thumb-1 {
