@@ -11,10 +11,7 @@ import CheckoutCartSummary from '../checkout/CheckoutCartSummary';
 import CheckoutCustomerForm from '../checkout/CheckoutCustomerForm';
 import CheckoutSuccess from '../checkout/CheckoutSuccess';
 import CheckoutErrorModal from '../checkout/CheckoutErrorModal';
-import {
-  getReceiptFileName,
-  getReceiptText,
-} from '../checkout/checkoutReceipt';
+import { getReceiptFileName, getReceiptText } from '../checkout/checkoutReceipt';
 import type { CreatedOrder } from '../checkout/types';
 
 type CheckoutModalProps = {
@@ -24,6 +21,22 @@ type CheckoutModalProps = {
   cartTotal: number;
   onSuccess: () => void;
 };
+
+type OrderResponse = {
+  error?: string;
+  order?: { order_number: string; subtotal: number };
+};
+
+async function readOrderResponse(response: Response): Promise<OrderResponse> {
+  const text = await response.text();
+  if (!text.trim()) return {};
+
+  try {
+    return JSON.parse(text) as OrderResponse;
+  } catch {
+    return {};
+  }
+}
 
 export default function CheckoutModal({
   isOpen,
@@ -35,6 +48,7 @@ export default function CheckoutModal({
   const { name, primaryAccent, pathFor } = useStorefront();
   const navigate = useNavigate();
   const pendingOrderStorageKey = `${name.toLowerCase()}-pending-order`;
+
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -59,21 +73,15 @@ export default function CheckoutModal({
       return null;
     }
   });
-  const [errors, setErrors] = useState({
-    fullName: '',
-    phoneNumber: '',
-  });
+  const [errors, setErrors] = useState({ fullName: '', phoneNumber: '' });
 
   const handleFullNameChange = (value: string) => {
     setFullName(value);
-    if (value.trim()) {
-      setErrors((current) => ({ ...current, fullName: '' }));
-    }
+    if (value.trim()) setErrors((current) => ({ ...current, fullName: '' });
   };
 
   const handlePhoneNumberChange = (value: string) => {
     setPhoneNumber(value);
-
     if (value && isValidPhoneNumber(value)) {
       setErrors((current) => ({ ...current, phoneNumber: '' }));
     }
@@ -88,7 +96,6 @@ export default function CheckoutModal({
     };
 
     setErrors(nextErrors);
-
     if (!nextErrors.fullName && !nextErrors.phoneNumber) {
       setShowConfirmation(true);
     }
@@ -118,7 +125,6 @@ export default function CheckoutModal({
 
     try {
       const phone = phoneNumber.replace(/\D/g, '');
-
       const response = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -133,30 +139,12 @@ export default function CheckoutModal({
         }),
       });
 
-      const responseText = await response.text();
-      let data: {
-        error?: string;
-        order?: { order_number: string; subtotal: number };
-      } = {};
-
-      if (responseText.trim()) {
-        try {
-          data = JSON.parse(responseText);
-        } catch {
-          // Handle empty or non-JSON server responses below.
-        }
-      }
-
+      const data = await readOrderResponse(response);
       if (!response.ok) {
-        throw new Error(
-          data.error || 'We could not submit your order. Please try again.'
-        );
+        throw new Error(data.error || 'We could not submit your order. Please try again.');
       }
-
       if (!data.order) {
-        throw new Error(
-          'We could not confirm your order. Please try again in a moment.'
-        );
+        throw new Error('We could not confirm your order. Please try again in a moment.');
       }
 
       const completedOrder: CreatedOrder = {
@@ -168,12 +156,9 @@ export default function CheckoutModal({
       };
 
       try {
-        window.localStorage.setItem(
-          pendingOrderStorageKey,
-          JSON.stringify(completedOrder)
-        );
+        window.localStorage.setItem(pendingOrderStorageKey, JSON.stringify(completedOrder));
       } catch {
-        // Keep the in-memory confirmation if browser storage is unavailable.
+        // Preserve the confirmation in component state when storage is unavailable.
       }
 
       setCreatedOrder(completedOrder);
@@ -182,9 +167,7 @@ export default function CheckoutModal({
     } catch (error) {
       setShowConfirmation(false);
       setSubmitError(
-        error instanceof Error
-          ? error.message
-          : 'Unable to submit your order. Please try again.'
+        error instanceof Error ? error.message : 'Unable to submit your order. Please try again.'
       );
     } finally {
       setIsSubmitting(false);
@@ -200,8 +183,19 @@ export default function CheckoutModal({
     return createReceiptPdf(name, primaryAccent, createdOrder);
   };
 
-  const getReceiptFileNameForOrder = () =>
-    getReceiptFileName(name, createdOrder);
+  const getReceiptFileNameForOrder = () => getReceiptFileName(name, createdOrder);
+
+  const handleContinueShopping = () => {
+    try {
+      window.localStorage.removeItem(pendingOrderStorageKey);
+    } catch {
+      // Continue navigation even when browser storage is unavailable.
+    }
+
+    setCreatedOrder(null);
+    onClose();
+    navigate(pathFor(''));
+  };
 
   const downloadReceipt = async () => {
     if (!createdOrder) return;
@@ -226,11 +220,9 @@ export default function CheckoutModal({
       return null;
     });
     const file = pdf
-      ? new File(
-          [pdf.output('blob')],
-          getReceiptFileNameForOrder(),
-          { type: 'application/pdf' }
-        )
+      ? new File([pdf.output('blob')], getReceiptFileNameForOrder(), {
+          type: 'application/pdf',
+        })
       : null;
 
     try {
@@ -257,18 +249,6 @@ export default function CheckoutModal({
     }
   };
 
-  const handleContinueShopping = () => {
-    try {
-      window.localStorage.removeItem(pendingOrderStorageKey);
-    } catch {
-      // Continue navigation even if browser storage is unavailable.
-    }
-
-    setCreatedOrder(null);
-    onClose();
-    navigate(pathFor(''));
-  };
-
   return (
     <>
       <Modal isOpen={isOpen || !!createdOrder} onClose={onClose} maxWidth="max-w-lg">
@@ -282,16 +262,12 @@ export default function CheckoutModal({
             />
           ) : (
             <>
-              <h2 className="text-2xl font-bold text-[#4d4d4d]">
-                Checkout
-              </h2>
-
+              <h2 className="text-2xl font-bold text-[#4d4d4d]">Checkout</h2>
               <CheckoutCartSummary
                 cartItems={cartItems}
                 cartTotal={cartTotal}
                 onSelectProduct={setSelectedProduct}
               />
-
               <CheckoutCustomerForm
                 fullName={fullName}
                 phoneNumber={phoneNumber}
@@ -299,7 +275,6 @@ export default function CheckoutModal({
                 onFullNameChange={handleFullNameChange}
                 onPhoneNumberChange={handlePhoneNumberChange}
               />
-
               <div className="mt-7 flex items-center gap-3">
                 <button
                   type="button"
@@ -308,7 +283,6 @@ export default function CheckoutModal({
                 >
                   Cancel
                 </button>
-
                 <button
                   type="button"
                   onClick={handleContinue}
@@ -320,7 +294,6 @@ export default function CheckoutModal({
             </>
           )}
         </div>
-
         <ConfirmModal
           isOpen={showConfirmation && !createdOrder}
           title="Confirm your order"
@@ -335,17 +308,12 @@ export default function CheckoutModal({
           }}
         />
       </Modal>
-
-      <CheckoutErrorModal
-        submitError={submitError}
-        onClose={() => setSubmitError('')}
-      />
-
+      <CheckoutErrorModal submitError={submitError} onClose={() => setSubmitError('')} />
       <ProductModal
         product={selectedProduct}
         bgColor="bg-white"
         placeholderColor={selectedProduct?.placeholderColor ?? ''}
-        accentColor={primaryAccent === "#ff1493" ? "text-[#ff1493]" : "text-[#8aa89b]"}
+        accentColor={primaryAccent === '#ff1493' ? 'text-[#ff1493]' : 'text-[#8aa89b]'}
         isDark={false}
         mode="preview"
         onClose={() => setSelectedProduct(null)}
