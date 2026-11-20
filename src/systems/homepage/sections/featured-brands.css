@@ -67,16 +67,13 @@
   z-index: 30;
   top: 34.55%;
   right: 10.42%;
-  max-width: 42svh;
   margin: 0;
-  overflow: hidden;
   color: var(--hp-color-text);
   font-size: clamp(20px, 1.66cqw, 34px);
   font-weight: 600;
   letter-spacing: -0.045em;
   line-height: 1;
   text-align: right;
-  text-overflow: ellipsis;
   white-space: nowrap;
   transform: none;
   transform-origin: right top;
@@ -351,7 +348,6 @@
     top: 4.5%;
     right: 7%;
     left: auto;
-    max-width: 34cqw;
     font-size: 5cqw;
     text-align: right;
     transform: none;
