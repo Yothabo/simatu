@@ -142,7 +142,7 @@
   --epr-x: 37.29cqw;
   --epr-y: 12.78svh;
   --epr-scale-x: 1.609;
-  --epr-scale-y: 3.454;
+  --epr-scale-y: 3.2;
   z-index: 12;
   pointer-events: none;
   cursor: default;
@@ -335,7 +335,7 @@
     --epr-x: 7cqw;
     --epr-y: 9svh;
     --epr-scale-x: 1.731;
-    --epr-scale-y: 2.5;
+    --epr-scale-y: 2.3;
   }
   .epr-card.thumb-0 {
     --epr-x: -40cqw;
