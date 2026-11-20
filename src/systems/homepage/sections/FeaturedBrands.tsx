@@ -41,6 +41,7 @@ const BRANDS: Brand[] = [
     position: "50% 50%",
     isLogo: true,
   },
+];
 
 
 const VISIBLE_CARDS = BRANDS.length;
@@ -50,7 +51,7 @@ const AUTOPLAY_MS = 9000;
 export default function FeaturedBrands() {
   const [active, setActive] = useState(2);
   const [previousActive, setPreviousActive] = useState<number | null>(null);
-  const activeRef = useRef(0);
+  const activeRef = useRef(2);
   const pauseUntil = useRef(0);
   const transitionTimerRef = useRef<number | null>(null);
   const autoplayTimerRef = useRef<number | null>(null);
@@ -80,50 +81,6 @@ export default function FeaturedBrands() {
       isTransitioningRef.current = false;
       transitionTimerRef.current = null;
     }, TRANSITION_MS);
-  }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-    let nextIndex = VISIBLE_CARDS;
-    let activeLoads = 0;
-    const maxConcurrentLoads = 2;
-    const pendingImages: HTMLImageElement[] = [];
-
-    const loadNext = () => {
-      if (cancelled) return;
-
-      while (
-        activeLoads < maxConcurrentLoads &&
-        nextIndex < BRANDS.length
-      ) {
-        const brand = BRANDS[nextIndex++];
-        const image = new Image();
-        image.decoding = "async";
-        image.fetchPriority = "low";
-        activeLoads += 1;
-        pendingImages.push(image);
-
-        const finish = () => {
-          activeLoads -= 1;
-          loadNext();
-        };
-
-        image.onload = finish;
-        image.onerror = finish;
-        image.src = brand.image;
-      }
-    };
-
-    const startTimer = window.setTimeout(loadNext, 700);
-
-    return () => {
-      cancelled = true;
-      window.clearTimeout(startTimer);
-      pendingImages.forEach((image) => {
-        image.onload = null;
-        image.onerror = null;
-      });
-    };
   }, []);
 
   useEffect(() => {
