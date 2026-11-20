@@ -24,6 +24,7 @@ export function useHeroImageRotation() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         isHeroVisible.current = entry.isIntersecting && entry.intersectionRatio >= 0.15;
+        hero.classList.toggle("is-offscreen", !isHeroVisible.current);
       },
       { threshold: [0, 0.15] },
     );
