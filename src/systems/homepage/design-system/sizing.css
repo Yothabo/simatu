@@ -1,20 +1,19 @@
 :root {
-  --hp-size-content: 1200px;
-  --hp-size-content-wide: 1440px;
-
-  --hp-size-hero-min-height: 780px;
-  --hp-size-hero-max-height: 1100px;
-
-  --hp-size-navigation-height: 104px;
-  --hp-size-navigation-height-tablet: 82px;
-  --hp-size-navigation-height-mobile: 74px;
-
-  --hp-size-button-height: 44px;
-  --hp-size-icon: 32px;
-
-  --hp-radius-small: 2px;
-  --hp-radius-medium: 4px;
-  --hp-radius-large: 12px;
+  /* Layout widths use percentages or viewport-relative units; caps are tokenized */
+  --hp-size-content: 75rem;
+  --hp-size-content-wide: 90rem;
+  --hp-size-hero-min-height: 48.75rem;
+  --hp-size-hero-max-height: 68.75rem;
+  --hp-size-navigation-height: 6.5rem;
+  --hp-size-navigation-height-tablet: 5.125rem;
+  --hp-size-navigation-height-mobile: 4.625rem;
+  --hp-size-button-height: 2.75rem;
+  --hp-size-icon-min: 1.25rem;
+  --hp-size-icon: 2rem;
+  --hp-radius-small: 0.125rem;
+  --hp-radius-medium: 0.25rem;
+  --hp-radius-large: 0.75rem;
   --hp-radius-pill: 999px;
   --hp-radius-circle: 50%;
+  --hp-border-width: 1px;
 }
