@@ -56,10 +56,10 @@ export default function HomePage() {
         .homepage-layered-experience .homepage-main>.novae-hero{transition:opacity 1s cubic-bezier(.2,.65,.25,1),transform 1s cubic-bezier(.2,.65,.25,1)}
         .homepage-layered-experience .homepage-main>.homepage-discover-trigger-section{transition:opacity .55s ease,visibility .55s}
         .homepage-layered-experience .homepage-foreground>footer{transition:opacity 1s cubic-bezier(.2,.65,.25,1),transform 1s cubic-bezier(.2,.65,.25,1)}
-        .homepage-layered-experience.phase-exit .homepage-main>header,.homepage-layered-experience.phase-exit .homepage-main>.novae-hero{opacity:0;transform:translateY(-100px);pointer-events:none}
-        .homepage-layered-experience.phase-exit .homepage-main>header{transform:translateY(-70px)}
-        .homepage-layered-experience.phase-exit .homepage-main>.homepage-discover-trigger-section{opacity:0;visibility:hidden;pointer-events:none}
-        .homepage-layered-experience.phase-exit .homepage-foreground>footer{opacity:0;transform:translateY(100px);pointer-events:none}
+        .homepage-layered-experience.phase-exit .homepage-main>header,.homepage-layered-experience.phase-exit .homepage-main>.novae-hero,.homepage-layered-experience.phase-reveal .homepage-main>header,.homepage-layered-experience.phase-reveal .homepage-main>.novae-hero,.homepage-layered-experience.phase-active .homepage-main>header,.homepage-layered-experience.phase-active .homepage-main>.novae-hero{opacity:0;transform:translateY(-100px);pointer-events:none}
+        .homepage-layered-experience.phase-exit .homepage-main>header,.homepage-layered-experience.phase-reveal .homepage-main>header,.homepage-layered-experience.phase-active .homepage-main>header{transform:translateY(-70px)}
+        .homepage-layered-experience.phase-exit .homepage-main>.homepage-discover-trigger-section,.homepage-layered-experience.phase-reveal .homepage-main>.homepage-discover-trigger-section,.homepage-layered-experience.phase-active .homepage-main>.homepage-discover-trigger-section{opacity:0;visibility:hidden;pointer-events:none}
+        .homepage-layered-experience.phase-exit .homepage-foreground>footer,.homepage-layered-experience.phase-reveal .homepage-foreground>footer,.homepage-layered-experience.phase-active .homepage-foreground>footer{opacity:0;transform:translateY(100px);pointer-events:none}
         .homepage-layered-experience.phase-reveal,.homepage-layered-experience.phase-active{height:100vh;height:100svh;overflow:hidden}
         @media(prefers-reduced-motion:reduce){.homepage-layered-experience *{transition-duration:.01ms!important;animation-duration:.01ms!important}}
       `}</style>
