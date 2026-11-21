@@ -40,10 +40,10 @@ describe("Homepage Discover transition", () => {
     expect(root).toHaveClass("phase-exit");
 
     // Emit the four transition events the exit handler is waiting for.
-    fireEvent.transitionEnd(container.querySelector("header")!, { propertyName: "transform" });
-    fireEvent.transitionEnd(container.querySelector(".novae-hero")!, { propertyName: "transform" });
-    fireEvent.transitionEnd(container.querySelector("footer")!, { propertyName: "transform" });
-    fireEvent.transitionEnd(container.querySelector(".homepage-discover-trigger-section")!, { propertyName: "opacity" });
+    emitTransition(container.querySelector("header")!, "transform");
+    emitTransition(container.querySelector(".novae-hero")!, "transform");
+    emitTransition(container.querySelector("footer")!, "transform");
+    emitTransition(container.querySelector(".homepage-discover-trigger-section")!, "opacity");
 
     expect(root).toHaveClass("phase-reveal");
     expect(container.querySelector(".homepage-moodboard-background")).toHaveAttribute("aria-hidden", "false");
@@ -52,7 +52,7 @@ describe("Homepage Discover transition", () => {
     expect(screen.getByRole("textbox", { name: "Search discovery" })).toBeInTheDocument();
     expect(container.querySelector(".kinetic-moodboard")).toHaveAttribute("data-interactive", "false");
 
-    fireEvent.transitionEnd(container.querySelector(".kinetic-moodboard__reveal-sentinel")!, { propertyName: "opacity" });
+    emitTransition(container.querySelector(".kinetic-moodboard__reveal-sentinel")!, "opacity");
 
     expect(root).toHaveClass("phase-active");
     expect(container.querySelector(".kinetic-moodboard")).toHaveAttribute("data-interactive", "true");
