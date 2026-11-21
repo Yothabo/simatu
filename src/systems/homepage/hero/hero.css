@@ -1274,3 +1274,7 @@
 .novae-hero.is-offscreen * {
   animation-play-state: paused !important;
 }
+
+/* Homepage hero: charcoal fade from bottom upward, without section border. */
+.novae-hero::after{content:"";position:absolute;z-index:11;left:0;right:0;bottom:0;height:180px;pointer-events:none;background:linear-gradient(to top,#111 0%,rgba(17,17,17,.72) 38%,transparent 100%)}
+.novae-hero .corner{display:none !important}
