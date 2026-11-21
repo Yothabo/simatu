@@ -282,7 +282,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__search-input:-webkit-autofill,.kinetic-moodboard__search-input:-webkit-autofill:hover,.kinetic-moodboard__search-input:-webkit-autofill:focus{-webkit-text-fill-color:#f2f2f2;transition:background-color 9999s ease-out 0s;box-shadow:0 0 0 1000px transparent inset}
         .kinetic-moodboard__search-input::placeholder{color:rgba(255,255,255,.45);opacity:1}
         @media(max-width:640px){.kinetic-moodboard__search-header{padding:12px}.kinetic-moodboard__search-row{width:100%;gap:8px}.kinetic-moodboard__search-back{width:56px;height:56px;flex-basis:56px}.kinetic-moodboard__search-shell{height:44px;padding:0 14px}}
-        .kinetic-moodboard__tile:after{content:"";position:absolute;inset:35% 0 0;background:linear-gradient(transparent,rgba(0,0,0,.65));pointer-events:none}
+        .kinetic-moodboard__tile:after{content:none}
         .kinetic-moodboard__label{position:absolute;z-index:1;left:16px;right:12px;bottom:15px;display:grid;gap:4px;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s}.kinetic-moodboard.is-color-revealing .kinetic-moodboard__label{opacity:1;visibility:visible}
         .kinetic-moodboard__category{font:600 9px/1.2 sans-serif;letter-spacing:.18em;text-transform:uppercase;opacity:.75}
         .kinetic-moodboard__title{font:500 15px/1.25 sans-serif;letter-spacing:.01em}
