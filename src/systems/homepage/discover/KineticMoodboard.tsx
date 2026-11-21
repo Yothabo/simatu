@@ -82,6 +82,27 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const [networkLoading, setNetworkLoading] = useState(false);
   const [networkError, setNetworkError] = useState('');
   const [activeDiscovery, setActiveDiscovery] = useState<MoodboardItem | null>(null);
+  const restorePositionRef = useRef<{ x: number; y: number } | null>(null);
+
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem('simatu-discover-return');
+      if (!saved) return;
+      sessionStorage.removeItem('simatu-discover-return');
+      const context = JSON.parse(saved) as { discovery?: MoodboardItem; position?: { x: number; y: number } };
+      if (context.discovery) setActiveDiscovery(context.discovery);
+      if (context.position) restorePositionRef.current = context.position;
+    } catch {
+      sessionStorage.removeItem('simatu-discover-return');
+    }
+  }, []);
+
+  useEffect(() => {
+    const savedPosition = restorePositionRef.current;
+    if (!savedPosition || !viewport.width || !viewport.height) return;
+    restorePositionRef.current = null;
+    applyPosition(savedPosition.x, savedPosition.y);
+  }, [viewport.width, viewport.height, applyPosition]);
 
   useEffect(() => {
     if (!activeDiscovery || !colorReveal) return;
@@ -322,7 +343,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
               {networkLoading && <div className="kinetic-moodboard__search-status">Loading store directory…</div>}
               {!networkLoading && networkError && <div className="kinetic-moodboard__search-status">{networkError}</div>}
               {!networkLoading && !networkError && discoveryStores.length === 0 && <div className="kinetic-moodboard__search-status">No stores are available.</div>}
-              {discoveryStores.map((store) => <a className="kinetic-moodboard__store-card" href={store.href} key={store.key}><div className="kinetic-moodboard__store-topline"><div className="kinetic-moodboard__store-name">{store.name}</div><div className="kinetic-moodboard__store-tags" aria-label={store.name + ' categories'}>{store.categories.map((category) => <span className="kinetic-moodboard__store-tag" key={category}>{category}</span>)}</div></div><div className="kinetic-moodboard__store-description">{store.description}</div><div className="kinetic-moodboard__store-link-row"><span className="kinetic-moodboard__store-open">Visit {store.name} ↗</span></div></a>)}
+              {discoveryStores.map((store) => <div className="kinetic-moodboard__store-card" key={store.key}><div className="kinetic-moodboard__store-topline"><div className="kinetic-moodboard__store-name">{store.name}</div><div className="kinetic-moodboard__store-tags" aria-label={store.name + ' categories'}>{store.categories.map((category) => <span className="kinetic-moodboard__store-tag" key={category}>{category}</span>)}</div></div><div className="kinetic-moodboard__store-description">{store.description}</div><div className="kinetic-moodboard__store-link-row"><a className="kinetic-moodboard__store-open" href={store.href} onClick={() => { try { sessionStorage.setItem('simatu-discover-return', JSON.stringify({ discovery: activeDiscovery, position: positionRef.current })); } catch {} }}>Visit {store.name} ↗</a></div></div>)}
             </div>
           </div>
         </div>
