@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Hero from "../hero/Hero";
 import DiscoverSection from "../discover/DiscoverSection";
 import KineticMoodboard from "../discover/KineticMoodboard";
