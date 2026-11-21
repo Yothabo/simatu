@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 type NetworkProduct = { id: string; name: string; price: number; category: string; subcategory?: string; image_url?: string | null; storeKey: 'yotaabo' | 'poshies'; storeName: string; href: string };
-const NETWORK_STORES = [{ key: 'yotaabo' as const, name: 'Yotaabo', href: '/yotaabo/catalog', description: 'Browse the Yotaabo storefront and explore its available collections.', categories: ['His', 'Hers', 'Spaces'] }, { key: 'poshies' as const, name: 'Poshies', href: '/poshies/catalog', description: 'Browse the Poshies storefront and explore its available collections.', categories: ['His', 'Hers', 'Lounge'] }];
+const NETWORK_STORES = [{ key: 'yotaabo' as const, name: 'Yotaabo', href: '/yotaabo/catalog', description: 'A curated selection of fragrance, fashion, and spaces for everyday living.', categories: ['His', 'Hers', 'Spaces'] }, { key: 'poshies' as const, name: 'Poshies', href: '/poshies/catalog', description: 'Fashion, accessories, and lifestyle pieces with a bold, expressive point of view.', categories: ['Hers', 'His', 'Lounge'] }];
 
 export interface MoodboardItem {
   id: string;
@@ -248,7 +248,8 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__dialog-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
         .kinetic-moodboard__dialog-title{font:500 24px/1.3 sans-serif}
         .kinetic-moodboard__dialog-intro{font:13px/1.65 sans-serif;color:#aaa;margin:12px 0 22px}
-        .kinetic-moodboard__store-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.08);color:#fff;text-decoration:none}
+        .kinetic-moodboard__store-card{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.08);color:#fff;text-decoration:none}
+        .kinetic-moodboard__store-topline{display:flex;align-items:center;justify-content:space-between;gap:12px}
         .kinetic-moodboard__store-info{min-width:0;flex:1;overflow:hidden}
         .kinetic-moodboard__store-name{font:500 16px/1.4 sans-serif;color:#fff}
         .kinetic-moodboard__store-description{font:12px/1.5 sans-serif;color:#aaa;margin-top:5px;max-width:500px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
@@ -309,11 +310,11 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         <div className="kinetic-moodboard__dialog-backdrop" onClick={() => setActiveDiscovery(null)}>
           <div className="kinetic-moodboard__dialog" role="dialog" aria-modal="true" aria-labelledby="discover-dialog-title" onClick={(event) => event.stopPropagation()}>
             <div className="kinetic-moodboard__dialog-heading"><div><div className="kinetic-moodboard__dialog-title" id="discover-dialog-title">{activeDiscovery.category}</div><div className="kinetic-moodboard__store-sub">Discover stores and collections across Simatu</div></div><button className="kinetic-moodboard__dialog-close" type="button" aria-label="Close" onClick={() => setActiveDiscovery(null)}>×</button></div>
-            <p className="kinetic-moodboard__dialog-intro">Browse storefronts related to {activeDiscovery.category.toLowerCase()}. Open a store to explore its collections, products, and details directly from the shop.</p>
+            <p className="kinetic-moodboard__dialog-intro">{activeDiscovery.category === 'Style' || activeDiscovery.category === 'Fashion' ? 'Styles brings together fashion and personal expression—from clothing and footwear to accessories that help define your look.' : activeDiscovery.category === 'Spaces' || activeDiscovery.category === 'Living' ? 'Explore pieces for your surroundings, from home accents and furniture to thoughtful details that make a space feel like yours.' : activeDiscovery.category === 'Objects' ? 'Discover useful and design-led objects, everyday essentials, and pieces made to add character to your routine.' : activeDiscovery.category === 'Culture' || activeDiscovery.category === 'Explore' ? 'Explore ideas, experiences, and finds that inspire curiosity and bring new perspectives.' : activeDiscovery.category === 'Ideas' || activeDiscovery.category === 'Workspaces' ? 'Find tools, objects, and inspiration for creative work, focused routines, and spaces to make things happen.' : 'Discover collections and products connected to everyday life, personal taste, and the things that inspire you.'}</p>
             {networkLoading && <div className="kinetic-moodboard__search-status">Loading store directory…</div>}
             {!networkLoading && networkError && <div className="kinetic-moodboard__search-status">{networkError}</div>}
             {!networkLoading && !networkError && discoveryStores.length === 0 && <div className="kinetic-moodboard__search-status">No stores are available.</div>}
-            {discoveryStores.map((store) => <a className="kinetic-moodboard__store-card" href={store.href} key={store.key}><div className="kinetic-moodboard__store-info"><div className="kinetic-moodboard__store-name">{store.name}</div><div className="kinetic-moodboard__store-description">{store.description}</div><div className="kinetic-moodboard__store-tags" aria-label={store.name + ' categories'}>{store.categories.map((category) => <span className="kinetic-moodboard__store-tag" key={category}>{category}</span>)}</div></div><span className="kinetic-moodboard__store-open">Visit storefront ↗</span></a>)}
+            {discoveryStores.map((store) => <a className="kinetic-moodboard__store-card" href={store.href} key={store.key}><div className="kinetic-moodboard__store-topline"><div className="kinetic-moodboard__store-name">{store.name}</div><span className="kinetic-moodboard__store-open">Visit storefront ↗</span></div><div className="kinetic-moodboard__store-description">{store.description}</div><div className="kinetic-moodboard__store-tags" aria-label={store.name + ' categories'}>{store.categories.map((category) => <span className="kinetic-moodboard__store-tag" key={category}>{category}</span>)}</div></a>)}
           </div>
         </div>
       )}
