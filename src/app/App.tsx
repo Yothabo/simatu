@@ -4,6 +4,9 @@ import { Toaster } from 'react-hot-toast';
 import MetaTags from './components/MetaTags';
 import ScrollToHash from './components/ScrollToHash';
 import { useTouchSelection } from '../shared/hooks/useTouchSelection';
+import Header from '../systems/homepage/header';
+import '../systems/homepage/design-system/index.css';
+import '../systems/homepage/hero/hero.css';
 
 import { CartProvider, StorefrontThemeProvider } from '../systems/storefront/core';
 
@@ -63,37 +66,12 @@ class AdminErrorBoundary extends React.Component<
 }
 
 function DiscoverPage() {
-  const navigate = useNavigate();
-
   return (
-    <main style={{ minHeight: '100vh' }}>
-      <header className="hero-navigation">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            aria-label="Go back"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 38,
-              height: 38,
-              border: '1px solid var(--hp-border-subtle-color)',
-              borderRadius: '50%',
-              background: 'transparent',
-              color: 'var(--hp-color-text)',
-              fontSize: 22,
-              lineHeight: 1,
-              cursor: 'pointer',
-            }}
-          >
-            ←
-          </button>
-          <a href="/" className="brand">Smartu</a>
-        </div>
-      </header>
-    </main>
+    <div className="novae-page">
+      <main className="homepage-main">
+        <Header brandName="Smartu" showBackButton />
+      </main>
+    </div>
   );
 }
 
