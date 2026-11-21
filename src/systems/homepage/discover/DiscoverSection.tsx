@@ -122,10 +122,10 @@ export default function DiscoverSection() {
         .homepage-discover__trigger.is-visible{opacity:1;visibility:visible;pointer-events:auto}
         .homepage-discover__trigger:hover{background:#a93d1a;border-color:#fff}
         .homepage-discover__trigger:focus-visible{outline:2px solid #fff;outline-offset:4px}
-        .homepage-discover__expanded{position:absolute;inset:0;display:block;width:100%;height:100%;min-height:0;margin:0;padding:0;box-sizing:border-box;opacity:0;filter:grayscale(1);pointer-events:none;transition:opacity 1.6s cubic-bezier(.2,.65,.25,1),filter 2.4s cubic-bezier(.2,.65,.25,1)}
+        .homepage-discover__expanded{position:absolute;inset:0;display:block;width:100%;height:100%;min-height:0;margin:0;padding:0;box-sizing:border-box;opacity:0;pointer-events:none;transition:opacity 1.6s cubic-bezier(.2,.65,.25,1)}
         .homepage-discover.is-live{position:fixed;inset:0;width:100vw;height:100vh;height:100svh;min-height:0;margin:0;padding:0;box-sizing:border-box;overflow:hidden}
         .homepage-discover.is-live .homepage-discover__preview{opacity:0;pointer-events:none}
-        .homepage-discover.is-live .homepage-discover__expanded{opacity:1;filter:grayscale(1);pointer-events:auto}\n        .homepage-discover.is-live.is-colored .homepage-discover__expanded{filter:grayscale(0)}
+        .homepage-discover.is-live .homepage-discover__expanded{opacity:1;pointer-events:auto}
         @media(max-width:640px){.homepage-discover__preview-grid{gap:6px}.homepage-discover__trigger{min-height:44px;padding-inline:17px;font-size:10px}}
       `}</style>
       <div ref={previewRef} className="homepage-discover__preview">
@@ -151,7 +151,7 @@ export default function DiscoverSection() {
         </button>
       </div>
       <div ref={expandedRef} className="homepage-discover__expanded">
-        <KineticMoodboard />
+        <KineticMoodboard colorReveal={isColorActive} />
       </div>
     </section>
   );
