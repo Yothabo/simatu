@@ -245,7 +245,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__search-status{padding:14px;color:#aaa;font:12px/1.5 sans-serif}
         .kinetic-moodboard__dialog-backdrop{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,0);backdrop-filter:blur(0);animation:discover-overlay-in .45s cubic-bezier(.2,.65,.25,1) forwards}
         .kinetic-moodboard__dialog{width:min(680px,100%);max-height:min(78vh,700px);overflow:auto;border:1px solid rgba(255,255,255,.1);border-radius:20px;background:#242424;color:#fff;padding:26px;opacity:0;transform:translateY(24px) scale(.96);animation:discover-dialog-in .55s cubic-bezier(.2,.65,.25,1) .06s forwards}
-        .kinetic-moodboard__dialog-heading{position:sticky;top:-26px;z-index:5;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin:-26px -26px 0;padding:26px 26px 18px;background:#242424}
+        .kinetic-moodboard__dialog-heading{position:sticky;top:-26px;z-index:5;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin:-26px -26px 0;padding:26px 26px 18px;background:#151515}
         .kinetic-moodboard__dialog-title{font:500 24px/1.3 sans-serif}
         .kinetic-moodboard__dialog-intro{font:13px/1.65 sans-serif;color:#aaa;margin:12px 0 22px}
         .kinetic-moodboard__store-list{margin-top:18px}.kinetic-moodboard__store-card{display:flex;flex-direction:column;align-items:stretch;gap:1px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.08);color:#fff;text-decoration:none}
