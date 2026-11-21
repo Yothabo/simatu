@@ -34,6 +34,8 @@ export default function DiscoverSection() {
   const [isMounted, setIsMounted] = useState(false);
   const [isFullyVisible, setIsFullyVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
+  const expandedRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const animationFrameRef = useRef<number | null>(null);
   const previewTiles = useMemo(() => {
@@ -62,27 +64,38 @@ export default function DiscoverSection() {
     const rect = section.getBoundingClientRect();
 
     section.style.position = "fixed";
-    section.style.top = `${rect.top}px`;
-    section.style.left = `${rect.left}px`;
-    section.style.width = `${rect.width}px`;
-    section.style.height = `${rect.height}px`;
+    section.style.inset = "0";
+    section.style.top = "0";
+    section.style.left = "0";
+    section.style.width = "100vw";
+    section.style.height = "100vh";
+    section.style.height = "100svh";
     section.style.margin = "0";
     section.style.zIndex = "9999";
-    section.style.transformOrigin = "0 0";
-    section.style.transform = "translate3d(0,0,0) scale(1,1)";
-    section.style.transition = "transform 1.35s cubic-bezier(.16,.76,.24,1)";
-    section.style.willChange = "transform";
+    section.style.transform = "none";
+    section.style.transition = "none";
 
     const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-    const targetHeight = window.visualViewport?.height ?? viewportHeight;
-    const scaleX = viewportWidth / Math.max(1, rect.width);
-    const scaleY = targetHeight / Math.max(1, rect.height);
+    const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+    const top = Math.max(0, rect.top);
+    const left = Math.max(0, rect.left);
+    const right = Math.max(0, viewportWidth - rect.right);
+    const bottom = Math.max(0, viewportHeight - rect.bottom);
+    const initialClip = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
+
+    [previewRef.current, expandedRef.current].forEach((surface) => {
+      if (!surface) return;
+      surface.style.clipPath = initialClip;
+      surface.style.transition = "clip-path 1.6s cubic-bezier(.2,.65,.25,1)";
+      surface.style.willChange = "clip-path";
+    });
 
     document.body.classList.add("homepage-discover-transition");
     setIsMounted(true);
     animationFrameRef.current = requestAnimationFrame(() => {
-      section.style.transform = `translate3d(${-rect.left}px,${-rect.top}px,0) scale(${scaleX},${scaleY})`;
+      [previewRef.current, expandedRef.current].forEach((surface) => {
+        if (surface) surface.style.clipPath = "inset(0)";
+      });
     });
   };
 
@@ -104,13 +117,13 @@ export default function DiscoverSection() {
         .homepage-discover__trigger.is-visible{opacity:1;visibility:visible;pointer-events:auto}
         .homepage-discover__trigger:hover{background:#a93d1a;border-color:#fff}
         .homepage-discover__trigger:focus-visible{outline:2px solid #fff;outline-offset:4px}
-        .homepage-discover__expanded{position:absolute;inset:0;display:block;width:100%;height:100%;min-height:0;margin:0;padding:0;box-sizing:border-box;opacity:0;filter:grayscale(1);pointer-events:none;transition:opacity 1.35s cubic-bezier(.16,.76,.24,1),filter 1.35s cubic-bezier(.16,.76,.24,1)}
-        .homepage-discover.is-live{inset:0;min-height:0;margin:0;padding:0;box-sizing:border-box;overflow:hidden}
+        .homepage-discover__expanded{position:absolute;inset:0;display:block;width:100%;height:100%;min-height:0;margin:0;padding:0;box-sizing:border-box;opacity:0;filter:grayscale(1);pointer-events:none;transition:opacity 1.6s cubic-bezier(.2,.65,.25,1),filter 1.6s cubic-bezier(.2,.65,.25,1)}
+        .homepage-discover.is-live{position:fixed;inset:0;width:100vw;height:100vh;height:100svh;min-height:0;margin:0;padding:0;box-sizing:border-box;overflow:hidden}
         .homepage-discover.is-live .homepage-discover__preview{opacity:0;pointer-events:none}
         .homepage-discover.is-live .homepage-discover__expanded{opacity:1;filter:grayscale(0);pointer-events:auto}
         @media(max-width:640px){.homepage-discover__preview-grid{gap:6px}.homepage-discover__trigger{min-height:44px;padding-inline:17px;font-size:10px}}
       `}</style>
-      <div className="homepage-discover__preview">
+      <div ref={previewRef} className="homepage-discover__preview">
         <div className="homepage-discover__preview-grid" aria-hidden="true">
           {previewTiles.map((item, index) => (
             <div className="homepage-discover__tile" key={`${item.id}-${index}`}>
@@ -132,7 +145,7 @@ export default function DiscoverSection() {
           Discover our brand network
         </button>
       </div>
-      <div className="homepage-discover__expanded">
+      <div ref={expandedRef} className="homepage-discover__expanded">
         <KineticMoodboard />
       </div>
     </section>
