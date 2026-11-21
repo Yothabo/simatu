@@ -249,11 +249,11 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__dialog-title{font:500 24px/1.3 sans-serif}
         .kinetic-moodboard__dialog-intro{font:13px/1.65 sans-serif;color:#aaa;margin:12px 0 22px}
         .kinetic-moodboard__store-card{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.08);color:#fff;text-decoration:none}
-        .kinetic-moodboard__store-topline{display:flex;align-items:center;justify-content:space-between;gap:12px}
+        .kinetic-moodboard__store-topline{display:flex;align-items:center;justify-content:space-between;gap:12px}\n        .kinetic-moodboard__store-tags{display:flex;flex-wrap:nowrap;gap:7px;max-width:65%;overflow-x:auto;overflow-y:hidden;white-space:nowrap;scrollbar-width:none;-webkit-overflow-scrolling:touch}\n        .kinetic-moodboard__store-tags::-webkit-scrollbar{display:none}\n        .kinetic-moodboard__store-link-row{display:flex;justify-content:flex-end;align-items:center;margin-top:2px}
         .kinetic-moodboard__store-info{min-width:0;flex:1;overflow:hidden}
         .kinetic-moodboard__store-name{font:500 16px/1.4 sans-serif;color:#fff}
         .kinetic-moodboard__store-description{font:12px/1.5 sans-serif;color:#aaa;margin-top:5px;max-width:500px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
-        .kinetic-moodboard__store-tags{display:flex;flex-wrap:nowrap;gap:7px;margin-top:10px;max-width:100%;overflow-x:auto;overflow-y:hidden;white-space:nowrap;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+        .kinetic-moodboard__store-tags{margin:0}
         .kinetic-moodboard__store-tags::-webkit-scrollbar{display:none}
         .kinetic-moodboard__store-tag{flex:0 0 auto;font:10px/1 sans-serif;color:#c9c9c9;background:#343434;border:1px solid #414141;padding:7px 9px;border-radius:999px}
         .kinetic-moodboard__store-open{flex:0 0 auto;font:600 11px/1 sans-serif;color:#ccc;white-space:nowrap}
@@ -314,7 +314,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
             {networkLoading && <div className="kinetic-moodboard__search-status">Loading store directory…</div>}
             {!networkLoading && networkError && <div className="kinetic-moodboard__search-status">{networkError}</div>}
             {!networkLoading && !networkError && discoveryStores.length === 0 && <div className="kinetic-moodboard__search-status">No stores are available.</div>}
-            {discoveryStores.map((store) => <a className="kinetic-moodboard__store-card" href={store.href} key={store.key}><div className="kinetic-moodboard__store-topline"><div className="kinetic-moodboard__store-name">{store.name}</div><span className="kinetic-moodboard__store-open">Visit storefront ↗</span></div><div className="kinetic-moodboard__store-description">{store.description}</div><div className="kinetic-moodboard__store-tags" aria-label={store.name + ' categories'}>{store.categories.map((category) => <span className="kinetic-moodboard__store-tag" key={category}>{category}</span>)}</div></a>)}
+            {discoveryStores.map((store) => <a className="kinetic-moodboard__store-card" href={store.href} key={store.key}><div className="kinetic-moodboard__store-topline"><div className="kinetic-moodboard__store-name">{store.name}</div><div className="kinetic-moodboard__store-tags" aria-label={store.name + ' categories'}>{store.categories.map((category) => <span className="kinetic-moodboard__store-tag" key={category}>{category}</span>)}</div></div><div className="kinetic-moodboard__store-description">{store.description}</div><div className="kinetic-moodboard__store-link-row"><span className="kinetic-moodboard__store-open">Visit storefront ↗</span></div></a>)}
           </div>
         </div>
       )}
