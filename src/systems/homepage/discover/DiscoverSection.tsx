@@ -13,7 +13,7 @@ export default function DiscoverSection({ onDiscover }: DiscoverSectionProps) {
       </button>
       <style>{`
         .homepage-discover-trigger-section{position:relative;z-index:3;display:flex;align-items:center;justify-content:center;min-height:85vh;min-height:85svh;padding:36px 20px;box-sizing:border-box;background:transparent;isolation:isolate}
-        .homepage-discover-trigger-section::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 68% 45%,color-mix(in srgb,var(--hp-color-primary) 12%,transparent),transparent 48%),linear-gradient(180deg,var(--hp-color-background) 0%,var(--hp-color-surface) 28%,rgba(17,17,17,0) 52%,#111 100%);mask-image:radial-gradient(ellipse 72% 58% at 50% 50%,#000 42%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 72% 58% at 50% 50%,#000 42%,transparent 100%)}
+        .homepage-discover-trigger-section::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180,var(--hp-color-background) 0 20%,transparent 20% 80%,#111 80% 100%),radial-gradient(ellipse 82% 60% at 50% 50%,var(--hp-color-surface) 0%,color-mix(in srgb,var(--hp-color-surface) 65%,#111 35%) 42%,#111 100%);background-repeat:no-repeat}
         .homepage-discover-trigger{
           display:inline-flex;
           align-items:center;
