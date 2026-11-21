@@ -1275,7 +1275,14 @@
   animation-play-state: paused !important;
 }
 
-/* Homepage hero: charcoal fade from bottom upward, without section border. */
-.novae-hero::after{content:"";position:absolute;z-index:11;left:0;right:0;bottom:0;height:180px;pointer-events:none;background:linear-gradient(to top,#111 0%,rgba(17,17,17,.72) 38%,transparent 100%)}
+/* Blend the Hero background layers into the fixed mood board at the bottom edge. */
+.novae-hero{background:transparent !important}
+.novae-hero .hero-background,
+.novae-hero .main-visual,
+.novae-hero .hero-glow,
+.novae-hero .orbit-stage{
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 72%,rgba(0,0,0,.78) 86%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 0%,#000 72%,rgba(0,0,0,.78) 86%,transparent 100%);
+}
 .novae-hero .hero-copy,.novae-hero .hero-description,.novae-hero .image-selector,.novae-hero .social-proof,.novae-hero .corner{z-index:12 !important}
 .novae-hero .corner{display:none !important}
