@@ -31,7 +31,7 @@ export default function HomePage() {
         .homepage-foreground{position:relative;z-index:2;transition:opacity 1.1s cubic-bezier(.2,.65,.25,1),visibility 1.1s}
         .homepage-layered-experience.discover-active .homepage-foreground{opacity:0;visibility:hidden;pointer-events:none}
         .homepage-layered-experience.discover-active{height:100vh;height:100svh;overflow:hidden}
-        .homepage-layered-experience.discover-active .homepage-moodboard-background{z-index:5}
+
         @media(prefers-reduced-motion:reduce){.homepage-foreground,.homepage-moodboard-background .kinetic-moodboard{transition-duration:.01ms}}
       `}</style>
     </div>
