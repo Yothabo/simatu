@@ -1,13 +1,13 @@
 import Hero from "../hero/Hero";
-import FeaturedBrands from "../sections/FeaturedBrands";
+import KineticMoodboard from "../discover/KineticMoodboard";
 
-/** The homepage is intentionally limited to the hero and full-screen brand showcase. */
+/** The homepage pairs the hero with the interactive discovery experience. */
 export default function HomePage() {
   return (
     <div className="novae-page">
       <main className="homepage-main">
         <Hero />
-        <FeaturedBrands />
+        <KineticMoodboard />
       </main>
     </div>
   );
