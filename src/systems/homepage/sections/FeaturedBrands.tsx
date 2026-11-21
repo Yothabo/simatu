@@ -17,43 +17,41 @@ const BRANDS: Brand[] = [
   {
     id: 0,
     name: "Who We Are",
-    headline: "Building Beyond Convention",
-    description: "Bringing together technology, commerce and creative thinking to shape new ventures, unlocking opportunities for sustainable growth.",
-    image: "/simatu.png",
-    imageAlt: "Simatu logo",
+    description: "We bring people, ideas and commercial thinking together to explore opportunities and develop ventures with room to grow.",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1800&q=88",
+    imageAlt: "Business analytics dashboard with charts and performance data",
     position: "50% 50%",
-    isLogo: true,
   },
   {
     id: 1,
     name: "Our Perspective",
     description: "We look beyond convention, bringing fresh thinking and considered decisions to the opportunities ahead.",
-    image: "https://images.unsplash.com/photo-1652715256292-bbee70ee04ca?auto=format&fit=crop&w=1800&q=88",
-    imageAlt: "Editorial fashion portrait",
+    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1800&q=88",
+    imageAlt: "Team collaborating around a table on strategy and planning",
     position: "50% 42%",
   },
   {
     id: 2,
     name: "What We Build",
     description: "We bring ideas, technology and commerce together to shape ventures with purpose and room to grow.",
-    image: "https://media.macphun.com/img/uploads/customer/blog/1752169898/1752170008686ffe183af522.98492050.jpg?q=85&w=1680",
-    imageAlt: "Atmospheric amber fragrance bottle in dramatic luxury editorial lighting",
+    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1800&q=88",
+    imageAlt: "Close-up of technology hardware and circuit components",
     position: "50% 45%",
   },
   {
     id: 3,
     name: "Opportunity",
     description: "We recognise opportunity in changing markets, emerging needs and ideas ready to move forward.",
-    image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1800&q=88",
-    imageAlt: "Minimal fashion editorial placeholder for an upcoming brand",
+    image: "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&w=1800&q=88",
+    imageAlt: "Financial market chart showing changing market performance",
     position: "50% 45%",
   },
   {
     id: 4,
     name: "Sustainable Growth",
     description: "Our focus is on building with intention and creating the foundations for sustainable growth.",
-    image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1800&q=88",
-    imageAlt: "Fashion editorial placeholder for a future Simatu brand",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1800&q=88",
+    imageAlt: "Business performance dashboard with upward-trending charts",
     position: "50% 45%",
   },
 ];
@@ -109,7 +107,7 @@ export default function SimatuIntroduction() {
       sectionVisibleRef.current = isVisible;
       section.classList.toggle("is-offscreen", !isVisible);
 
-      // Whenever the section comes into view, lead with the Our Brands slide.
+      // Whenever the section comes into view, lead with the introduction slide.
       if (hasJustEntered && activeRef.current !== 0) {
         activate(0);
       }
