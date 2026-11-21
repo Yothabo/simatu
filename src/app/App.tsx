@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Outlet, Route, Routes, useNavigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import MetaTags from './components/MetaTags';
 import ScrollToHash from './components/ScrollToHash';
@@ -62,6 +62,41 @@ class AdminErrorBoundary extends React.Component<
   }
 }
 
+function DiscoverPage() {
+  const navigate = useNavigate();
+
+  return (
+    <main style={{ minHeight: '100vh' }}>
+      <header className="hero-navigation">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            aria-label="Go back"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 38,
+              height: 38,
+              border: '1px solid var(--hp-border-subtle-color)',
+              borderRadius: '50%',
+              background: 'transparent',
+              color: 'var(--hp-color-text)',
+              fontSize: 22,
+              lineHeight: 1,
+              cursor: 'pointer',
+            }}
+          >
+            ←
+          </button>
+          <a href="/" className="brand">Smartu</a>
+        </div>
+      </header>
+    </main>
+  );
+}
+
 function RouteLoadingFallback() {
   return (
     <main
@@ -92,7 +127,7 @@ function App() {
       <Suspense fallback={<RouteLoadingFallback />}>
         <Routes>
           <Route path="/" element={<HomepageHero />} />
-          <Route path="/discover" element={<main style={{ minHeight: '100vh' }} />} />
+          <Route path="/discover" element={<DiscoverPage />} />
 
 
           <Route element={<CartProvider><StorefrontThemeProvider><Outlet /></StorefrontThemeProvider></CartProvider>}>
