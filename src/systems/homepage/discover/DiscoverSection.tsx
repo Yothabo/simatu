@@ -55,6 +55,7 @@ export default function DiscoverSection() {
       <style>{`
         .homepage-discover{position:relative;width:100%;background:#111}
         .homepage-discover__preview{position:relative;width:100%;height:596px;min-height:596px;overflow:hidden;background:#111}
+        .homepage-discover__preview:before{content:"";position:absolute;z-index:1;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,rgba(17,17,17,0) 0%,rgba(17,17,17,0) 22%,rgba(17,17,17,.42) 48%,rgba(17,17,17,.88) 100%)}
         .homepage-discover__preview-grid{position:absolute;inset:0;display:grid;grid-template-columns:repeat(8,230px);grid-auto-rows:290px;gap:16px;overflow:hidden;filter:grayscale(1)}
         .homepage-discover__tile{position:relative;width:230px;height:290px;overflow:hidden;border-radius:3px;background:#252525;color:#fff}
         .homepage-discover__tile img{display:block;width:100%;height:100%;object-fit:cover}
@@ -62,7 +63,7 @@ export default function DiscoverSection() {
         .homepage-discover__label{position:absolute;z-index:1;left:16px;right:12px;bottom:15px;display:grid;gap:4px;pointer-events:none}
         .homepage-discover__category{font:600 9px/1.2 sans-serif;letter-spacing:.18em;text-transform:uppercase;opacity:.75}
         .homepage-discover__title{font:500 15px/1.25 sans-serif;letter-spacing:.01em}
-        .homepage-discover__trigger{position:absolute;z-index:2;top:22px;left:50%;transform:translateX(-50%);display:inline-flex;min-height:48px;padding:0 24px;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.6);border-radius:999px;background:rgba(17,17,17,.82);color:#fff;font:600 11px/1.2 var(--hp-font-family,sans-serif);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:background .2s,border-color .2s;opacity:0;visibility:hidden;pointer-events:none}
+        .homepage-discover__trigger{position:absolute;z-index:3;top:22px;left:50%;transform:translateX(-50%);display:inline-flex;min-height:48px;padding:0 24px;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.6);border-radius:999px;background:rgba(17,17,17,.82);color:#fff;font:600 11px/1.2 var(--hp-font-family,sans-serif);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:background .2s,border-color .2s;opacity:0;visibility:hidden;pointer-events:none}
         .homepage-discover__trigger.is-visible{opacity:1;visibility:visible;pointer-events:auto}
         .homepage-discover__trigger:hover{background:#292929;border-color:#fff}
         .homepage-discover__trigger:focus-visible{outline:2px solid #fff;outline-offset:4px}
