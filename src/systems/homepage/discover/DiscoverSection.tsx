@@ -21,12 +21,9 @@ export default function DiscoverSection({ onDiscover }: DiscoverSectionProps) {
           <span>ordinary.</span>
         </h2>
         <div className="homepage-discover-lower">
-          <div className="homepage-discover-meta">
-            <span>SIMATU</span>
-            <span>Brand network</span>
-          </div>
+          
           <div className="homepage-discover-description">
-            <p>Discover a collection of brands, ideas, experiences and worlds — each with its own identity.</p>
+            <p>Discover a collection of brands, ideas, experiences and worlds.</p>
             <button type="button" className="homepage-discover-trigger" aria-label="Discover our brand network" onClick={onDiscover}>
               Explore our brand network <span aria-hidden="true">↗</span>
             </button>
