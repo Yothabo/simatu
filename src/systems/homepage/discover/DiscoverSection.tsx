@@ -50,9 +50,9 @@ export default function DiscoverSection({ onDiscover }: DiscoverSectionProps) {
         .homepage-discover-lower{display:grid;grid-template-columns:minmax(110px,17%) minmax(250px,440px);gap:clamp(24px,5vw,72px);align-items:start;justify-content:start;margin:clamp(72px,12vh,150px) 0 0 clamp(0px,3vw,48px);max-width:780px;text-align:left}
         .homepage-discover-meta{display:flex;flex-direction:column;gap:10px;padding-top:2px;font:400 10px/1.5 var(--hp-font-family,sans-serif);letter-spacing:.04em;color:rgba(245,245,245,.35)}
         .homepage-discover-description p{margin:0 0 24px;max-width:440px;font:400 15px/1.65 var(--hp-font-family,sans-serif);letter-spacing:.01em;color:rgba(245,245,245,.62)}
-        .homepage-discover-trigger{display:inline-flex;align-items:center;gap:16px;justify-content:center;min-height:48px;padding:0 20px;border:1px solid rgba(245,245,245,.35);border-radius:999px;background:rgba(196,71,29,.94);color:#fff;font:600 10px/1.2 var(--hp-font-family,sans-serif);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:opacity .55s ease,background .2s,border-color .2s}
+        .homepage-discover-trigger{display:inline-flex;align-items:center;gap:16px;justify-content:center;min-height:48px;padding:0 20px;border:1px solid rgba(245,245,245,.35);border-radius:999px;background:#f2eee7;color:#242321;font:600 10px/1.2 var(--hp-font-family,sans-serif);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:opacity .55s ease,background .2s,border-color .2s}
         .homepage-discover-trigger span{font-size:15px;line-height:1}
-        .homepage-discover-trigger:hover{background:#a93d1a;border-color:rgba(255,255,255,.75)}
+        .homepage-discover-trigger:hover{background:#ddd6cb;border-color:#242321}
         .homepage-discover-trigger:active{transform:scale(.98)}
         .homepage-discover-trigger:focus-visible{outline:2px solid #fff;outline-offset:4px}
         .homepage-discover-trigger:disabled{visibility:hidden}
