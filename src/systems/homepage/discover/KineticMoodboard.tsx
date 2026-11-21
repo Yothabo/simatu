@@ -300,11 +300,11 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       {activeDiscovery && colorReveal && (
         <div className="kinetic-moodboard__dialog-backdrop" onClick={() => setActiveDiscovery(null)}>
           <div className="kinetic-moodboard__dialog" role="dialog" aria-modal="true" aria-labelledby="discover-dialog-title" onClick={(event) => event.stopPropagation()}>
-            <div className="kinetic-moodboard__dialog-heading"><div><div className="kinetic-moodboard__dialog-title" id="discover-dialog-title">{activeDiscovery.category}</div><div className="kinetic-moodboard__store-sub">Browse the Simatu store network</div></div><button className="kinetic-moodboard__dialog-close" type="button" aria-label="Close" onClick={() => setActiveDiscovery(null)}>×</button></div>
+            <div className="kinetic-moodboard__dialog-heading"><div><div className="kinetic-moodboard__dialog-title" id="discover-dialog-title">{activeDiscovery.category}</div><div className="kinetic-moodboard__store-sub">Stores across the Simatu network</div></div><button className="kinetic-moodboard__dialog-close" type="button" aria-label="Close" onClick={() => setActiveDiscovery(null)}>×</button></div>
             {networkLoading && <div className="kinetic-moodboard__search-status">Loading store directory…</div>}
             {!networkLoading && networkError && <div className="kinetic-moodboard__search-status">{networkError}</div>}
             {!networkLoading && !networkError && discoveryStores.length === 0 && <div className="kinetic-moodboard__search-status">No stores are available.</div>}
-            {discoveryStores.map((store) => { const count = networkProducts.filter((product) => product.storeKey === store.key).length; const samples = discoveryProducts.filter((product) => product.storeKey === store.key).slice(0, 2); return <a className="kinetic-moodboard__store-card" href={store.href} key={store.key}><div><div>{store.name}</div><div className="kinetic-moodboard__store-sub">{count} active products{samples.length ? ' · ' + samples.map((p) => p.name).join(' · ') : ''}</div></div><span className="kinetic-moodboard__store-open">OPEN STORE ↗</span></a>; })}
+            {discoveryStores.map((store) => { const count = networkProducts.filter((product) => product.storeKey === store.key).length; return <a className="kinetic-moodboard__store-card" href={store.href} key={store.key}><div><div>{store.name}</div><div className="kinetic-moodboard__store-sub">{count} active products · Browse catalog</div></div><span className="kinetic-moodboard__store-open">OPEN STORE ↗</span></a>; })}
           </div>
         </div>
       )}
