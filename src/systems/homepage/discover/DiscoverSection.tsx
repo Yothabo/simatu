@@ -27,6 +27,8 @@ interface DiscoverSectionProps {
 
 /** The reveal is isolated to this section; the fixed moodboard is managed by HomePage. */
 export default function DiscoverSection({ onDiscover }: DiscoverSectionProps) {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
   return (
     <section className="homepage-discover-trigger-section" aria-label="Discover our brand network">
       <div className="homepage-discover-art" aria-hidden="true">
