@@ -59,16 +59,16 @@ export default function DiscoverSection() {
 
   const handleDiscover = () => {
     document.body.classList.add("homepage-discover-transition");
-    transitionTimerRef.current = setTimeout(() => setIsMounted(true), 650);
+    transitionTimerRef.current = setTimeout(() => setIsMounted(true), 900);
   };
 
 
   return (
     <section className={`homepage-discover${isMounted ? " is-live" : ""}`} aria-label="Discover our brand network">
       <style>{`
-        .homepage-discover{position:relative;width:100%;background:#111}
-        .homepage-discover__preview{position:relative;width:100%;height:100vh;height:100svh;min-height:100vh;min-height:100svh;overflow:hidden;background:#111;transition:filter .65s ease,opacity .65s ease}
-        body.homepage-discover-transition .homepage-main #top,body.homepage-discover-transition .hero-navigation,body.homepage-discover-transition .homepage-footer{filter:grayscale(1);opacity:0;transition:filter .65s ease,opacity .65s ease}
+        .homepage-discover{position:relative;width:100%;height:100%;min-height:100%;background:#111}
+        .homepage-discover__preview{position:relative;width:100%;height:100%;min-height:100%;overflow:hidden;background:#111;transition:filter .9s cubic-bezier(.22,1,.36,1),opacity .9s cubic-bezier(.22,1,.36,1)}
+        body.homepage-discover-transition .homepage-main #top,body.homepage-discover-transition .hero-navigation,body.homepage-discover-transition .homepage-footer{filter:grayscale(1);opacity:0;transition:filter .9s cubic-bezier(.22,1,.36,1),opacity .9s cubic-bezier(.22,1,.36,1)}
         .homepage-discover__preview:before,.homepage-discover__preview:after{content:"";position:absolute;z-index:1;left:0;right:0;height:160px;pointer-events:none}.homepage-discover__preview:before{top:0;background:linear-gradient(to bottom,#111 0%,rgba(17,17,17,.7) 35%,transparent 100%)}.homepage-discover__preview:after{bottom:0;background:linear-gradient(to top,#111 0%,rgba(17,17,17,.7) 35%,transparent 100%)}
         .homepage-discover__preview-grid{position:absolute;inset:0;display:grid;grid-template-columns:repeat(8,230px);grid-auto-rows:290px;gap:16px;overflow:hidden;filter:grayscale(1)}
         .homepage-discover__tile{position:relative;width:230px;height:290px;overflow:hidden;border-radius:3px;background:#252525;color:#fff}
@@ -81,10 +81,10 @@ export default function DiscoverSection() {
         .homepage-discover__trigger.is-visible{opacity:1;visibility:visible;pointer-events:auto}
         .homepage-discover__trigger:hover{background:#a93d1a;border-color:#fff}
         .homepage-discover__trigger:focus-visible{outline:2px solid #fff;outline-offset:4px}
-        .homepage-discover__expanded{width:100%;height:100vh;height:100svh;min-height:100vh;min-height:100svh}
+        .homepage-discover__expanded{width:100%;height:100%;min-height:100%;opacity:0;animation:homepage-discover-reveal .8s cubic-bezier(.22,1,.36,1) forwards}@keyframes homepage-discover-reveal{from{opacity:0}to{opacity:1}}
         .homepage-discover__loading{display:grid;min-height:280px;place-items:center;color:rgba(255,255,255,.65);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
         .homepage-discover.is-live{padding:0;margin:0}
-        @media(max-width:640px){.homepage-discover__preview{height:100vh;height:100svh;min-height:100vh;min-height:100svh}.homepage-discover__preview-grid{gap:6px}.homepage-discover__trigger{min-height:44px;padding-inline:17px;font-size:10px}.homepage-discover__expanded{height:100vh;height:100svh;min-height:100vh;min-height:100svh}}
+        @media(max-width:640px){.homepage-discover__preview{height:100%;min-height:100%}.homepage-discover__preview-grid{gap:6px}.homepage-discover__trigger{min-height:44px;padding-inline:17px;font-size:10px}}
       `}</style>
       {!isMounted ? (
         <div className="homepage-discover__preview">
