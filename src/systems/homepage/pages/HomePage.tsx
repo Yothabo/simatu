@@ -38,7 +38,7 @@ export default function HomePage() {
         .homepage-moodboard-background{position:fixed;inset:0;z-index:0;overflow:hidden;background:#111}
         .homepage-moodboard-background .kinetic-moodboard{position:absolute;inset:0;width:100%;height:100%;opacity:1;pointer-events:none}
         .homepage-moodboard-gradient{display:none}
-        .homepage-foreground{position:relative;z-index:2}
+        .homepage-foreground{position:relative;z-index:2}\n        .homepage-layered-experience.phase-active .homepage-moodboard-background .kinetic-moodboard{pointer-events:auto}
         .homepage-layered-experience .homepage-main>header,.homepage-layered-experience .homepage-main>.novae-hero{will-change:opacity,transform}
         .homepage-layered-experience .homepage-main>header{transition:opacity .55s cubic-bezier(.2,.65,.25,1),transform .55s cubic-bezier(.2,.65,.25,1)}
         .homepage-layered-experience .homepage-main>.novae-hero{transition:opacity 1s cubic-bezier(.2,.65,.25,1),transform 1s cubic-bezier(.2,.65,.25,1)}
