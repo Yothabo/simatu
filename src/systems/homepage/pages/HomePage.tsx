@@ -4,13 +4,25 @@ import DiscoverSection from "../discover/DiscoverSection";
 import KineticMoodboard from "../discover/KineticMoodboard";
 import Footer from "../footer";
 
-/** The moodboard is a fixed canvas beneath the independently scrolling homepage. */
+/** Coordinates the homepage exit and discovery entrance as separate phases. */
 export default function HomePage() {
-  const [transitionPhase, setTransitionPhase] = useState<"idle" | "exit" | "reveal" | "active">("idle");\n\n  useEffect(() => {\n    if (transitionPhase !== "exit") return;\n    const timeout = window.setTimeout(() => setTransitionPhase("reveal"), 1050);\n    return () => window.clearTimeout(timeout);\n  }, [transitionPhase]);\n\n  useEffect(() => {\n    if (transitionPhase !== "reveal") return;\n    const timeout = window.setTimeout(() => setTransitionPhase("active"), 1550);\n    return () => window.clearTimeout(timeout);\n  }, [transitionPhase]);
+  const [transitionPhase, setTransitionPhase] = useState<"idle" | "exit" | "reveal" | "active">("idle");
+
+  useEffect(() => {
+    if (transitionPhase !== "exit") return;
+    const timeout = window.setTimeout(() => setTransitionPhase("reveal"), 1050);
+    return () => window.clearTimeout(timeout);
+  }, [transitionPhase]);
+
+  useEffect(() => {
+    if (transitionPhase !== "reveal") return;
+    const timeout = window.setTimeout(() => setTransitionPhase("active"), 1550);
+    return () => window.clearTimeout(timeout);
+  }, [transitionPhase]);
 
   return (
-    <div className={`novae-page homepage-layered-experience${discoverActive ? " discover-active" : ""}`}>
-      <div className="homepage-moodboard-background" aria-hidden={!discoverActive}>
+    <div className={`nova e-page homepage-layered-experience phase-${transitionPhase}`.replace("nova e-page","nova-page")}>
+      <div className="homepage-moodboard-background" aria-hidden={transitionPhase === "idle"}>
         <KineticMoodboard colorReveal={transitionPhase === "reveal" || transitionPhase === "active"} interactive={transitionPhase === "active"} onExit={() => setTransitionPhase("idle")} />
         <div className="homepage-moodboard-gradient" aria-hidden="true" />
       </div>
