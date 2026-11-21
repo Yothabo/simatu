@@ -29,7 +29,7 @@ export default function DiscoverSection({ onDiscover }: DiscoverSectionProps) {
           text-transform:uppercase;
           white-space:nowrap;
           cursor:pointer;
-          transition:background .2s,border-color .2s,transform .2s
+          transition:opacity .55s ease
         }
         .homepage-discover-trigger:hover{background:#a93d1a;border-color:#fff}
         .homepage-discover-trigger:active{transform:scale(.98)}
