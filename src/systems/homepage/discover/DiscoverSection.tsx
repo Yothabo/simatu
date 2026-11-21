@@ -30,8 +30,9 @@ function seededShuffle<T>(items: T[]) {
 }
 
 export default function DiscoverSection() {
-  const [isMounted, setIsMounted] = useState(false);\n  const sectionRef = useRef<HTMLElement>(null);
+  const [isMounted, setIsMounted] = useState(false);
   const [isFullyVisible, setIsFullyVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const animationFrameRef = useRef<number | null>(null);
   const previewTiles = useMemo(() => {
@@ -54,16 +55,34 @@ export default function DiscoverSection() {
     document.body.classList.remove("homepage-discover-transition");
   }, []);
 
-
   const handleDiscover = () => {
-    document.body.classList.add("homepage-discover-transition");
-    transitionTimerRef.current = setTimeout(() => setIsMounted(true), 900);
-  };
+    const section = sectionRef.current;
+    if (!section || isMounted) return;
+    const rect = section.getBoundingClientRect();
 
+    section.style.position = "fixed";
+    section.style.top = `${rect.top}px`;
+    section.style.left = `${rect.left}px`;
+    section.style.width = `${rect.width}px`;
+    section.style.height = `${rect.height}px`;
+    section.style.margin = "0";
+    section.style.zIndex = "9999";
+    section.style.transition = "top .9s cubic-bezier(.22,1,.36,1), left .9s cubic-bezier(.22,1,.36,1), width .9s cubic-bezier(.22,1,.36,1), height .9s cubic-bezier(.22,1,.36,1)";
+
+    document.body.classList.add("homepage-discover-transition");
+    setIsMounted(true);
+    animationFrameRef.current = requestAnimationFrame(() => {
+      section.style.top = "0";
+      section.style.left = "0";
+      section.style.width = "100vw";
+      section.style.height = "100vh";
+      section.style.height = "100svh";
+    });
+  };
 
   return (
     <section ref={sectionRef} className={`homepage-discover${isMounted ? " is-live" : ""}`} aria-label="Discover our brand network">
-      <style>{`
+      <style>{\`
         .homepage-discover{position:relative;display:block;width:100%;height:100vh;height:100svh;min-height:100vh;min-height:100svh;margin:0;padding:0;box-sizing:border-box;background:#111}
         .homepage-discover__preview{position:absolute;inset:0;display:block;width:100%;height:100%;min-height:0;margin:0;padding:0;box-sizing:border-box;overflow:hidden;background:#111;transition:opacity .9s cubic-bezier(.22,1,.36,1)}
         body.homepage-discover-transition .homepage-main #top,body.homepage-discover-transition .hero-navigation,body.homepage-discover-transition .homepage-footer{filter:grayscale(1);opacity:0;transition:filter .9s cubic-bezier(.22,1,.36,1),opacity .9s cubic-bezier(.22,1,.36,1)}
@@ -80,10 +99,11 @@ export default function DiscoverSection() {
         .homepage-discover__trigger:hover{background:#a93d1a;border-color:#fff}
         .homepage-discover__trigger:focus-visible{outline:2px solid #fff;outline-offset:4px}
         .homepage-discover__expanded{position:absolute;inset:0;display:block;width:100%;height:100%;min-height:0;margin:0;padding:0;box-sizing:border-box;opacity:0;pointer-events:none;transition:opacity .9s cubic-bezier(.22,1,.36,1)}
-        .homepage-discover__loading{display:grid;min-height:280px;place-items:center;color:rgba(255,255,255,.65);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
-        .homepage-discover.is-live{inset:0;min-height:0;margin:0;padding:0;box-sizing:border-box;overflow:hidden}\n        .homepage-discover.is-live .homepage-discover__preview{opacity:0;pointer-events:none}\n        .homepage-discover.is-live .homepage-discover__expanded{opacity:1;pointer-events:auto}
+        .homepage-discover.is-live{inset:0;min-height:0;margin:0;padding:0;box-sizing:border-box;overflow:hidden}
+        .homepage-discover.is-live .homepage-discover__preview{opacity:0;pointer-events:none}
+        .homepage-discover.is-live .homepage-discover__expanded{opacity:1;pointer-events:auto}
         @media(max-width:640px){.homepage-discover__preview-grid{gap:6px}.homepage-discover__trigger{min-height:44px;padding-inline:17px;font-size:10px}}
-      `}</style>
+      \`}</style>
       <div className="homepage-discover__preview">
         <div className="homepage-discover__preview-grid" aria-hidden="true">
           {previewTiles.map((item, index) => (
