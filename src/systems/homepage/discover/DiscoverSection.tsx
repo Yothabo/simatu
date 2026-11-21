@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";\nimport KineticMoodboard from "./KineticMoodboard";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import KineticMoodboard from "./KineticMoodboard";
 
 const previewItems = [
   { id: "01", image: "https://images.unsplash.com/photo-1531058020387-3be344556be6?w=900&q=85", alt: "Modern architectural interior", category: "Spaces", title: "New perspectives" },
@@ -82,7 +83,7 @@ export default function DiscoverSection() {
 
   return (
     <section ref={sectionRef} className={`homepage-discover${isMounted ? " is-live" : ""}`} aria-label="Discover our brand network">
-      <style>{\`
+      <style>{`
         .homepage-discover{position:relative;display:block;width:100%;height:100vh;height:100svh;min-height:100vh;min-height:100svh;margin:0;padding:0;box-sizing:border-box;background:#111}
         .homepage-discover__preview{position:absolute;inset:0;display:block;width:100%;height:100%;min-height:0;margin:0;padding:0;box-sizing:border-box;overflow:hidden;background:#111;transition:opacity .9s cubic-bezier(.22,1,.36,1)}
         body.homepage-discover-transition .homepage-main #top,body.homepage-discover-transition .hero-navigation,body.homepage-discover-transition .homepage-footer{filter:grayscale(1);opacity:0;transition:filter .9s cubic-bezier(.22,1,.36,1),opacity .9s cubic-bezier(.22,1,.36,1)}
@@ -103,7 +104,7 @@ export default function DiscoverSection() {
         .homepage-discover.is-live .homepage-discover__preview{opacity:0;pointer-events:none}
         .homepage-discover.is-live .homepage-discover__expanded{opacity:1;pointer-events:auto}
         @media(max-width:640px){.homepage-discover__preview-grid{gap:6px}.homepage-discover__trigger{min-height:44px;padding-inline:17px;font-size:10px}}
-      \`}</style>
+      `}</style>
       <div className="homepage-discover__preview">
         <div className="homepage-discover__preview-grid" aria-hidden="true">
           {previewTiles.map((item, index) => (
