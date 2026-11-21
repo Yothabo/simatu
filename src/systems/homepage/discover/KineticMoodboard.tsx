@@ -98,13 +98,6 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   }, []);
 
   useEffect(() => {
-    const savedPosition = restorePositionRef.current;
-    if (!savedPosition || !viewport.width || !viewport.height) return;
-    restorePositionRef.current = null;
-    applyPosition(savedPosition.x, savedPosition.y);
-  }, [viewport.width, viewport.height, applyPosition]);
-
-  useEffect(() => {
     if (!activeDiscovery || !colorReveal) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -150,6 +143,13 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
     positionRef.current = next;
     setPosition(next);
   }, [boardWidth, boardHeight, viewport.width, viewport.height]);
+
+  useEffect(() => {
+    const savedPosition = restorePositionRef.current;
+    if (!savedPosition || !viewport.width || !viewport.height) return;
+    restorePositionRef.current = null;
+    applyPosition(savedPosition.x, savedPosition.y);
+  }, [viewport.width, viewport.height, applyPosition]);
 
   useEffect(() => {
     const element = viewportRef.current;
