@@ -7,7 +7,7 @@ import Footer from "../footer";
 /** Coordinates homepage motion with transition events and conservative watchdog fallbacks. */
 const EXIT_ANIMATION_MS = 1000;
 const EXIT_WATCHDOG_MS = EXIT_ANIMATION_MS + 250;
-const DISCOVERY_REVEAL_WATCHDOG_MS = 5200; // Allows the 8-row staggered reveal to finish before fallback activation.
+const DISCOVERY_REVEAL_WATCHDOG_MS = 2000; // Activates controls promptly; tile reveal continues independently.
 export default function HomePage() {
   const [transitionPhase, setTransitionPhase] = useState<"idle" | "exit" | "reveal" | "active">("idle");
   const exitCompletion = useRef({ header: false, hero: false, footer: false, discover: false });
@@ -50,8 +50,8 @@ export default function HomePage() {
   return (
     <div className={`nova-page homepage-layered-experience phase-${transitionPhase}`}>
       <div className="homepage-moodboard-background" aria-hidden={transitionPhase === "idle"} onTransitionEnd={handleRevealTransitionEnd}>
-        <KineticMoodboard colorReveal={transitionPhase === "reveal" || transitionPhase === "active"} interactive={transitionPhase === "active"} onExit={() => setTransitionPhase("idle")} />
         <div className="homepage-moodboard-gradient" aria-hidden="true" />
+        <KineticMoodboard colorReveal={transitionPhase === "reveal" || transitionPhase === "active"} interactive={transitionPhase === "reveal" || transitionPhase === "active"} onExit={() => setTransitionPhase("idle")} />
       </div>
       <div className="homepage-foreground" onTransitionEnd={handleExitTransitionEnd}>
         <main className="homepage-main">
@@ -62,9 +62,9 @@ export default function HomePage() {
       </div>
       <style>{`
         .homepage-layered-experience{position:relative;min-height:100vh;background:#111}
-        .homepage-moodboard-background{position:fixed;inset:0;z-index:0;overflow:hidden;background:transparent}
-        .homepage-moodboard-background .kinetic-moodboard{position:absolute;inset:0;width:100%;height:100%;opacity:1;pointer-events:none}
-        .homepage-moodboard-gradient{display:none}
+        .homepage-moodboard-background{position:fixed;inset:0;z-index:0;overflow:hidden;background:linear-gradient(180deg,rgba(12,12,12,.08) 0%,rgba(12,12,12,.28) 48%,rgba(12,12,12,.62) 100%)}
+        .homepage-moodboard-background .kinetic-moodboard{position:absolute;inset:0;width:100%;height:100%;z-index:1;opacity:1;pointer-events:none}
+        .homepage-moodboard-gradient{position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(180deg,rgba(10,10,10,.06) 0%,rgba(10,10,10,.16) 45%,rgba(10,10,10,.48) 100%)}
         .homepage-foreground{position:relative;z-index:2}
         .homepage-layered-experience.phase-active .homepage-moodboard-background .kinetic-moodboard{pointer-events:auto}
         .homepage-layered-experience.phase-reveal .homepage-foreground,.homepage-layered-experience.phase-active .homepage-foreground{pointer-events:none}
