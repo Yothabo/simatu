@@ -19,7 +19,7 @@ export default function DiscoverSection() {
         .homepage-discover__preview-grid{display:grid;width:100%;height:100%;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;transform:scale(1.04)}
         .homepage-discover__preview-grid img{width:100%;height:100%;min-width:0;object-fit:cover;opacity:.55;filter:brightness(.65)}
         .homepage-discover__preview:after{position:absolute;inset:0;content:"";background:linear-gradient(180deg,rgba(17,17,17,.18),rgba(17,17,17,.62))}
-        .homepage-discover__trigger{position:absolute;z-index:2;top:22px;left:50%;transform:translateX(-50%);display:inline-flex;min-height:48px;padding:0 24px;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.6);border-radius:999px;background:rgba(17,17,17,.82);color:#fff;font:600 11px/1.2 inherit;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:background .2s,border-color .2s}
+        .homepage-discover__trigger{position:absolute;z-index:2;top:22px;left:50%;transform:translateX(-50%);display:inline-flex;min-height:48px;padding:0 24px;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.6);border-radius:999px;background:rgba(17,17,17,.82);color:#fff;font:600 11px/1.2 var(--hp-font-family,sans-serif);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:background .2s,border-color .2s}
         .homepage-discover__trigger:hover{background:#292929;border-color:#fff}
         .homepage-discover__trigger:focus-visible{outline:2px solid #fff;outline-offset:4px}
         .homepage-discover__expanded{min-height:560px}
