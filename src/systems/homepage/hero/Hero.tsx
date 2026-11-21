@@ -89,7 +89,7 @@ export default function AuralisCreativeHero() {
           </h1>
         </div>
 
-        <div className="hero-description absolute z-[6] right-[8%] bottom-[19%] w-[min(300px,25%)]">
+        <div className="hero-description absolute z-[6] right-[8%] bottom-[19%]">
           <p className="hero-copy-description m-0 text-[rgba(245,245,245,0.67)] text-base font-normal leading-[1.75] tracking-[0.1px] max-[820px]:text-[15px] max-[520px]:leading-[1.7]">
             {heroCopy.description}
           </p>
