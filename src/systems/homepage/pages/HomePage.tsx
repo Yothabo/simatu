@@ -1,14 +1,16 @@
 import Hero from "../hero/Hero";
-import KineticMoodboard from "../discover/KineticMoodboard";
+import DiscoverSection from "../discover/DiscoverSection";
+import Footer from "../footer";
 
-/** The homepage pairs the hero with the interactive discovery experience. */
+/** The homepage pairs the hero with an opt-in discovery experience and footer. */
 export default function HomePage() {
   return (
     <div className="novae-page">
       <main className="homepage-main">
         <Hero />
-        <KineticMoodboard />
+        <DiscoverSection />
       </main>
+      <Footer />
     </div>
   );
 }
