@@ -10,7 +10,6 @@ type Brand = {
   image: string;
   imageAlt: string;
   position: string;
-  href?: string;
   isLogo?: boolean;
 };
 
@@ -32,7 +31,6 @@ const BRANDS: Brand[] = [
     image: "https://images.unsplash.com/photo-1652715256292-bbee70ee04ca?auto=format&fit=crop&w=1800&q=88",
     imageAlt: "Editorial fashion portrait",
     position: "50% 42%",
-    href: "/poshies",
   },
   {
     id: 2,
@@ -41,7 +39,6 @@ const BRANDS: Brand[] = [
     image: "https://media.macphun.com/img/uploads/customer/blog/1752169898/1752170008686ffe183af522.98492050.jpg?q=85&w=1680",
     imageAlt: "Atmospheric amber fragrance bottle in dramatic luxury editorial lighting",
     position: "50% 45%",
-    href: "/yotaabo",
   },
   {
     id: 3,
