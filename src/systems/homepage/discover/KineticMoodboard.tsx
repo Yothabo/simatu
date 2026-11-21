@@ -74,6 +74,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const sourceItems = items.length ? items : DEFAULT_ITEMS;
   const tiles = useMemo(() => {
@@ -86,6 +87,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
     return Array.from({ length: columns * columns }, (_, index) => shuffled[index % shuffled.length]);
   }, [sourceItems, columns]);
 
+  const normalizedSearch = searchQuery.trim().toLowerCase();
   const boardWidth = columns * tileWidth + (columns - 1) * gap;
   const boardHeight = columns * tileHeight + (columns - 1) * gap;
 
@@ -198,6 +200,14 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__tile{position:relative;display:block;width:${tileWidth}px;height:${tileHeight}px;padding:0;overflow:hidden;border:0;border-radius:${borderRadius}px;background:#252525;color:inherit;text-align:left;cursor:pointer}
         .kinetic-moodboard__tile img{display:block;width:100%;height:100%;object-fit:cover;filter:grayscale(1);transition:transform .7s cubic-bezier(.2,.7,.2,1),filter 1.8s cubic-bezier(.2,.65,.25,1)}.kinetic-moodboard.is-color-revealing .kinetic-moodboard__tile img{filter:grayscale(0)}
         .kinetic-moodboard__tile:hover img{transform:scale(1.055);filter:brightness(.82)}
+        .kinetic-moodboard__tile.is-search-hidden{visibility:hidden;pointer-events:none}
+        .kinetic-moodboard__search-header{position:absolute;z-index:10;top:0;left:0;right:0;display:flex;justify-content:center;padding:18px 20px;transform:translate3d(0,-125%,0);opacity:0;pointer-events:none;transition:transform .85s cubic-bezier(.2,.65,.25,1),opacity .65s ease;}
+        .kinetic-moodboard.is-color-revealing .kinetic-moodboard__search-header{transform:translate3d(0,0,0);opacity:1;pointer-events:auto}
+        .kinetic-moodboard__search-shell{width:min(560px,calc(100vw - 40px));height:48px;display:flex;align-items:center;gap:12px;padding:0 18px;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:#292929;box-shadow:0 12px 36px rgba(0,0,0,.3);color:#f2f2f2}
+        .kinetic-moodboard__search-icon{width:16px;height:16px;flex:0 0 16px;opacity:.62}
+        .kinetic-moodboard__search-input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:#f2f2f2;font:400 13px/1.2 sans-serif;letter-spacing:.02em}
+        .kinetic-moodboard__search-input::placeholder{color:rgba(255,255,255,.45)}
+        @media(max-width:640px){.kinetic-moodboard__search-header{padding:12px 12px}.kinetic-moodboard__search-shell{height:44px;width:calc(100vw - 24px)}}
         .kinetic-moodboard__tile:after{content:"";position:absolute;inset:35% 0 0;background:linear-gradient(transparent,rgba(0,0,0,.65));pointer-events:none}
         .kinetic-moodboard__label{position:absolute;z-index:1;left:16px;right:12px;bottom:15px;display:grid;gap:4px;pointer-events:none}
         .kinetic-moodboard__category{font:600 9px/1.2 sans-serif;letter-spacing:.18em;text-transform:uppercase;opacity:.75}
@@ -206,6 +216,12 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__hint:before{content:"";width:22px;height:1px;background:currentColor}
         @media(max-width:640px){.kinetic-moodboard{height:100%;min-height:0}.kinetic-moodboard__hint{right:16px;bottom:16px}}
       `}</style>
+      <div className="kinetic-moodboard__search-header" aria-hidden={!colorReveal}>
+        <label className="kinetic-moodboard__search-shell">
+          <svg className="kinetic-moodboard__search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" strokeWidth="1.7"/><path d="m16 16 4.3 4.3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/></svg>
+          <input className="kinetic-moodboard__search-input" type="search" placeholder="Search the network" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} tabIndex={colorReveal ? 0 : -1} aria-label="Search the brand network" />
+        </label>
+      </div>
       <div
         ref={viewportRef}
         className={`kinetic-moodboard__viewport${dragging ? ' is-dragging' : ''}`}
@@ -219,7 +235,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
           {tiles.map((item, index) => (
             <button
               type="button"
-              className="kinetic-moodboard__tile"
+              className={`kinetic-moodboard__tile${normalizedSearch && !`${item.category} ${item.title}`.toLowerCase().includes(normalizedSearch) ? ' is-search-hidden' : ''}`}
               key={`${item.id}-${index}`}
               onClick={() => handleTileClick(item)}
               aria-label={`${item.category}: ${item.title}`}
@@ -231,7 +247,6 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
           ))}
         </div>
       </div>
-      <div className="kinetic-moodboard__hint" aria-hidden="true">Drag to explore</div>
     </section>
   );
 };
