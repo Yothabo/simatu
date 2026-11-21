@@ -120,7 +120,7 @@ export default function AuralisCreativeHero() {
 
             <div className="selector-overlay" />
             <div className="selector-shine" />
-            <a href="#contact" className="selector-cta" aria-label="Let's talk">↗</a>
+            <a href="/discover" target="_blank" rel="noopener noreferrer" className="selector-cta" aria-label="Open discovery page in a new tab">↗</a>
           </div>
         </div>
 
