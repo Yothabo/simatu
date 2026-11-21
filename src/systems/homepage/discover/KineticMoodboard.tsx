@@ -286,7 +286,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__store-list{margin-top:18px}.kinetic-moodboard__store-card{display:flex;flex-direction:column;align-items:stretch;gap:1px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.08);color:#fff;text-decoration:none}.kinetic-moodboard__store-card:last-of-type{border-bottom:0}
         .kinetic-moodboard__store-topline{display:flex;align-items:center;justify-content:space-between;gap:12px}
         .kinetic-moodboard__store-link-row{display:block;margin-top:4px}
-        .kinetic-moodboard__store-name{font:500 16px/1.4 sans-serif;color:#d0d0d0}
+        .kinetic-moodboard__store-name{font:500 16px/1.4 sans-serif;color:#dedede}
         .kinetic-moodboard__store-description{font:12px/1.5 sans-serif;color:#aaa;margin:0;min-width:0;max-width:500px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden}
         .kinetic-moodboard__store-open{flex:0 0 auto;font:500 11px/1 sans-serif;color:#b8b8b8;white-space:nowrap}
         @keyframes discover-overlay-in{to{background:rgba(0,0,0,.66);backdrop-filter:blur(10px)}}
