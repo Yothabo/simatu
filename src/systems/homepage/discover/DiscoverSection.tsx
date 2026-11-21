@@ -34,19 +34,19 @@ function seededShuffle<T>(items: T[]) {
 export default function DiscoverSection() {
   const [isMounted, setIsMounted] = useState(false);
   const [isFullyVisible, setIsFullyVisible] = useState(false);
-  const previewRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const previewTiles = useMemo(() => {
     const shuffled = seededShuffle(previewItems);
     return Array.from({ length: 64 }, (_, index) => shuffled[index % shuffled.length]);
   }, []);
 
   useEffect(() => {
-    if (isMounted || !previewRef.current) return;
+    if (isMounted || !triggerRef.current) return;
     const observer = new IntersectionObserver(
       ([entry]) => setIsFullyVisible(entry.isIntersecting && entry.intersectionRatio >= 1),
       { threshold: 1 },
     );
-    observer.observe(previewRef.current);
+    observer.observe(triggerRef.current);
     return () => observer.disconnect();
   }, [isMounted]);
 
@@ -54,8 +54,8 @@ export default function DiscoverSection() {
     <section className={`homepage-discover${isMounted ? " is-live" : ""}`} aria-label="Discover our brand network">
       <style>{`
         .homepage-discover{position:relative;width:100%;background:#111}
-        .homepage-discover__preview{position:relative;width:100%;height:560px;min-height:560px;overflow:hidden;background:#111}
-        .homepage-discover__preview-grid{position:absolute;inset:0;display:grid;grid-template-columns:repeat(8,230px);grid-auto-rows:290px;gap:16px;overflow:hidden}
+        .homepage-discover__preview{position:relative;width:100%;height:596px;min-height:596px;overflow:hidden;background:#111}
+        .homepage-discover__preview-grid{position:absolute;inset:0;display:grid;grid-template-columns:repeat(8,230px);grid-auto-rows:290px;gap:16px;overflow:hidden;filter:grayscale(1)}
         .homepage-discover__tile{position:relative;width:230px;height:290px;overflow:hidden;border-radius:3px;background:#252525;color:#fff}
         .homepage-discover__tile img{display:block;width:100%;height:100%;object-fit:cover}
         .homepage-discover__tile:after{content:"";position:absolute;inset:35% 0 0;background:linear-gradient(transparent,rgba(0,0,0,.65));pointer-events:none}
@@ -69,10 +69,10 @@ export default function DiscoverSection() {
         .homepage-discover__expanded{width:100%;height:560px;min-height:560px}
         .homepage-discover__loading{display:grid;min-height:280px;place-items:center;color:rgba(255,255,255,.65);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
         .homepage-discover.is-live{padding:0;margin:0}
-        @media(max-width:640px){.homepage-discover__preview{height:calc(100svh - 72px);min-height:560px}.homepage-discover__preview-grid{gap:6px}.homepage-discover__trigger{top:16px;min-height:44px;padding-inline:17px;font-size:10px}.homepage-discover__expanded{height:calc(100svh - 72px);min-height:560px}}
+        @media(max-width:640px){.homepage-discover__preview{height:596px;min-height:596px}.homepage-discover__preview-grid{gap:6px}.homepage-discover__trigger{top:16px;min-height:44px;padding-inline:17px;font-size:10px}.homepage-discover__expanded{height:calc(100svh - 72px);min-height:560px}}
       `}</style>
       {!isMounted ? (
-        <div className="homepage-discover__preview" ref={previewRef}>
+        <div className="homepage-discover__preview">
           <div className="homepage-discover__preview-grid" aria-hidden="true">
             {previewTiles.map((item, index) => (
               <div className="homepage-discover__tile" key={`${item.id}-${index}`}>
@@ -86,7 +86,7 @@ export default function DiscoverSection() {
           </div>
           <button
             type="button"
-            className={`homepage-discover__trigger${isFullyVisible ? " is-visible" : ""}`}
+            className={`homepage-discover__trigger${isFullyVisible ? " is-visible" : ""}`}\n            ref={triggerRef}
             onClick={() => setIsMounted(true)}
             tabIndex={isFullyVisible ? 0 : -1}
           >
