@@ -30,7 +30,7 @@ export default function HomePage() {
         
         .homepage-foreground{position:relative;z-index:2}
         .homepage-layered-experience .homepage-main>header,.homepage-layered-experience .homepage-main>.novae-hero{transition:opacity .9s cubic-bezier(.2,.65,.25,1),transform .9s cubic-bezier(.2,.65,.25,1)}
-        .homepage-layered-experience .homepage-main>.homepage-discover-trigger-section{transition:opacity .65s ease,visibility .65s}
+        .homepage-layered-experience .homepage-main>.homepage-discover-trigger-section{transition:opacity .55s ease,visibility .55s}
         .homepage-layered-experience .homepage-foreground>footer{transition:opacity .9s cubic-bezier(.2,.65,.25,1),transform .9s cubic-bezier(.2,.65,.25,1)}
         .homepage-layered-experience.discover-active .homepage-main>header,.homepage-layered-experience.discover-active .homepage-main>.novae-hero{opacity:0;transform:translateY(-100px);pointer-events:none}
         .homepage-layered-experience.discover-active .homepage-main>.homepage-discover-trigger-section{opacity:0;visibility:hidden;pointer-events:none}
