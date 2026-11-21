@@ -1,25 +1,28 @@
 .epr-page {
   --epr-content-inset: clamp(48px, 6vh, 88px);
+  padding-top: var(--epr-content-inset);
   position: relative;
   isolation: isolate;
   width: 100%;
   height: 100svh;
   min-height: 680px;
   overflow: hidden;
-  padding-top: var(--epr-content-inset);
   color: var(--hp-color-text);
   background: var(--hp-palette-grey-900);
   font-family: inherit;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
-
 .epr-page *,
 .epr-page *::before,
 .epr-page *::after {
   box-sizing: border-box;
 }
-
+.epr-page button,
+.epr-page a {
+  color: inherit;
+  font: inherit;
+}
 .epr-stage {
   container-type: inline-size;
   position: absolute;
@@ -27,11 +30,12 @@
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 1;
+  width: 100%;
   overflow: hidden;
+  background: transparent;
   isolation: isolate;
+  z-index: 1;
 }
-
 .epr-page::before {
   content: "";
   position: absolute;
@@ -45,110 +49,421 @@
     linear-gradient(25deg, transparent 0 44%, color-mix(in srgb, var(--hp-palette-grey-800) 65%, transparent) 44.1%, transparent 44.3% 100%);
   background-size: 100% 100%;
 }
-
-.epr-mark {
+.epr-count {
   position: absolute;
-  top: 12.78svh;
-  left: 10.42cqw;
-  display: grid;
-  width: 43cqw;
-  height: 67.5svh;
-  place-items: center;
-  overflow: hidden;
-  background: #000;
+  z-index: 30;
+  top: 34.55%;
+  left: 10.42%;
+  margin: 0;
+  color: var(--hp-color-text);
+  font-size: clamp(10px, 0.71cqw, 15px);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
 }
-
-.epr-mark img {
+.epr-count-window {
+  position: relative;
+  display: inline-block;
+  width: 1.75em;
+  height: 1em;
+  overflow: hidden;
+  vertical-align: -0.08em;
+}
+.epr-count-number {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.epr-count-number.is-entering {
+  animation: epr-count-in var(--hp-motion-duration-slow) cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.epr-count-number.is-leaving {
+  animation: epr-count-out var(--hp-motion-duration-base) ease-in both;
+}
+.epr-title {
+  position: absolute;
+  z-index: 30;
+  top: 34.55%;
+  right: 10.42%;
+  margin: 0;
+  color: var(--hp-color-text);
+  font-size: clamp(20px, 1.66cqw, 34px);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  text-align: right;
+  white-space: nowrap;
+  transform: none;
+  transform-origin: right top;
+  animation: epr-title-in var(--hp-motion-duration-slow) cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.epr-deck {
+  position: absolute;
+  inset: 0;
+}
+/* Cards keep fixed layout dimensions. Carousel movement and the hero-card
+ * expansion are transform-only, avoiding repeated layout/reflow on every
+ * frame of the transition. */
+.epr-card {
+  --epr-x: 0cqw;
+  --epr-y: 0svh;
+  --epr-scale-x: 1;
+  --epr-scale-y: 1;
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 11.46cqw;
+  height: 21.11svh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  background: var(--hp-color-surface);
+  cursor: pointer;
+  opacity: 1;
+  transform: translate3d(var(--epr-x), var(--epr-y), 0) scale(var(--epr-scale-x), var(--epr-scale-y));
+  transform-origin: top left;
+  transition:
+    transform var(--hp-motion-duration-image) cubic-bezier(0.22, 1, 0.36, 1),
+    opacity var(--hp-motion-duration-base) ease;
+  backface-visibility: hidden;
+}
+.epr-card img {
   display: block;
   width: 100%;
   height: 100%;
-  padding: 18%;
-  object-fit: contain;
-  object-position: center;
+  object-fit: cover;
+  object-position: var(--image-position);
+  user-select: none;
+  -webkit-user-drag: none;
+  backface-visibility: hidden;
 }
-
-.epr-kicker {
-  position: absolute;
-  top: 16.5svh;
-  right: 10.42cqw;
-  margin: 0;
-  color: var(--hp-color-text-muted);
-  font-size: clamp(10px, 0.65cqw, 13px);
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  line-height: 1.2;
-  text-align: right;
-  text-transform: uppercase;
+.epr-card.hero {
+  --epr-x: 37.29cqw;
+  --epr-y: 12.78svh;
+  --epr-scale-x: 1.609;
+  --epr-scale-y: 3.2;
+  z-index: 12;
+  pointer-events: none;
+  cursor: default;
 }
-
-.epr-title {
+.epr-card.thumb-0 {
+  --epr-x: -3.13cqw;
+  --epr-y: 56svh;
+  z-index: 2;
+}
+.epr-card.thumb-1 {
+  --epr-x: -3.13cqw;
+  --epr-y: 56svh;
+}
+.epr-card.thumb-2 {
+  --epr-x: 10.42cqw;
+  --epr-y: 56svh;
+}
+.epr-card.thumb-3 {
+  --epr-x: 23.85cqw;
+  --epr-y: 56svh;
+}
+.epr-card[class*="thumb-"]:hover img,
+.epr-card[class*="thumb-"]:focus-visible img {
+  opacity: 0.82;
+}
+.epr-card[class*="thumb-"]:focus-visible {
+  outline: 2px solid var(--hp-color-focus);
+  outline-offset: 4px;
+}
+.epr-meta {
   position: absolute;
-  top: 25svh;
-  right: 10.42cqw;
-  max-width: 32cqw;
-  margin: 0;
+  top: calc(100% + 0.8cqw);
+  left: 0;
+  display: grid;
+  gap: 0.2cqw;
+  width: 100%;
+  opacity: 0;
+  text-align: left;
+  transform: translate3d(0, 5px, 0);
+  transition:
+    opacity var(--hp-motion-duration-fast) ease,
+    transform var(--hp-motion-duration-base) cubic-bezier(0.22, 1, 0.36, 1);
+}
+.epr-meta strong {
+  overflow: hidden;
   color: var(--hp-color-text);
-  font-size: clamp(28px, 3.2cqw, 64px);
+  font-size: clamp(8px, 0.49cqw, 11px);
   font-weight: 600;
-  letter-spacing: -0.055em;
-  line-height: 1.04;
-  text-align: right;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-
+.epr-meta small {
+  color: var(--hp-color-text-muted);
+  font-size: clamp(7px, 0.43cqw, 10px);
+  line-height: 1.2;
+}
+.epr-card[class*="thumb-"]:hover .epr-meta,
+.epr-card[class*="thumb-"]:focus-visible .epr-meta {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
 .epr-copy {
   position: absolute;
-  top: 39svh;
-  right: 10.42cqw;
-  width: min(28.2cqw, 440px);
+  z-index: 22;
+  top: 12.78%;
+  bottom: 14.34%;
+  left: 64.58%;
+  width: min(28.2%, 440px);
 }
-
+.epr-copy-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+.epr-copy-layer.is-entering {
+  animation: epr-copy-in var(--hp-motion-duration-slow) cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.epr-copy-layer.is-leaving {
+  pointer-events: none;
+  animation: epr-copy-out var(--hp-motion-duration-base) ease-in both;
+}
 .epr-description {
-  max-width: 42ch;
   margin: 0;
   color: var(--hp-color-text-subtle);
   font-size: var(--hp-value-16_px);
   font-weight: var(--hp-font-weight-regular);
   letter-spacing: var(--hp-value-0p1_px);
   line-height: var(--hp-line-height-relaxed);
+  max-width: 42ch;
 }
-
+.epr-visit {
+  display: inline-flex;
+  min-height: 44px;
+  margin-top: auto;
+  padding: 0 0 7px;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  border-bottom: 1px solid var(--hp-color-border-strong);
+  color: var(--hp-color-text);
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  text-decoration: none;
+  transition:
+    gap var(--hp-motion-duration-base) cubic-bezier(0.22, 1, 0.36, 1),
+    border-color var(--hp-motion-duration-fast) ease,
+    color var(--hp-motion-duration-fast) ease;
+}
+.epr-visit:hover {
+  gap: 20px;
+  border-color: var(--hp-color-primary);
+  color: var(--hp-color-primary);
+}
+.epr-visit span {
+  font-size: 16px;
+}
+.epr-visit.is-unavailable {
+  color: var(--hp-color-text-muted);
+  cursor: default;
+}
+.epr-visit.is-unavailable:hover {
+  gap: 12px;
+  border-color: var(--hp-color-border-strong);
+  color: var(--hp-color-text-muted);
+}
+@keyframes epr-copy-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes epr-copy-out {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, -8px, 0);
+  }
+}
+@keyframes epr-count-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes epr-count-out {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+}
+@keyframes epr-title-in {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
 @media (max-aspect-ratio: 4 / 5) {
   .epr-page {
     min-height: 650px;
   }
-
-  .epr-mark {
-    top: 9svh;
-    left: 7cqw;
-    width: 45cqw;
-    height: 48svh;
+  .epr-card {
+    width: 26cqw;
+    height: 20svh;
   }
-
-  .epr-mark img {
-    padding: 14%;
+  .epr-card.hero {
+    --epr-x: 7cqw;
+    --epr-y: 9svh;
+    --epr-scale-x: 1.731;
+    --epr-scale-y: 2.3;
   }
-
-  .epr-kicker {
-    top: 9svh;
-    right: 7cqw;
-    font-size: 2.4cqw;
+  .epr-card.thumb-0 {
+    --epr-x: -10cqw;
+    --epr-y: 59.5svh;
   }
-
+  .epr-card.thumb-1 {
+    --epr-x: -10cqw;
+    --epr-y: 59.5svh;
+  }
+  .epr-card.thumb-2 {
+    --epr-x: 20cqw;
+    --epr-y: 59.5svh;
+  }
+  .epr-card.thumb-3 {
+    --epr-x: 50cqw;
+    --epr-y: 59.5svh;
+  }
+  .epr-count {
+    top: 4.5%;
+    left: 7%;
+    font-size: 2.6cqw;
+  }
   .epr-title {
-    top: 16svh;
-    right: 7cqw;
-    max-width: 39cqw;
-    font-size: 5.5cqw;
+    top: 4.5%;
+    right: 7%;
+    left: auto;
+    font-size: 5cqw;
+    text-align: right;
+    transform: none;
+    transform-origin: right top;
   }
-
   .epr-copy {
-    top: 27svh;
-    right: 7cqw;
-    width: 39cqw;
+    top: 9%;
+    bottom: 41%;
+    left: 60%;
+    width: 35%;
   }
-
+  .epr-tagline {
+    font-size: 2.6cqw;
+  }
   .epr-description {
+    margin-top: 0;
     font-size: var(--hp-value-15_px);
     line-height: 1.7;
   }
+  .epr-visit {
+    margin-top: auto;
+    font-size: 2.4cqw !important;
+  }
+
+  /* Counter the expanded card's mobile transform so the CTA remains compact. */
+  .epr-page .epr-hero-arrow {
+    transform: translate(-50%, -50%) scale(0.578, 0.4);
+  }
+
+
+  .epr-page .epr-card.hero:hover .epr-hero-arrow {
+    transform: translate(-50%, -50%) scale(0.578, 0.4)
+      translateY(calc(-1 * var(--hp-brands-cta-hover-offset)));
+  }
+}
+
+/* Keep carousel animations idle during active page scrolling. */
+.epr-page.is-scrolling,
+.epr-page.is-scrolling * {
+  animation-play-state: paused !important;
+}
+
+/* Pause Featured Brands motion outside the viewport. */
+.epr-page.is-offscreen,
+.epr-page.is-offscreen * {
+  animation-play-state: paused !important;
+}
+
+/* The hero image stays clean; decorative lines belong to the section background. */
+.epr-card.hero img {
+  filter: none;
+}
+/* Centered circular brand navigation control inside the expanded image. */
+/* Our Brands CTA uses centralized homepage design-system tokens. */
+.epr-hero-arrow {
+  position: absolute;
+  z-index: 20;
+  top: 78%;
+  left: 50%;
+  display: inline-flex;
+  width: fit-content;
+  max-width: var(--hp-brands-cta-max-width);
+  min-height: var(--hp-brands-cta-min-height);
+  padding-inline: var(--hp-brands-cta-padding-inline);
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--hp-brands-cta-radius);
+  color: var(--hp-color-text);
+  background: var(--epr-cta-color, var(--hp-color-primary));
+  font-size: var(--hp-brands-cta-font-size);
+  font-weight: var(--hp-brands-cta-font-weight);
+  letter-spacing: var(--hp-brands-cta-letter-spacing);
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  transition:
+    filter var(--hp-brands-cta-hover-duration) var(--hp-motion-ease-standard),
+    transform var(--hp-brands-cta-hover-duration) var(--hp-motion-ease-standard);
+}
+.epr-card.hero:hover .epr-hero-arrow {
+  filter: brightness(var(--hp-brands-cta-hover-brightness));
+  transform: translate(-50%, -50%) translateY(calc(-1 * var(--hp-brands-cta-hover-offset)));
+}
+
+/* Logo-led Our Brands card: black canvas with the Simatu mark centered. */
+.epr-card.is-logo {
+  background: #000;
+}
+.epr-card.is-logo .epr-logo-image {
+  object-fit: contain;
+  object-position: center;
+  padding: 18%;
+}
+.epr-card.hero.is-logo .epr-logo-image {
+  padding: 20%;
+}
+.epr-card.thumb-2.is-logo .epr-logo-image,
+.epr-card.thumb-3.is-logo .epr-logo-image {
+  padding: 12%;
 }
