@@ -33,6 +33,8 @@ function seededShuffle<T>(items: T[]) {
 export default function DiscoverSection() {
   const [isMounted, setIsMounted] = useState(false);
   const [isFullyVisible, setIsFullyVisible] = useState(false);
+  const [isColorActive, setIsColorActive] = useState(false);
+  const colorTimerRef = useRef<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
   const expandedRef = useRef<HTMLDivElement>(null);
@@ -55,6 +57,7 @@ export default function DiscoverSection() {
 
   useEffect(() => () => {
     if (animationFrameRef.current !== null) cancelAnimationFrame(animationFrameRef.current);
+    if (colorTimerRef.current !== null) window.clearTimeout(colorTimerRef.current);
     document.body.classList.remove("homepage-discover-transition");
   }, []);
 
@@ -92,6 +95,8 @@ export default function DiscoverSection() {
 
     document.body.classList.add("homepage-discover-transition");
     setIsMounted(true);
+    // Keep the board grayscale through expansion and a brief settling pause.
+    colorTimerRef.current = window.setTimeout(() => setIsColorActive(true), 2150);
     animationFrameRef.current = requestAnimationFrame(() => {
       [previewRef.current, expandedRef.current].forEach((surface) => {
         if (surface) surface.style.clipPath = "inset(0)";
@@ -100,11 +105,11 @@ export default function DiscoverSection() {
   };
 
   return (
-    <section ref={sectionRef} className={`homepage-discover${isMounted ? " is-live" : ""}`} aria-label="Discover our brand network">
+    <section ref={sectionRef} className={`homepage-discover${isMounted ? " is-live" : ""}${isColorActive ? " is-colored" : ""}`} aria-label="Discover our brand network">
       <style>{`
         .homepage-discover{position:relative;display:block;width:100%;height:100vh;height:100svh;min-height:100vh;min-height:100svh;margin:0;padding:0;box-sizing:border-box;background:#111}
         .homepage-discover__preview{position:absolute;inset:0;display:block;width:100%;height:100%;min-height:0;margin:0;padding:0;box-sizing:border-box;overflow:hidden;background:#111;transition:opacity 1.35s cubic-bezier(.16,.76,.24,1)}
-        body.homepage-discover-transition .homepage-main #top,body.homepage-discover-transition .hero-navigation,body.homepage-discover-transition .homepage-footer{filter:grayscale(1);opacity:0;transition:filter 1.35s cubic-bezier(.16,.76,.24,1),opacity 1.35s cubic-bezier(.16,.76,.24,1)}
+        body.homepage-discover-transition .homepage-main #top,body.homepage-discover-transition .hero-navigation{filter:grayscale(1);opacity:0;transform:translate3d(0,-18px,0);transition:filter 1.45s cubic-bezier(.16,.76,.24,1),opacity 1.45s cubic-bezier(.16,.76,.24,1),transform 1.45s cubic-bezier(.16,.76,.24,1)}\n        body.homepage-discover-transition .homepage-footer{filter:grayscale(1);opacity:0;transform:translate3d(0,24px,0);transition:filter 1.55s cubic-bezier(.16,.76,.24,1),opacity 1.55s cubic-bezier(.16,.76,.24,1),transform 1.55s cubic-bezier(.16,.76,.24,1)}
         .homepage-discover__preview:before,.homepage-discover__preview:after{content:"";position:absolute;z-index:1;left:0;right:0;height:160px;pointer-events:none}.homepage-discover__preview:before{top:0;background:linear-gradient(to bottom,#111 0%,rgba(17,17,17,.7) 35%,transparent 100%)}.homepage-discover__preview:after{bottom:0;background:linear-gradient(to top,#111 0%,rgba(17,17,17,.7) 35%,transparent 100%)}
         .homepage-discover__preview-grid{position:absolute;inset:0;display:grid;grid-template-columns:repeat(8,230px);grid-auto-rows:290px;gap:16px;overflow:hidden;filter:grayscale(1)}
         .homepage-discover__tile{position:relative;width:230px;height:290px;overflow:hidden;border-radius:3px;background:#252525;color:#fff}
@@ -117,10 +122,10 @@ export default function DiscoverSection() {
         .homepage-discover__trigger.is-visible{opacity:1;visibility:visible;pointer-events:auto}
         .homepage-discover__trigger:hover{background:#a93d1a;border-color:#fff}
         .homepage-discover__trigger:focus-visible{outline:2px solid #fff;outline-offset:4px}
-        .homepage-discover__expanded{position:absolute;inset:0;display:block;width:100%;height:100%;min-height:0;margin:0;padding:0;box-sizing:border-box;opacity:0;filter:grayscale(1);pointer-events:none;transition:opacity 1.6s cubic-bezier(.2,.65,.25,1),filter 1.6s cubic-bezier(.2,.65,.25,1)}
+        .homepage-discover__expanded{position:absolute;inset:0;display:block;width:100%;height:100%;min-height:0;margin:0;padding:0;box-sizing:border-box;opacity:0;filter:grayscale(1);pointer-events:none;transition:opacity 1.6s cubic-bezier(.2,.65,.25,1),filter 2.4s cubic-bezier(.2,.65,.25,1)}
         .homepage-discover.is-live{position:fixed;inset:0;width:100vw;height:100vh;height:100svh;min-height:0;margin:0;padding:0;box-sizing:border-box;overflow:hidden}
         .homepage-discover.is-live .homepage-discover__preview{opacity:0;pointer-events:none}
-        .homepage-discover.is-live .homepage-discover__expanded{opacity:1;filter:grayscale(0);pointer-events:auto}
+        .homepage-discover.is-live .homepage-discover__expanded{opacity:1;filter:grayscale(1);pointer-events:auto}\n        .homepage-discover.is-live.is-colored .homepage-discover__expanded{filter:grayscale(0)}
         @media(max-width:640px){.homepage-discover__preview-grid{gap:6px}.homepage-discover__trigger{min-height:44px;padding-inline:17px;font-size:10px}}
       `}</style>
       <div ref={previewRef} className="homepage-discover__preview">
