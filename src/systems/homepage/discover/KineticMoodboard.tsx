@@ -83,7 +83,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const [networkError, setNetworkError] = useState('');
   const [activeDiscovery, setActiveDiscovery] = useState<MoodboardItem | null>(null);
   const [isDiscoveryClosing, setIsDiscoveryClosing] = useState(false);
-  const closeDiscovery = () => setIsDiscoveryClosing(true);
+  const closeDiscovery = () => { if (activeDiscovery && !isDiscoveryClosing) setIsDiscoveryClosing(true); };
   const finishDiscoveryClose = (event: React.AnimationEvent<HTMLDivElement>) => {
     if (event.target !== event.currentTarget || !isDiscoveryClosing) return;
     setActiveDiscovery(null);
@@ -278,8 +278,8 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__result-store{font:11px/1.4 sans-serif;color:#aaa;margin-top:4px}
         .kinetic-moodboard__result-price{font:600 13px/1.3 sans-serif;color:#f4f4f4;white-space:nowrap}
         .kinetic-moodboard__search-status{padding:14px;color:#aaa;font:12px/1.5 sans-serif}
-        .kinetic-moodboard__dialog-backdrop{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:12px;overflow:hidden;box-sizing:border-box;background:rgba(0,0,0,0);backdrop-filter:blur(0);animation:discover-overlay-in .45s cubic-bezier(.2,.65,.25,1) forwards}.kinetic-moodboard__dialog-backdrop.is-closing{animation:discover-overlay-out .45s cubic-bezier(.2,.65,.25,1) forwards}
-        .kinetic-moodboard__dialog{width:min(680px,100%);max-height:min(78vh,700px);max-height:min(78dvh,700px);min-height:0;box-sizing:border-box;overscroll-behavior:contain;overflow-x:hidden;overflow-y:auto;border:1px solid rgba(255,255,255,.1);border-radius:20px;background:#242424;color:#fff;padding:26px;opacity:0;transform:translateY(24px) scale(.96);animation:discover-dialog-in .55s cubic-bezier(.2,.65,.25,1) .06s forwards}.kinetic-moodboard__dialog-backdrop.is-closing .kinetic-moodboard__dialog{animation:discover-dialog-out .45s cubic-bezier(.2,.65,.25,1) forwards}
+        .kinetic-moodboard__dialog-backdrop{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:12px;overflow:hidden;box-sizing:border-box;background:rgba(0,0,0,0);backdrop-filter:blur(0);animation:discover-overlay-in .45s cubic-bezier(.2,.65,.25,1) forwards}.kinetic-moodboard__dialog-backdrop.is-closing{animation:discover-overlay-out .65s cubic-bezier(.16,1,.3,1) forwards}
+        .kinetic-moodboard__dialog{width:min(680px,100%);max-height:min(78vh,700px);max-height:min(78dvh,700px);min-height:0;box-sizing:border-box;overscroll-behavior:contain;overflow-x:hidden;overflow-y:auto;border:1px solid rgba(255,255,255,.1);border-radius:20px;background:#242424;color:#fff;padding:26px;opacity:0;transform:translateY(24px) scale(.96);animation:discover-dialog-in .55s cubic-bezier(.2,.65,.25,1) .06s forwards}.kinetic-moodboard__dialog-backdrop.is-closing .kinetic-moodboard__dialog{animation:discover-dialog-out .65s cubic-bezier(.16,1,.3,1) forwards}
         .kinetic-moodboard__dialog-heading{position:sticky;top:-26px;z-index:5;display:flex;flex-direction:column;align-items:stretch;gap:0;margin:-26px -26px 0;padding:26px 26px 18px;background:#151515}.kinetic-moodboard__dialog-title-row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0}.kinetic-moodboard__dialog-title-row>div{min-width:0;flex:1}
         .kinetic-moodboard__dialog-title{font:500 24px/1.3 sans-serif}
         .kinetic-moodboard__dialog-intro{font:13px/1.65 sans-serif;color:#aaa;margin:12px 0 22px}
@@ -293,9 +293,9 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__store-tag{flex:0 0 auto;font:10px/1 sans-serif;color:#c9c9c9;background:#343434;border:1px solid #414141;padding:7px 9px;border-radius:999px}
         .kinetic-moodboard__store-open{flex:0 0 auto;font:600 11px/1 sans-serif;color:#ccc;white-space:nowrap}
         @keyframes discover-overlay-in{to{background:rgba(0,0,0,.66);backdrop-filter:blur(10px)}}
-        @keyframes discover-overlay-out{to{background:rgba(0,0,0,0);backdrop-filter:blur(0)}}
+        @keyframes discover-overlay-out{0%{background:rgba(0,0,0,.66);backdrop-filter:blur(10px)}100%{background:rgba(0,0,0,0);backdrop-filter:blur(0)}}
         @keyframes discover-dialog-in{to{opacity:1;transform:translateY(0) scale(1)}}
-        @keyframes discover-dialog-out{to{opacity:0;transform:translateY(24px) scale(.96)}}
+        @keyframes discover-dialog-out{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(18px) scale(.985)}}
         .kinetic-moodboard__dialog-close{border:0;border-radius:50%;width:36px;height:36px;background:#353535;color:#fff;font-size:22px;cursor:pointer}
         .kinetic-moodboard__store-sub{color:#aaa;font:12px/1.4 sans-serif;margin-top:4px}
         @media(max-width:640px){.kinetic-moodboard__search-header{padding:12px}.kinetic-moodboard__search-shell{height:56px;width:calc(100vw - 24px)}.kinetic-moodboard__search-results{top:80px}.kinetic-moodboard__dialog-backdrop{padding:12px;padding-bottom:max(12px,env(safe-area-inset-bottom));padding-top:max(12px,env(safe-area-inset-top))}.kinetic-moodboard__dialog{width:100%;max-height:min(82vh,700px);max-height:min(82dvh,700px);padding:18px;border-radius:16px;overflow-y:auto;overscroll-behavior:contain}.kinetic-moodboard__dialog-heading{top:-18px;margin:-18px -18px 0;padding:18px 18px 14px}}
