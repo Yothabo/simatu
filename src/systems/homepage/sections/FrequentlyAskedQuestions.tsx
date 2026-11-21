@@ -26,7 +26,6 @@ export default function FrequentlyAskedQuestions() {
     <section className="homepage-faq" aria-labelledby="homepage-faq-title">
       <div className="homepage-faq__inner">
         <div className="homepage-faq__intro">
-          <span className="homepage-faq__eyebrow">A few things worth knowing</span>
           <h2 id="homepage-faq-title">Frequently asked questions.</h2>
         </div>
         <div className="homepage-faq__list">
