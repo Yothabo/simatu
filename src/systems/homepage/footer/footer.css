@@ -133,3 +133,18 @@
   transform:translateY(4vh);
 }
 .homepage-footer__bottom{position:relative;z-index:1}
+
+/* Keep the footer mark centered while deliberately extending beyond the page edge. */
+.footer-wordmark{
+  position:relative !important;
+  left:50% !important;
+  width:135vw !important;
+  max-width:none !important;
+  margin-left:0 !important;
+  margin-bottom:-18vh !important;
+  transform:translate(-50%,14vh) !important;
+  object-position:center !important;
+}
+@media(max-width:520px){
+ .footer-wordmark{width:150vw !important;height:var(--hp-size-260) !important;margin-bottom:-22vh !important;transform:translate(-50%,18vh) !important}
+}
