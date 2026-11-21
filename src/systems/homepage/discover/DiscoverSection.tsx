@@ -86,7 +86,8 @@ export default function DiscoverSection() {
           </div>
           <button
             type="button"
-            className={`homepage-discover__trigger${isFullyVisible ? " is-visible" : ""}`}\n            ref={triggerRef}
+            className={`homepage-discover__trigger${isFullyVisible ? " is-visible" : ""}`}
+            ref={triggerRef}
             onClick={() => setIsMounted(true)}
             tabIndex={isFullyVisible ? 0 : -1}
           >
