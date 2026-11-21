@@ -137,7 +137,16 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
     return () => { cancelled = true; };
   }, []);
   const normalizedSearch = searchQuery.trim().toLowerCase();
-  const matchingProducts = normalizedSearch.length >= 2 ? networkProducts.filter((product) => (product.name + ' ' + product.category + ' ' + (product.subcategory || '') + ' ' + product.storeName).toLowerCase().includes(normalizedSearch)).slice(0, 12) : [];
+  const searchMatches = (value: string) => value.toLowerCase().includes(normalizedSearch);
+  const startsWithSearch = (value: string) => value.toLowerCase().startsWith(normalizedSearch);
+  const searchStores = normalizedSearch.length ? NETWORK_STORES.filter((store) => startsWithSearch(store.name)).slice(0, 4) : [];
+  const searchCategories = normalizedSearch.length ? Array.from(new Set(networkProducts.flatMap((product) => [product.category, product.subcategory || '']).filter(Boolean))).filter((category) => startsWithSearch(category)).slice(0, 6) : [];
+  const matchingProducts = normalizedSearch.length ? networkProducts
+    .filter((product) => searchMatches(product.name + ' ' + product.category + ' ' + (product.subcategory || '') + ' ' + product.storeName))
+    .sort((a, b) => {
+      const score = (product: NetworkProduct) => startsWithSearch(product.name) ? 0 : startsWithSearch(product.category) || startsWithSearch(product.subcategory || '') ? 1 : startsWithSearch(product.storeName) ? 2 : 3;
+      return score(a) - score(b) || a.name.localeCompare(b.name);
+    }).slice(0, 8) : [];
   const discoveryStores = activeDiscovery ? NETWORK_STORES : [];
   const boardWidth = columns * tileWidth + (columns - 1) * gap;
   const boardHeight = columns * tileHeight + (columns - 1) * gap;
@@ -262,8 +271,11 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard.is-color-revealing .kinetic-moodboard__search-header{transform:translate3d(0,0,0);opacity:1;pointer-events:auto}
         .kinetic-moodboard__search-shell{width:min(680px,calc(100vw - 40px));height:62px;display:flex;align-items:center;gap:12px;padding:0 18px;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:#292929;box-shadow:0 12px 36px rgba(0,0,0,.3);color:#f2f2f2}
         .kinetic-moodboard__search-icon{width:16px;height:16px;flex:0 0 16px;opacity:.62}
-        .kinetic-moodboard__search-input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:#f2f2f2;font:400 13px/1.2 sans-serif;letter-spacing:.02em}
-        .kinetic-moodboard__search-input::placeholder{color:rgba(255,255,255,.45)}
+        .kinetic-moodboard__search-input{-webkit-appearance:none;appearance:none;width:100%;min-width:0;margin:0;padding:0;border:0;border-radius:0;outline:none;box-shadow:none;background:transparent!important;color:#f2f2f2;font:400 13px/1.2 sans-serif;letter-spacing:.02em;caret-color:#dedede}
+        .kinetic-moodboard__search-input:focus,.kinetic-moodboard__search-input:focus-visible{outline:none!important;border:0!important;box-shadow:none!important;background:transparent!important}
+        .kinetic-moodboard__search-input::-webkit-search-decoration,.kinetic-moodboard__search-input::-webkit-search-cancel-button,.kinetic-moodboard__search-input::-webkit-search-results-button,.kinetic-moodboard__search-input::-webkit-search-results-decoration{display:none;-webkit-appearance:none}
+        .kinetic-moodboard__search-input:-webkit-autofill,.kinetic-moodboard__search-input:-webkit-autofill:hover,.kinetic-moodboard__search-input:-webkit-autofill:focus{-webkit-text-fill-color:#f2f2f2;transition:background-color 9999s ease-out 0s;box-shadow:0 0 0 1000px transparent inset}
+        .kinetic-moodboard__search-input::placeholder{color:rgba(255,255,255,.45);opacity:1}
         @media(max-width:640px){.kinetic-moodboard__search-header{padding:12px 12px}.kinetic-moodboard__search-shell{height:44px;width:calc(100vw - 24px)}}
         .kinetic-moodboard__tile:after{content:"";position:absolute;inset:35% 0 0;background:linear-gradient(transparent,rgba(0,0,0,.65));pointer-events:none}
         .kinetic-moodboard__label{position:absolute;z-index:1;left:16px;right:12px;bottom:15px;display:grid;gap:4px;pointer-events:none}
@@ -278,6 +290,15 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__result-store{font:11px/1.4 sans-serif;color:#aaa;margin-top:4px}
         .kinetic-moodboard__result-price{font:600 13px/1.3 sans-serif;color:#f4f4f4;white-space:nowrap}
         .kinetic-moodboard__search-status{padding:14px;color:#aaa;font:12px/1.5 sans-serif}
+        .kinetic-moodboard__suggestion-group{padding:4px 0 8px}
+        .kinetic-moodboard__suggestion-heading{padding:9px 10px 6px;color:#888;font:600 9px/1.2 sans-serif;letter-spacing:.14em}
+        .kinetic-moodboard__suggestion{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:10px;text-decoration:none;color:#ddd}
+        .kinetic-moodboard__suggestion:hover,.kinetic-moodboard__suggestion:focus{background:#333}
+        .kinetic-moodboard__suggestion-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#333;color:#bbb;flex:0 0 auto;font:16px/1 sans-serif}
+        .kinetic-moodboard__suggestion-text{display:flex;flex-direction:column;gap:3px;min-width:0}
+        .kinetic-moodboard__suggestion-name{font:500 12px/1.35 sans-serif;color:#dedede}
+        .kinetic-moodboard__suggestion-detail{font:11px/1.3 sans-serif;color:#999}
+        .kinetic-moodboard__suggestion-button{width:100%;border:0;background:transparent;text-align:left;font:inherit;cursor:pointer}
         .kinetic-moodboard__dialog-backdrop{position:fixed;inset:0;z-index:1000;display:flex;align-items:flex-end;justify-content:center;padding:0;overflow:hidden;box-sizing:border-box;background:rgba(0,0,0,0);backdrop-filter:blur(0);animation:discover-overlay-in .42s cubic-bezier(.32,.72,0,1) forwards}.kinetic-moodboard__dialog-backdrop.is-closing{animation:discover-overlay-out .48s cubic-bezier(.32,.72,0,1) forwards}
         .kinetic-moodboard__dialog{width:100%;max-height:min(90vh,900px);max-height:min(90dvh,900px);min-height:0;margin:0;box-sizing:border-box;overscroll-behavior:contain;overflow-x:hidden;overflow-y:auto;border:1px solid rgba(255,255,255,.1);border-bottom:0;border-radius:22px 22px 0 0;background:#242424;color:#fff;padding:0 26px calc(26px + env(safe-area-inset-bottom));opacity:1;transform:translateY(100%);animation:discover-sheet-in .48s cubic-bezier(.32,.72,0,1) forwards}.kinetic-moodboard__dialog-backdrop.is-closing .kinetic-moodboard__dialog{animation:discover-sheet-out .48s cubic-bezier(.32,.72,0,1) forwards}
         .kinetic-moodboard__dialog-heading{position:sticky;top:0;z-index:5;display:flex;flex-direction:column;align-items:stretch;gap:0;margin:0 -26px 0;padding:18px 26px;background:#151515}.kinetic-moodboard__dialog-title-row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0}.kinetic-moodboard__dialog-title-row>div{min-width:0;flex:1}
@@ -300,7 +321,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       <div className="kinetic-moodboard__search-header" aria-hidden={!colorReveal}>
         <label className="kinetic-moodboard__search-shell">
           <svg className="kinetic-moodboard__search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" strokeWidth="1.7"/><path d="m16 16 4.3 4.3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/></svg>
-          <input className="kinetic-moodboard__search-input" type="search" placeholder="Search the network" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} tabIndex={colorReveal ? 0 : -1} aria-label="Search the brand network" />
+          <input className="kinetic-moodboard__search-input" type="search" placeholder="Search stores, products, brands or categories…" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} tabIndex={colorReveal ? 0 : -1} aria-label="Search the brand network" />
         </label>
       </div>
       <div
@@ -328,16 +349,18 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
           ))}
         </div>
       </div>
-      {normalizedSearch.length >= 2 && colorReveal && (
-        <div className="kinetic-moodboard__search-results" role="listbox" aria-label="Network product search results">
-          {networkLoading && <div className="kinetic-moodboard__search-status">Searching stores…</div>}
+      {normalizedSearch.length >= 1 && colorReveal && (
+        <div className="kinetic-moodboard__search-results" role="listbox" aria-label="Predictive search suggestions">
+          {networkLoading && <div className="kinetic-moodboard__search-status">Searching across stores…</div>}
           {!networkLoading && networkError && <div className="kinetic-moodboard__search-status">{networkError}</div>}
-          {!networkLoading && !networkError && matchingProducts.length === 0 && <div className="kinetic-moodboard__search-status">No matching products found across the network.</div>}
-          {matchingProducts.map((product) => <a className="kinetic-moodboard__result" href={product.href} key={product.storeKey + product.id}>
+          {!networkLoading && !networkError && searchStores.length === 0 && searchCategories.length === 0 && matchingProducts.length === 0 && <div className="kinetic-moodboard__search-status">No matches yet. Try a store, product or category.</div>}
+          {searchStores.length > 0 && <div className="kinetic-moodboard__suggestion-group"><div className="kinetic-moodboard__suggestion-heading">STORES</div>{searchStores.map((store) => <a className="kinetic-moodboard__suggestion" href={store.href} key={store.key}><span className="kinetic-moodboard__suggestion-icon">⌂</span><span className="kinetic-moodboard__suggestion-text"><span className="kinetic-moodboard__suggestion-name">{store.name}</span><span className="kinetic-moodboard__suggestion-detail">Store · Fashion & lifestyle</span></span>)}</div>}
+          {searchCategories.length > 0 && <div className="kinetic-moodboard__suggestion-group"><div className="kinetic-moodboard__suggestion-heading">CATEGORIES</div>{searchCategories.map((category) => <button type="button" className="kinetic-moodboard__suggestion kinetic-moodboard__suggestion-button" key={category} onClick={() => setSearchQuery(category)}><span className="kinetic-moodboard__suggestion-icon">⌕</span><span className="kinetic-moodboard__suggestion-text"><span className="kinetic-moodboard__suggestion-name">{category}</span><span className="kinetic-moodboard__suggestion-detail">Browse category</span></span></button>)}</div>}
+          {matchingProducts.length > 0 && <div className="kinetic-moodboard__suggestion-group"><div className="kinetic-moodboard__suggestion-heading">PRODUCTS</div>{matchingProducts.map((product) => <a className="kinetic-moodboard__result" href={product.href} key={product.storeKey + product.id}>
             {product.image_url ? <img className="kinetic-moodboard__result-image" src={product.image_url} alt="" /> : <div className="kinetic-moodboard__result-image" />}
             <div className="kinetic-moodboard__result-meta"><div className="kinetic-moodboard__result-name">{product.name}</div><div className="kinetic-moodboard__result-store">{product.storeName} · {product.category}{product.subcategory ? ' / ' + product.subcategory : ''}</div></div>
             <div className="kinetic-moodboard__result-price">{Number(product.price).toLocaleString('en-ZA', { style: 'currency', currency: 'ZAR' })}</div>
-          </a>)}
+          </a>)}</div>}
         </div>
       )}
       {activeDiscovery && colorReveal && (
