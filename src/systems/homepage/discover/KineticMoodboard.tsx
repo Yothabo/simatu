@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 type NetworkProduct = { id: string; name: string; price: number; category: string; subcategory?: string; image_url?: string | null; storeKey: 'yotaabo' | 'poshies'; storeName: string; href: string };
-const NETWORK_STORES = [{ key: 'yotaabo' as const, name: 'Yotaabo', href: '/yotaabo/catalog', categories: ['His', 'Hers', 'Spaces'] }, { key: 'poshies' as const, name: 'Poshies', href: '/poshies/catalog', categories: ['His', 'Hers', 'Lounge'] }];
+const NETWORK_STORES = [{ key: 'yotaabo' as const, name: 'Yotaabo', href: '/yotaabo/catalog', description: 'Browse the Yotaabo storefront and explore its available collections.', categories: ['His', 'Hers', 'Spaces'] }, { key: 'poshies' as const, name: 'Poshies', href: '/poshies/catalog', description: 'Browse the Poshies storefront and explore its available collections.', categories: ['His', 'Hers', 'Lounge'] }];
 
 export interface MoodboardItem {
   id: string;
@@ -243,10 +243,19 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__result-store{font:11px/1.4 sans-serif;color:#aaa;margin-top:4px}
         .kinetic-moodboard__result-price{font:600 13px/1.3 sans-serif;color:#f4f4f4;white-space:nowrap}
         .kinetic-moodboard__search-status{padding:14px;color:#aaa;font:12px/1.5 sans-serif}
-        .kinetic-moodboard__dialog-backdrop{position:absolute;inset:0;z-index:20;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.62);backdrop-filter:blur(10px)}
-        .kinetic-moodboard__dialog{width:min(640px,100%);max-height:min(78vh,700px);overflow:auto;border:1px solid rgba(255,255,255,.1);border-radius:20px;background:#242424;color:#fff;padding:22px}
+        .kinetic-moodboard__dialog-backdrop{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,0);backdrop-filter:blur(0);animation:discover-overlay-in .45s cubic-bezier(.2,.65,.25,1) forwards}
+        .kinetic-moodboard__dialog{width:min(680px,100%);max-height:min(78vh,700px);overflow:auto;border:1px solid rgba(255,255,255,.1);border-radius:20px;background:#242424;color:#fff;padding:26px;opacity:0;transform:translateY(24px) scale(.96);animation:discover-dialog-in .55s cubic-bezier(.2,.65,.25,1) .06s forwards}
         .kinetic-moodboard__dialog-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-        .kinetic-moodboard__dialog-title{font:500 22px/1.3 sans-serif}
+        .kinetic-moodboard__dialog-title{font:500 24px/1.3 sans-serif}
+        .kinetic-moodboard__dialog-intro{font:13px/1.65 sans-serif;color:#aaa;margin:12px 0 22px}
+        .kinetic-moodboard__store-card{display:block;padding:18px 0}
+        .kinetic-moodboard__store-name{font:500 16px/1.4 sans-serif;color:#fff}
+        .kinetic-moodboard__store-description{font:12px/1.6 sans-serif;color:#aaa;margin-top:6px;max-width:500px}
+        .kinetic-moodboard__store-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+        .kinetic-moodboard__store-tag{font:10px/1 sans-serif;color:#c9c9c9;background:#343434;border:1px solid #414141;padding:7px 9px;border-radius:999px}
+        .kinetic-moodboard__store-open{display:inline-block;margin-top:12px}
+        @keyframes discover-overlay-in{to{background:rgba(0,0,0,.66);backdrop-filter:blur(10px)}}
+        @keyframes discover-dialog-in{to{opacity:1;transform:translateY(0) scale(1)}}
         .kinetic-moodboard__dialog-close{border:0;border-radius:50%;width:36px;height:36px;background:#353535;color:#fff;font-size:22px;cursor:pointer}
         .kinetic-moodboard__store-card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.08);color:#fff;text-decoration:none}
         .kinetic-moodboard__store-sub{color:#aaa;font:12px/1.4 sans-serif;margin-top:4px}
@@ -299,11 +308,12 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       {activeDiscovery && colorReveal && (
         <div className="kinetic-moodboard__dialog-backdrop" onClick={() => setActiveDiscovery(null)}>
           <div className="kinetic-moodboard__dialog" role="dialog" aria-modal="true" aria-labelledby="discover-dialog-title" onClick={(event) => event.stopPropagation()}>
-            <div className="kinetic-moodboard__dialog-heading"><div><div className="kinetic-moodboard__dialog-title" id="discover-dialog-title">{activeDiscovery.category}</div><div className="kinetic-moodboard__store-sub">Stores across the Simatu network</div></div><button className="kinetic-moodboard__dialog-close" type="button" aria-label="Close" onClick={() => setActiveDiscovery(null)}>×</button></div>
+            <div className="kinetic-moodboard__dialog-heading"><div><div className="kinetic-moodboard__dialog-title" id="discover-dialog-title">{activeDiscovery.category}</div><div className="kinetic-moodboard__store-sub">Discover stores and collections across Simatu</div></div><button className="kinetic-moodboard__dialog-close" type="button" aria-label="Close" onClick={() => setActiveDiscovery(null)}>×</button></div>
+            <p className="kinetic-moodboard__dialog-intro">Browse storefronts related to {activeDiscovery.category.toLowerCase()}. Open a store to explore its collections, products, and details directly from the shop.</p>
             {networkLoading && <div className="kinetic-moodboard__search-status">Loading store directory…</div>}
             {!networkLoading && networkError && <div className="kinetic-moodboard__search-status">{networkError}</div>}
             {!networkLoading && !networkError && discoveryStores.length === 0 && <div className="kinetic-moodboard__search-status">No stores are available.</div>}
-            {discoveryStores.map((store) => { const count = networkProducts.filter((product) => product.storeKey === store.key).length; return <a className="kinetic-moodboard__store-card" href={store.href} key={store.key}><div><div>{store.name}</div><div className="kinetic-moodboard__store-sub">{count} active products · Browse catalog</div></div><span className="kinetic-moodboard__store-open">OPEN STORE ↗</span></a>; })}
+            {discoveryStores.map((store) => <a className="kinetic-moodboard__store-card" href={store.href} key={store.key}><div className="kinetic-moodboard__store-name">{store.name}</div><div className="kinetic-moodboard__store-description">{store.description}</div><div className="kinetic-moodboard__store-tags">{store.categories.map((category) => <span className="kinetic-moodboard__store-tag" key={category}>{category}</span>)}</div><span className="kinetic-moodboard__store-open">Visit storefront ↗</span></a>)}
           </div>
         </div>
       )}
