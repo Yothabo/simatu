@@ -17,7 +17,7 @@ export default function HomePage() {
       <div className="homepage-foreground">
         <main className="homepage-main">
           <Hero />
-          <DiscoverSection active={discoverActive} onDiscover={() => setDiscoverActive(true)} />
+          <DiscoverSection onDiscover={() => setDiscoverActive(true)} />
         </main>
         <Footer />
       </div>
