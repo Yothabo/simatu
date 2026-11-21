@@ -13,15 +13,15 @@ export default function Footer() {
 
       </section>
 
+      <div className="homepage-footer__bottom">
+        <span>© {new Date().getFullYear()} Simatu. All rights reserved.</span>
+      </div>
+
       <img
         className="footer-wordmark"
         src="/systems/homepage/images/simatu-wordmark.svg"
         alt="Simatu"
       />
-
-      <div className="homepage-footer__bottom">
-        <span>© {new Date().getFullYear()} Simatu. All rights reserved.</span>
-      </div>
     </footer>
   );
 }
