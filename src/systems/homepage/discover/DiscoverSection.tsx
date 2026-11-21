@@ -1,7 +1,7 @@
 import React from "react";
 
 interface DiscoverSectionProps {
-  active: boolean;
+
   onDiscover: () => void;
 }
 
@@ -9,7 +9,7 @@ interface DiscoverSectionProps {
 export default function DiscoverSection({ onDiscover }: DiscoverSectionProps) {
   return (
     <section className="homepage-discover-trigger-section" aria-label="Discover our brand network">
-      <button type="button" className="homepage-discover-trigger" onClick={onDiscover} disabled={active}>
+      <button type="button" className="homepage-discover-trigger" onClick={onDiscover}>
         Discover our brand network
       </button>
       <style>{`
