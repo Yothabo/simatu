@@ -1274,17 +1274,3 @@
 .novae-hero.is-offscreen * {
   animation-play-state: paused !important;
 }
-
-/* Background-only layers are grouped and faded together, leaving foreground content crisp. */
-.novae-hero{background:transparent !important}
-.novae-hero .hero-background-layers{
-  position:absolute;
-  inset:0;
-  z-index:0;
-  pointer-events:none;
-  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 68%,rgba(0,0,0,.72) 84%,transparent 100%);
-  mask-image:linear-gradient(to bottom,#000 0%,#000 68%,rgba(0,0,0,.72) 84%,transparent 100%);
-}
-.novae-hero .hero-background-layers .main-visual{pointer-events:none}
-.novae-hero .hero-copy,.novae-hero .hero-description,.novae-hero .image-selector,.novae-hero .social-proof,.novae-hero .corner{z-index:12 !important}
-.novae-hero .corner{display:none !important}
