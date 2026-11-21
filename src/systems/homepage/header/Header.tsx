@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { navItems } from "../hero/hero.data";
+import { footerLinkGroups } from "../footer/footer-links.data";
 import { TiArrowBack } from "react-icons/ti";
 import "./header.css";
 
@@ -50,6 +51,18 @@ export default function Header({
                 {item}
               </a>
             ))}
+            <div className="nav-footer-link-groups">
+              {footerLinkGroups.map((group) => (
+                <section key={group.title} className="nav-footer-link-group">
+                  <h3>{group.title}</h3>
+                  {group.links.map((link) => (
+                    <a key={link.href} href={link.href} onClick={() => setMenuOpen(false)}>
+                      {link.label}
+                    </a>
+                  ))}
+                </section>
+              ))}
+            </div>
           </div>
 
           <button
