@@ -4,8 +4,6 @@ import { Toaster } from 'react-hot-toast';
 import MetaTags from './components/MetaTags';
 import ScrollToHash from './components/ScrollToHash';
 import { useTouchSelection } from '../shared/hooks/useTouchSelection';
-import '../systems/homepage/design-system/index.css';
-import '../systems/homepage/hero/hero.css';
 
 import { CartProvider, StorefrontThemeProvider } from '../systems/storefront/core';
 
