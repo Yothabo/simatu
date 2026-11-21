@@ -92,6 +92,7 @@ function App() {
       <Suspense fallback={<RouteLoadingFallback />}>
         <Routes>
           <Route path="/" element={<HomepageHero />} />
+          <Route path="/discover" element={<main style={{ minHeight: '100vh' }} />} />
 
 
           <Route element={<CartProvider><StorefrontThemeProvider><Outlet /></StorefrontThemeProvider></CartProvider>}>
