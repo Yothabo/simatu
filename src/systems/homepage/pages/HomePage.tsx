@@ -67,6 +67,7 @@ export default function HomePage() {
         .homepage-moodboard-gradient{display:none}
         .homepage-foreground{position:relative;z-index:2}
         .homepage-layered-experience.phase-active .homepage-moodboard-background .kinetic-moodboard{pointer-events:auto}
+        .homepage-layered-experience.phase-reveal .homepage-foreground,.homepage-layered-experience.phase-active .homepage-foreground{pointer-events:none}
         .homepage-layered-experience .homepage-main>.hero-navigation,.homepage-layered-experience .homepage-main>.novae-hero{will-change:opacity,transform}
         .homepage-layered-experience .homepage-main>.hero-navigation{transition:opacity .55s cubic-bezier(.2,.65,.25,1),transform .55s cubic-bezier(.2,.65,.25,1);color:#fff}.homepage-layered-experience .homepage-main>.hero-navigation .brand{color:#fff}
         .homepage-layered-experience .homepage-main>.novae-hero{transition:opacity ${EXIT_ANIMATION_MS}ms cubic-bezier(.2,.65,.25,1),transform ${EXIT_ANIMATION_MS}ms cubic-bezier(.2,.65,.25,1)}
