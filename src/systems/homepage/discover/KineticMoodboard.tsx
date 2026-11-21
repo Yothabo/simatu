@@ -109,9 +109,9 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
     return () => { cancelled = true; };
   }, []);
   const normalizedSearch = searchQuery.trim().toLowerCase();
-  const matchingProducts = normalizedSearch.length >= 2 ? networkProducts.filter((product) => (product.name + ' ' + product.category + ' ' + (product.subcategory || '') + ' ' + product.storeName).toLowerCase().includes(normalizedSearch).slice(0, 12) : [];
-  const discoveryStores = activeDiscovery ? NETWORK_STORES.filter((store) => networkProducts.some((product) => product.storeKey === store.key && (product.category + ' ' + (product.subcategory || '') + ' ' + product.name).toLowerCase().includes(activeDiscovery.category.toLowerCase())) : [];
-  const discoveryProducts = activeDiscovery ? networkProducts.filter((product) => discoveryStores.some((store) => store.key === product.storeKey) && (product.category + ' ' + (product.subcategory || '') + ' ' + product.name).toLowerCase().includes(activeDiscovery.category.toLowerCase()).slice(0, 8) : [];
+  const matchingProducts = normalizedSearch.length >= 2 ? networkProducts.filter((product) => (product.name + ' ' + product.category + ' ' + (product.subcategory || '') + ' ' + product.storeName).toLowerCase().includes(normalizedSearch)).slice(0, 12) : [];
+  const discoveryStores = activeDiscovery ? NETWORK_STORES : [];
+  const discoveryProducts = activeDiscovery ? networkProducts.filter((product) => (product.category + ' ' + (product.subcategory || '') + ' ' + product.name).toLowerCase().includes(activeDiscovery.category.toLowerCase())).slice(0, 8) : [];
   const boardWidth = columns * tileWidth + (columns - 1) * gap;
   const boardHeight = columns * tileHeight + (columns - 1) * gap;
 
@@ -276,7 +276,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
           {tiles.map((item, index) => (
             <button
               type="button"
-              className={`kinetic-moodboard__tile${normalizedSearch && !`${item.category} ${item.title}`.toLowerCase().includes(normalizedSearch) ? ' is-search-hidden' : ''}`}
+              className="kinetic-moodboard__tile"
               key={`${item.id}-${index}`}
               onClick={() => { handleTileClick(item); setActiveDiscovery(item); }}
               aria-label={`${item.category}: ${item.title}`}
@@ -288,8 +288,32 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
           ))}
         </div>
       </div>
+      {normalizedSearch.length >= 2 && colorReveal && (
+        <div className="kinetic-moodboard__search-results" role="listbox" aria-label="Network product search results">
+          {networkLoading && <div className="kinetic-moodboard__search-status">Searching stores…</div>}
+          {!networkLoading && networkError && <div className="kinetic-moodboard__search-status">{networkError}</div>}
+          {!networkLoading && !networkError && matchingProducts.length === 0 && <div className="kinetic-moodboard__search-status">No matching products found across the network.</div>}
+          {matchingProducts.map((product) => <a className="kinetic-moodboard__result" href={product.href} key={product.storeKey + product.id}>
+            {product.image_url ? <img className="kinetic-moodboard__result-image" src={product.image_url} alt="" /> : <div className="kinetic-moodboard__result-image" />}
+            <div className="kinetic-moodboard__result-meta"><div className="kinetic-moodboard__result-name">{product.name}</div><div className="kinetic-moodboard__result-store">{product.storeName} · {product.category}{product.subcategory ? ' / ' + product.subcategory : ''}</div></div>
+            <div className="kinetic-moodboard__result-price">{Number(product.price).toLocaleString('en-ZA', { style: 'currency', currency: 'ZAR' })}</div>
+          </a>)}
+        </div>
+      )}
+      {activeDiscovery && colorReveal && (
+        <div className="kinetic-moodboard__dialog-backdrop" onClick={() => setActiveDiscovery(null)}>
+          <div className="kinetic-moodboard__dialog" role="dialog" aria-modal="true" aria-labelledby="discover-dialog-title" onClick={(event) => event.stopPropagation()}>
+            <div className="kinetic-moodboard__dialog-heading"><div><div className="kinetic-moodboard__dialog-title" id="discover-dialog-title">{activeDiscovery.category}</div><div className="kinetic-moodboard__store-sub">Explore stores in the Simatu network</div></div><button className="kinetic-moodboard__dialog-close" type="button" aria-label="Close" onClick={() => setActiveDiscovery(null)}>×</button></div>
+            {networkLoading && <div className="kinetic-moodboard__search-status">Loading store directory…</div>}
+            {!networkLoading && networkError && <div className="kinetic-moodboard__search-status">{networkError}</div>}
+            {!networkLoading && !networkError && discoveryStores.length === 0 && <div className="kinetic-moodboard__search-status">No stores are available.</div>}
+            {discoveryStores.map((store) => { const count = networkProducts.filter((product) => product.storeKey === store.key).length; const samples = discoveryProducts.filter((product) => product.storeKey === store.key).slice(0, 2); return <a className="kinetic-moodboard__store-card" href={store.href} key={store.key}><div><div>{store.name}</div><div className="kinetic-moodboard__store-sub">{count} active products{samples.length ? ' · ' + samples.map((p) => p.name).join(' · ') : ''}</div></div><span className="kinetic-moodboard__store-open">OPEN STORE ↗</span></a>; })}
+          </div>
+        </div>
+      )}
     </section>
   );
 };
+
 
 export default KineticMoodboard;
