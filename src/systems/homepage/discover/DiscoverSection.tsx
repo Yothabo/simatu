@@ -1,6 +1,4 @@
-import React, { Suspense, lazy, useEffect, useMemo, useRef, useState } from "react";
-
-const KineticMoodboard = lazy(() => import("./KineticMoodboard"));
+import React, { useEffect, useMemo, useRef, useState } from "react";\nimport KineticMoodboard from "./KineticMoodboard";
 
 const previewItems = [
   { id: "01", image: "https://images.unsplash.com/photo-1531058020387-3be344556be6?w=900&q=85", alt: "Modern architectural interior", category: "Spaces", title: "New perspectives" },
@@ -32,10 +30,10 @@ function seededShuffle<T>(items: T[]) {
 }
 
 export default function DiscoverSection() {
-  const [isMounted, setIsMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);\n  const sectionRef = useRef<HTMLElement>(null);
   const [isFullyVisible, setIsFullyVisible] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const transitionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
   const previewTiles = useMemo(() => {
     const shuffled = seededShuffle(previewItems);
     return Array.from({ length: 64 }, (_, index) => shuffled[index % shuffled.length]);
@@ -52,7 +50,7 @@ export default function DiscoverSection() {
   }, [isMounted]);
 
   useEffect(() => () => {
-    if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
+    if (animationFrameRef.current !== null) cancelAnimationFrame(animationFrameRef.current);
     document.body.classList.remove("homepage-discover-transition");
   }, []);
 
@@ -64,10 +62,10 @@ export default function DiscoverSection() {
 
 
   return (
-    <section className={`homepage-discover${isMounted ? " is-live" : ""}`} aria-label="Discover our brand network">
+    <section ref={sectionRef} className={`homepage-discover${isMounted ? " is-live" : ""}`} aria-label="Discover our brand network">
       <style>{`
         .homepage-discover{position:relative;display:block;width:100%;height:100vh;height:100svh;min-height:100vh;min-height:100svh;margin:0;padding:0;box-sizing:border-box;background:#111}
-        .homepage-discover__preview{position:relative;display:block;width:100%;height:100%;min-height:100%;margin:0;padding:0;box-sizing:border-box;overflow:hidden;background:#111;transition:filter .9s cubic-bezier(.22,1,.36,1),opacity .9s cubic-bezier(.22,1,.36,1)}
+        .homepage-discover__preview{position:absolute;inset:0;display:block;width:100%;height:100%;min-height:0;margin:0;padding:0;box-sizing:border-box;overflow:hidden;background:#111;transition:opacity .9s cubic-bezier(.22,1,.36,1)}
         body.homepage-discover-transition .homepage-main #top,body.homepage-discover-transition .hero-navigation,body.homepage-discover-transition .homepage-footer{filter:grayscale(1);opacity:0;transition:filter .9s cubic-bezier(.22,1,.36,1),opacity .9s cubic-bezier(.22,1,.36,1)}
         .homepage-discover__preview:before,.homepage-discover__preview:after{content:"";position:absolute;z-index:1;left:0;right:0;height:160px;pointer-events:none}.homepage-discover__preview:before{top:0;background:linear-gradient(to bottom,#111 0%,rgba(17,17,17,.7) 35%,transparent 100%)}.homepage-discover__preview:after{bottom:0;background:linear-gradient(to top,#111 0%,rgba(17,17,17,.7) 35%,transparent 100%)}
         .homepage-discover__preview-grid{position:absolute;inset:0;display:grid;grid-template-columns:repeat(8,230px);grid-auto-rows:290px;gap:16px;overflow:hidden;filter:grayscale(1)}
@@ -81,41 +79,36 @@ export default function DiscoverSection() {
         .homepage-discover__trigger.is-visible{opacity:1;visibility:visible;pointer-events:auto}
         .homepage-discover__trigger:hover{background:#a93d1a;border-color:#fff}
         .homepage-discover__trigger:focus-visible{outline:2px solid #fff;outline-offset:4px}
-        .homepage-discover__expanded{display:block;width:100%;height:100%;min-height:100%;margin:0;padding:0;box-sizing:border-box;opacity:0;animation:homepage-discover-reveal .8s cubic-bezier(.22,1,.36,1) forwards}@keyframes homepage-discover-reveal{from{opacity:0}to{opacity:1}}
+        .homepage-discover__expanded{position:absolute;inset:0;display:block;width:100%;height:100%;min-height:0;margin:0;padding:0;box-sizing:border-box;opacity:0;pointer-events:none;transition:opacity .9s cubic-bezier(.22,1,.36,1)}
         .homepage-discover__loading{display:grid;min-height:280px;place-items:center;color:rgba(255,255,255,.65);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
-        .homepage-discover.is-live{position:fixed;inset:0;z-index:9999;width:100vw;height:100vh;height:100svh;min-height:0;margin:0;padding:0;box-sizing:border-box;overflow:hidden}
-        @media(max-width:640px){.homepage-discover__preview{height:100%;min-height:100%}.homepage-discover__preview-grid{gap:6px}.homepage-discover__trigger{min-height:44px;padding-inline:17px;font-size:10px}.homepage-discover.is-live{width:100vw;height:100vh;height:100svh}}
+        .homepage-discover.is-live{inset:0;min-height:0;margin:0;padding:0;box-sizing:border-box;overflow:hidden}\n        .homepage-discover.is-live .homepage-discover__preview{opacity:0;pointer-events:none}\n        .homepage-discover.is-live .homepage-discover__expanded{opacity:1;pointer-events:auto}
+        @media(max-width:640px){.homepage-discover__preview-grid{gap:6px}.homepage-discover__trigger{min-height:44px;padding-inline:17px;font-size:10px}}
       `}</style>
-      {!isMounted ? (
-        <div className="homepage-discover__preview">
-          <div className="homepage-discover__preview-grid" aria-hidden="true">
-            {previewTiles.map((item, index) => (
-              <div className="homepage-discover__tile" key={`${item.id}-${index}`}>
-                <img src={item.image} alt="" loading={index < 12 ? "eager" : "lazy"} />
-                <span className="homepage-discover__label">
-                  <span className="homepage-discover__category">{item.category}</span>
-                  <span className="homepage-discover__title">{item.title}</span>
-                </span>
-              </div>
-            ))}
-          </div>
-          <button
-            type="button"
-            className={`homepage-discover__trigger${isFullyVisible ? " is-visible" : ""}`}
-            ref={triggerRef}
-            onClick={handleDiscover}
-            tabIndex={isFullyVisible ? 0 : -1}
-          >
-            Discover our brand network
-          </button>
+      <div className="homepage-discover__preview">
+        <div className="homepage-discover__preview-grid" aria-hidden="true">
+          {previewTiles.map((item, index) => (
+            <div className="homepage-discover__tile" key={`${item.id}-${index}`}>
+              <img src={item.image} alt="" loading={index < 12 ? "eager" : "lazy"} />
+              <span className="homepage-discover__label">
+                <span className="homepage-discover__category">{item.category}</span>
+                <span className="homepage-discover__title">{item.title}</span>
+              </span>
+            </div>
+          ))}
         </div>
-      ) : (
-        <div className="homepage-discover__expanded">
-          <Suspense fallback={<div className="homepage-discover__loading">Loading discovery...</div>}>
-            <KineticMoodboard />
-          </Suspense>
-        </div>
-      )}
+        <button
+          type="button"
+          className={`homepage-discover__trigger${isFullyVisible ? " is-visible" : ""}`}
+          ref={triggerRef}
+          onClick={handleDiscover}
+          tabIndex={isFullyVisible ? 0 : -1}
+        >
+          Discover our brand network
+        </button>
+      </div>
+      <div className="homepage-discover__expanded">
+        <KineticMoodboard />
+      </div>
     </section>
   );
 }
