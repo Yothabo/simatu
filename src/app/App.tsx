@@ -5,6 +5,7 @@ import MetaTags from './components/MetaTags';
 import ScrollToHash from './components/ScrollToHash';
 import { useTouchSelection } from '../shared/hooks/useTouchSelection';
 import Header from '../systems/homepage/header';
+import KineticMoodboard from '../systems/homepage/discover/KineticMoodboard';
 import '../systems/homepage/design-system/index.css';
 import '../systems/homepage/hero/hero.css';
 
@@ -70,6 +71,7 @@ function DiscoverPage() {
     <div className="novae-page">
       <main className="homepage-main">
         <Header showBackButton />
+        <KineticMoodboard />
       </main>
     </div>
   );
