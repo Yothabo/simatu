@@ -34,6 +34,9 @@ export default function DiscoverSection() {
   const [isMounted, setIsMounted] = useState(false);
   const [isFullyVisible, setIsFullyVisible] = useState(false);
   const [isColorActive, setIsColorActive] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
+  const initialClipRef = useRef<string>("");
+  const originalStylesRef = useRef<Record<string, string> | null>(null);
   const colorTimerRef = useRef<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
@@ -65,6 +68,7 @@ export default function DiscoverSection() {
     const section = sectionRef.current;
     if (!section || isMounted) return;
     const rect = section.getBoundingClientRect();
+    originalStylesRef.current = { position: section.style.position, inset: section.style.inset, top: section.style.top, left: section.style.left, width: section.style.width, height: section.style.height, margin: section.style.margin, zIndex: section.style.zIndex, transform: section.style.transform, transition: section.style.transition };
 
     section.style.position = "fixed";
     section.style.inset = "0";
@@ -85,6 +89,8 @@ export default function DiscoverSection() {
     const right = Math.max(0, viewportWidth - rect.right);
     const bottom = Math.max(0, viewportHeight - rect.bottom);
     const initialClip = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
+    initialClipRef.current = initialClip;
+    section.style.setProperty("--discover-return-clip", initialClip);
 
     [previewRef.current, expandedRef.current].forEach((surface) => {
       if (!surface) return;
@@ -104,8 +110,38 @@ export default function DiscoverSection() {
     });
   };
 
+  const handleExitDiscover = () => {
+    const section = sectionRef.current;
+    if (!section || !isMounted || isExiting) return;
+    if (colorTimerRef.current !== null) window.clearTimeout(colorTimerRef.current);
+    setIsExiting(true);
+    document.body.classList.remove("homepage-discover-transition");
+    const returnClip = initialClipRef.current || "inset(0)";
+    [previewRef.current, expandedRef.current].forEach((surface) => {
+      if (surface) surface.style.clipPath = returnClip;
+    });
+    window.setTimeout(() => {
+      [previewRef.current, expandedRef.current].forEach((surface) => {
+        if (!surface) return;
+        surface.style.clipPath = "";
+        surface.style.transition = "";
+        surface.style.willChange = "";
+      });
+      section.style.removeProperty("--discover-return-clip");
+      const original = originalStylesRef.current;
+      if (original) Object.entries(original).forEach(([key, value]) => { (section.style as any)[key] = value; });
+      originalStylesRef.current = null;
+      initialClipRef.current = "";
+      setIsColorActive(false);
+      setIsMounted(false);
+      setIsExiting(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 1650);
+  };
+
+
   return (
-    <section ref={sectionRef} className={`homepage-discover${isMounted ? " is-live" : ""}${isColorActive ? " is-colored" : ""}`} aria-label="Discover our brand network">
+    <section ref={sectionRef} className={`homepage-discover${isMounted ? " is-live" : ""}${isColorActive ? " is-colored" : ""}${isExiting ? " is-exiting" : ""}`} aria-label="Discover our brand network">
       <style>{`
         .homepage-discover{position:relative;display:block;width:100%;height:100vh;height:100svh;min-height:100vh;min-height:100svh;margin:0;padding:0;box-sizing:border-box;background:#111}
         .homepage-discover__preview{position:absolute;inset:0;display:block;width:100%;height:100%;min-height:0;margin:0;padding:0;box-sizing:border-box;overflow:hidden;background:#111;transition:opacity 1.35s cubic-bezier(.16,.76,.24,1)}
@@ -124,6 +160,9 @@ export default function DiscoverSection() {
         .homepage-discover__trigger:focus-visible{outline:2px solid #fff;outline-offset:4px}
         .homepage-discover__expanded{position:absolute;inset:0;display:block;width:100%;height:100%;min-height:0;margin:0;padding:0;box-sizing:border-box;opacity:0;pointer-events:none;transition:opacity 1.6s cubic-bezier(.2,.65,.25,1)}
         .homepage-discover.is-live{position:fixed;inset:0;width:100vw;height:100vh;height:100svh;min-height:0;margin:0;padding:0;box-sizing:border-box;overflow:hidden}
+        .homepage-discover.is-exiting .homepage-discover__preview,.homepage-discover.is-exiting .homepage-discover__expanded{clip-path:var(--discover-return-clip, inset(0));transition:clip-path 1.6s cubic-bezier(.2,.65,.25,1)!important;}
+        .homepage-discover.is-exiting .homepage-discover__preview{opacity:1;pointer-events:none}
+        .homepage-discover.is-exiting .homepage-discover__expanded{opacity:0;pointer-events:none}
         .homepage-discover.is-live .homepage-discover__preview{opacity:0;pointer-events:none}
         .homepage-discover.is-live .homepage-discover__expanded{opacity:1;pointer-events:auto}
         @media(max-width:640px){.homepage-discover__preview-grid{gap:6px}.homepage-discover__trigger{min-height:44px;padding-inline:17px;font-size:10px}}
@@ -151,7 +190,7 @@ export default function DiscoverSection() {
         </button>
       </div>
       <div ref={expandedRef} className="homepage-discover__expanded">
-        <KineticMoodboard colorReveal={isColorActive} />
+        <KineticMoodboard colorReveal={isColorActive} onExit={handleExitDiscover} />
       </div>
     </section>
   );
