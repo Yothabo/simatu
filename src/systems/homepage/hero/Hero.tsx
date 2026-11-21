@@ -73,14 +73,7 @@ export default function AuralisCreativeHero() {
           </div>
 
         <div className="hero-copy relative z-[6] w-[58%] mt-[35px] ml-[10.5%] pointer-events-none max-[1100px]:w-[66%] max-[1100px]:ml-[7%] max-[820px]:w-[85%] max-[820px]:mt-[-55px] max-[820px]:ml-[7%] max-[520px]:w-[92%] max-[520px]:mt-[-95px] max-[520px]:ml-[6%] min-[1500px]:ml-[12%]">
-          <div className="orbit orbit-one" />
-          <div className="orbit orbit-two" />
-          <div className="orbit orbit-three" />
-          <div className="orbit orbit-four" />
-          <div className="orbit-highlight" />
-        </div>
-
-        <div className="hero-copy relative z-[6] w-[58%] mt-[35px] ml-[10.5%] pointer-events-none max-[1100px]:w-[66%] max-[1100px]:ml-[7%] max-[820px]:w-[85%] max-[820px]:mt-[-55px] max-[820px]:ml-[7%] max-[520px]:w-[92%] max-[520px]:mt-[-95px] max-[520px]:ml-[6%] min-[1500px]:ml-[12%]">
+          <div className="hero-copy relative z-[6] w-[58%] mt-[35px] ml-[10.5%] pointer-events-none max-[1100px]:w-[66%] max-[1100px]:ml-[7%] max-[820px]:w-[85%] max-[820px]:mt-[-55px] max-[820px]:ml-[7%] max-[520px]:w-[92%] max-[520px]:mt-[-95px] max-[520px]:ml-[6%] min-[1500px]:ml-[12%]">
           <div className="social-proof relative z-[7] w-fit mb-6 pointer-events-auto">
             <div className="social-icons flex items-center gap-[11px] max-[520px]:gap-[7px]">
               <a href="#instagram" aria-label="Instagram"><FaInstagram aria-hidden="true" /></a>
