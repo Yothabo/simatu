@@ -111,7 +111,6 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const normalizedSearch = searchQuery.trim().toLowerCase();
   const matchingProducts = normalizedSearch.length >= 2 ? networkProducts.filter((product) => (product.name + ' ' + product.category + ' ' + (product.subcategory || '') + ' ' + product.storeName).toLowerCase().includes(normalizedSearch)).slice(0, 12) : [];
   const discoveryStores = activeDiscovery ? NETWORK_STORES : [];
-  const discoveryProducts = activeDiscovery ? networkProducts.filter((product) => (product.category + ' ' + (product.subcategory || '') + ' ' + product.name).toLowerCase().includes(activeDiscovery.category.toLowerCase())).slice(0, 8) : [];
   const boardWidth = columns * tileWidth + (columns - 1) * gap;
   const boardHeight = columns * tileHeight + (columns - 1) * gap;
 
