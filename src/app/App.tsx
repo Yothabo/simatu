@@ -1,11 +1,9 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter, Outlet, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import MetaTags from './components/MetaTags';
 import ScrollToHash from './components/ScrollToHash';
 import { useTouchSelection } from '../shared/hooks/useTouchSelection';
-import Header from '../systems/homepage/header';
-import KineticMoodboard from '../systems/homepage/discover/KineticMoodboard';
 import '../systems/homepage/design-system/index.css';
 import '../systems/homepage/hero/hero.css';
 
@@ -66,17 +64,6 @@ class AdminErrorBoundary extends React.Component<
   }
 }
 
-function DiscoverPage() {
-  return (
-    <div className="novae-page">
-      <main className="homepage-main">
-        <Header showBackButton />
-        <KineticMoodboard />
-      </main>
-    </div>
-  );
-}
-
 function RouteLoadingFallback() {
   return (
     <main
@@ -107,9 +94,6 @@ function App() {
       <Suspense fallback={<RouteLoadingFallback />}>
         <Routes>
           <Route path="/" element={<HomepageHero />} />
-          <Route path="/discover" element={<DiscoverPage />} />
-
-
           <Route element={<CartProvider><StorefrontThemeProvider><Outlet /></StorefrontThemeProvider></CartProvider>}>
             <Route path="/yotaabo" element={<Home />} />
             <Route path="/yotaabo/services" element={<ServicesPage />} />
