@@ -17,6 +17,16 @@ type Brand = {
 const BRANDS: Brand[] = [
   {
     id: 0,
+    name: "Our Brands",
+    headline: "A World of Possibilities",
+    description: "From established names to emerging ventures, discover a diverse range of brands shaped by creativity, innovation and commercial ambition.",
+    image: "/simatu.png",
+    imageAlt: "Simatu logo",
+    position: "50% 50%",
+    isLogo: true,
+  },
+  {
+    id: 1,
     name: "Poshies",
     description: "Your lingerie. Your rules. From everyday panties to statement thongs, discover lingerie that feels good, fits beautifully, and makes you feel confident in your own skin.",
     image: "https://images.unsplash.com/photo-1652715256292-bbee70ee04ca?auto=format&fit=crop&w=1800&q=88",
@@ -25,23 +35,13 @@ const BRANDS: Brand[] = [
     href: "/poshies",
   },
   {
-    id: 1,
+    id: 2,
     name: "Yotaabo",
     description: "Some scents say everything without a single word. Find the fragrance that becomes your signature.",
     image: "https://media.macphun.com/img/uploads/customer/blog/1752169898/1752170008686ffe183af522.98492050.jpg?q=85&w=1680",
     imageAlt: "Atmospheric amber fragrance bottle in dramatic luxury editorial lighting",
     position: "50% 45%",
     href: "/yotaabo",
-  },
-  {
-    id: 2,
-    name: "Our Brands",
-    headline: "A World of Possibilities",
-    description: "From established names to emerging ventures, discover a diverse range of brands shaped by creativity, innovation and commercial ambition.",
-    image: "/simatu.png",
-    imageAlt: "Simatu logo",
-    position: "50% 50%",
-    isLogo: true,
   },
   {
     id: 3,
@@ -67,9 +67,9 @@ const TRANSITION_MS = 900;
 const AUTOPLAY_MS = 9000;
 
 export default function FeaturedBrands() {
-  const [active, setActive] = useState(2);
+  const [active, setActive] = useState(0);
   const [previousActive, setPreviousActive] = useState<number | null>(null);
-  const activeRef = useRef(2);
+  const activeRef = useRef(0);
   const pauseUntil = useRef(0);
   const transitionTimerRef = useRef<number | null>(null);
   const autoplayTimerRef = useRef<number | null>(null);
