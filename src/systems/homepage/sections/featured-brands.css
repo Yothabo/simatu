@@ -1,5 +1,5 @@
 .epr-page {
-  margin-top: clamp(48px, 6vh, 88px);
+  padding-top: clamp(48px, 6vh, 88px);
   position: relative;
   isolation: isolate;
   width: 100%;
