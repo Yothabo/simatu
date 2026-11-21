@@ -22,6 +22,7 @@ interface KineticMoodboardProps {
   className?: string;
   style?: React.CSSProperties;
   onItemClick?: (item: MoodboardItem) => void;
+  colorReveal?: boolean;
 }
 
 const DEFAULT_ITEMS: MoodboardItem[] = [
@@ -187,14 +188,14 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   };
 
   return (
-    <section className={`kinetic-moodboard ${className}`} style={style} aria-label="Explore the moodboard">
+    <section className={`kinetic-moodboard ${className}${colorReveal ? ' is-color-revealing' : ''}`} style={style} aria-label="Explore the moodboard">
       <style>{`
         .kinetic-moodboard{position:relative;display:block;width:100%;height:100%;min-height:0;margin:0;padding:0;box-sizing:border-box;overflow:hidden;background:#111;color:#fff;isolation:isolate}
         .kinetic-moodboard__viewport{position:absolute;inset:0;overflow:hidden;cursor:grab;touch-action:none;user-select:none}
         .kinetic-moodboard__viewport.is-dragging{cursor:grabbing}
         .kinetic-moodboard__board{position:absolute;top:0;left:0;display:grid;grid-template-columns:repeat(${columns},${tileWidth}px);gap:${gap}px;will-change:transform}
         .kinetic-moodboard__tile{position:relative;display:block;width:${tileWidth}px;height:${tileHeight}px;padding:0;overflow:hidden;border:0;border-radius:${borderRadius}px;background:#252525;color:inherit;text-align:left;cursor:pointer}
-        .kinetic-moodboard__tile img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .5s}
+        .kinetic-moodboard__tile img{display:block;width:100%;height:100%;object-fit:cover;filter:grayscale(1);transition:transform .7s cubic-bezier(.2,.7,.2,1),filter 1.8s cubic-bezier(.2,.65,.25,1)}.kinetic-moodboard.is-color-revealing .kinetic-moodboard__tile img{filter:grayscale(0)}
         .kinetic-moodboard__tile:hover img{transform:scale(1.055);filter:brightness(.82)}
         .kinetic-moodboard__tile:after{content:"";position:absolute;inset:35% 0 0;background:linear-gradient(transparent,rgba(0,0,0,.65));pointer-events:none}
         .kinetic-moodboard__label{position:absolute;z-index:1;left:16px;right:12px;bottom:15px;display:grid;gap:4px;pointer-events:none}
@@ -223,7 +224,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
               aria-label={`${item.category}: ${item.title}`}
               draggable={false}
             >
-              <img src={item.image} alt={item.alt} loading={index < 12 ? 'eager' : 'lazy'} draggable={false} style={{ objectPosition: item.objectPosition || 'center' }} />
+              <img src={item.image} alt={item.alt} loading={index < 12 ? 'eager' : 'lazy'} draggable={false} style={{ objectPosition: item.objectPosition || 'center', transitionDelay: colorReveal ? `${Math.floor(index / columns) * 0.42}s` : '0s' }} />
               {showLabels && <span className="kinetic-moodboard__label"><span className="kinetic-moodboard__category">{item.category}</span><span className="kinetic-moodboard__title">{item.title}</span></span>}
             </button>
           ))}
