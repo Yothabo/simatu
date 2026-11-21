@@ -146,3 +146,8 @@
 .homepage-footer .footer-wordmark{object-position:center!important;margin-inline:auto!important}
 .homepage-footer__bottom{justify-content:center!important;text-align:center!important;border-top:0!important;padding-top:0!important}
 @media(max-width:820px){.homepage-footer__button{width:100%;justify-content:center}}
+
+
+/* Footer wordmark is intentionally very faint; copyright sits directly beneath it. */
+.homepage-footer .footer-wordmark{opacity:.12!important;filter:grayscale(1) brightness(1.5)!important;margin-bottom:12px!important}
+.homepage-footer__bottom{margin-top:0!important;padding-top:0!important;text-align:center!important;justify-content:center!important}
