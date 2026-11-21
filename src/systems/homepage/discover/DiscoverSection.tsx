@@ -1,4 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
+
+const questions = [
+  {
+    question: "What is Simatu?",
+    answer: "Simatu is a brand network bringing together distinct brands, ideas, experiences and worlds—each with its own identity.",
+  },
+  {
+    question: "What can I explore through Simatu?",
+    answer: "Explore the Simatu ecosystem and discover the different brands and experiences within our network.",
+  },
+  {
+    question: "How can I work with Simatu?",
+    answer: "If you have an idea or would like to explore a collaboration, use the Let's talk button in the footer. It is not connected yet, but will be enabled in a future update.",
+  },
+  {
+    question: "Do the brands have their own identities?",
+    answer: "Yes. Each brand within the network has its own identity and world, while being part of the broader Simatu ecosystem.",
+  },
+];
+
+
 
 interface DiscoverSectionProps {
   onDiscover: () => void;
@@ -20,8 +41,18 @@ export default function DiscoverSection({ onDiscover }: DiscoverSectionProps) {
           Beyond the
           <span>ordinary.</span>
         </h2>
+        <div className="homepage-discover-questions">
+          {questions.map((item, index) => (
+            <div className={`homepage-discover-question ${openIndex === index ? "is-open" : ""}`} key={item.question}>
+              <button type="button" className="homepage-discover-question-button" aria-expanded={openIndex === index} onClick={() => setOpenIndex(openIndex === index ? null : index)}>
+                <span>{item.question}</span>
+                <span className="homepage-discover-question-toggle" aria-hidden="true">{openIndex === index ? "−" : "+"}</span>
+              </button>
+              {openIndex === index && <p className="homepage-discover-question-answer">{item.answer}</p>}
+            </div>
+          ))}
+        </div>
         <div className="homepage-discover-lower">
-          
           <div className="homepage-discover-description">
             <p>Discover a collection of brands, ideas, experiences and worlds.</p>
             <button type="button" className="homepage-discover-trigger" aria-label="Discover our brand network" onClick={onDiscover}>
@@ -40,11 +71,17 @@ export default function DiscoverSection({ onDiscover }: DiscoverSectionProps) {
         .homepage-discover-ribbon-one{width:118%;height:52%;top:15%;left:8%;transform:rotate(-17deg);background:linear-gradient(160deg,#411706 4%,#a53b08 22%,#f47718 34%,#5b2107 48%,#d85a0c 62%,#230d03 84%);filter:blur(1px);clip-path:polygon(0 18%,18% 0,38% 22%,60% 8%,83% 35%,100% 18%,92% 74%,68% 84%,44% 64%,24% 100%,8% 74%)}
         .homepage-discover-ribbon-two{width:115%;height:60%;top:39%;left:3%;transform:rotate(13deg);background:linear-gradient(180deg,#240d03 0%,#8e3307 15%,#f06b12 28%,#9d410a 43%,#2a1005 58%,#e65d0a 73%,#6b2805 88%);filter:blur(2px);clip-path:polygon(0 0,18% 22%,39% 8%,57% 36%,79% 20%,100% 0,94% 72%,72% 100%,51% 68%,30% 92%,10% 62%)}
         .homepage-discover-ribbon-three{width:95%;height:48%;top:5%;left:32%;transform:rotate(24deg);background:linear-gradient(90deg,#341305,#bc4d0a 18%,#ff7b19 35%,#682605 58%,#e8660d 76%,#250b02);filter:blur(3px);clip-path:polygon(0 20%,24% 0,44% 32%,68% 14%,100% 0,86% 80%,60% 100%,34% 74%,12% 100%)}
+        .homepage-discover-questions{width:min(100%,780px);margin:clamp(32px,5vw,72px) 0 0}
+        .homepage-discover-question{border-top:1px solid rgba(245,245,245,.16)}
+        .homepage-discover-question:last-child{border-bottom:1px solid rgba(245,245,245,.16)}
+        .homepage-discover-question-button{display:flex;align-items:center;justify-content:space-between;gap:24px;width:100%;padding:var(--hp-space-5) 0;border:0;background:transparent;color:#f1e7d8;text-align:left;font:var(--hp-font-weight-regular) var(--hp-font-size-base)/var(--hp-line-height-normal) var(--hp-font-family);cursor:pointer}
+        .homepage-discover-question-toggle{color:rgba(245,245,245,.62);font:var(--hp-font-weight-regular) var(--hp-font-size-base)/var(--hp-line-height-tight) var(--hp-font-family)}
+        .homepage-discover-question-answer{margin:0 40px var(--hp-space-5) 0;max-width:620px;color:rgba(245,245,245,.6);font:var(--hp-font-weight-regular) var(--hp-font-size-sm)/var(--hp-line-height-relaxed) var(--hp-font-family)}
         .homepage-discover-content{position:relative;z-index:3;width:100%;max-width:none;margin:0;text-align:left}
         .homepage-discover-eyebrow{margin:0 0 clamp(32px,5vh,64px);font:var(--hp-font-weight-medium) var(--hp-font-size-xs)/var(--hp-line-height-normal) var(--hp-font-family);letter-spacing:var(--hp-letter-spacing-wide);text-transform:uppercase;color:rgba(245,245,245,.48)}
         .homepage-discover-title{margin:0;max-width:1100px;margin:0;font-family:var(--hp-font-family);font-size:var(--hp-font-size-display);font-weight:var(--hp-font-weight-regular);line-height:var(--hp-line-height-tight);letter-spacing:var(--hp-letter-spacing-tight);color:#f1e7d8;text-wrap:balance}
          .homepage-discover-title span{display:block;margin:clamp(18px,3vh,38px) 0 0 clamp(72px,18vw,260px);color:#eee2d0}
-        .homepage-discover-lower{display:grid;grid-template-columns:minmax(110px,17%) minmax(250px,440px);gap:clamp(24px,5vw,72px);align-items:start;justify-content:start;margin:clamp(72px,12vh,150px) 0 0 clamp(0px,3vw,48px);max-width:780px;text-align:left}
+        .homepage-discover-lower{display:grid;grid-template-columns:minmax(110px,17%) minmax(250px,440px);gap:clamp(24px,5vw,72px);align-items:start;justify-content:start;margin:clamp(32px,6vh,72px) 0 0 clamp(0px,3vw,48px);max-width:780px;text-align:left}
         
         .homepage-discover-description p{margin:0 0 24px;max-width:440px;font:var(--hp-font-weight-regular) var(--hp-font-size-base)/var(--hp-line-height-relaxed) var(--hp-font-family);letter-spacing:var(--hp-letter-spacing-normal);color:rgba(245,245,245,.62)}
         .homepage-discover-trigger{display:inline-flex;align-items:center;gap:16px;justify-content:center;min-height:48px;padding:0 20px;border:1px solid rgba(245,245,245,.35);border-radius:999px;background:#f2eee7;color:#242321;font:var(--hp-font-weight-semibold) var(--hp-font-size-xs)/var(--hp-line-height-normal) var(--hp-font-family);letter-spacing:var(--hp-letter-spacing-wide);text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:opacity .55s ease,background .2s,border-color .2s}
@@ -53,8 +90,8 @@ export default function DiscoverSection({ onDiscover }: DiscoverSectionProps) {
         .homepage-discover-trigger:active{transform:scale(.98)}
         .homepage-discover-trigger:focus-visible{outline:2px solid #fff;outline-offset:4px}
         .homepage-discover-trigger:disabled{visibility:hidden}
-        @media(max-width:820px){.homepage-discover-trigger-section{min-height:88svh;padding:72px 7%}.homepage-discover-art{width:90%;right:-28%;opacity:.68}.homepage-discover-title span{margin:18px 0 0 14vw}.homepage-discover-lower{grid-template-columns:100px minmax(0,380px);gap:24px;justify-content:start;margin:clamp(56px,10vh,90px) 0 0 7vw}}
-        @media(max-width:520px){.homepage-discover-trigger-section{min-height:72svh;padding:64px 6%}.homepage-discover-eyebrow{margin-bottom:22px}.homepage-discover-title span{margin-left:18vw}.homepage-discover-art{width:118%;right:-45%;height:110%;top:-5%;opacity:.52}.homepage-discover-lower{grid-template-columns:1fr;gap:22px;justify-content:start;margin:64px 0 0 8vw;max-width:360px;text-align:left}.homepage-discover-description p{max-width:330px;margin-bottom:20px}.homepage-discover-trigger{min-height:46px;padding:0 17px}}
+        @media(max-width:820px){.homepage-discover-trigger-section{min-height:88svh;padding:72px 7%}.homepage-discover-art{width:90%;right:-28%;opacity:.68}.homepage-discover-title span{margin:18px 0 0 14vw}.homepage-discover-lower{grid-template-columns:100px minmax(0,380px);gap:24px;justify-content:start;margin:clamp(32px,6vh,72px) 0 0 7vw}}
+        @media(max-width:520px){.homepage-discover-trigger-section{min-height:72svh;padding:64px 6%}.homepage-discover-eyebrow{margin-bottom:22px}.homepage-discover-title span{margin-left:18vw}.homepage-discover-art{width:118%;right:-45%;height:110%;top:-5%;opacity:.52}.homepage-discover-lower{grid-template-columns:1fr;gap:22px;justify-content:start;margin:32px 0 0 8vw;max-width:360px;text-align:left}.homepage-discover-description p{max-width:330px;margin-bottom:20px}.homepage-discover-trigger{min-height:46px;padding:0 17px}}
         @media(prefers-reduced-motion:reduce){.homepage-discover-trigger{transition-duration:.01ms!important}}
       `}</style>
     </section>
