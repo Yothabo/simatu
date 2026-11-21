@@ -37,9 +37,9 @@ export default function AuralisCreativeHero() {
         onTouchEnd={handleTouchEnd}
         onTouchCancel={handleTouchCancel}
       >
-        <div className="hero-background" />
-
-        <div className="main-visual">
+        <div className="hero-background-layers" aria-hidden="true">
+          <div className="hero-background" />
+          <div className="main-visual">
           {visuals.map((visual, index) => (
             <div
               key={visual}
@@ -61,12 +61,18 @@ export default function AuralisCreativeHero() {
           <div className="light-streak light-streak-two" />
           <div className="light-streak light-streak-three" />
         </div>
+          <div className="hero-glow" />
+          <div className="hero-noise" />
+          <div className="hero-vignette" />
+          <div className="orbit-stage">
+            <div className="orbit orbit-one" />
+            <div className="orbit orbit-two" />
+            <div className="orbit orbit-three" />
+            <div className="orbit orbit-four" />
+            <div className="orbit-highlight" />
+          </div>
 
-        <div className="hero-glow" />
-        <div className="hero-noise" />
-        <div className="hero-vignette" />
-
-        <div className="orbit-stage">
+        <div className="hero-copy relative z-[6] w-[58%] mt-[35px] ml-[10.5%] pointer-events-none max-[1100px]:w-[66%] max-[1100px]:ml-[7%] max-[820px]:w-[85%] max-[820px]:mt-[-55px] max-[820px]:ml-[7%] max-[520px]:w-[92%] max-[520px]:mt-[-95px] max-[520px]:ml-[6%] min-[1500px]:ml-[12%]">
           <div className="orbit orbit-one" />
           <div className="orbit orbit-two" />
           <div className="orbit orbit-three" />
