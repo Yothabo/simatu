@@ -3,7 +3,6 @@ import Hero from "../hero/Hero";
 import DiscoverSection from "../discover/DiscoverSection";
 import KineticMoodboard from "../discover/KineticMoodboard";
 import Footer from "../footer";
-import FrequentlyAskedQuestions from "../sections/FrequentlyAskedQuestions";
 
 /** Coordinates homepage motion with transition events and conservative watchdog fallbacks. */
 const EXIT_ANIMATION_MS = 1000;
@@ -70,7 +69,6 @@ export default function HomePage() {
           <Hero />
           <DiscoverSection onDiscover={startDiscovery} />
         </main>
-        <FrequentlyAskedQuestions />
         <Footer />
       </div>
       <style>{`
