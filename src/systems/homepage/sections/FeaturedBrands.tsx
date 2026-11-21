@@ -1,6 +1,6 @@
 import "./featured-brands.css";
 
-export default function FeaturedBrands() {
+export default function SimatuIntroduction() {
   return (
     <section className="epr-page" aria-labelledby="epr-title">
       <div className="epr-stage">
