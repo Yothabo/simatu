@@ -83,6 +83,13 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const [networkError, setNetworkError] = useState('');
   const [activeDiscovery, setActiveDiscovery] = useState<MoodboardItem | null>(null);
 
+  useEffect(() => {
+    if (!activeDiscovery || !colorReveal) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = previousOverflow; };
+  }, [activeDiscovery, colorReveal]);
+
   const sourceItems = items.length ? items : DEFAULT_ITEMS;
   const tiles = useMemo(() => {
     const random = seededRandom(29);
@@ -243,12 +250,12 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__result-store{font:11px/1.4 sans-serif;color:#aaa;margin-top:4px}
         .kinetic-moodboard__result-price{font:600 13px/1.3 sans-serif;color:#f4f4f4;white-space:nowrap}
         .kinetic-moodboard__search-status{padding:14px;color:#aaa;font:12px/1.5 sans-serif}
-        .kinetic-moodboard__dialog-backdrop{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,0);backdrop-filter:blur(0);animation:discover-overlay-in .45s cubic-bezier(.2,.65,.25,1) forwards}
-        .kinetic-moodboard__dialog{width:min(680px,100%);max-height:min(78vh,700px);overflow:auto;border:1px solid rgba(255,255,255,.1);border-radius:20px;background:#242424;color:#fff;padding:26px;opacity:0;transform:translateY(24px) scale(.96);animation:discover-dialog-in .55s cubic-bezier(.2,.65,.25,1) .06s forwards}
+        .kinetic-moodboard__dialog-backdrop{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:12px;overflow:hidden;box-sizing:border-box;background:rgba(0,0,0,0);backdrop-filter:blur(0);animation:discover-overlay-in .45s cubic-bezier(.2,.65,.25,1) forwards}
+        .kinetic-moodboard__dialog{width:min(680px,100%);max-height:min(78vh,700px);max-height:min(78dvh,700px);min-height:0;box-sizing:border-box;overscroll-behavior:contain;overflow-x:hidden;overflow-y:auto;border:1px solid rgba(255,255,255,.1);border-radius:20px;background:#242424;color:#fff;padding:26px;opacity:0;transform:translateY(24px) scale(.96);animation:discover-dialog-in .55s cubic-bezier(.2,.65,.25,1) .06s forwards}
         .kinetic-moodboard__dialog-heading{position:sticky;top:-26px;z-index:5;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin:-26px -26px 0;padding:26px 26px 18px;background:#151515}
         .kinetic-moodboard__dialog-title{font:500 24px/1.3 sans-serif}
         .kinetic-moodboard__dialog-intro{font:13px/1.65 sans-serif;color:#aaa;margin:12px 0 22px}
-        .kinetic-moodboard__store-list{margin-top:18px}.kinetic-moodboard__store-card{display:flex;flex-direction:column;align-items:stretch;gap:1px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.08);color:#fff;text-decoration:none}
+        .kinetic-moodboard__store-list{margin-top:18px}.kinetic-moodboard__store-card{display:flex;flex-direction:column;align-items:stretch;gap:1px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.08);color:#fff;text-decoration:none}.kinetic-moodboard__store-card:last-of-type{border-bottom:0}
         .kinetic-moodboard__store-topline{display:flex;align-items:center;justify-content:space-between;gap:12px}\n        .kinetic-moodboard__store-tags{display:flex;flex-wrap:nowrap;gap:7px;max-width:65%;overflow-x:auto;overflow-y:hidden;white-space:nowrap;scrollbar-width:none;-webkit-overflow-scrolling:touch}\n        .kinetic-moodboard__store-tags::-webkit-scrollbar{display:none}\n        .kinetic-moodboard__store-link-row{display:flex;justify-content:flex-end;align-items:center;margin-top:2px}
         .kinetic-moodboard__store-info{min-width:0;flex:1;overflow:hidden}
         .kinetic-moodboard__store-name{font:500 16px/1.4 sans-serif;color:#fff}
@@ -261,7 +268,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         @keyframes discover-dialog-in{to{opacity:1;transform:translateY(0) scale(1)}}
         .kinetic-moodboard__dialog-close{border:0;border-radius:50%;width:36px;height:36px;background:#353535;color:#fff;font-size:22px;cursor:pointer}
         .kinetic-moodboard__store-sub{color:#aaa;font:12px/1.4 sans-serif;margin-top:4px}
-        @media(max-width:640px){.kinetic-moodboard__search-header{padding:12px}.kinetic-moodboard__search-shell{height:56px;width:calc(100vw - 24px)}.kinetic-moodboard__search-results{top:80px}.kinetic-moodboard__dialog{padding:18px}}
+        @media(max-width:640px){.kinetic-moodboard__search-header{padding:12px}.kinetic-moodboard__search-shell{height:56px;width:calc(100vw - 24px)}.kinetic-moodboard__search-results{top:80px}.kinetic-moodboard__dialog-backdrop{padding:12px;padding-bottom:max(12px,env(safe-area-inset-bottom));padding-top:max(12px,env(safe-area-inset-top))}.kinetic-moodboard__dialog{width:100%;max-height:min(82vh,700px);max-height:min(82dvh,700px);padding:18px;border-radius:16px;overflow-y:auto;overscroll-behavior:contain}.kinetic-moodboard__dialog-heading{top:-18px;margin:-18px -18px 0;padding:18px 18px 14px}}
       `}</style>
       <div className="kinetic-moodboard__search-header" aria-hidden={!colorReveal}>
         <label className="kinetic-moodboard__search-shell">
