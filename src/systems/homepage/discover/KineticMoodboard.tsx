@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { FiShoppingBag } from 'react-icons/fi';
+import { FiHome } from 'react-icons/fi';
 
 type NetworkProduct = { id: string; name: string; price: number; category: string; subcategory?: string; brand?: string; image_url?: string | null; storeKey: 'yotaabo' | 'poshies'; storeName: string; href: string };
 const NETWORK_STORES = [{ key: 'yotaabo' as const, name: 'Yotaabo', href: '/yotaabo/catalog', description: 'A curated selection of fragrance, fashion, and spaces for everyday living.', categories: ['His', 'Hers', 'Spaces'] }, { key: 'poshies' as const, name: 'Poshies', href: '/poshies/catalog', description: 'Fashion, accessories, and lifestyle pieces with a bold, expressive point of view.', categories: ['Hers', 'His', 'Lounge'] }];
@@ -327,7 +327,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       `}</style>
       <div className="kinetic-moodboard__search-header" aria-hidden={!colorReveal || searchDismissed} style={searchDismissed ? { transform: "translate3d(0,-125%,0)", opacity: 0, pointerEvents: "none" } : undefined}>
         <div className="kinetic-moodboard__search-row">
-          <button type="button" className="kinetic-moodboard__search-back" aria-label="Exit Discover and return home" onClick={() => { setSearchQuery(""); setSearchDismissed(true); onExit?.(); }} tabIndex={interactive && !searchDismissed ? 0 : -1}><FiShoppingBag size={20} aria-hidden="true" /></button>
+          <button type="button" className="kinetic-moodboard__search-back" aria-label="Exit Discover and return home" onClick={() => { setSearchQuery(""); setSearchDismissed(true); onExit?.(); }} tabIndex={interactive && !searchDismissed ? 0 : -1}><FiHome size={20} aria-hidden="true" /></button>
         <label className="kinetic-moodboard__search-shell">
           <svg className="kinetic-moodboard__search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" strokeWidth="1.7"/><path d="m16 16 4.3 4.3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/></svg>
           <input className="kinetic-moodboard__search-input" type="search" placeholder="Search stores, products, brands or categories…" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} tabIndex={interactive ? 0 : -1} aria-label="Search the brand network" />
