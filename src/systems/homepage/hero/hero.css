@@ -414,7 +414,8 @@
   z-index: 6;
   right: 8%;
   bottom: 19%;
-  width: min(var(--hp-value-300_px), 25%);
+  width: var(--hp-value-300_px);
+  max-width: 25%;
 }
 
 .hero-description p {
