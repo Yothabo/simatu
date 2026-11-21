@@ -7,7 +7,7 @@ import Footer from "../footer";
 /** Coordinates homepage motion with transition events and conservative watchdog fallbacks. */
 const EXIT_ANIMATION_MS = 1000;
 const EXIT_WATCHDOG_MS = EXIT_ANIMATION_MS + 250;
-const DISCOVERY_REVEAL_WATCHDOG_MS = 4000; // Default 8-column reveal: 7 * 420ms + 650ms = 3590ms.
+const DISCOVERY_REVEAL_WATCHDOG_MS = 5200; // Allows the 8-row staggered reveal to finish before fallback activation.
 export default function HomePage() {
   const [transitionPhase, setTransitionPhase] = useState<"idle" | "exit" | "reveal" | "active">("idle");
   const exitCompletion = useRef({ header: false, hero: false, footer: false, discover: false });
@@ -62,7 +62,7 @@ export default function HomePage() {
       </div>
       <style>{`
         .homepage-layered-experience{position:relative;min-height:100vh;background:#111}
-        .homepage-moodboard-background{position:fixed;inset:0;z-index:0;overflow:hidden;background:#111}
+        .homepage-moodboard-background{position:fixed;inset:0;z-index:0;overflow:hidden;background:transparent}
         .homepage-moodboard-background .kinetic-moodboard{position:absolute;inset:0;width:100%;height:100%;opacity:1;pointer-events:none}
         .homepage-moodboard-gradient{display:none}
         .homepage-foreground{position:relative;z-index:2}
