@@ -8,7 +8,7 @@ export const visuals = [
 export const heroCopy = {
   tagline: "Building Beyond Convention",
   description:
-    "Bringing together technology, commerce and creative thinking to shape new ventures, advance established enterprises and unlock opportunities for sustainable growth.",
+    "Bringing together technology, commerce and creative thinking to shape new ventures.",
 };
 
 export const navItems = [
