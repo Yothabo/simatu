@@ -26,7 +26,7 @@ export default function HomePage() {
   };
 
   const handleRevealTransitionEnd = (event: React.TransitionEvent<HTMLDivElement>) => {
-    if (transitionPhase !== "reveal" || event.propertyName !== "filter") return;
+    if (transitionPhase !== "reveal" || event.propertyName !== "opacity") return;
     const target = event.target as HTMLImageElement;
     if (target.classList.contains("kinetic-moodboard__reveal-sentinel") && event.propertyName === "opacity") setTransitionPhase("active");
   };
