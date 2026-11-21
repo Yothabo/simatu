@@ -106,8 +106,16 @@ export default function FeaturedBrands() {
     if (!section) return;
 
     const observer = new IntersectionObserver(([entry]) => {
-      sectionVisibleRef.current = entry.isIntersecting && entry.intersectionRatio >= 0.1;
-      section.classList.toggle("is-offscreen", !sectionVisibleRef.current);
+      const isVisible = entry.isIntersecting && entry.intersectionRatio >= 0.1;
+      const hasJustEntered = isVisible && !sectionVisibleRef.current;
+
+      sectionVisibleRef.current = isVisible;
+      section.classList.toggle("is-offscreen", !isVisible);
+
+      // Whenever the section comes into view, lead with the Our Brands slide.
+      if (hasJustEntered && activeRef.current !== 0) {
+        activate(0);
+      }
     }, { threshold: [0, 0.1] });
     observer.observe(section);
 
