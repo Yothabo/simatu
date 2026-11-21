@@ -15,7 +15,7 @@ export default function HomePage() {
   };
 
   const handleExitTransitionEnd = (event: React.TransitionEvent<HTMLElement>) => {
-    if (transitionPhase !== "exit" || event.target !== event.currentTarget) return;
+    if (transitionPhase !== "exit") return;
     const target = event.target as HTMLElement;
     if (target.tagName === "HEADER" && event.propertyName === "transform") exitCompletion.current.header = true;
     if (target.classList.contains("novae-hero") && event.propertyName === "transform") exitCompletion.current.hero = true;
