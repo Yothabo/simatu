@@ -310,7 +310,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         <div className="kinetic-moodboard__dialog-backdrop" onClick={() => setActiveDiscovery(null)}>
           <div className="kinetic-moodboard__dialog" role="dialog" aria-modal="true" aria-labelledby="discover-dialog-title" onClick={(event) => event.stopPropagation()}>
             <div className="kinetic-moodboard__dialog-heading"><div><div className="kinetic-moodboard__dialog-title" id="discover-dialog-title">{activeDiscovery.category}</div><div className="kinetic-moodboard__store-sub">Discover stores and collections across Simatu</div></div><button className="kinetic-moodboard__dialog-close" type="button" aria-label="Close" onClick={() => setActiveDiscovery(null)}>×</button></div>
-            <p className="kinetic-moodboard__dialog-intro">Discover stores and collections across Simatu.</p>
+            
             {networkLoading && <div className="kinetic-moodboard__search-status">Loading store directory…</div>}
             {!networkLoading && networkError && <div className="kinetic-moodboard__search-status">{networkError}</div>}
             {!networkLoading && !networkError && discoveryStores.length === 0 && <div className="kinetic-moodboard__search-status">No stores are available.</div>}
