@@ -335,6 +335,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         </label>
         </div>
       </div>
+      <span className="kinetic-moodboard__reveal-sentinel" aria-hidden="true" />
       <div
         ref={viewportRef}
         className={`kinetic-moodboard__viewport${dragging ? ' is-dragging' : ''}`}
