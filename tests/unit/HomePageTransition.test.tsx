@@ -82,7 +82,7 @@ describe("Homepage Discover transition", () => {
     expect(screen.getByRole("button", { name: "Home" })).toBeInTheDocument();
   });
 
-  it("uses the 5,200ms reveal watchdog if sentinel transition never arrives", () => {
+  it("uses the 2,000ms reveal watchdog if sentinel transition never arrives", () => {
     const { container } = render(<HomePage />);
     const root = container.querySelector(".homepage-layered-experience");
 
@@ -90,7 +90,7 @@ describe("Homepage Discover transition", () => {
     act(() => vi.advanceTimersByTime(1250));
     expect(root).toHaveClass("phase-reveal");
 
-    act(() => vi.advanceTimersByTime(5200));
+    act(() => vi.advanceTimersByTime(2000));
 
     expect(root).toHaveClass("phase-active");
     expect(container.querySelector(".kinetic-moodboard")).toHaveAttribute("data-interactive", "true");
