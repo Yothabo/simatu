@@ -66,6 +66,12 @@ describe("Homepage Discover transition", () => {
     expect(container.querySelector(".kinetic-moodboard")).toHaveAttribute("data-interactive", "true");
 
     fireEvent.click(screen.getByRole("button", { name: "Home" }));
+    expect(root).toHaveClass("phase-return");
+    expect(container.querySelector(".kinetic-moodboard")).toHaveAttribute("data-color-reveal", "false");
+    expect(container.querySelector(".kinetic-moodboard")).toHaveAttribute("data-interactive", "false");
+
+    // The board retracts first; Home restores after the reverse sentinel transition.
+    emitTransition(container.querySelector(".kinetic-moodboard__reveal-sentinel")!, "opacity");
     expect(root).toHaveClass("phase-idle");
     expect(container.querySelector(".homepage-moodboard-background")).toHaveAttribute("aria-hidden", "true");
   });
