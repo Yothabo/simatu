@@ -111,3 +111,25 @@
 .homepage-footer::before{content:"";position:absolute;z-index:0;top:0;left:0;right:0;height:180px;pointer-events:none;background:linear-gradient(to bottom,#111 0%,rgba(17,17,17,.72) 38%,transparent 100%)}
 .homepage-footer__cta,.homepage-footer__resources,.footer-wordmark,.homepage-footer__bottom{position:relative;z-index:1}
 .homepage-footer__resources,.homepage-footer__bottom{border:0 !important}
+
+/* Footer typography follows the hero description; ambient homepage background carries through. */
+.homepage-footer__cta p{
+  color:var(--hp-color-text-subtle) !important;
+  font-size:var(--hp-value-16_px) !important;
+  font-weight:400 !important;
+  line-height:1.75 !important;
+  letter-spacing:var(--hp-value-0p1_px) !important;
+}
+.homepage-footer{
+  overflow:visible !important;
+  background:
+    radial-gradient(ellipse at 80% 50%, color-mix(in srgb, var(--hp-color-primary) 10%, transparent), transparent 48%),
+    #111 !important;
+}
+.footer-wordmark{
+  width:calc(100% + 8vw) !important;
+  max-width:none !important;
+  margin-bottom:-8vh !important;
+  transform:translateY(4vh);
+}
+.homepage-footer__bottom{position:relative;z-index:1}
