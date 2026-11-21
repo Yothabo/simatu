@@ -6,7 +6,7 @@ interface DiscoverSectionProps {
 }
 
 /** Discover is a foreground action; the fixed moodboard is managed by HomePage. */
-export default function DiscoverSection({ active, onDiscover }: DiscoverSectionProps) {
+export default function DiscoverSection({ onDiscover }: DiscoverSectionProps) {
   return (
     <section className="homepage-discover-trigger-section" aria-label="Discover our brand network">
       <button type="button" className="homepage-discover-trigger" onClick={onDiscover} disabled={active}>
