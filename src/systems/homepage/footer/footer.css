@@ -106,16 +106,20 @@
 
 }
 
-/* Footer surface fades in from the mood board instead of starting at a hard edge. */
+/* Transparent footer surface with a background-only fade; footer content stays fully opaque. */
 .homepage-footer{
-  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.18) 8%,rgba(0,0,0,.62) 20%,#000 34%);
-  mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.18) 8%,rgba(0,0,0,.62) 20%,#000 34%);
   overflow:visible !important;
-  background:#111 !important;
+  background:transparent !important;
   border:0 !important;
+  isolation:isolate;
 }
 .homepage-footer::before{
-  content:none !important;
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:linear-gradient(to bottom,transparent 0%,rgba(17,17,17,.12) 10%,rgba(17,17,17,.58) 30%,#111 58%,#111 100%);
 }
 .homepage-footer__cta,.footer-wordmark,.homepage-footer__bottom{position:relative;z-index:1}
 .homepage-footer__bottom{border:0 !important}
