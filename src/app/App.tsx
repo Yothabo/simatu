@@ -69,7 +69,7 @@ function DiscoverPage() {
   return (
     <div className="novae-page">
       <main className="homepage-main">
-        <Header brandName="Smartu" showBackButton />
+        <Header showBackButton />
       </main>
     </div>
   );
