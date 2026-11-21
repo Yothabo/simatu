@@ -11,7 +11,7 @@ export default function HomePage() {
   return (
     <div className={`novae-page homepage-layered-experience${discoverActive ? " discover-active" : ""}`}>
       <div className="homepage-moodboard-background" aria-hidden={!discoverActive}>
-        <KineticMoodboard colorReveal={discoverActive} />
+        <KineticMoodboard colorReveal={discoverActive} onExit={() => setDiscoverActive(false)} />\n        <div className="homepage-moodboard-gradient" aria-hidden="true" />
       </div>
       <div className="homepage-foreground">
         <main className="homepage-main">
