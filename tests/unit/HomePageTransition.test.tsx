@@ -1,73 +1,68 @@
-import React from "react";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import HomePage from "../../src/systems/homepage/pages/HomePage";
 
-vi.mock("../../src/systems/homepage/hero/Hero", () => ({
-  default: () => React.createElement(
-    React.Fragment,
-    null,
+vi.mock("../../src/systems/homepage/hero/Hero", async () => {
+  const React = await import("react");
+  return { default: () => React.createElement(React.Fragment, null,
     React.createElement("header", null, "Mock header"),
-    React.createElement("section", { className: "novae-hero" }, "Mock hero")
-  ),
-}));
+    React.createElement("section", { className: "novae-hero" }, "Mock hero")) };
+});
 
-vi.mock("../../src/systems/homepage/footer", () => ({
-  default: () => React.createElement("footer", null, "Mock footer"),
-}));
+vi.mock("../../src/systems/homepage/footer", async () => {
+  const React = await import("react");
+  return { default: () => React.createElement("footer", null, "Mock footer") };
+});
 
-vi.mock("../../src/systems/homepage/discover/KineticMoodboard", () => ({
-  default: ({ colorReveal, interactive, onExit }: { colorReveal: boolean; interactive: boolean; onExit?: () => void }) =>
-    React.createElement(
-      "div",
-      { className: "kinetic-moodboard", "data-color-reveal": String(colorReveal), "data-interactive": String(interactive) },
+vi.mock("../../src/systems/homepage/discover/KineticMoodboard", async () => {
+  const React = await import("react");
+  return { default: ({ colorReveal, interactive, onExit }: { colorReveal: boolean; interactive: boolean; onExit?: () => void }) =>
+    React.createElement("div", { className: "kinetic-moodboard", "data-color-reveal": String(colorReveal), "data-interactive": String(interactive) },
       colorReveal && React.createElement("div", { className: "mock-discovery-controls" },
         React.createElement("button", { type: "button", onClick: onExit }, "Home"),
-        React.createElement("input", { "aria-label": "Search discovery" })
-      ),
-      React.createElement("span", { className: "kinetic-moodboard__reveal-sentinel", style: { opacity: colorReveal ? 1 : 0 } })
-    ),
-}));
+        React.createElement("input", { "aria-label": "Search discovery" })),
+      React.createElement("span", { className: "kinetic-moodboard__reveal-sentinel", style: { opacity: colorReveal ? 1 : 0 } })) };
+});
 
 describe("Homepage Discover transition", () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => vi.useRealTimers());
 
-  afterEach(() => {
-    vi.useRealTimers();
-  });
-
-  it("clicks Discover and follows exit, reveal, and activation in order", () => {
+  it("clicks Discover and follows exit, reveal, activation, and Home return in order", () => {
     const { container } = render(<HomePage />);
     const root = container.querySelector(".homepage-layered-experience");
 
     expect(root).toHaveClass("phase-idle");
     expect(screen.getByRole("button", { name: "Discover our brand network" })).toBeEnabled();
-    expect(screen.queryByRole("textbox", { name: "Search discovery" })).not.toBeInTheDocument();
+    expect(container.querySelector(".homepage-moodboard-background")).toHaveAttribute("aria-hidden", "true");
 
     fireEvent.click(screen.getByRole("button", { name: "Discover our brand network" }));
     expect(root).toHaveClass("phase-exit");
 
-    // Complete each real transition target that HomePage tracks.
+    // Emit the four transition events the exit handler is waiting for.
     fireEvent.transitionEnd(container.querySelector("header")!, { propertyName: "transform" });
     fireEvent.transitionEnd(container.querySelector(".novae-hero")!, { propertyName: "transform" });
     fireEvent.transitionEnd(container.querySelector("footer")!, { propertyName: "transform" });
     fireEvent.transitionEnd(container.querySelector(".homepage-discover-trigger-section")!, { propertyName: "opacity" });
 
     expect(root).toHaveClass("phase-reveal");
-    expect(container.querySelector(".kinetic-moodboard")?.getAttribute("data-color-reveal")).toBe("true");
+    expect(container.querySelector(".homepage-moodboard-background")).toHaveAttribute("aria-hidden", "false");
+    expect(container.querySelector(".kinetic-moodboard")).toHaveAttribute("data-color-reveal", "true");
     expect(screen.getByRole("button", { name: "Home" })).toBeInTheDocument();
     expect(screen.getByRole("textbox", { name: "Search discovery" })).toBeInTheDocument();
-    expect(container.querySelector(".kinetic-moodboard")?.getAttribute("data-interactive")).toBe("false");
+    expect(container.querySelector(".kinetic-moodboard")).toHaveAttribute("data-interactive", "false");
 
     fireEvent.transitionEnd(container.querySelector(".kinetic-moodboard__reveal-sentinel")!, { propertyName: "opacity" });
 
     expect(root).toHaveClass("phase-active");
-    expect(container.querySelector(".kinetic-moodboard")?.getAttribute("data-interactive")).toBe("true");
+    expect(container.querySelector(".kinetic-moodboard")).toHaveAttribute("data-interactive", "true");
+
+    fireEvent.click(screen.getByRole("button", { name: "Home" }));
+    expect(root).toHaveClass("phase-idle");
+    expect(container.querySelector(".homepage-moodboard-background")).toHaveAttribute("aria-hidden", "true");
   });
 
-  it("uses the 1,250ms exit watchdog when exit transition events never arrive", () => {
+  it("uses the 1,250ms exit watchdog if exit transition events never arrive", () => {
     const { container } = render(<HomePage />);
     const root = container.querySelector(".homepage-layered-experience");
 
@@ -80,7 +75,7 @@ describe("Homepage Discover transition", () => {
     expect(screen.getByRole("button", { name: "Home" })).toBeInTheDocument();
   });
 
-  it("uses the 4,000ms reveal watchdog when the sentinel transition never arrives", () => {
+  it("uses the 4,000ms reveal watchdog if sentinel transition never arrives", () => {
     const { container } = render(<HomePage />);
     const root = container.querySelector(".homepage-layered-experience");
 
@@ -91,6 +86,6 @@ describe("Homepage Discover transition", () => {
     act(() => vi.advanceTimersByTime(4000));
 
     expect(root).toHaveClass("phase-active");
-    expect(container.querySelector(".kinetic-moodboard")?.getAttribute("data-interactive")).toBe("true");
+    expect(container.querySelector(".kinetic-moodboard")).toHaveAttribute("data-interactive", "true");
   });
 });
