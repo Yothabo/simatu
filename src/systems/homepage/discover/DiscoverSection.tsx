@@ -66,7 +66,7 @@ export default function DiscoverSection() {
   return (
     <section className={`homepage-discover${isMounted ? " is-live" : ""}`} aria-label="Discover our brand network">
       <style>{`
-        .homepage-discover{position:relative;width:100%;height:100%;min-height:100%;background:#111}
+        .homepage-discover{position:relative;width:100%;height:100vh;height:100svh;min-height:100vh;min-height:100svh;background:#111}
         .homepage-discover__preview{position:relative;width:100%;height:100%;min-height:100%;overflow:hidden;background:#111;transition:filter .9s cubic-bezier(.22,1,.36,1),opacity .9s cubic-bezier(.22,1,.36,1)}
         body.homepage-discover-transition .homepage-main #top,body.homepage-discover-transition .hero-navigation,body.homepage-discover-transition .homepage-footer{filter:grayscale(1);opacity:0;transition:filter .9s cubic-bezier(.22,1,.36,1),opacity .9s cubic-bezier(.22,1,.36,1)}
         .homepage-discover__preview:before,.homepage-discover__preview:after{content:"";position:absolute;z-index:1;left:0;right:0;height:160px;pointer-events:none}.homepage-discover__preview:before{top:0;background:linear-gradient(to bottom,#111 0%,rgba(17,17,17,.7) 35%,transparent 100%)}.homepage-discover__preview:after{bottom:0;background:linear-gradient(to top,#111 0%,rgba(17,17,17,.7) 35%,transparent 100%)}
