@@ -214,3 +214,37 @@
     height: var(--hp-size-37);
   }
 }
+
+
+/* Shared header brand group and contextual back control. */
+.header-brand-group {
+  display: flex;
+  align-items: center;
+  gap: var(--hp-size-18);
+}
+
+.header-back-button {
+  display: inline-flex;
+  width: var(--hp-size-40);
+  height: var(--hp-size-40);
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border: var(--hp-border-width) solid var(--hp-border-subtle-color);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--hp-color-text);
+  font-size: var(--hp-size-22);
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    border-color var(--hp-motion-duration-300) ease,
+    background var(--hp-motion-duration-300) ease,
+    transform var(--hp-motion-duration-300) ease;
+}
+
+.header-back-button:hover {
+  border-color: var(--hp-color-primary);
+  background: color-mix(in srgb, var(--hp-color-primary) 12%, transparent);
+  transform: translateX(-2px);
+}
