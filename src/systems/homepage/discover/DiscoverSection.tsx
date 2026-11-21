@@ -12,7 +12,9 @@ export default function DiscoverSection({ onDiscover }: DiscoverSectionProps) {
         Discover our brand network
       </button>
       <style>{`
-        .homepage-discover-trigger-section{position:relative;z-index:3;display:flex;align-items:center;justify-content:center;min-height:85vh;min-height:85svh;padding:36px 20px;box-sizing:border-box;background:linear-gradient(to bottom,#111 0%,#111 20%,rgba(17,17,17,0) 40%,rgba(17,17,17,0) 60%,#111 80%,#111 100%)}
+        .homepage-discover-trigger-section{position:relative;z-index:3;display:flex;align-items:center;justify-content:center;min-height:85vh;min-height:85svh;padding:36px 20px;box-sizing:border-box;background:transparent;isolation:isolate}
+        .homepage-discover-trigger-section::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 68% 45%,color-mix(in srgb,var(--hp-color-primary) 12%,transparent),transparent 48%),linear-gradient(120deg,var(--hp-color-background) 0%,var(--hp-color-surface) 55%,var(--hp-color-background) 100%);mask-image:linear-gradient(to bottom,#000 0%,#000 20%,transparent 40%);-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 20%,transparent 40%)}
+        .homepage-discover-trigger-section::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:#111;mask-image:linear-gradient(to bottom,transparent 60%,#000 80%,#000 100%);-webkit-mask-image:linear-gradient(to bottom,transparent 60%,#000 80%,#000 100%)}
         .homepage-discover-trigger{
           display:inline-flex;
           align-items:center;
