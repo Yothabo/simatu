@@ -355,6 +355,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
               aria-label={`${item.category}: ${item.title}`}
               disabled={!interactive}
               data-reveal-final={index === tiles.length - 1 ? "true" : "false"}
+              style={{ transitionDelay: colorReveal ? `${Math.floor(index / columns) * 0.45}s` : "0s" }}
               draggable={false}
             >
               <img src={item.image} alt={item.alt} loading={index < 12 ? 'eager' : 'lazy'} draggable={false} style={{ objectPosition: item.objectPosition || 'center', transitionDelay: colorReveal ? `${Math.floor(index / columns) * 0.45}s` : '0s' }} />
