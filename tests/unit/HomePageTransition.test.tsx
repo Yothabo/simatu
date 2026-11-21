@@ -57,7 +57,8 @@ describe("Homepage Discover transition", () => {
     expect(container.querySelector(".kinetic-moodboard")).toHaveAttribute("data-color-reveal", "true");
     expect(screen.getByRole("button", { name: "Home" })).toBeInTheDocument();
     expect(screen.getByRole("textbox", { name: "Search discovery" })).toBeInTheDocument();
-    expect(container.querySelector(".kinetic-moodboard")).toHaveAttribute("data-interactive", "false");
+    // Controls are interactive immediately during reveal, before the sentinel completes.
+    expect(container.querySelector(".kinetic-moodboard")).toHaveAttribute("data-interactive", "true");
 
     emitTransition(container.querySelector(".kinetic-moodboard__reveal-sentinel")!, "opacity");
 
