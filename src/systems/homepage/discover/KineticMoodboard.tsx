@@ -189,7 +189,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   return (
     <section className={`kinetic-moodboard ${className}`} style={style} aria-label="Explore the moodboard">
       <style>{`
-        .kinetic-moodboard{position:relative;width:100%;height:100%;min-height:560px;overflow:hidden;background:#111;color:#fff;isolation:isolate}
+        .kinetic-moodboard{position:relative;display:block;width:100%;height:100%;min-height:0;margin:0;padding:0;box-sizing:border-box;overflow:hidden;background:#111;color:#fff;isolation:isolate}
         .kinetic-moodboard__viewport{position:absolute;inset:0;overflow:hidden;cursor:grab;touch-action:none;user-select:none}
         .kinetic-moodboard__viewport.is-dragging{cursor:grabbing}
         .kinetic-moodboard__board{position:absolute;top:0;left:0;display:grid;grid-template-columns:repeat(${columns},${tileWidth}px);gap:${gap}px;will-change:transform}
@@ -202,7 +202,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__title{font:500 15px/1.25 sans-serif;letter-spacing:.01em}
         .kinetic-moodboard__hint{position:absolute;z-index:2;right:24px;bottom:22px;display:flex;align-items:center;gap:9px;color:rgba(255,255,255,.65);font:500 10px/1 sans-serif;letter-spacing:.16em;text-transform:uppercase;pointer-events:none}
         .kinetic-moodboard__hint:before{content:"";width:22px;height:1px;background:currentColor}
-        @media(max-width:640px){.kinetic-moodboard{min-height:calc(100svh - 72px)}.kinetic-moodboard__hint{right:16px;bottom:16px}}
+        @media(max-width:640px){.kinetic-moodboard{height:100%;min-height:0}.kinetic-moodboard__hint{right:16px;bottom:16px}}
       `}</style>
       <div
         ref={viewportRef}
