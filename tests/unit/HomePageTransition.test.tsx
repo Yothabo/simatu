@@ -2,6 +2,13 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import HomePage from "../../src/systems/homepage/pages/HomePage";
 
+function emitTransition(target: Element, propertyName: string) {
+  const event = new Event("transitionend", { bubbles: true });
+  Object.defineProperty(event, "propertyName", { value: propertyName });
+  act(() => target.dispatchEvent(event));
+}
+
+
 vi.mock("../../src/systems/homepage/hero/Hero", async () => {
   const React = await import("react");
   return { default: () => React.createElement(React.Fragment, null,
