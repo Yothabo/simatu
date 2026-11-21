@@ -1,5 +1,5 @@
 import SectionHeading from "../components/SectionHeading";
-import FeaturedBrands from "./FeaturedBrands";
+import SimatuIntroduction from "./FeaturedBrands";
 import "./sections.css";
 
 const services = [
@@ -121,7 +121,7 @@ export default function HomepageSections() {
         </div>
       </section>
 
-      <FeaturedBrands />
+      <SimatuIntroduction />
 
       <section className="hp-section hp-approach" id="approach" aria-label="Our approach">
         <div className="hp-section__inner">
