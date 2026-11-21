@@ -224,7 +224,7 @@ export default function FeaturedBrands() {
                 style={{ "--image-position": brand.position } as CSSProperties}
               >
                 <img src={brand.image} alt={brand.imageAlt} className={brand.isLogo ? "epr-logo-image" : undefined} draggable={false} loading="eager" decoding="async" fetchPriority={slot === "hero" ? "high" : "low"} />
-                {slot === "hero" && (brand.id === 0 || brand.id === 1) && (
+                {slot === "hero" && (brand.id === 1 || brand.id === 2) && (
                   <span
                     className="epr-hero-arrow"
                     aria-hidden="true"
