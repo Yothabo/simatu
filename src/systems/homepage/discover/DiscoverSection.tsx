@@ -63,14 +63,14 @@ export default function DiscoverSection() {
         .homepage-discover__label{position:absolute;z-index:1;left:16px;right:12px;bottom:15px;display:grid;gap:4px;pointer-events:none}
         .homepage-discover__category{font:600 9px/1.2 sans-serif;letter-spacing:.18em;text-transform:uppercase;opacity:.75}
         .homepage-discover__title{font:500 15px/1.25 sans-serif;letter-spacing:.01em}
-        .homepage-discover__trigger{position:absolute;z-index:3;top:22px;left:50%;transform:translateX(-50%);display:inline-flex;min-height:48px;padding:0 24px;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.6);border-radius:999px;background:rgba(17,17,17,.82);color:#fff;font:600 11px/1.2 var(--hp-font-family,sans-serif);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:background .2s,border-color .2s;opacity:0;visibility:hidden;pointer-events:none}
+        .homepage-discover__trigger{position:absolute;z-index:3;top:50%;left:50%;transform:translate(-50%,-50%);display:inline-flex;min-height:48px;padding:0 24px;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.6);border-radius:999px;background:rgba(17,17,17,.82);color:#fff;font:600 11px/1.2 var(--hp-font-family,sans-serif);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:background .2s,border-color .2s;opacity:0;visibility:hidden;pointer-events:none}
         .homepage-discover__trigger.is-visible{opacity:1;visibility:visible;pointer-events:auto}
         .homepage-discover__trigger:hover{background:#292929;border-color:#fff}
         .homepage-discover__trigger:focus-visible{outline:2px solid #fff;outline-offset:4px}
         .homepage-discover__expanded{width:100%;height:560px;min-height:560px}
         .homepage-discover__loading{display:grid;min-height:280px;place-items:center;color:rgba(255,255,255,.65);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
         .homepage-discover.is-live{padding:0;margin:0}
-        @media(max-width:640px){.homepage-discover__preview{height:596px;min-height:596px}.homepage-discover__preview-grid{gap:6px}.homepage-discover__trigger{top:16px;min-height:44px;padding-inline:17px;font-size:10px}.homepage-discover__expanded{height:calc(100svh - 72px);min-height:560px}}
+        @media(max-width:640px){.homepage-discover__preview{height:596px;min-height:596px}.homepage-discover__preview-grid{gap:6px}.homepage-discover__trigger{min-height:44px;padding-inline:17px;font-size:10px}.homepage-discover__expanded{height:calc(100svh - 72px);min-height:560px}}
       `}</style>
       {!isMounted ? (
         <div className="homepage-discover__preview">
