@@ -885,7 +885,8 @@
     right: auto;
     bottom: 17%;
     left: 7%;
-    width: 52%;
+    width: 86%;
+    max-width: 520px;
   }
 
   .hero-description p {
@@ -983,7 +984,8 @@
   .hero-description {
     bottom: 19%;
     left: 6%;
-    width: 66%;
+    width: 88%;
+    max-width: 420px;
   }
 
   .hero-description p {
