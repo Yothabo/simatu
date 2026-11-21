@@ -23,15 +23,17 @@ export default function Header({
           <button
             type="button"
             className="header-back-button"
-            onClick={() => navigate(-1)}
-            aria-label="Go back"
+            onClick={() => navigate("/")}
+            aria-label="Back to home"
           >
             <TiArrowBack size={24} aria-hidden="true" />
           </button>
         )}
-        <a href="/" className="brand">
-          {brandName}
-        </a>
+        {!showBackButton && (
+          <a href="/" className="brand">
+            {brandName}
+          </a>
+        )}
       </div>
 
       {!showBackButton && (
