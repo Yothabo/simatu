@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-type NetworkProduct = { id: string; name: string; price: number; category: string; subcategory?: string; image_url?: string | null; storeKey: 'yotaabo' | 'poshies'; storeName: string; href: string };
+type NetworkProduct = { id: string; name: string; price: number; category: string; subcategory?: string; brand?: string; image_url?: string | null; storeKey: 'yotaabo' | 'poshies'; storeName: string; href: string };
 const NETWORK_STORES = [{ key: 'yotaabo' as const, name: 'Yotaabo', href: '/yotaabo/catalog', description: 'A curated selection of fragrance, fashion, and spaces for everyday living.', categories: ['His', 'Hers', 'Spaces'] }, { key: 'poshies' as const, name: 'Poshies', href: '/poshies/catalog', description: 'Fashion, accessories, and lifestyle pieces with a bold, expressive point of view.', categories: ['Hers', 'His', 'Lounge'] }];
 
 export interface MoodboardItem {
@@ -142,7 +142,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const searchStores = normalizedSearch.length ? NETWORK_STORES.filter((store) => startsWithSearch(store.name)).slice(0, 4) : [];
   const searchCategories = normalizedSearch.length ? Array.from(new Set(networkProducts.flatMap((product) => [product.category, product.subcategory || '']).filter(Boolean))).filter((category) => startsWithSearch(category)).slice(0, 6) : [];
   const matchingProducts = normalizedSearch.length ? networkProducts
-    .filter((product) => searchMatches(product.name + ' ' + product.category + ' ' + (product.subcategory || '') + ' ' + product.storeName))
+    .filter((product) => searchMatches(product.name + ' ' + product.category + ' ' + (product.subcategory || '') + ' ' + (product.brand || '') + ' ' + product.storeName))
     .sort((a, b) => {
       const score = (product: NetworkProduct) => startsWithSearch(product.name) ? 0 : startsWithSearch(product.category) || startsWithSearch(product.subcategory || '') ? 1 : startsWithSearch(product.storeName) ? 2 : 3;
       return score(a) - score(b) || a.name.localeCompare(b.name);
