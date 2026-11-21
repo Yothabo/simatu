@@ -248,3 +248,15 @@
   background: color-mix(in srgb, var(--hp-color-primary) 12%, transparent);
   transform: translateX(-2px);
 }
+
+/* Additional company, documentation and legal destinations in the mobile menu. */
+.nav-footer-link-groups{display:none}
+@media (max-width:820px){
+ .nav-links{max-height:calc(100vh - var(--hp-size-82));overflow-y:auto}
+ .nav-footer-link-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--hp-size-28) var(--hp-size-24);width:100%;padding-top:var(--hp-size-28);margin-top:var(--hp-size-8);border-top:1px solid color-mix(in srgb,var(--hp-palette-white) 12%,transparent)}
+ .nav-footer-link-group{display:flex;flex-direction:column;align-items:flex-start;gap:var(--hp-size-12)}
+ .nav-footer-link-group h3{margin:0;color:var(--hp-color-primary-light);font-size:var(--hp-size-10);font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+ .nav-footer-link-group a{font-size:var(--hp-size-11);font-weight:500;letter-spacing:.04em;text-transform:none;color:var(--hp-color-text-subtle)}
+ .nav-footer-link-group a::after{display:none}
+}
+@media(max-width:520px){.nav-footer-link-groups{gap:var(--hp-size-24) var(--hp-size-18)}}
