@@ -4,10 +4,26 @@ import DiscoverSection from "../discover/DiscoverSection";
 import KineticMoodboard from "../discover/KineticMoodboard";
 import Footer from "../footer";
 
-/** Coordinates the homepage exit and discovery entrance through transition events. */
+/** Coordinates homepage motion with transition events and conservative watchdog fallbacks. */
+const EXIT_ANIMATION_MS = 1000;
+const EXIT_WATCHDOG_MS = EXIT_ANIMATION_MS + 250;
+const DISCOVERY_REVEAL_WATCHDOG_MS = 4000; // Default 8-column reveal: 7 * 420ms + 650ms = 3590ms.
 export default function HomePage() {
   const [transitionPhase, setTransitionPhase] = useState<"idle" | "exit" | "reveal" | "active">("idle");
   const exitCompletion = useRef({ header: false, hero: false, footer: false, discover: false });
+
+  useEffect(() => {
+    if (transitionPhase !== "exit") return;
+    const timeout = window.setTimeout(() => setTransitionPhase("reveal"), EXIT_WATCHDOG_MS);
+    return () => window.clearTimeout(timeout);
+  }, [transitionPhase]);
+
+
+  useEffect(() => {
+    if (transitionPhase !== "reveal") return;
+    const timeout = window.setTimeout(() => setTransitionPhase("active"), DISCOVERY_REVEAL_WATCHDOG_MS);
+    return () => window.clearTimeout(timeout);
+  }, [transitionPhase]);
 
   const startDiscovery = () => {
     exitCompletion.current = { header: false, hero: false, footer: false, discover: false };
@@ -53,7 +69,7 @@ export default function HomePage() {
         .homepage-layered-experience.phase-active .homepage-moodboard-background .kinetic-moodboard{pointer-events:auto}
         .homepage-layered-experience .homepage-main>header,.homepage-layered-experience .homepage-main>.novae-hero{will-change:opacity,transform}
         .homepage-layered-experience .homepage-main>header{transition:opacity .55s cubic-bezier(.2,.65,.25,1),transform .55s cubic-bezier(.2,.65,.25,1)}
-        .homepage-layered-experience .homepage-main>.novae-hero{transition:opacity 1s cubic-bezier(.2,.65,.25,1),transform 1s cubic-bezier(.2,.65,.25,1)}
+        .homepage-layered-experience .homepage-main>.novae-hero{transition:opacity ${EXIT_ANIMATION_MS}ms cubic-bezier(.2,.65,.25,1),transform ${EXIT_ANIMATION_MS}ms cubic-bezier(.2,.65,.25,1)}
         .homepage-layered-experience .homepage-main>.homepage-discover-trigger-section{transition:opacity .55s ease,visibility .55s}
         .homepage-layered-experience .homepage-foreground>footer{transition:opacity 1s cubic-bezier(.2,.65,.25,1),transform 1s cubic-bezier(.2,.65,.25,1)}
         .homepage-layered-experience.phase-exit .homepage-main>header,.homepage-layered-experience.phase-exit .homepage-main>.novae-hero,.homepage-layered-experience.phase-reveal .homepage-main>header,.homepage-layered-experience.phase-reveal .homepage-main>.novae-hero,.homepage-layered-experience.phase-active .homepage-main>header,.homepage-layered-experience.phase-active .homepage-main>.novae-hero{opacity:0;transform:translateY(-100px);pointer-events:none}
