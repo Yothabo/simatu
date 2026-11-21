@@ -106,8 +106,10 @@
 
 }
 
-/* Footer uses one continuous solid charcoal surface. */
+/* Footer surface fades in from the mood board instead of starting at a hard edge. */
 .homepage-footer{
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.18) 8%,rgba(0,0,0,.62) 20%,#000 34%);
+  mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.18) 8%,rgba(0,0,0,.62) 20%,#000 34%);
   overflow:visible !important;
   background:#111 !important;
   border:0 !important;
