@@ -220,6 +220,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   };
 
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!interactive) return;
     if (event.pointerType === 'mouse' && event.button !== 0) return;
     stopMotion();
     event.currentTarget.setPointerCapture(event.pointerId);
@@ -253,7 +254,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   };
 
   const onWheel = (event: React.WheelEvent<HTMLDivElement>) => {
-    if (!enableWheel) return;
+    if (!enableWheel || !interactive) return;
     event.preventDefault();
     stopMotion();
     applyPosition(positionRef.current.x - event.deltaX - (event.shiftKey ? event.deltaY : 0), positionRef.current.y - (event.shiftKey ? 0 : event.deltaY));
@@ -265,7 +266,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   };
 
   return (
-    <section className={`kinetic-moodboard ${className}${colorReveal ? ' is-color-revealing' : ''}`} style={style} aria-label="Explore the moodboard">
+    <section className={`kinetic-moodboard ${className}${colorReveal ? ' is-color-revealing' : ''}${interactive ? ' is-interactive' : ''}`} style={style} aria-label="Explore the moodboard">
       <style>{`
         .kinetic-moodboard{position:relative;display:block;width:100%;height:100%;min-height:0;margin:0;padding:0;box-sizing:border-box;overflow:hidden;background:#111;color:#fff;isolation:isolate}
         .kinetic-moodboard__viewport{position:absolute;inset:0;overflow:hidden;cursor:grab;touch-action:none;user-select:none}
@@ -275,7 +276,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__tile img{display:block;width:100%;height:100%;object-fit:cover;filter:grayscale(1);transition:filter .65s ease}.kinetic-moodboard.is-color-revealing .kinetic-moodboard__tile img{filter:grayscale(0)}
         .kinetic-moodboard__tile:hover img{transform:scale(1.055);filter:brightness(.82)}
         .kinetic-moodboard__search-header{position:absolute;z-index:10;top:0;left:0;right:0;display:flex;justify-content:center;padding:18px 20px;transform:translate3d(0,-125%,0);opacity:0;pointer-events:none;transition:transform .7s cubic-bezier(.2,.65,.25,1),opacity .7s ease}.kinetic-moodboard__search-row{width:min(680px,calc(100vw - 40px));display:flex;align-items:center;gap:10px}.kinetic-moodboard__search-back{width:62px;height:62px;flex:0 0 62px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.08);border-radius:50%;background:#292929;color:#c8c8c8;box-shadow:0 10px 28px rgba(0,0,0,.24);cursor:pointer;transition:background .2s,color .2s,transform .2s}.kinetic-moodboard__search-back:hover{background:#353535;color:#fff}.kinetic-moodboard__search-back:active{transform:scale(.96)}.kinetic-moodboard__search-back:focus-visible{outline:2px solid rgba(255,255,255,.35);outline-offset:2px}.kinetic-moodboard__search-back svg{width:18px;height:18px}
-        .kinetic-moodboard.is-color-revealing .kinetic-moodboard__search-header{transform:translate3d(0,0,0);opacity:1;pointer-events:auto}
+        .kinetic-moodboard.is-color-revealing .kinetic-moodboard__search-header{transform:translate3d(0,0,0);opacity:1}.kinetic-moodboard.is-interactive .kinetic-moodboard__search-header{pointer-events:auto}
         .kinetic-moodboard__search-shell{width:auto;min-width:0;flex:1;height:62px;display:flex;align-items:center;gap:12px;padding:0 18px;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:#292929;box-shadow:0 12px 36px rgba(0,0,0,.3);color:#f2f2f2}
         .kinetic-moodboard__search-icon{width:16px;height:16px;flex:0 0 16px;opacity:.62}
         .kinetic-moodboard__search-input{-webkit-appearance:none;appearance:none;width:100%;min-width:0;margin:0;padding:0;border:0;border-radius:0;outline:none;box-shadow:none;background:transparent!important;color:#f2f2f2;font:400 13px/1.2 sans-serif;letter-spacing:.02em;caret-color:#dedede}
@@ -320,7 +321,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         @keyframes discover-overlay-in{to{background:rgba(0,0,0,.66);backdrop-filter:blur(10px)}}
         @keyframes discover-overlay-out{0%{background:rgba(0,0,0,.66);backdrop-filter:blur(10px)}100%{background:rgba(0,0,0,0);backdrop-filter:blur(0)}}
         @keyframes discover-dialog-in{to{opacity:1;transform:translateY(0) scale(1)}}\n        @keyframes discover-sheet-in{from{transform:translateY(100%)}to{transform:translateY(0)}}
-        @keyframes discover-dialog-out{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(18px) scale(.985)}}\n        @keyframes discover-sheet-out{from{transform:translateY(0)}to{transform:translateY(100%)}}\n        \n        @media(prefers-reduced-motion:reduce){.kinetic-moodboard__dialog-backdrop,.kinetic-moodboard__dialog-backdrop.is-closing,.kinetic-moodboard__dialog,.kinetic-moodboard__dialog-backdrop.is-closing .kinetic-moodboard__dialog{animation-duration:.01ms!important;animation-iteration-count:1!important}}
+        @keyframes discover-dialog-out{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(18px) scale(.985)}}\n        @keyframes discover-sheet-out{from{transform:translateY(0)}to{transform:translateY(100%)}}\n        \n        @media(prefers-reduced-motion:reduce){.kinetic-moodboard__board,.kinetic-moodboard__tile img,.kinetic-moodboard__label,.kinetic-moodboard__search-header{transition-duration:.01ms!important;transition-delay:0s!important}.kinetic-moodboard__dialog-backdrop,.kinetic-moodboard__dialog-backdrop.is-closing,.kinetic-moodboard__dialog,.kinetic-moodboard__dialog-backdrop.is-closing .kinetic-moodboard__dialog{animation-duration:.01ms!important;animation-iteration-count:1!important}}
         .kinetic-moodboard__dialog-close{border:0;border-radius:50%;width:36px;height:36px;background:#353535;color:#fff;font-size:22px;cursor:pointer}
         .kinetic-moodboard__store-sub{color:#aaa;font:12px/1.4 sans-serif;margin-top:4px}
         @media(max-width:640px){.kinetic-moodboard__search-header{padding:12px}.kinetic-moodboard__search-shell{height:56px;width:calc(100vw - 24px)}.kinetic-moodboard__search-results{top:80px}.kinetic-moodboard__dialog-backdrop{padding:0;padding-top:max(0px,env(safe-area-inset-top))}.kinetic-moodboard__dialog{width:100%;max-height:min(92vh,900px);max-height:min(92dvh,900px);padding:0 18px calc(18px + env(safe-area-inset-bottom));border-radius:22px 22px 0 0;overflow-y:auto;overscroll-behavior:contain}.kinetic-moodboard__dialog-heading{top:0;margin:0 -18px;padding:18px}}
@@ -352,6 +353,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
               onClick={() => { handleTileClick(item); setActiveDiscovery(item); }}
               aria-label={`${item.category}: ${item.title}`}
               disabled={!interactive}
+              data-reveal-final={index === tiles.length - 1 ? "true" : "false"}
               draggable={false}
             >
               <img src={item.image} alt={item.alt} loading={index < 12 ? 'eager' : 'lazy'} draggable={false} style={{ objectPosition: item.objectPosition || 'center', transitionDelay: colorReveal ? `${Math.floor(index / columns) * 0.42}s` : '0s' }} />
