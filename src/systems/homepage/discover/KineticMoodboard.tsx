@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+type NetworkProduct = { id: string; name: string; price: number; category: string; subcategory?: string; image_url?: string | null; storeKey: 'yotaabo' | 'poshies'; storeName: string; href: string };
+const NETWORK_STORES = [{ key: 'yotaabo' as const, name: 'Yotaabo', href: '/yotaabo/catalog', categories: ['His', 'Hers', 'Spaces'] }, { key: 'poshies' as const, name: 'Poshies', href: '/poshies/catalog', categories: ['His', 'Hers', 'Lounge'] }];
+
 export interface MoodboardItem {
   id: string;
   image: string;
@@ -75,6 +78,10 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [networkProducts, setNetworkProducts] = useState<NetworkProduct[]>([]);
+  const [networkLoading, setNetworkLoading] = useState(false);
+  const [networkError, setNetworkError] = useState('');
+  const [activeDiscovery, setActiveDiscovery] = useState<MoodboardItem | null>(null);
 
   const sourceItems = items.length ? items : DEFAULT_ITEMS;
   const tiles = useMemo(() => {
@@ -87,7 +94,24 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
     return Array.from({ length: columns * columns }, (_, index) => shuffled[index % shuffled.length]);
   }, [sourceItems, columns]);
 
+  useEffect(() => {
+    let cancelled = false;
+    setNetworkLoading(true);
+    Promise.all(NETWORK_STORES.map(async (store) => {
+      const response = await fetch('/api/products?storefront=' + encodeURIComponent(store.key), { headers: { Accept: 'application/json' } });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || ('Unable to load ' + store.name + ' products.'));
+      return (Array.isArray(data.products) ? data.products : []).filter((product: any) => product && product.is_active !== false).map((product: any) => ({ ...product, storeKey: store.key, storeName: store.name, href: store.href } as NetworkProduct));
+    }))
+      .then((results) => { if (!cancelled) { setNetworkProducts(results.flat()); setNetworkError(''); } })
+      .catch((error) => { if (!cancelled) setNetworkError(error instanceof Error ? error.message : 'Network search unavailable.'); })
+      .finally(() => { if (!cancelled) setNetworkLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
   const normalizedSearch = searchQuery.trim().toLowerCase();
+  const matchingProducts = normalizedSearch.length >= 2 ? networkProducts.filter((product) => (product.name + ' ' + product.category + ' ' + (product.subcategory || '') + ' ' + product.storeName).toLowerCase().includes(normalizedSearch).slice(0, 12) : [];
+  const discoveryStores = activeDiscovery ? NETWORK_STORES.filter((store) => networkProducts.some((product) => product.storeKey === store.key && (product.category + ' ' + (product.subcategory || '') + ' ' + product.name).toLowerCase().includes(activeDiscovery.category.toLowerCase())) : [];
+  const discoveryProducts = activeDiscovery ? networkProducts.filter((product) => discoveryStores.some((store) => store.key === product.storeKey) && (product.category + ' ' + (product.subcategory || '') + ' ' + product.name).toLowerCase().includes(activeDiscovery.category.toLowerCase()).slice(0, 8) : [];
   const boardWidth = columns * tileWidth + (columns - 1) * gap;
   const boardHeight = columns * tileHeight + (columns - 1) * gap;
 
@@ -203,7 +227,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__tile.is-search-hidden{visibility:hidden;pointer-events:none}
         .kinetic-moodboard__search-header{position:absolute;z-index:10;top:0;left:0;right:0;display:flex;justify-content:center;padding:18px 20px;transform:translate3d(0,-125%,0);opacity:0;pointer-events:none;transition:transform .85s cubic-bezier(.2,.65,.25,1),opacity .65s ease;}
         .kinetic-moodboard.is-color-revealing .kinetic-moodboard__search-header{transform:translate3d(0,0,0);opacity:1;pointer-events:auto}
-        .kinetic-moodboard__search-shell{width:min(560px,calc(100vw - 40px));height:48px;display:flex;align-items:center;gap:12px;padding:0 18px;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:#292929;box-shadow:0 12px 36px rgba(0,0,0,.3);color:#f2f2f2}
+        .kinetic-moodboard__search-shell{width:min(680px,calc(100vw - 40px));height:62px;display:flex;align-items:center;gap:12px;padding:0 18px;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:#292929;box-shadow:0 12px 36px rgba(0,0,0,.3);color:#f2f2f2}
         .kinetic-moodboard__search-icon{width:16px;height:16px;flex:0 0 16px;opacity:.62}
         .kinetic-moodboard__search-input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:#f2f2f2;font:400 13px/1.2 sans-serif;letter-spacing:.02em}
         .kinetic-moodboard__search-input::placeholder{color:rgba(255,255,255,.45)}
@@ -214,7 +238,24 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__title{font:500 15px/1.25 sans-serif;letter-spacing:.01em}
         .kinetic-moodboard__hint{position:absolute;z-index:2;right:24px;bottom:22px;display:flex;align-items:center;gap:9px;color:rgba(255,255,255,.65);font:500 10px/1 sans-serif;letter-spacing:.16em;text-transform:uppercase;pointer-events:none}
         .kinetic-moodboard__hint:before{content:"";width:22px;height:1px;background:currentColor}
-        @media(max-width:640px){.kinetic-moodboard{height:100%;min-height:0}.kinetic-moodboard__hint{right:16px;bottom:16px}}
+        .kinetic-moodboard__search-results{position:absolute;top:98px;left:50%;transform:translateX(-50%);width:min(680px,calc(100vw - 32px));max-height:min(62vh,560px);overflow:auto;z-index:11;background:#242424;border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:8px;color:#fff;box-shadow:0 24px 70px rgba(0,0,0,.45)}
+        .kinetic-moodboard__result{display:flex;align-items:center;gap:12px;padding:10px;border-radius:12px;text-decoration:none;color:#fff;transition:background .18s}
+        .kinetic-moodboard__result:hover{background:#353535}
+        .kinetic-moodboard__result-image{width:54px;height:62px;object-fit:contain;border-radius:8px;background:#333;flex:0 0 auto}
+        .kinetic-moodboard__result-meta{min-width:0;flex:1}
+        .kinetic-moodboard__result-name{font:500 13px/1.35 sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .kinetic-moodboard__result-store{font:11px/1.4 sans-serif;color:#aaa;margin-top:4px}
+        .kinetic-moodboard__result-price{font:600 13px/1.3 sans-serif;color:#f4f4f4;white-space:nowrap}
+        .kinetic-moodboard__search-status{padding:14px;color:#aaa;font:12px/1.5 sans-serif}
+        .kinetic-moodboard__dialog-backdrop{position:absolute;inset:0;z-index:20;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.62);backdrop-filter:blur(10px)}
+        .kinetic-moodboard__dialog{width:min(640px,100%);max-height:min(78vh,700px);overflow:auto;border:1px solid rgba(255,255,255,.1);border-radius:20px;background:#242424;color:#fff;padding:22px}
+        .kinetic-moodboard__dialog-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+        .kinetic-moodboard__dialog-title{font:500 22px/1.3 sans-serif}
+        .kinetic-moodboard__dialog-close{border:0;border-radius:50%;width:36px;height:36px;background:#353535;color:#fff;font-size:22px;cursor:pointer}
+        .kinetic-moodboard__store-card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.08);color:#fff;text-decoration:none}
+        .kinetic-moodboard__store-sub{color:#aaa;font:12px/1.4 sans-serif;margin-top:4px}
+        .kinetic-moodboard__store-open{font:600 11px/1 sans-serif;color:#ccc}
+        @media(max-width:640px){.kinetic-moodboard__search-header{padding:12px}.kinetic-moodboard__search-shell{height:56px;width:calc(100vw - 24px)}.kinetic-moodboard__search-results{top:80px}.kinetic-moodboard__dialog{padding:18px}}
       `}</style>
       <div className="kinetic-moodboard__search-header" aria-hidden={!colorReveal}>
         <label className="kinetic-moodboard__search-shell">
@@ -237,7 +278,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
               type="button"
               className={`kinetic-moodboard__tile${normalizedSearch && !`${item.category} ${item.title}`.toLowerCase().includes(normalizedSearch) ? ' is-search-hidden' : ''}`}
               key={`${item.id}-${index}`}
-              onClick={() => handleTileClick(item)}
+              onClick={() => { handleTileClick(item); setActiveDiscovery(item); }}
               aria-label={`${item.category}: ${item.title}`}
               draggable={false}
             >
