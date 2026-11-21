@@ -3,19 +3,19 @@ import React, { useState } from "react";
 const questions = [
   {
     question: "What is Simatu?",
-    answer: "Simatu is a brand network bringing together distinct brands, ideas, experiences and worlds—each with its own identity.",
+    answer: "Simatu is a collective of distinct brands, each with its own identity, purpose and vision.",
   },
   {
-    question: "What can I explore through Simatu?",
-    answer: "Explore the Simatu ecosystem and discover the different brands and experiences within our network.",
+    question: "What defines the Simatu network?",
+    answer: "A growing portfolio of brands, ideas and experiences, built to stand apart and move forward.",
   },
   {
-    question: "How can I work with Simatu?",
-    answer: "If you have an idea or would like to explore a collaboration, use the Let's talk button in the footer. It is not connected yet, but will be enabled in a future update.",
+    question: "Can I collaborate with Simatu?",
+    answer: "We welcome meaningful ideas and partnerships. Our contact channel will be available soon.",
   },
   {
-    question: "Do the brands have their own identities?",
-    answer: "Yes. Each brand within the network has its own identity and world, while being part of the broader Simatu ecosystem.",
+    question: "What brings our brands together?",
+    answer: "A shared vision, with the freedom for every brand to develop its own character and direction.",
   },
 ];
 
