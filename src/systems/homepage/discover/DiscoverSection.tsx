@@ -12,26 +12,7 @@ export default function DiscoverSection({ onDiscover }: DiscoverSectionProps) {
         Discover our brand network
       </button>
       <style>{`
-        .homepage-discover-trigger-section{
-          position:relative;
-          z-index:3;
-          display:flex;
-          align-items:center;
-          justify-content:center;
-          min-height:85vh;
-          min-height:85svh;
-          padding:36px 20px;
-          box-sizing:border-box;
-          background:linear-gradient(
-            to bottom,
-            #111 0%,
-            #111 20%,
-            rgba(17,17,17,0) 20%,
-            rgba(17,17,17,0) 80%,
-            #111 80%,
-            #111 100%
-          );
-        }
+        .homepage-discover-trigger-section{position:relative;z-index:3;display:flex;align-items:center;justify-content:center;min-height:85vh;min-height:85svh;padding:36px 20px;box-sizing:border-box;background:radial-gradient(ellipse at center,rgba(17,17,17,0) 0%,rgba(17,17,17,.10) 42%,rgba(17,17,17,.82) 100%)}
         .homepage-discover-trigger{
           display:inline-flex;
           align-items:center;
