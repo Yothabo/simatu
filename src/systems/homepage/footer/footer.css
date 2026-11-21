@@ -106,13 +106,27 @@
 
 }
 
-/* Homepage footer: charcoal fade from top downward, borderless. */
-.homepage-footer{background:#111 !important;border:0 !important}
-.homepage-footer::before{content:"";position:absolute;z-index:0;top:0;left:0;right:0;height:180px;pointer-events:none;background:linear-gradient(to bottom,#111 0%,rgba(17,17,17,.72) 38%,transparent 100%)}
-.homepage-footer__cta,.homepage-footer__resources,.footer-wordmark,.homepage-footer__bottom{position:relative;z-index:1}
-.homepage-footer__resources,.homepage-footer__bottom{border:0 !important}
+/* Footer preserves the homepage background and its charcoal atmosphere. */
+.homepage-footer{
+  overflow:visible !important;
+  background:transparent !important;
+  border:0 !important;
+}
+.homepage-footer::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  top:0;
+  left:0;
+  right:0;
+  height:180px;
+  pointer-events:none;
+  background:linear-gradient(to bottom, color-mix(in srgb, var(--hp-color-surface) 85%, transparent) 0%, color-mix(in srgb, var(--hp-color-surface) 48%, transparent) 38%, transparent 100%);
+}
+.homepage-footer__cta,.footer-wordmark,.homepage-footer__bottom{position:relative;z-index:1}
+.homepage-footer__bottom{border:0 !important}
 
-/* Footer typography follows the hero description; ambient homepage background carries through. */
+/* Match the hero paragraph rhythm and tone. */
 .homepage-footer__cta p{
   color:var(--hp-color-text-subtle) !important;
   font-size:var(--hp-value-16_px) !important;
@@ -120,31 +134,31 @@
   line-height:1.75 !important;
   letter-spacing:var(--hp-value-0p1_px) !important;
 }
-.homepage-footer{
-  overflow:visible !important;
-  background:
-    radial-gradient(ellipse at 80% 50%, color-mix(in srgb, var(--hp-color-primary) 10%, transparent), transparent 48%),
-    #111 !important;
-}
-.footer-wordmark{
-  width:calc(100% + 8vw) !important;
-  max-width:none !important;
-  margin-bottom:-8vh !important;
-  transform:translateY(4vh);
-}
-.homepage-footer__bottom{position:relative;z-index:1}
 
-/* Keep the footer mark centered while deliberately extending beyond the page edge. */
+/* Center the responsive wordmark and let its lower edge intentionally overflow. */
 .footer-wordmark{
-  position:relative !important;
-  left:50% !important;
-  width:135vw !important;
-  max-width:none !important;
-  margin-left:0 !important;
-  margin-bottom:-18vh !important;
-  transform:translate(-50%,14vh) !important;
+  width:100% !important;
+  max-width:var(--hp-size-content-wide) !important;
+  height:clamp(var(--hp-size-150),32vw,var(--hp-size-480)) !important;
+  margin:var(--hp-space-8) auto -14vh !important;
+  left:auto !important;
+  transform:translateY(8vh) !important;
+  object-fit:contain !important;
   object-position:center !important;
 }
+@media(max-width:820px){
+  .footer-wordmark{
+    width:100% !important;
+    height:clamp(var(--hp-size-150),42vw,var(--hp-size-300)) !important;
+    margin-bottom:-16vh !important;
+    transform:translateY(10vh) !important;
+  }
+}
 @media(max-width:520px){
- .footer-wordmark{width:150vw !important;height:var(--hp-size-260) !important;margin-bottom:-22vh !important;transform:translate(-50%,18vh) !important}
+  .footer-wordmark{
+    width:100% !important;
+    height:var(--hp-size-260) !important;
+    margin-bottom:-18vh !important;
+    transform:translateY(12vh) !important;
+  }
 }
