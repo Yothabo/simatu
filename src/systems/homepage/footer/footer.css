@@ -40,8 +40,7 @@
   z-index: 1;
   padding: clamp(var(--hp-space-16), 9vw, var(--hp-space-28)) clamp(var(--hp-space-6), 7.2vw, var(--hp-space-20)) var(--hp-space-6);
   overflow: hidden;
-  border-top: var(--hp-border-width) solid var(--hp-color-border);
-  background: color-mix(in srgb, var(--hp-color-surface) 92%, var(--hp-color-background));
+  background: #111;
   color: var(--hp-color-text);
 }
 
@@ -120,7 +119,6 @@
 
 .homepage-footer__resources {
   padding-block: var(--hp-space-8);
-  border-top: var(--hp-border-width) solid var(--hp-color-border);
 }
 
 .footer-wordmark {
@@ -141,7 +139,6 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--hp-space-4);
-  border-top: var(--hp-border-width) solid var(--hp-color-border);
   color: var(--hp-color-text-muted);
   font-size: var(--hp-font-size-xs);
 }
@@ -181,3 +178,9 @@
     transform: none;
   }
 }
+
+/* Homepage footer: charcoal fade from top downward, borderless. */
+.homepage-footer{background:#111 !important;border:0 !important}
+.homepage-footer::before{content:"";position:absolute;z-index:0;top:0;left:0;right:0;height:180px;pointer-events:none;background:linear-gradient(to bottom,#111 0%,rgba(17,17,17,.72) 38%,transparent 100%)}
+.homepage-footer__cta,.homepage-footer__resources,.footer-wordmark,.homepage-footer__bottom{position:relative;z-index:1}
+.homepage-footer__resources,.homepage-footer__bottom{border:0 !important}
