@@ -60,6 +60,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   enableWheel = true,
   enableMomentum = true,
   showLabels = true,
+  colorReveal = false,
   className = '',
   style,
   onItemClick,
