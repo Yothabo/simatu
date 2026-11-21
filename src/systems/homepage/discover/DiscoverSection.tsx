@@ -63,7 +63,7 @@ export default function DiscoverSection() {
         .homepage-discover__label{position:absolute;z-index:1;left:16px;right:12px;bottom:15px;display:grid;gap:4px;pointer-events:none}
         .homepage-discover__category{font:600 9px/1.2 sans-serif;letter-spacing:.18em;text-transform:uppercase;opacity:.75}
         .homepage-discover__title{font:500 15px/1.25 sans-serif;letter-spacing:.01em}
-        .homepage-discover__trigger{position:absolute;z-index:3;top:50%;left:50%;transform:translate(-50%,-50%);display:inline-flex;min-height:48px;padding:0 24px;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.6);border-radius:999px;background:#c4471d;color:#fff;font:600 11px/1.2 var(--hp-font-family,sans-serif);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:background .2s,border-color .2s;opacity:0;visibility:hidden;pointer-events:none}
+        .homepage-discover__trigger{position:absolute;z-index:3;top:calc(50% + 32px);left:50%;transform:translate(-50%,-50%);display:inline-flex;min-height:48px;padding:0 24px;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.6);border-radius:999px;background:#c4471d;color:#fff;font:600 11px/1.2 var(--hp-font-family,sans-serif);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:background .2s,border-color .2s;opacity:0;visibility:hidden;pointer-events:none}
         .homepage-discover__trigger.is-visible{opacity:1;visibility:visible;pointer-events:auto}
         .homepage-discover__trigger:hover{background:#a93d1a;border-color:#fff}
         .homepage-discover__trigger:focus-visible{outline:2px solid #fff;outline-offset:4px}
