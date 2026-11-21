@@ -3,7 +3,7 @@ import "./footer.css";
 export default function Footer() {
   return (
     <footer className="homepage-footer" id="footer">
-      <section className="homepage-footer__cta" id="contact" aria-label="Start a conversation">
+      <section className="homepage-footer__cta homepage-footer__editorial" id="contact" aria-label="Start a conversation">\n        <span className="homepage-footer__eyebrow">SIMATU · THE NEXT CHAPTER</span>
         <h2>How can we shape your next idea?</h2>
         <p>
           We bring strategy, imagination and thoughtful execution together to
