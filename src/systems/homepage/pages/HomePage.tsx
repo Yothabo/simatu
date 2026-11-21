@@ -21,7 +21,7 @@ export default function HomePage() {
   }, [transitionPhase]);
 
   return (
-    <div className={`nova e-page homepage-layered-experience phase-${transitionPhase}`.replace("nova e-page","nova-page")}>
+    <div className={`nova-page homepage-layered-experience phase-${transitionPhase}`}>
       <div className="homepage-moodboard-background" aria-hidden={transitionPhase === "idle"}>
         <KineticMoodboard colorReveal={transitionPhase === "reveal" || transitionPhase === "active"} interactive={transitionPhase === "active"} onExit={() => setTransitionPhase("idle")} />
         <div className="homepage-moodboard-gradient" aria-hidden="true" />
