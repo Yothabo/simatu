@@ -38,7 +38,6 @@ export default function DiscoverSection({ onDiscover }: DiscoverSectionProps) {
       </div>
 
       <div className="homepage-discover-content">
-        <p className="homepage-discover-eyebrow">Explore beyond the expected</p>
         <h2 className="homepage-discover-title">
           Beyond the
           <span>ordinary.</span>
@@ -56,7 +55,6 @@ export default function DiscoverSection({ onDiscover }: DiscoverSectionProps) {
         </div>
         <div className="homepage-discover-lower">
           <div className="homepage-discover-description">
-            <p>Discover a collection of brands, ideas, experiences and worlds.</p>
             <button type="button" className="homepage-discover-trigger" aria-label="Discover our brand network" onClick={onDiscover}>
               Explore our brand network <span aria-hidden="true">↗</span>
             </button>
