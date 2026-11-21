@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import HomePage from "../../src/systems/homepage/pages/HomePage";
 
@@ -12,7 +12,7 @@ function emitTransition(target: Element, propertyName: string) {
 vi.mock("../../src/systems/homepage/hero/Hero", async () => {
   const React = await import("react");
   return { default: () => React.createElement(React.Fragment, null,
-    React.createElement("header", null, "Mock header"),
+    React.createElement("nav", { className: "hero-navigation" }, "Mock header"),
     React.createElement("section", { className: "novae-hero" }, "Mock hero")) };
 });
 
@@ -33,7 +33,7 @@ vi.mock("../../src/systems/homepage/discover/KineticMoodboard", async () => {
 
 describe("Homepage Discover transition", () => {
   beforeEach(() => vi.useFakeTimers());
-  afterEach(() => vi.useRealTimers());
+  afterEach(() => { cleanup(); vi.useRealTimers(); });
 
   it("clicks Discover and follows exit, reveal, activation, and Home return in order", () => {
     const { container } = render(<HomePage />);
@@ -47,7 +47,7 @@ describe("Homepage Discover transition", () => {
     expect(root).toHaveClass("phase-exit");
 
     // Emit the four transition events the exit handler is waiting for.
-    emitTransition(container.querySelector("header")!, "transform");
+    emitTransition(container.querySelector(".hero-navigation")!, "transform");
     emitTransition(container.querySelector(".novae-hero")!, "transform");
     emitTransition(container.querySelector("footer")!, "transform");
     emitTransition(container.querySelector(".homepage-discover-trigger-section")!, "opacity");
