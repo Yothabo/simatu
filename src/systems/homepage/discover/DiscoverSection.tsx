@@ -27,7 +27,7 @@ export default function DiscoverSection({ onDiscover }: DiscoverSectionProps) {
           </div>
           <div className="homepage-discover-description">
             <p>Discover a collection of brands, ideas, experiences and worlds — each with its own identity.</p>
-            <button type="button" className="homepage-discover-trigger" onClick={onDiscover}>
+            <button type="button" className="homepage-discover-trigger" aria-label="Discover our brand network" onClick={onDiscover}>
               Explore our brand network <span aria-hidden="true">↗</span>
             </button>
           </div>
