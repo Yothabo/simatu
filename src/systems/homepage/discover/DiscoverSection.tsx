@@ -35,6 +35,7 @@ export default function DiscoverSection() {
   const [isMounted, setIsMounted] = useState(false);
   const [isFullyVisible, setIsFullyVisible] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const transitionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const previewTiles = useMemo(() => {
     const shuffled = seededShuffle(previewItems);
     return Array.from({ length: 64 }, (_, index) => shuffled[index % shuffled.length]);
@@ -54,7 +55,7 @@ export default function DiscoverSection() {
     <section className={`homepage-discover${isMounted ? " is-live" : ""}`} aria-label="Discover our brand network">
       <style>{`
         .homepage-discover{position:relative;width:100%;background:#111}
-        .homepage-discover__preview{position:relative;width:100%;height:596px;min-height:596px;overflow:hidden;background:#111}
+        .homepage-discover__preview{position:relative;width:100%;height:596px;min-height:596px;overflow:hidden;background:#111;transition:filter .65s ease,opacity .65s ease}\n        .homepage-discover-transition .homepage-discover__preview{filter:grayscale(1);opacity:0}\n        .homepage-discover-transition .nov ae-hero,.homepage-discover-transition .hero-navigation,.homepage-discover-transition .homepage-footer{filter:grayscale(1);opacity:0;transition:filter .65s ease,opacity .65s ease}
         .homepage-discover__preview:before,.homepage-discover__preview:after{content:"";position:absolute;z-index:1;left:0;right:0;height:160px;pointer-events:none}.homepage-discover__preview:before{top:0;background:linear-gradient(to bottom,#111 0%,rgba(17,17,17,.7) 35%,transparent 100%)}.homepage-discover__preview:after{bottom:0;background:linear-gradient(to top,#111 0%,rgba(17,17,17,.7) 35%,transparent 100%)}
         .homepage-discover__preview-grid{position:absolute;inset:0;display:grid;grid-template-columns:repeat(8,230px);grid-auto-rows:290px;gap:16px;overflow:hidden;filter:grayscale(1)}
         .homepage-discover__tile{position:relative;width:230px;height:290px;overflow:hidden;border-radius:3px;background:#252525;color:#fff}
@@ -89,7 +90,7 @@ export default function DiscoverSection() {
             type="button"
             className={`homepage-discover__trigger${isFullyVisible ? " is-visible" : ""}`}
             ref={triggerRef}
-            onClick={() => setIsMounted(true)}
+            onClick={handleDiscover}
             tabIndex={isFullyVisible ? 0 : -1}
           >
             Discover our brand network
