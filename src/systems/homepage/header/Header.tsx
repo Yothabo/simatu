@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { navItems } from "../hero/hero.data";
+import { TiArrowBack } from "react-icons/ti";
 import "./header.css";
 
 type HeaderProps = {
@@ -25,7 +26,7 @@ export default function Header({
             onClick={() => navigate(-1)}
             aria-label="Go back"
           >
-            <span aria-hidden="true">←</span>
+            <TiArrowBack size={24} aria-hidden="true" />
           </button>
         )}
         <a href="/" className="brand">
