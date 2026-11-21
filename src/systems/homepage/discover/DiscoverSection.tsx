@@ -49,7 +49,11 @@ export default function DiscoverSection({ onDiscover }: DiscoverSectionProps) {
                 <span>{item.question}</span>
                 <span className="homepage-discover-question-toggle" aria-hidden="true">{openIndex === index ? "−" : "+"}</span>
               </button>
-              {openIndex === index && <p className="homepage-discover-question-answer">{item.answer}</p>}
+              <div className="homepage-discover-answer" aria-hidden={openIndex !== index}>
+                <div className="homepage-discover-answer-inner">
+                  <p className="homepage-discover-question-answer">{item.answer}</p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
@@ -76,7 +80,7 @@ export default function DiscoverSection({ onDiscover }: DiscoverSectionProps) {
         .homepage-discover-question:last-child{border-bottom:var(--hp-border-width) solid var(--hp-color-border)}
         .homepage-discover-question-button{display:flex;align-items:center;justify-content:space-between;gap:var(--hp-size-24);width:100%;padding:var(--hp-space-5) 0;border:0;background:transparent;color:var(--hp-color-text);text-align:left;font:var(--hp-font-weight-regular) var(--hp-font-size-base)/var(--hp-line-height-normal) var(--hp-font-family);cursor:pointer}
         .homepage-discover-question-toggle{color:var(--hp-color-text-muted);font:var(--hp-font-weight-regular) var(--hp-font-size-base)/var(--hp-line-height-tight) var(--hp-font-family)}
-        .homepage-discover-question-answer{margin:0 var(--hp-size-40) var(--hp-space-5) 0;max-width:var(--hp-size-620);color:var(--hp-color-text-muted);font:var(--hp-font-weight-regular) var(--hp-font-size-sm)/var(--hp-line-height-relaxed) var(--hp-font-family)}
+        .homepage-discover-answer{display:grid;grid-template-rows:0fr;opacity:0;transform:translateY(calc(-1 * var(--hp-motion-distance-xs)));transition:grid-template-rows var(--hp-motion-duration-slow) var(--hp-motion-ease-in-out),opacity var(--hp-motion-duration-base) var(--hp-motion-ease-out),transform var(--hp-motion-duration-slow) var(--hp-motion-ease-in-out)}.homepage-discover-question.is-open .homepage-discover-answer{grid-template-rows:1fr;opacity:1;transform:translateY(0)}.homepage-discover-answer-inner{min-height:0;overflow:hidden}.homepage-discover-question-answer{margin:0 var(--hp-size-40) var(--hp-space-5) 0;max-width:var(--hp-size-620);color:var(--hp-color-text-muted);font:var(--hp-font-weight-regular) var(--hp-font-size-sm)/var(--hp-line-height-relaxed) var(--hp-font-family)}
         .homepage-discover-content{position:relative;z-index:3;width:100%;max-width:none;margin:0;text-align:left}
         .homepage-discover-eyebrow{margin:0 0 clamp(var(--hp-size-32),5vh,var(--hp-size-64));font:var(--hp-font-weight-medium) var(--hp-font-size-xs)/var(--hp-line-height-normal) var(--hp-font-family);letter-spacing:var(--hp-letter-spacing-wide);text-transform:uppercase;color:var(--hp-color-white-muted)}
         .homepage-discover-title{margin:0;max-width:var(--hp-size-1100);margin:0;font-family:var(--hp-font-family);font-size:var(--hp-font-size-display);font-weight:var(--hp-font-weight-regular);line-height:var(--hp-line-height-tight);letter-spacing:var(--hp-letter-spacing-tight);color:var(--hp-color-text);text-wrap:balance}
