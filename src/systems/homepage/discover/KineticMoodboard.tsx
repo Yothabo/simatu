@@ -26,6 +26,7 @@ interface KineticMoodboardProps {
   style?: React.CSSProperties;
   onItemClick?: (item: MoodboardItem) => void;
   colorReveal?: boolean;
+  onExit?: () => void;
 }
 
 const DEFAULT_ITEMS: MoodboardItem[] = [
@@ -64,6 +65,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   enableMomentum = true,
   showLabels = true,
   colorReveal = false,
+  onExit,
   className = '',
   style,
   onItemClick,
@@ -269,7 +271,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__tile{position:relative;display:block;width:${tileWidth}px;height:${tileHeight}px;padding:0;overflow:hidden;border:0;border-radius:${borderRadius}px;background:#252525;color:inherit;text-align:left;cursor:pointer}
         .kinetic-moodboard__tile img{display:block;width:100%;height:100%;object-fit:cover;filter:grayscale(1);transition:transform .7s cubic-bezier(.2,.7,.2,1),filter 1.8s cubic-bezier(.2,.65,.25,1)}.kinetic-moodboard.is-color-revealing .kinetic-moodboard__tile img{filter:grayscale(0)}
         .kinetic-moodboard__tile:hover img{transform:scale(1.055);filter:brightness(.82)}
-        .kinetic-moodboard__search-header{position:absolute;z-index:10;top:0;left:0;right:0;display:flex;justify-content:center;padding:18px 20px;transform:translate3d(0,-125%,0);opacity:0;pointer-events:none;transition:transform .85s cubic-bezier(.2,.65,.25,1),opacity .65s ease}.kinetic-moodboard__search-row{width:min(680px,calc(100vw - 40px));display:flex;align-items:center;gap:10px}.kinetic-moodboard__search-back{width:42px;height:42px;flex:0 0 42px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.08);border-radius:50%;background:#292929;color:#c8c8c8;box-shadow:0 10px 28px rgba(0,0,0,.24);cursor:pointer;transition:background .2s,color .2s,transform .2s}.kinetic-moodboard__search-back:hover{background:#353535;color:#fff}.kinetic-moodboard__search-back:active{transform:scale(.96)}.kinetic-moodboard__search-back:focus-visible{outline:2px solid rgba(255,255,255,.35);outline-offset:2px}.kinetic-moodboard__search-back svg{width:18px;height:18px}
+        .kinetic-moodboard__search-header{position:absolute;z-index:10;top:0;left:0;right:0;display:flex;justify-content:center;padding:18px 20px;transform:translate3d(0,-125%,0);opacity:0;pointer-events:none;transition:transform .85s cubic-bezier(.2,.65,.25,1),opacity .65s ease}.kinetic-moodboard__search-row{width:min(680px,calc(100vw - 40px));display:flex;align-items:center;gap:10px}.kinetic-moodboard__search-back{width:62px;height:62px;flex:0 0 62px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.08);border-radius:50%;background:#292929;color:#c8c8c8;box-shadow:0 10px 28px rgba(0,0,0,.24);cursor:pointer;transition:background .2s,color .2s,transform .2s}.kinetic-moodboard__search-back:hover{background:#353535;color:#fff}.kinetic-moodboard__search-back:active{transform:scale(.96)}.kinetic-moodboard__search-back:focus-visible{outline:2px solid rgba(255,255,255,.35);outline-offset:2px}.kinetic-moodboard__search-back svg{width:18px;height:18px}
         .kinetic-moodboard.is-color-revealing .kinetic-moodboard__search-header{transform:translate3d(0,0,0);opacity:1;pointer-events:auto}
         .kinetic-moodboard__search-shell{width:auto;min-width:0;flex:1;height:62px;display:flex;align-items:center;gap:12px;padding:0 18px;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:#292929;box-shadow:0 12px 36px rgba(0,0,0,.3);color:#f2f2f2}
         .kinetic-moodboard__search-icon{width:16px;height:16px;flex:0 0 16px;opacity:.62}
@@ -278,7 +280,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__search-input::-webkit-search-decoration,.kinetic-moodboard__search-input::-webkit-search-cancel-button,.kinetic-moodboard__search-input::-webkit-search-results-button,.kinetic-moodboard__search-input::-webkit-search-results-decoration{display:none;-webkit-appearance:none}
         .kinetic-moodboard__search-input:-webkit-autofill,.kinetic-moodboard__search-input:-webkit-autofill:hover,.kinetic-moodboard__search-input:-webkit-autofill:focus{-webkit-text-fill-color:#f2f2f2;transition:background-color 9999s ease-out 0s;box-shadow:0 0 0 1000px transparent inset}
         .kinetic-moodboard__search-input::placeholder{color:rgba(255,255,255,.45);opacity:1}
-        @media(max-width:640px){.kinetic-moodboard__search-header{padding:12px}.kinetic-moodboard__search-row{width:100%;gap:8px}.kinetic-moodboard__search-back{width:40px;height:40px;flex-basis:40px}.kinetic-moodboard__search-shell{height:44px;padding:0 14px}}
+        @media(max-width:640px){.kinetic-moodboard__search-header{padding:12px}.kinetic-moodboard__search-row{width:100%;gap:8px}.kinetic-moodboard__search-back{width:56px;height:56px;flex-basis:56px}.kinetic-moodboard__search-shell{height:44px;padding:0 14px}}
         .kinetic-moodboard__tile:after{content:"";position:absolute;inset:35% 0 0;background:linear-gradient(transparent,rgba(0,0,0,.65));pointer-events:none}
         .kinetic-moodboard__label{position:absolute;z-index:1;left:16px;right:12px;bottom:15px;display:grid;gap:4px;pointer-events:none}
         .kinetic-moodboard__category{font:600 9px/1.2 sans-serif;letter-spacing:.18em;text-transform:uppercase;opacity:.75}
@@ -322,7 +324,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       `}</style>
       <div className="kinetic-moodboard__search-header" aria-hidden={!colorReveal || searchDismissed} style={searchDismissed ? { transform: "translate3d(0,-125%,0)", opacity: 0, pointerEvents: "none" } : undefined}>
         <div className="kinetic-moodboard__search-row">
-          <button type="button" className="kinetic-moodboard__search-back" aria-label="Back to Discover moodboard" onClick={() => { setSearchQuery(""); setSearchDismissed(true); }} tabIndex={colorReveal && !searchDismissed ? 0 : -1}><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5M8.3 12H20" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
+          <button type="button" className="kinetic-moodboard__search-back" aria-label="Exit Discover and return home" onClick={() => { setSearchQuery(""); setSearchDismissed(true); onExit?.(); }} tabIndex={colorReveal && !searchDismissed ? 0 : -1}><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 8.5h18M5.5 8.5l1.2 11h10.6l1.2-11M9 11v5m6-5v5M8 4.5h8l1.2 4H6.8L8 4.5Z" stroke="currentColor" strokeWidth="1.55" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
         <label className="kinetic-moodboard__search-shell">
           <svg className="kinetic-moodboard__search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" strokeWidth="1.7"/><path d="m16 16 4.3 4.3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/></svg>
           <input className="kinetic-moodboard__search-input" type="search" placeholder="Search stores, products, brands or categories…" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} tabIndex={colorReveal ? 0 : -1} aria-label="Search the brand network" />
