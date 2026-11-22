@@ -51,6 +51,7 @@ export default function Header({
                 {item}
               </a>
             ))}
+            <a className="nav-network-link" href="/join-network" onClick={() => setMenuOpen(false)}>Join Network <span>↗</span></a>
             <div className="nav-footer-link-groups">
               {footerLinkGroups.map((group) => (
                 <section key={group.title} className="nav-footer-link-group">
