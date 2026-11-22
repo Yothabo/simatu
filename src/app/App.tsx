@@ -92,6 +92,7 @@ function App() {
       <Suspense fallback={<RouteLoadingFallback />}>
         <Routes>
           <Route path="/" element={<HomepageHero />} />
+          <Route path="/join-network" element={<NetworkApplicationPage />} />
           <Route element={<CartProvider><StorefrontThemeProvider><Outlet /></StorefrontThemeProvider></CartProvider>}>
             <Route path="/yotaabo" element={<Home />} />
             <Route path="/yotaabo/services" element={<ServicesPage />} />
