@@ -24,9 +24,10 @@ export default function ProductDetailsHeader({
 }: ProductDetailsHeaderProps) {
   return (
     <div
-      className="flex items-center justify-between"
+      className="relative flex items-center justify-between"
       style={{
         padding: 'var(--admin-space-sm) var(--admin-space-md)',
+        paddingRight: 'calc(var(--admin-space-md) + 40px)',
         borderBottom: '1px solid var(--admin-border-subtle)',
         flexShrink: 0,
         gap: 'var(--admin-space-md)',
@@ -87,6 +88,17 @@ export default function ProductDetailsHeader({
           }}
         />
 
+      </div>
+
+      {/* Floating close control, inset from the modal's rounded corner. */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 'var(--admin-space-sm)',
+          right: 'var(--admin-space-sm)',
+          zIndex: 2,
+        }}
+      >
         <HeaderIconButton onClick={onClose} ariaLabel="Close">
           <FiX size={14} aria-hidden="true" />
         </HeaderIconButton>
