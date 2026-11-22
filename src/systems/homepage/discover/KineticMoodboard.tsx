@@ -271,6 +271,12 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard{position:relative;display:block;width:100%;height:100%;min-height:0;margin:0;padding:0;box-sizing:border-box;overflow:hidden;background:transparent;color:var(--hp-color-text);isolation:isolate}
         .kinetic-moodboard__reveal-sentinel{position:absolute;top:0;left:0;width:var(--hp-border-width);height:var(--hp-border-width);opacity:0;pointer-events:none;transition:opacity .65s ease}.kinetic-moodboard.is-color-revealing .kinetic-moodboard__reveal-sentinel{opacity:.01;transition-delay:0.65s}\n        .kinetic-moodboard__viewport{position:absolute;inset:0;overflow:hidden;cursor:grab;touch-action:none;user-select:none}
         .kinetic-moodboard__viewport.is-dragging{cursor:grabbing}
+        .kinetic-moodboard__join-network{position:absolute;z-index:12;right:clamp(var(--hp-size-18),4vw,var(--hp-size-48));bottom:max(clamp(var(--hp-size-20),4vh,var(--hp-size-42)),env(safe-area-inset-bottom));display:inline-flex;align-items:center;justify-content:center;gap:var(--hp-size-12);min-height:var(--hp-size-52);padding:0 clamp(var(--hp-size-20),3vw,var(--hp-size-32));border:1px solid rgba(255,255,255,.26);border-radius:var(--hp-radius-pill);background:rgba(255,255,255,.15);color:#fff;font:var(--hp-font-weight-semibold) var(--hp-font-size-xs)/var(--hp-line-height-normal) var(--hp-font-family);letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;backdrop-filter:blur(26px) saturate(185%);-webkit-backdrop-filter:blur(26px) saturate(185%);box-shadow:0 var(--hp-size-14) var(--hp-size-38) rgba(0,0,0,.26),inset 0 1px 0 rgba(255,255,255,.34),inset 0 -1px 0 rgba(255,255,255,.09);cursor:pointer;transition:background .24s ease,border-color .24s ease,transform .24s ease,box-shadow .24s ease}
+        .kinetic-moodboard__join-network:hover{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.42);box-shadow:0 var(--hp-size-16) var(--hp-size-44) rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.42),inset 0 -1px 0 rgba(255,255,255,.12);transform:translateY(-2px)}
+        .kinetic-moodboard__join-network:active{transform:scale(.97)}
+        .kinetic-moodboard__join-network:focus-visible{outline:2px solid rgba(255,255,255,.85);outline-offset:4px}
+        .kinetic-moodboard__join-network span{font-size:var(--hp-font-size-base);letter-spacing:normal}
+        @media(max-width:640px){.kinetic-moodboard__join-network{right:max(var(--hp-size-16),env(safe-area-inset-right));bottom:max(var(--hp-size-18),env(safe-area-inset-bottom));min-height:var(--hp-size-48);padding:0 var(--hp-size-20);font-size:var(--hp-font-size-xs)}}
         .kinetic-moodboard__board{position:absolute;top:0;left:0;display:grid;grid-template-columns:repeat(${columns},${tileWidth}px);gap:${gap}px;will-change:transform;background:transparent}
         .kinetic-moodboard__tile{position:relative;display:block;width:${tileWidth}px;height:${tileHeight}px;padding:0;overflow:hidden;border:0;border-radius:${borderRadius}px;background:transparent;color:inherit;text-align:left;cursor:pointer;opacity:0;transform:translateY(var(--hp-size-14)) scale(.985);transition:opacity .55s ease,transform .55s cubic-bezier(.2,.65,.25,1)}.kinetic-moodboard.is-color-revealing .kinetic-moodboard__tile{opacity:1;transform:translateY(0) scale(1)}
         .kinetic-moodboard__tile img{display:block;width:100%;height:100%;object-fit:cover;filter:grayscale(1);transition:filter .7s ease,transform .7s ease}.kinetic-moodboard.is-color-revealing .kinetic-moodboard__tile img{filter:grayscale(0)}
@@ -362,6 +368,9 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
           ))}
         </div>
       </div>
+      <button type="button" className="kinetic-moodboard__join-network" aria-label="Join the Simatu network — onboarding coming soon" title="Network onboarding coming soon" disabled={false}>
+        JOIN NETWORK <span aria-hidden="true">↗</span>
+      </button>
       {normalizedSearch.length >= 1 && interactive && !searchDismissed && (
         <div className="kinetic-moodboard__search-results" role="listbox" aria-label="Predictive search suggestions">
           {networkLoading && <div className="kinetic-moodboard__search-status">Searching across stores…</div>}
