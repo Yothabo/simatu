@@ -262,3 +262,5 @@
  .nav-footer-link-group a::after{display:none}
 }
 @media(max-width:520px){.nav-footer-link-groups{gap:var(--hp-size-24) var(--hp-size-18)}}
+
+.nav-network-link{display:inline-flex;align-items:center;gap:10px;white-space:nowrap;padding:10px 15px;border:1px solid rgba(255,255,255,.22);border-radius:3px;color:#fff!important;background:rgba(255,255,255,.06)}.nav-network-link span{font-size:15px}.nav-network-link::after{display:none!important}
