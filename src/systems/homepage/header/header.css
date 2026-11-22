@@ -7,8 +7,9 @@
   top: 0;
   z-index: 100;
   flex-shrink: 0;
-  background: color-mix(in srgb, var(--hp-color-background) 88%, transparent);
-  backdrop-filter: blur(var(--hp-size-18));
+  background: rgba(255, 255, 255, 0.075);
+  backdrop-filter: blur(26px) saturate(165%);
+  -webkit-backdrop-filter: blur(26px) saturate(165%);
   left: 0;
   display: flex;
   width: 100%;
@@ -16,7 +17,8 @@
   padding: 0 7.2%;
   align-items: center;
   justify-content: space-between;
-  border-bottom: var(--hp-border-width) solid var(--hp-border-subtle-color);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.10), inset 0 -1px 0 rgba(255, 255, 255, 0.035);
 }
 
 .brand {
