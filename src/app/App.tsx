@@ -17,6 +17,7 @@ const About = React.lazy(() => import('../systems/storefront/experience').then((
 const CartPage = React.lazy(() => import('../systems/storefront/experience').then(({ CartPage }) => ({ default: CartPage })));
 const NotFound = React.lazy(() => import('../pages/NotFound'));
 const UpdatePassword = React.lazy(() => import('../pages/UpdatePassword'));
+const NetworkApplicationPage = React.lazy(() => import('../systems/homepage/pages/NetworkApplicationPage'));
 const AdminPage = React.lazy(() => import('../pages/admin/AdminPage'));
 
 class AdminErrorBoundary extends React.Component<
