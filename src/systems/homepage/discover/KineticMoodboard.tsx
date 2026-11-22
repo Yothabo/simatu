@@ -101,6 +101,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const restorePositionRef = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
+    if (decorativeOnly) return;
     try {
       const saved = sessionStorage.getItem('simatu-discover-return');
       if (!saved) return;
