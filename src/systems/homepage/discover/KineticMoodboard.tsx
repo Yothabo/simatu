@@ -368,7 +368,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
           ))}
         </div>
       </div>
-      <button type="button" className="kinetic-moodboard__join-network" aria-label="Join the Simatu network — onboarding coming soon" title="Network onboarding coming soon" aria-hidden={!colorReveal || searchDismissed} tabIndex={colorReveal && !searchDismissed ? 0 : -1} disabled={!colorReveal || searchDismissed} style={!colorReveal || searchDismissed ? { opacity: 0, transform: "translate3d(0,12px,0)", pointerEvents: "none" } : undefined}>
+      <button type="button" className="kinetic-moodboard__join-network" aria-label="Join the Simatu network" title="Join the Simatu network" onClick={() => window.location.assign('/join-network')} aria-hidden={!colorReveal || searchDismissed} tabIndex={colorReveal && !searchDismissed ? 0 : -1} disabled={!colorReveal || searchDismissed} style={!colorReveal || searchDismissed ? { opacity: 0, transform: "translate3d(0,12px,0)", pointerEvents: "none" } : undefined}>
         JOIN NETWORK <span aria-hidden="true">↗</span>
       </button>
       {normalizedSearch.length >= 1 && interactive && !searchDismissed && (
