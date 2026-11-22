@@ -149,19 +149,26 @@ export default function ProductModal({
 
       {/* Modal Content */}
       <div
-        className={`relative w-full max-w-sm bg-white shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+        className={`relative w-full max-w-sm overflow-hidden rounded-[var(--product-modal-radius,1.5rem)] bg-white shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
           isOpen
             ? 'translate-y-0 scale-100 opacity-100'
             : 'translate-y-12 scale-90 opacity-0'
         }`}
+        style={{ '--product-modal-radius': '1.5rem' } as React.CSSProperties}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center border-0 bg-transparent p-0 text-[#4d4d4d]/50 outline-none transition-colors hover:text-[#4d4d4d]"
-          style={{ WebkitAppearance: 'none', appearance: 'none', boxShadow: 'none' }}
+          aria-label="Close product details"
+          className="absolute z-20 flex h-9 w-9 items-center justify-center rounded-full border-0 bg-white/70 p-0 text-[#4d4d4d]/70 shadow-[0_2px_12px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.8)] backdrop-blur-md outline-none transition-all duration-200 hover:bg-white/90 hover:text-[#4d4d4d] active:scale-95"
+          style={{
+            WebkitAppearance: 'none',
+            appearance: 'none',
+            top: 'calc(var(--product-modal-radius) * 0.45)',
+            right: 'calc(var(--product-modal-radius) * 0.45)',
+          }}
         >
           <FiX size={20} aria-hidden="true" />
         </button>
