@@ -56,7 +56,6 @@
   align-items:center;
   gap:16px;
   padding:16px 0 4px;
-  border-top:1px solid rgba(255,255,255,.12);
   color:rgba(245,245,245,.48);
   font:400 11px/1.5 var(--hp-font-family,sans-serif);
 }
@@ -67,7 +66,7 @@
 }
 @media(max-width:520px){
   .homepage-footer{padding:42px 6% 14px}
-  .homepage-footer__top{grid-template-columns:1fr;gap:30px}
+  .homepage-footer__top{grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);gap:18px}
   .homepage-footer__group-title{margin-bottom:14px}
   .homepage-footer__group nav a{font-size:12px}
   .homepage-footer .footer-wordmark{width:118%;margin-left:-9%;margin-top:28px;margin-bottom:-3.5vw}
