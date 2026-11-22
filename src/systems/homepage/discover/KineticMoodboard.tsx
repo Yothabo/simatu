@@ -29,6 +29,7 @@ interface KineticMoodboardProps {
   colorReveal?: boolean;
   interactive?: boolean;
   onExit?: () => void;
+  decorativeOnly?: boolean;
 }
 
 const DEFAULT_ITEMS: MoodboardItem[] = [
@@ -69,6 +70,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   colorReveal = false,
   interactive = colorReveal,
   onExit,
+  decorativeOnly = false,
   className = '',
   style,
   onItemClick,
@@ -130,6 +132,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   }, [sourceItems, columns]);
 
   useEffect(() => {
+    if (decorativeOnly) return;
     let cancelled = false;
     setNetworkLoading(true);
     Promise.all(NETWORK_STORES.map(async (store) => {
@@ -266,8 +269,9 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   };
 
   return (
-    <section className={`kinetic-moodboard ${className}${colorReveal ? ' is-color-revealing' : ''}${interactive ? ' is-interactive' : ''}`} style={style} aria-label="Explore the moodboard">
+    <section className={`kinetic-moodboard ${decorativeOnly ? 'is-decorative ' : ''}${className}${colorReveal ? ' is-color-revealing' : ''}${interactive ? ' is-interactive' : ''}`} style={style} aria-label="Explore the moodboard">
       <style>{`
+        .kinetic-moodboard.is-decorative .kinetic-moodboard__tile{opacity:1;transform:none;cursor:default}.kinetic-moodboard.is-decorative .kinetic-moodboard__tile img{filter:grayscale(1)}.kinetic-moodboard.is-decorative .kinetic-moodboard__label,.kinetic-moodboard.is-decorative .kinetic-moodboard__search-header,.kinetic-moodboard.is-decorative .kinetic-moodboard__join-network,.kinetic-moodboard.is-decorative .kinetic-moodboard__search-results{display:none!important}.kinetic-moodboard.is-decorative .kinetic-moodboard__viewport{pointer-events:none;cursor:default}
         .kinetic-moodboard{position:relative;display:block;width:100%;height:100%;min-height:0;margin:0;padding:0;box-sizing:border-box;overflow:hidden;background:transparent;color:var(--hp-color-text);isolation:isolate}
         .kinetic-moodboard__reveal-sentinel{position:absolute;top:0;left:0;width:var(--hp-border-width);height:var(--hp-border-width);opacity:0;pointer-events:none;transition:opacity .65s ease}.kinetic-moodboard.is-color-revealing .kinetic-moodboard__reveal-sentinel{opacity:.01;transition-delay:0.65s}\n        .kinetic-moodboard__viewport{position:absolute;inset:0;overflow:hidden;cursor:grab;touch-action:none;user-select:none}
         .kinetic-moodboard__viewport.is-dragging{cursor:grabbing}
