@@ -1,0 +1,4 @@
+import type {WorkflowDraft,WorkflowValues} from "./types";const prefix="simatu-workflow-draft:";
+export function loadDraft(id:string,version:number):WorkflowDraft|null{try{const d=JSON.parse(localStorage.getItem(prefix+id)||"null") as WorkflowDraft|null;return d&&d.workflowId===id&&d.version===version?d:null;}catch{return null;}}
+export function saveDraft(id:string,version:number,step:number,values:WorkflowValues):WorkflowDraft{const d={workflowId:id,version,step,values,updatedAt:new Date().toISOString()};try{localStorage.setItem(prefix+id,JSON.stringify(d));}catch{/* storage optional */}return d;}
+export function clearDraft(id:string){try{localStorage.removeItem(prefix+id);}catch{/* ignore */}}
