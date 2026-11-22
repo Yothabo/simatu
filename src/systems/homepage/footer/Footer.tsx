@@ -1,13 +1,45 @@
 import React from "react";
 import "./footer.css";
 
-const socialLinks = ["Instagram", "X", "Facebook", "WhatsApp"];
+const footerGroups = [
+  {
+    title: "Company",
+    items: ["Our Vision", "Our Mission", "Our Philosophy"],
+  },
+  {
+    title: "Documentation",
+    items: [
+      "Company Overview",
+      "Platform Architecture",
+      "Governance",
+      "Brand Guidelines",
+      "Our Principles",
+      "A collective of brands",
+      "Privacy Policy",
+      "Terms & Conditions",
+      "Disclaimer",
+      "Cookie Policy",
+    ],
+  },
+];
+
+const toSlug = (label: string) =>
+  label.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
 export default function Footer() {
   return (
     <footer className="homepage-footer" id="footer">
       <div className="homepage-footer__top">
-        <h2 className="homepage-footer__heading">A collective of brands.</h2>
+        {footerGroups.map((group) => (
+          <section key={group.title} className="homepage-footer__group">
+            <h2 className="homepage-footer__group-title">{group.title}</h2>
+            <nav aria-label={group.title}>
+              {group.items.map((item) => (
+                <a key={item} href={`/documents/${toSlug(item)}`}>{item}</a>
+              ))}
+            </nav>
+          </section>
+        ))}
       </div>
 
       <img
@@ -18,12 +50,8 @@ export default function Footer() {
       />
 
       <div className="homepage-footer__bottom">
-        <nav className="homepage-footer__socials" aria-label="Social media">
-          {socialLinks.map((social) => (
-            <a key={social} href={`#${social.toLowerCase()}`}>{social}</a>
-          ))}
-        </nav>
         <span>© 2026 Simatu</span>
+        <span>A collective of brands</span>
       </div>
     </footer>
   );
