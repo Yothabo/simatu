@@ -3,7 +3,7 @@ import "./footer.css";
 
 const footerGroups = [
   {
-    title: "Company",
+    title: "Brand",
     items: ["Our Vision", "Our Mission", "Our Philosophy"],
   },
   {
@@ -51,7 +51,7 @@ export default function Footer() {
 
       <div className="homepage-footer__bottom">
         <span>© 2026 Simatu</span>
-        <span>A collective of brands</span>
+        <span>All rights reserved.</span>
       </div>
     </footer>
   );
