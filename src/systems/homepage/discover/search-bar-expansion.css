@@ -6,6 +6,7 @@
 .kinetic-moodboard__search-header.menu-expanded .kinetic-moodboard__search-shell {
   padding: 16px;
   align-items: stretch;
+  overflow: hidden;
 }
 .kinetic-moodboard__search-header.menu-expanded .kinetic-moodboard__menu-button {
   align-self: stretch;
@@ -14,17 +15,23 @@
   display: flex;
   flex: 1;
   min-width: 0;
+  min-height: 0;
   flex-direction: column;
   justify-content: center;
-  gap: 6px;
+  gap: 4px;
+  padding: 6px 2px;
+  overflow: hidden;
 }
 .kinetic-moodboard__discover-tool {
   display: flex;
+  box-sizing: border-box;
   width: 100%;
-  min-height: 58px;
+  min-width: 0;
+  min-height: 52px;
+  flex: 0 1 auto;
   align-items: center;
-  gap: 14px;
-  padding: 0 14px;
+  gap: 12px;
+  padding: 0 12px;
   border: 0;
   border-radius: 14px;
   background: transparent;
@@ -34,6 +41,12 @@
   text-decoration: none;
   cursor: pointer;
   transition: background .2s ease, opacity .2s ease;
+}
+.kinetic-moodboard__discover-tool span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .kinetic-moodboard__discover-tool svg {
   width: 20px;
@@ -65,9 +78,13 @@
   .kinetic-moodboard__search-header.menu-expanded .kinetic-moodboard__search-shell {
     padding: 12px;
   }
+  .kinetic-moodboard__discover-tools {
+    gap: 3px;
+    padding: 4px 2px;
+  }
   .kinetic-moodboard__discover-tool {
-    min-height: 54px;
-    gap: 12px;
+    min-height: 48px;
+    gap: 10px;
     padding-inline: 10px;
   }
 }
