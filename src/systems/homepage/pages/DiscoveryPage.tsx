@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import KineticMoodboard from '../discover/KineticMoodboard';
 
 /** Direct Discovery entry with a deliberate inactive-state brand overlay. */
@@ -24,7 +24,7 @@ export default function DiscoveryPage() {
     <main className={`simatu-discovery-page is-${phase}`}>
       <KineticMoodboard className="simatu-discovery-page__board" colorReveal={phase !== 'intro'} interactive={phase !== 'intro'} />
       {phase !== 'revealed' && (
-        <section className={`simatu-discovery-page__overlay${phase === 'exiting' ? ' is-exiting' : ''}`} aria-label="Simatu introduction">
+        <section className=simatu-discovery-page__overlay} aria-label="Simatu introduction">
           <div className="simatu-discovery-page__content">
             <svg
               aria-hidden="true"
@@ -50,7 +50,7 @@ export default function DiscoveryPage() {
             </svg>
             
             <p>Discover brands, explore products, connect with businesses, and uncover new opportunities.</p>
-            <button className="simatu-discovery-page__cta" type="button" onClick={startReveal} disabled={phase === 'exiting'}>
+            <button className="simatu-discovery-page__cta" type="button" onClick={startReveal} disabled={false}>
               Discover our Network <span aria-hidden="true">↗</span>
             </button>
           </div>
@@ -86,15 +86,8 @@ export default function DiscoveryPage() {
           backdrop-filter: none;
           -webkit-backdrop-filter: none;
           text-align: center;
-          animation: simatu-discovery-overlay-in .35s ease both;
-          transition: opacity .85s ease, background .85s ease, backdrop-filter .85s ease;
-        }
-        .simatu-discovery-page__overlay.is-exiting {
-          opacity: 0;
-          background: transparent;
-          backdrop-filter: none;
-          -webkit-backdrop-filter: none;
-          pointer-events: none;
+          animation: none;
+          transition: none;
         }
         .simatu-discovery-page__content {
           width: min(100%, 1000px);
@@ -103,7 +96,6 @@ export default function DiscoveryPage() {
           align-items: center;
         }
         .simatu-discovery-page__brand-svg {
-          animation: simatu-intro-item-in .65s cubic-bezier(.2,.65,.25,1) both;
           display: block;
           width: 100%;
           height: 25vh;
@@ -117,7 +109,6 @@ export default function DiscoveryPage() {
           letter-spacing: -.045em;
         }
         .simatu-discovery-page__content p {
-          animation: simatu-intro-item-in .65s cubic-bezier(.2,.65,.25,1) .18s both;
           max-width: 540px;
           margin: 18px 0 30px;
           color: rgba(255,255,255,.82);
@@ -125,7 +116,6 @@ export default function DiscoveryPage() {
           letter-spacing: .005em;
         }
         .simatu-discovery-page__cta {
-          animation: simatu-intro-item-in .65s cubic-bezier(.2,.65,.25,1) .32s both;
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -150,25 +140,13 @@ export default function DiscoveryPage() {
           outline: 2px solid #fff;
           outline-offset: 4px;
         }
-        @keyframes simatu-intro-item-in {
-          from { opacity: 0; transform: translate3d(0, 16px, 0); }
-          to { opacity: 1; transform: translate3d(0, 0, 0); }
-        }
-        @keyframes simatu-discovery-overlay-in {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
         @media (max-width: 600px) {
           .simatu-discovery-page__overlay { padding-inline: 22px; }
           .simatu-discovery-page__brand { margin-bottom: 20px; }
           .simatu-discovery-page__content p { margin: 14px 0 26px; }
         }
         @media (prefers-reduced-motion: reduce) {
-          .simatu-discovery-page__board,
-          .simatu-discovery-page__cta,
-          .simatu-discovery-page__overlay,
-          .simatu-discovery-page__brand-svg,
-          .simatu-discovery-page__content p { transition: none; animation: none; }
+          .simatu-discovery-page__board { transition: none; }
         }
       `}</style>
     </main>
