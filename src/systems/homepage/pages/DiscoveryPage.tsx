@@ -22,7 +22,7 @@ export default function DiscoveryPage() {
 
   return (
     <main className={`simatu-discovery-page is-${phase}`}>
-      <KineticMoodboard className="simatu-discovery-page__board" colorReveal={phase !== 'intro'} interactive={phase !== 'intro' ? false : true} />
+      <KineticMoodboard className="simatu-discovery-page__board" colorReveal={phase !== 'intro'} interactive={phase !== 'intro'} />
       {phase !== 'revealed' && (
         <section className={`simatu-discovery-page__overlay${phase === 'exiting' ? ' is-exiting' : ''}`} aria-label="Simatu introduction">
           <div className="simatu-discovery-page__content">
@@ -82,16 +82,16 @@ export default function DiscoveryPage() {
           place-items: center;
           box-sizing: border-box;
           padding: max(28px, env(safe-area-inset-top)) 24px max(28px, env(safe-area-inset-bottom));
-          background: rgba(13, 13, 13, .18);
-          backdrop-filter: blur(1px);
-          -webkit-backdrop-filter: blur(3px);
+          background: rgba(255, 255, 255, .12);
+          backdrop-filter: blur(26px) saturate(185%);
+          -webkit-backdrop-filter: blur(26px) saturate(185%);
           text-align: center;
           animation: simatu-discovery-overlay-in .35s ease both;
           transition: opacity .32s ease, background .32s ease, backdrop-filter .32s ease;
         }
         .simatu-discovery-page__overlay.is-exiting {
           opacity: 0;
-          background: rgba(13,13,13,0);
+          background: rgba(255,255,255,0);
           backdrop-filter: blur(0);
           -webkit-backdrop-filter: blur(0);
           pointer-events: none;
