@@ -91,14 +91,6 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const [networkProducts, setNetworkProducts] = useState<NetworkProduct[]>([]);
   const [networkLoading, setNetworkLoading] = useState(false);
   const [networkError, setNetworkError] = useState('');
-  const [activeDiscovery, setActiveDiscovery] = useState<MoodboardItem | null>(null);
-  const [isDiscoveryClosing, setIsDiscoveryClosing] = useState(false);
-  const closeDiscovery = () => { if (activeDiscovery && !isDiscoveryClosing) setIsDiscoveryClosing(true); };
-  const finishDiscoveryClose = (event: React.AnimationEvent<HTMLDivElement>) => {
-    if (event.target !== event.currentTarget || !isDiscoveryClosing) return;
-    setActiveDiscovery(null);
-    setIsDiscoveryClosing(false);
-  };
   const restorePositionRef = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
@@ -107,20 +99,12 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       const saved = sessionStorage.getItem('simatu-discover-return');
       if (!saved) return;
       sessionStorage.removeItem('simatu-discover-return');
-      const context = JSON.parse(saved) as { discovery?: MoodboardItem; position?: { x: number; y: number } };
-      if (context.discovery) setActiveDiscovery(context.discovery);
+      const context = JSON.parse(saved) as { position?: { x: number; y: number } };
       if (context.position) restorePositionRef.current = context.position;
     } catch {
       sessionStorage.removeItem('simatu-discover-return');
     }
   }, []);
-
-  useEffect(() => {
-    if (!activeDiscovery || !colorReveal) return;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = previousOverflow; };
-  }, [activeDiscovery, colorReveal]);
 
   const sourceItems = items.length ? items : DEFAULT_ITEMS;
   const tiles = useMemo(() => {
@@ -159,7 +143,6 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       const score = (product: NetworkProduct) => startsWithSearch(product.name) ? 0 : startsWithSearch(product.category) || startsWithSearch(product.subcategory || '') ? 1 : startsWithSearch(product.storeName) ? 2 : 3;
       return score(a) - score(b) || a.name.localeCompare(b.name);
     }).slice(0, 8) : [];
-  const discoveryStores = activeDiscovery ? NETWORK_STORES : [];
   const boardWidth = columns * tileWidth + (columns - 1) * gap;
   const boardHeight = columns * tileHeight + (columns - 1) * gap;
 
@@ -362,7 +345,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
               type="button"
               className="kinetic-moodboard__tile"
               key={`${item.id}-${index}`}
-              onClick={() => { handleTileClick(item); setActiveDiscovery(item); }}
+              onClick={() => { if (dragRef.current.moved) { handleTileClick(item); return; } handleTileClick(item); try { sessionStorage.setItem('simatu-discover-return', JSON.stringify({ position: positionRef.current })); } catch {} navigate('/discover/' + item.category.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''), { state: { discovery: item, position: positionRef.current } }); }}
               aria-label={`${item.category}: ${item.title}`}
               disabled={!interactive}
               data-reveal-final={index === tiles.length - 1 ? "true" : "false"}
@@ -392,20 +375,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
           </a>)}</div>}
         </div>
       )}
-      {activeDiscovery && interactive && (
-        <div className={`kinetic-moodboard__dialog-backdrop${isDiscoveryClosing ? " is-closing" : ""}`} onClick={closeDiscovery} onAnimationEnd={finishDiscoveryClose}>
-          <div className="kinetic-moodboard__dialog" role="dialog" aria-modal="true" aria-labelledby="discover-dialog-title" onClick={(event) => event.stopPropagation()}>
-            <div className="kinetic-moodboard__dialog-heading"><div className="kinetic-moodboard__dialog-title-row"><div className="kinetic-moodboard__dialog-title" id="discover-dialog-title">{activeDiscovery.category}</div><button className="kinetic-moodboard__dialog-close" type="button" aria-label="Close" onClick={closeDiscovery}>×</button></div><div className="kinetic-moodboard__store-sub">{({ Style: "Explore fashion, accessories, and everyday style.", Fashion: "Discover pieces that express your style.", Spaces: "Explore inspiring interiors and spaces.", Living: "Thoughtful pieces for everyday living.", Objects: "Everyday objects, thoughtfully designed.", Culture: "Discover ideas, places, and inspiration.", Ideas: "Fresh ideas and creative inspiration.", Workspaces: "Spaces designed for focus and creativity.", Everyday: "Essentials for everyday life.", Explore: "Discover something new." } as Record<string, string>)[activeDiscovery.category] || `Explore ${activeDiscovery.category.toLowerCase()} through curated stores and collections.`}</div></div>
-            
-            <div className="kinetic-moodboard__store-list">
-              {networkLoading && <div className="kinetic-moodboard__search-status">Loading store directory…</div>}
-              {!networkLoading && networkError && <div className="kinetic-moodboard__search-status">{networkError}</div>}
-              {!networkLoading && !networkError && discoveryStores.length === 0 && <div className="kinetic-moodboard__search-status">No stores are available.</div>}
-              {discoveryStores.map((store) => <div className="kinetic-moodboard__store-card" key={store.key}><div className="kinetic-moodboard__store-topline"><div className="kinetic-moodboard__store-name">{store.name}</div><a className="kinetic-moodboard__store-open" href={store.href} onClick={() => { try { sessionStorage.setItem('simatu-discover-return', JSON.stringify({ discovery: activeDiscovery, position: positionRef.current })); } catch {} }}>Visit {store.name} ↗</a></div><div className="kinetic-moodboard__store-link-row"><div className="kinetic-moodboard__store-description">{store.description}</div></div></div>)}
-            </div>
-          </div>
-        </div>
-      )}
+
     </section>
   );
 };
