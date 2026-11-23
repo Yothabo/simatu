@@ -8,11 +8,13 @@ import "./header.css";
 type HeaderProps = {
   brandName?: string;
   showBackButton?: boolean;
+  onBack?: () => void;
 };
 
 export default function Header({
   brandName = "simatu",
   showBackButton = false,
+  onBack,
 }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -24,17 +26,13 @@ export default function Header({
           <button
             type="button"
             className="header-back-button"
-            onClick={() => navigate("/")}
+            onClick={() => (onBack ? onBack() : navigate("/"))}
             aria-label="Back to home"
           >
             <TiArrowBack size={24} aria-hidden="true" />
           </button>
         )}
-        {!showBackButton && (
-          <a href="/" className="brand">
-            {brandName}
-          </a>
-        )}
+        <a href="/" className="brand">{brandName}</a>
       </div>
 
       {!showBackButton && (
