@@ -33,7 +33,7 @@ export default function DiscoveryCategoryPage() {
     navigate('/', { state: { revealMoodboard: true } });
   };
   return <main style={{ minHeight: '100dvh', background: '#111', color: '#f4f1ec', overflowX: 'hidden' }}>
-    <MoodboardSearchBar value={searchQuery} onChange={setSearchQuery} ariaLabel="Search brands, products or collections" onBack={goBack} backIcon="arrow" fixed />
+    <MoodboardSearchBar value={searchQuery} onChange={setSearchQuery} ariaLabel="Search brands, products or collections" onBack={goBack} backIcon="arrow" className="category-search-header" fixed />
     <section style={{ position: 'relative', overflow: 'hidden', minHeight: 'min(88svh,920px)', display: 'flex', alignItems: 'flex-end', padding: 'clamp(28px,7vw,100px)', paddingBottom: 'clamp(100px,12vh,160px)', boxSizing: 'border-box', background: '#111' }}>
       <img src={item.image} alt={item.alt} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: item.objectPosition || 'center', zIndex: 0 }} />
       <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none', background: 'linear-gradient(rgba(0,0,0,.28),rgba(0,0,0,.28)),linear-gradient(to top,rgba(0,0,0,.88) 0%,rgba(0,0,0,.62) 34%,rgba(0,0,0,.24) 68%,rgba(0,0,0,0) 100%),linear-gradient(to bottom,rgba(0,0,0,.55) 0%,rgba(0,0,0,.12) 24%,rgba(0,0,0,0) 52%)' }} />
