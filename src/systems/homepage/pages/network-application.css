@@ -41,7 +41,7 @@
   animation:na-arrive .3s ease both;
 }
 .na-stage.is-transitioning{opacity:0;transform:translateY(6px)}
-.na-visual{display:none}
+.na-visual{display:flex}
 .na-content{max-width:680px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:18px}
 .na-kicker{margin:0;font-size:10px;letter-spacing:.16em;color:var(--na-muted);font-weight:600}
 .na-content h1,.na-success h1{
