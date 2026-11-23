@@ -22,7 +22,7 @@ export default function DiscoveryPage() {
 
   return (
     <main className={`simatu-discovery-page is-${phase}`}>
-      <KineticMoodboard className="simatu-discovery-page__board" colorReveal={phase !== 'intro'} interactive={phase !== 'intro' ? false : false} />
+      <KineticMoodboard className="simatu-discovery-page__board" colorReveal={phase !== 'intro'} interactive={phase !== 'intro' ? false : true} />
       {phase !== 'revealed' && (
         <section className={`simatu-discovery-page__overlay${phase === 'exiting' ? ' is-exiting' : ''}`} aria-label="Simatu introduction">
           <div className="simatu-discovery-page__content">
