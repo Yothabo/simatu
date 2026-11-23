@@ -43,7 +43,8 @@ export default function DiscoveryCategoryPage() {
   }, []);
   const matching = useMemo(() => {
     const term = item.category.toLowerCase();
-    return products.filter(p => (p.category + ' ' + (p.subcategory || '') + ' ' + (p.name || '')).toLowerCase().includes(term)).slice(0, 12);
+    const filtered = products.filter(p => (p.category + ' ' + (p.subcategory || '') + ' ' + (p.name || '')).toLowerCase().includes(term));
+    return (filtered.length ? filtered : products).slice(0, 12);
   }, [products, item.category]);
   const goBack = () => {
     try { sessionStorage.setItem('simatu-discover-return', JSON.stringify({ position: (location.state as any)?.position || null })); } catch {}
