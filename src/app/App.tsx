@@ -82,6 +82,32 @@ function RouteLoadingFallback() {
   );
 }
 
+function NetworkApplicationLoadingFallback() {
+  return (
+    <main
+      role="status"
+      aria-live="polite"
+      aria-label="Preparing your Simatu introduction"
+      style={{
+        minHeight: '100vh',
+        display: 'grid',
+        placeContent: 'center',
+        gap: 18,
+        padding: 24,
+        boxSizing: 'border-box',
+        background: '#111111',
+        color: '#f5f5f5',
+        textAlign: 'center',
+        fontFamily: 'inherit',
+      }}
+    >
+      <span style={{ fontSize: 13, letterSpacing: '0.28em' }}>SIMATU</span>
+      <span style={{ width: 34, height: 1, margin: '0 auto', background: 'rgba(255,255,255,.7)' }} />
+      <span style={{ fontSize: 11, letterSpacing: '0.16em', color: 'rgba(255,255,255,.65)' }}>PREPARING YOUR INTRODUCTION</span>
+    </main>
+  );
+}
+
 function App() {
   useTouchSelection();
 
@@ -93,7 +119,7 @@ function App() {
       <Suspense fallback={<RouteLoadingFallback />}>
         <Routes>
           <Route path="/" element={<DiscoveryPage />} />
-          <Route path="/join-network" element={<NetworkApplicationPage />} />
+          <Route path="/join-network" element={<Suspense fallback={<NetworkApplicationLoadingFallback />}><NetworkApplicationPage /></Suspense>} />
           <Route element={<CartProvider><StorefrontThemeProvider><Outlet /></StorefrontThemeProvider></CartProvider>}>
             <Route path="/yotaabo" element={<Home />} />
             <Route path="/yotaabo/services" element={<ServicesPage />} />
