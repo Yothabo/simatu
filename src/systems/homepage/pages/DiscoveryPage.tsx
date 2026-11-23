@@ -17,7 +17,7 @@ export default function DiscoveryPage() {
       setPhase('revealed');
       return;
     }
-    revealTimer.current = window.setTimeout(() => setPhase('revealed'), 320);
+    revealTimer.current = window.setTimeout(() => setPhase('revealed'), 900);
   };
 
   return (
@@ -68,7 +68,7 @@ export default function DiscoveryPage() {
           color: #fff;
         }
         .simatu-discovery-page__board {
-          transition: filter .3s ease;
+          transition: filter 1.2s ease;
         }
         .simatu-discovery-page.is-intro .simatu-discovery-page__board,
         .simatu-discovery-page.is-exiting .simatu-discovery-page__board {
@@ -82,18 +82,18 @@ export default function DiscoveryPage() {
           place-items: center;
           box-sizing: border-box;
           padding: max(28px, env(safe-area-inset-top)) 24px max(28px, env(safe-area-inset-bottom));
-          background: rgba(255, 255, 255, .12);
-          backdrop-filter: blur(26px) saturate(185%);
-          -webkit-backdrop-filter: blur(26px) saturate(185%);
+          background: transparent;
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
           text-align: center;
           animation: simatu-discovery-overlay-in .35s ease both;
-          transition: opacity .32s ease, background .32s ease, backdrop-filter .32s ease;
+          transition: opacity .85s ease, background .85s ease, backdrop-filter .85s ease;
         }
         .simatu-discovery-page__overlay.is-exiting {
           opacity: 0;
-          background: rgba(255,255,255,0);
-          backdrop-filter: blur(0);
-          -webkit-backdrop-filter: blur(0);
+          background: transparent;
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
           pointer-events: none;
         }
         .simatu-discovery-page__content {
@@ -103,7 +103,7 @@ export default function DiscoveryPage() {
           align-items: center;
         }
         .simatu-discovery-page__brand-svg {
-          animation: simatu-intro-item-in .4s cubic-bezier(.2,.65,.25,1) both;
+          animation: simatu-intro-item-in .65s cubic-bezier(.2,.65,.25,1) both;
           display: block;
           width: 100%;
           height: 25vh;
@@ -117,7 +117,7 @@ export default function DiscoveryPage() {
           letter-spacing: -.045em;
         }
         .simatu-discovery-page__content p {
-          animation: simatu-intro-item-in .4s cubic-bezier(.2,.65,.25,1) .12s both;
+          animation: simatu-intro-item-in .65s cubic-bezier(.2,.65,.25,1) .18s both;
           max-width: 540px;
           margin: 18px 0 30px;
           color: rgba(255,255,255,.82);
@@ -125,7 +125,7 @@ export default function DiscoveryPage() {
           letter-spacing: .005em;
         }
         .simatu-discovery-page__cta {
-          animation: simatu-intro-item-in .4s cubic-bezier(.2,.65,.25,1) .2s both;
+          animation: simatu-intro-item-in .65s cubic-bezier(.2,.65,.25,1) .32s both;
           display: inline-flex;
           align-items: center;
           justify-content: center;
