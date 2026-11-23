@@ -5,18 +5,10 @@ import KineticMoodboard from "../discover/KineticMoodboard";
 import Footer from "../footer";
 
 /** Unified, coordinated homepage transition phases. */
-const EXIT_DURATION_MS = 0;
-const EXIT_WATCHDOG_MS = 0;
 const REVEAL_DURATION_MS = 1450;
 const RETURN_DURATION_MS = 780;
 export default function HomePage() {
   const [transitionPhase, setTransitionPhase] = useState<"idle" | "exit" | "reveal" | "active" | "return">("idle");
-
-  useEffect(() => {
-    if (transitionPhase !== "exit") return;
-    const timeout = window.setTimeout(() => setTransitionPhase("reveal"), EXIT_WATCHDOG_MS);
-    return () => window.clearTimeout(timeout);
-  }, [transitionPhase]);
 
   useEffect(() => {
     if (transitionPhase !== "reveal") return;
@@ -31,7 +23,8 @@ export default function HomePage() {
   }, [transitionPhase]);
 
   const startDiscovery = () => {
-    setTransitionPhase("exit");
+    // Hide the homepage instantly; only the moodboard reveal is animated.
+    setTransitionPhase("reveal");
   };
 
   const startHomeReturn = () => setTransitionPhase("return");
@@ -63,7 +56,7 @@ export default function HomePage() {
         .homepage-moodboard-background .kinetic-moodboard{position:absolute;inset:0;width:100%;height:100%;z-index:1;opacity:1;pointer-events:none}
         .homepage-moodboard-gradient{position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(180deg,rgba(10,10,10,.06) 0%,rgba(10,10,10,.16) 45%,rgba(10,10,10,.48) 100%)}
         .homepage-foreground{position:relative;z-index:2;opacity:1;transform:none;visibility:visible;transition:none;will-change:auto}
-        .homepage-layered-experience.phase-exit .homepage-foreground,.homepage-layered-experience.phase-reveal .homepage-foreground,.homepage-layered-experience.phase-active .homepage-foreground,.homepage-layered-experience.phase-return .homepage-foreground{display:none;opacity:0;transform:none;visibility:hidden;pointer-events:none}
+        .homepage-layered-experience.phase-reveal .homepage-foreground,.homepage-layered-experience.phase-active .homepage-foreground,.homepage-layered-experience.phase-return .homepage-foreground{display:none;opacity:0;transform:none;visibility:hidden;pointer-events:none}
         .homepage-layered-experience.phase-active .homepage-moodboard-background .kinetic-moodboard{pointer-events:auto}
         .homepage-layered-experience.phase-reveal .homepage-foreground,.homepage-layered-experience.phase-active .homepage-foreground,.homepage-layered-experience.phase-return .homepage-foreground{pointer-events:none}
                 .homepage-layered-experience.phase-reveal,.homepage-layered-experience.phase-active{height:100vh;height:100svh;overflow:hidden}
