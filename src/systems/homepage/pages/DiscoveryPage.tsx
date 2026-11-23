@@ -61,8 +61,7 @@ export default function DiscoveryPage() {
         .simatu-discovery-page__board {
           transition: filter 1.2s ease;
         }
-        .simatu-discovery-page.is-intro .simatu-discovery-page__board,
-        .simatu-discovery-page.is-exiting .simatu-discovery-page__board {
+        .simatu-discovery-page.is-intro .simatu-discovery-page__board {
           filter: grayscale(1) brightness(.78);
         }
         .simatu-discovery-page__overlay {
@@ -120,7 +119,7 @@ export default function DiscoveryPage() {
           font: 600 12px/1 system-ui, sans-serif;
           letter-spacing: .12em;
           cursor: pointer;
-          transition: background .2s ease, color .2s ease, transform .2s ease;
+          transition: none;
         }
         .simatu-discovery-page__cta:hover {
           background: transparent;
