@@ -51,7 +51,7 @@ export default function Header({
           {!searchOpen ? <>
             <button type="button" className="header-float-button" aria-label="Back" onClick={() => (onBack ? onBack() : navigate("/"))}><TiArrowBack size={21} /></button>
             <button type="button" className="header-float-button" aria-label="Search" onClick={() => setSearchOpen(true)}><FiSearch size={20} /></button>
-          </> : <MoodboardSearchBar value={searchQuery} onChange={setSearchQuery} onBack={() => setSearchOpen(false)} ariaLabel="Search brands, products or collections" backIcon="arrow" fixed />}
+          </> : <MoodboardSearchBar value={searchQuery} onChange={setSearchQuery} ariaLabel="Search brands, products or collections" fixed />}
         </div>
       ) : <>
         <div className="header-brand-group">
