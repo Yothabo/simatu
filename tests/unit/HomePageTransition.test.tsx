@@ -77,7 +77,7 @@ describe("Homepage Discover transition", () => {
     fireEvent.click(screen.getByRole("button", { name: "Discover our brand network" }));
     expect(root).toHaveClass("phase-exit");
 
-    act(() => vi.advanceTimersByTime(940));
+    act(() => vi.advanceTimersByTime(520);
 
     expect(root).toHaveClass("phase-reveal");
     expect(screen.getByRole("button", { name: "Home" })).toBeInTheDocument();
