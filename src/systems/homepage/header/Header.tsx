@@ -47,11 +47,13 @@ export default function Header({
     <nav className={inline ? "hero-navigation header-inline" : floatingControls ? "hero-navigation header-floating" : "hero-navigation"}>
       {floatingControls ? (
         <div className="header-floating-controls">
-          <button type="button" className="header-float-button" aria-label="Back" onClick={() => (onBack ? onBack() : navigate("/"))}><TiArrowBack size={21} /></button>
-          <button type="button" className="header-float-button" aria-label="Search" aria-expanded={searchOpen} onClick={() => { setSearchOpen((v) => !v); setMenuOpen(false); }}><FiSearch size={20} /></button>
-          <button type="button" className="header-float-button" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} onClick={() => { setMenuOpen((v) => !v); setSearchOpen(false); }}>{menuOpen ? <FiX size={21} /> : <FiMenu size={21} />}</button>
-          {searchOpen && <div className="header-floating-search"><div className="header-floating-search-shell"><FiSearch size={18} /><input autoFocus type="search" placeholder="Search brands, products or collections…" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} aria-label="Search brands, products or collections" /><button type="button" onClick={() => setSearchOpen(false)} aria-label="Close search"><FiX size={18}/></button></div></div>}
-          {menuOpen && <div className="header-floating-menu">{menuContent}</div>}
+          {!searchOpen ? <>
+            <button type="button" className="header-float-button" aria-label="Back" onClick={() => (onBack ? onBack() : navigate("/"))}><TiArrowBack size={21} /></button>
+            <button type="button" className="header-float-button" aria-label="Search" onClick={() => setSearchOpen(true)}><FiSearch size={20} /></button>
+          </> : <div className="header-floating-search"><div className="header-floating-search-row">
+            <button type="button" className="header-float-button header-search-back" aria-label="Back" onClick={() => setSearchOpen(false)}><TiArrowBack size={21} /></button>
+            <div className="header-floating-search-shell"><input autoFocus type="search" placeholder="Search brands, products or collections…" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} aria-label="Search brands, products or collections" /></div>
+          </div></div>}
         </div>
       ) : <>
         <div className="header-brand-group">
