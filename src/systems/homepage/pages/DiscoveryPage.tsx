@@ -12,24 +12,25 @@ export default function DiscoveryPage() {
         <section className="simatu-discovery-page__overlay" aria-label="Simatu introduction">
           <div className="simatu-discovery-page__content">
             <svg
-              className="simatu-discovery-page__brand"
-              viewBox="0 0 1000 150"
-              role="img"
-              aria-label="SIMATU"
+              aria-hidden="true"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+              className="simatu-discovery-page__brand-svg"
               xmlns="http://www.w3.org/2000/svg"
             >
               <text
-                x="500"
-                y="118"
+                x="50"
+                y="50%"
+                dominantBaseline="middle"
                 textAnchor="middle"
-                textLength="960"
+                textLength="100"
                 lengthAdjust="spacingAndGlyphs"
-                fill="currentColor"
-                fontFamily="Arial, Helvetica, sans-serif"
-                fontSize="132"
-                fontWeight="700"
+                fill="#EDE8E0"
+                fontSize="100"
+                fontFamily="Anton, sans-serif"
+                fontWeight="400"
               >
-                SIMATU
+                simatu
               </text>
             </svg>
             <h1>Help hustlers hustle better.</h1>
@@ -77,13 +78,12 @@ export default function DiscoveryPage() {
           flex-direction: column;
           align-items: center;
         }
-        .simatu-discovery-page__brand {
+        .simatu-discovery-page__brand-svg {
           display: block;
           width: 100%;
-          height: auto;
+          height: 25vh;
           margin: 0 0 26px;
           overflow: visible;
-          color: #fff;
         }
         .simatu-discovery-page__content h1 {
           margin: 0;
