@@ -7,8 +7,8 @@ import { useTouchSelection } from '../shared/hooks/useTouchSelection';
 
 import { CartProvider, StorefrontThemeProvider } from '../systems/storefront/core';
 
-const HomepageHero = React.lazy(
-  () => import('../systems/homepage').then(({ HomePage }) => ({ default: HomePage }))
+const DiscoveryPage = React.lazy(
+  () => import('../systems/homepage').then(({ DiscoveryPage }) => ({ default: DiscoveryPage }))
 );
 const Home = React.lazy(() => import('../systems/storefront/experience').then(({ HomePage }) => ({ default: HomePage })));
 const ServicesPage = React.lazy(() => import('../systems/storefront/experience').then(({ ServicesPage }) => ({ default: ServicesPage })));
@@ -92,7 +92,7 @@ function App() {
 
       <Suspense fallback={<RouteLoadingFallback />}>
         <Routes>
-          <Route path="/" element={<HomepageHero />} />
+          <Route path="/" element={<DiscoveryPage />} />
           <Route path="/join-network" element={<NetworkApplicationPage />} />
           <Route element={<CartProvider><StorefrontThemeProvider><Outlet /></StorefrontThemeProvider></CartProvider>}>
             <Route path="/yotaabo" element={<Home />} />
