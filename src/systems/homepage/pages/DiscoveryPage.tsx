@@ -1,12 +1,27 @@
 import React, { useState } from 'react';
 import KineticMoodboard from '../discover/KineticMoodboard';
 
+const MOODBOARD_ACTIVATED_KEY = 'simatu-discover-moodboard-activated-v1';
+
+
 /** Direct Discovery entry with a deliberate inactive-state brand overlay. */
 export default function DiscoveryPage() {
-  const [phase, setPhase] = useState<'intro' | 'revealed'>('intro');
+  const [phase, setPhase] = useState<'intro' | 'revealed'>(() => {
+    try {
+      return localStorage.getItem(MOODBOARD_ACTIVATED_KEY) === 'true' ? 'revealed' : 'intro';
+    } catch {
+      return 'intro';
+    }
+  });
 
   const startReveal = () => {
     if (phase !== 'intro') return;
+    // Persist activation so returning from onboarding opens the live moodboard.
+    try {
+      localStorage.setItem(MOODBOARD_ACTIVATED_KEY, 'true');
+    } catch {
+      // Activation still applies for this visit if storage is unavailable.
+    }
     // Unmount the intro immediately; moodboard reveal is independent.
     setPhase('revealed');
   };
