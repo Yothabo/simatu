@@ -46,7 +46,7 @@ describe("Homepage Discover transition", () => {
     fireEvent.click(screen.getByRole("button", { name: "Discover our brand network" }));
     expect(root).toHaveClass("phase-exit");
 
-    act(() => vi.advanceTimersByTime(940));
+    act(() => vi.advanceTimersByTime(520));
 
     expect(root).toHaveClass("phase-reveal");
     expect(container.querySelector(".homepage-moodboard-background")).toHaveAttribute("aria-hidden", "false");
@@ -70,7 +70,7 @@ describe("Homepage Discover transition", () => {
     expect(container.querySelector(".homepage-moodboard-background")).toHaveAttribute("aria-hidden", "true");
   });
 
-  it("uses the 940ms exit watchdog if exit transition events never arrive", () => {
+  it("uses the 520ms exit watchdog if exit transition events never arrive", () => {
     const { container } = render(<HomePage />);
     const root = container.querySelector(".homepage-layered-experience");
 
@@ -88,7 +88,7 @@ describe("Homepage Discover transition", () => {
     const root = container.querySelector(".homepage-layered-experience");
 
     fireEvent.click(screen.getByRole("button", { name: "Discover our brand network" }));
-    act(() => vi.advanceTimersByTime(1250));
+    act(() => vi.advanceTimersByTime(520));
     expect(root).toHaveClass("phase-reveal");
 
     act(() => vi.advanceTimersByTime(1450));
