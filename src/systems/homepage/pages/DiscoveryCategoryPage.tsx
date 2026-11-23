@@ -32,7 +32,7 @@ export default function DiscoveryCategoryPage() {
     navigate('/', { state: { revealMoodboard: true } });
   };
   return <main style={{ minHeight: '100dvh', background: '#111', color: '#f4f1ec', overflowX: 'hidden' }}>
-    <Header brandName="SIMATU" showBackButton onBack={goBack} />
+    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100 }}><Header brandName="SIMATU" showBackButton onBack={goBack} /></div>
     <section style={{ minHeight: 'min(76vh,760px)', paddingTop: 'calc(clamp(28px,7vw,100px) + 76px)', display: 'flex', alignItems: 'flex-end', padding: 'clamp(28px,7vw,100px)', boxSizing: 'border-box', backgroundImage: 'linear-gradient(180deg,rgba(0,0,0,.24),rgba(0,0,0,.08) 34%,rgba(0,0,0,.78)),url(' + item.image + ')', backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div style={{ width: 'min(100%,920px)', paddingTop: 90 }}>
         <div style={{ font: '600 10px/1.4 system-ui', letterSpacing: '.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,.72)' }}>{editorial.eyebrow}</div>
