@@ -32,10 +32,10 @@ export default function DiscoveryCategoryPage() {
     navigate('/', { state: { revealMoodboard: true } });
   };
   return <main style={{ minHeight: '100dvh', background: '#111', color: '#f4f1ec', overflowX: 'hidden' }}>
-    <header style={{ position: 'absolute', zIndex: 3, inset: '0 0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 'clamp(18px,4vw,42px)' }}>
+    <header style={{ position: 'fixed', zIndex: 100, top: 0, left: 0, right: 0, background: 'rgba(17,17,17,.88)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(255,255,255,.08)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 'clamp(16px,3vw,30px)' }}>
       <button style={button} onClick={goBack}>Back to discovery</button><a href="/" style={{ ...button, textDecoration: 'none', fontSize: 13, letterSpacing: '.2em' }}>SIMATU</a>
     </header>
-    <section style={{ minHeight: 'min(76vh,760px)', display: 'flex', alignItems: 'flex-end', padding: 'clamp(28px,7vw,100px)', boxSizing: 'border-box', backgroundImage: 'linear-gradient(180deg,rgba(0,0,0,.24),rgba(0,0,0,.08) 34%,rgba(0,0,0,.78)),url(' + item.image + ')', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <section style={{ minHeight: 'min(76vh,760px)', paddingTop: 'calc(clamp(28px,7vw,100px) + 76px)', display: 'flex', alignItems: 'flex-end', padding: 'clamp(28px,7vw,100px)', boxSizing: 'border-box', backgroundImage: 'linear-gradient(180deg,rgba(0,0,0,.24),rgba(0,0,0,.08) 34%,rgba(0,0,0,.78)),url(' + item.image + ')', backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div style={{ width: 'min(100%,920px)', paddingTop: 90 }}>
         <div style={{ font: '600 10px/1.4 system-ui', letterSpacing: '.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,.72)' }}>{editorial.eyebrow}</div>
         <h1 style={{ margin: '18px 0 16px', font: '400 clamp(48px,10vw,132px)/.92 system-ui', letterSpacing: '-.07em' }}>{editorial.title}</h1>
@@ -54,6 +54,5 @@ export default function DiscoveryCategoryPage() {
         </a>)}
       </div>
     </section>
-    <footer style={{ ...panel, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 20, borderTop: '1px solid rgba(255,255,255,.1)' }}><button style={button} onClick={goBack}>Back to discovery</button><a href="/" style={{ ...button, textDecoration: 'none' }}>SIMATU</a></footer>
   </main>;
 }
