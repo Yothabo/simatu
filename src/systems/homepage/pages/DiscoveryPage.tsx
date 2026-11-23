@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import KineticMoodboard from '../discover/KineticMoodboard';
 
-const MOODBOARD_ACTIVATED_KEY = 'simatu-discover-moodboard-activated-v1';
+const MOODBOARD_ACTIVATED_KEY = 'simatu-discover-moodboard-activated-v2';
 
 
 /** Direct Discovery entry with a deliberate inactive-state brand overlay. */
