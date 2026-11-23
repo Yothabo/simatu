@@ -34,7 +34,7 @@ export default function DiscoveryPage() {
               </text>
             </svg>
             <h1>A network of possibilities.</h1>
-            <p>Discover brands, explore possibilities, connect with businesses, and find new opportunities.</p>
+            <p>Discover brands, explore products, connect with businesses, and uncover new opportunities.</p>
             <button className="simatu-discovery-page__cta" type="button" onClick={() => setIsInactive(false)}>
               Discover our Network <span aria-hidden="true">↗</span>
             </button>
