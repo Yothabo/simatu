@@ -36,7 +36,7 @@ export default function DiscoveryCategoryPage() {
     <MoodboardSearchBar value={searchQuery} onChange={setSearchQuery} ariaLabel="Search brands, products or collections" fixed />
     <section style={{ position: 'relative', overflow: 'hidden', minHeight: 'min(76vh,760px)', display: 'flex', alignItems: 'flex-end', padding: 'clamp(28px,7vw,100px)', boxSizing: 'border-box', background: '#111' }}>
       <img src={item.image} alt={item.alt} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: item.objectPosition || 'center', zIndex: 0 }} />
-      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none', background: 'linear-gradient(180,rgba(0,0,0,.82) 0%,rgba(0,0,0,.4) 22%,rgba(0,0,0,0) 48%),linear-gradient(0,rgba(0,0,0,.82) 0%,rgba(0,0,0,.4) 28%,rgba(0,0,0,0) 58%)' }} />
+      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none', background: 'linear-gradient(180,rgba(0,0,0,.82) 0%,rgba(0,0,0,.4) 22%,rgba(0,0,0,0) 48%),linear-gradient(0,rgba(0,0,0,.9) 0%,rgba(0,0,0,.62) 32%,rgba(0,0,0,.18) 66%,rgba(0,0,0,0) 82%)' }} />
       <div style={{ position: 'relative', zIndex: 2, width: 'min(100%,920px)', paddingTop: 90 }}>
         <div style={{ font: '600 10px/1.4 system-ui', letterSpacing: '.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,.72)' }}>{editorial.eyebrow}</div>
         <h1 style={{ margin: '18px 0 16px', font: '400 clamp(48px,10vw,132px)/.92 system-ui', letterSpacing: '-.07em' }}>{editorial.title}</h1>
