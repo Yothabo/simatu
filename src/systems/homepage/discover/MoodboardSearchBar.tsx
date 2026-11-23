@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaHome, FaBars, FaTimes, FaUsers, FaBookmark, FaHistory, FaRandom } from 'react-icons/fa';
 import { TiArrowBack } from 'react-icons/ti';
 import './moodboard-search.css';
@@ -31,6 +31,7 @@ export default function MoodboardSearchBar({
   showMenu = false,
   onMenuClick,
 }: MoodboardSearchBarProps) {
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
   const menuExpanded = className.includes("menu-expanded");
   return (
     <div className={`kinetic-moodboard__search-header ${fixed ? 'moodboard-search-fixed' : ''} ${className}`} aria-hidden={!visible} style={!visible ? { transform: 'translate3d(0,-125%,0)', opacity: 0, pointerEvents: 'none' } : undefined}>
@@ -43,6 +44,8 @@ export default function MoodboardSearchBar({
               <button type="button" className="kinetic-moodboard__discover-tool" disabled><FaBookmark aria-hidden="true" /><span>Saved Discoveries</span></button>
               <button type="button" className="kinetic-moodboard__discover-tool" disabled><FaHistory aria-hidden="true" /><span>Recently Viewed</span></button>
               <button type="button" className="kinetic-moodboard__discover-tool" disabled><FaRandom aria-hidden="true" /><span>Explore Randomly</span></button>
+              <button type="button" className="kinetic-moodboard__discover-tool" onClick={() => setCategoriesOpen((open) => !open)} aria-expanded={categoriesOpen}><span className="kinetic-moodboard__discover-tool-category-icon">⌕</span><span>Browse Categories</span></button>
+              {categoriesOpen && <div className="kinetic-moodboard__discover-category-list" aria-label="Browse discovery categories">{['Spaces','Style','Fashion','Living','Objects','Culture','Ideas','Workspaces','Everyday','Explore'].map((category) => <button type="button" key={category} className="kinetic-moodboard__discover-category" onClick={() => { onChange(category); setCategoriesOpen(false); onMenuClick?.(); }}>{category}</button>)}</div>}
             </nav>
           ) : (
             <input className="kinetic-moodboard__search-input" type="search" placeholder={placeholder} value={value} onChange={(event) => onChange(event.target.value)} tabIndex={visible ? 0 : -1} aria-label={ariaLabel} />
