@@ -5,8 +5,8 @@ import KineticMoodboard from "../discover/KineticMoodboard";
 import Footer from "../footer";
 
 /** Unified, coordinated homepage transition phases. */
-const EXIT_DURATION_MS = 820;
-const EXIT_WATCHDOG_MS = EXIT_DURATION_MS + 120;
+const EXIT_DURATION_MS = 440;
+const EXIT_WATCHDOG_MS = EXIT_DURATION_MS + 80;
 const REVEAL_DURATION_MS = 1450;
 const RETURN_DURATION_MS = 780;
 export default function HomePage() {
