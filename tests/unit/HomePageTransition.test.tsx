@@ -70,7 +70,7 @@ describe("Homepage Discover transition", () => {
     expect(container.querySelector(".homepage-moodboard-background")).toHaveAttribute("aria-hidden", "true");
   });
 
-  it("uses the 1,250ms exit watchdog if exit transition events never arrive", () => {
+  it("uses the 940ms exit watchdog if exit transition events never arrive", () => {
     const { container } = render(<HomePage />);
     const root = container.querySelector(".homepage-layered-experience");
 
@@ -83,7 +83,7 @@ describe("Homepage Discover transition", () => {
     expect(screen.getByRole("button", { name: "Home" })).toBeInTheDocument();
   });
 
-  it("uses the 2,000ms reveal watchdog if sentinel transition never arrives", () => {
+  it("uses the 1,450ms reveal watchdog if sentinel transition never arrives", () => {
     const { container } = render(<HomePage />);
     const root = container.querySelector(".homepage-layered-experience");
 
