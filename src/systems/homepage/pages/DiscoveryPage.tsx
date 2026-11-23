@@ -11,7 +11,27 @@ export default function DiscoveryPage() {
       {isInactive && (
         <section className="simatu-discovery-page__overlay" aria-label="Simatu introduction">
           <div className="simatu-discovery-page__content">
-            <div className="simatu-discovery-page__brand">SIMATU</div>
+            <svg
+              className="simatu-discovery-page__brand"
+              viewBox="0 0 1000 150"
+              role="img"
+              aria-label="SIMATU"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <text
+                x="500"
+                y="118"
+                textAnchor="middle"
+                textLength="960"
+                lengthAdjust="spacingAndGlyphs"
+                fill="currentColor"
+                fontFamily="Arial, Helvetica, sans-serif"
+                fontSize="132"
+                fontWeight="700"
+              >
+                SIMATU
+              </text>
+            </svg>
             <h1>Help hustlers hustle better.</h1>
             <p>Build your presence. Get discovered. Find opportunity. Grow your hustle.</p>
             <button className="simatu-discovery-page__cta" type="button" onClick={() => setIsInactive(false)}>
@@ -52,16 +72,18 @@ export default function DiscoveryPage() {
           animation: simatu-discovery-overlay-in .35s ease both;
         }
         .simatu-discovery-page__content {
-          width: min(100%, 660px);
+          width: min(100%, 1000px);
           display: flex;
           flex-direction: column;
           align-items: center;
         }
         .simatu-discovery-page__brand {
-          margin-bottom: 26px;
+          display: block;
+          width: 100%;
+          height: auto;
+          margin: 0 0 26px;
+          overflow: visible;
           color: #fff;
-          font: 600 clamp(14px, 2vw, 18px)/1.2 system-ui, sans-serif;
-          letter-spacing: .34em;
         }
         .simatu-discovery-page__content h1 {
           margin: 0;
