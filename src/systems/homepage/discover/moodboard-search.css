@@ -21,3 +21,6 @@
 .kinetic-moodboard__search-header.header-search-fullwidth.moodboard-search-fixed .kinetic-moodboard__search-row{width:100%;max-width:none;flex:1;}
 .kinetic-moodboard__search-header.header-search-fullwidth.moodboard-search-fixed .kinetic-moodboard__search-shell{width:100%;flex:1;box-sizing:border-box;}
 @media(max-width:640px){.kinetic-moodboard__search-header.header-search-fullwidth.moodboard-search-fixed{padding:var(--hp-size-12);}}
+
+/* TEMP DIAGNOSTIC: unmistakable red test on expanded homepage floating search. */
+.header-search-fullwidth .kinetic-moodboard__search-shell{background:#ff0000!important;}
