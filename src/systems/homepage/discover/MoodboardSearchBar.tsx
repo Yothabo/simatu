@@ -23,6 +23,8 @@ export default function MoodboardSearchBar({
   ariaLabel = 'Search the brand network',
   className = '',
   visible = true,
+  backIcon = 'home',
+  fixed = false,
 }: MoodboardSearchBarProps) {
   return (
     <div className={`kinetic-moodboard__search-header ${fixed ? 'moodboard-search-fixed' : ''} ${className}`} aria-hidden={!visible} style={!visible ? { transform: 'translate3d(0,-125%,0)', opacity: 0, pointerEvents: 'none' } : undefined}>
