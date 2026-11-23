@@ -3,28 +3,19 @@ import KineticMoodboard from '../discover/KineticMoodboard';
 
 /** Direct Discovery entry with a deliberate inactive-state brand overlay. */
 export default function DiscoveryPage() {
-  const [phase, setPhase] = useState<'intro' | 'exiting' | 'revealed'>('intro');
-  const revealTimer = useRef<number | null>(null);
-
-  useEffect(() => () => {
-    if (revealTimer.current !== null) window.clearTimeout(revealTimer.current);
-  }, []);
+  const [phase, setPhase] = useState<'intro' | 'revealed'>('intro');
 
   const startReveal = () => {
     if (phase !== 'intro') return;
-    setPhase('exiting');
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setPhase('revealed');
-      return;
-    }
-    revealTimer.current = window.setTimeout(() => setPhase('revealed'), 900);
+    // Unmount the intro immediately; moodboard reveal is independent.
+    setPhase('revealed');
   };
 
   return (
     <main className={`simatu-discovery-page is-${phase}`}>
       <KineticMoodboard className="simatu-discovery-page__board" colorReveal={phase !== 'intro'} interactive={phase !== 'intro'} />
       {phase !== 'revealed' && (
-        <section className=simatu-discovery-page__overlay} aria-label="Simatu introduction">
+        <section className="simatu-discovery-page__overlay" aria-label="Simatu introduction">
           <div className="simatu-discovery-page__content">
             <svg
               aria-hidden="true"
@@ -50,7 +41,7 @@ export default function DiscoveryPage() {
             </svg>
             
             <p>Discover brands, explore products, connect with businesses, and uncover new opportunities.</p>
-            <button className="simatu-discovery-page__cta" type="button" onClick={startReveal} disabled={false}>
+            <button className="simatu-discovery-page__cta" type="button" onClick={startReveal}>
               Discover our Network <span aria-hidden="true">↗</span>
             </button>
           </div>
