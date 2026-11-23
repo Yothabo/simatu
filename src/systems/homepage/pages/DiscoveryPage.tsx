@@ -111,17 +111,19 @@ export default function DiscoveryPage() {
           justify-content: center;
           gap: 18px;
           min-height: 52px;
+          width: 240px;
           padding: 0 26px;
           border: 1px solid rgba(255,255,255,.85);
           border-radius: 999px;
-          background: #fff;
-          color: #151515;
+          background: transparent;
+          color: #fff;
           font: 600 12px/1 system-ui, sans-serif;
           letter-spacing: .12em;
           cursor: pointer;
-          transition: none;
+          transition: width 250ms ease, transform 250ms ease;
         }
         .simatu-discovery-page__cta:hover {
+          width: 280px;
           background: transparent;
           color: #fff;
           transform: translateY(-2px);
