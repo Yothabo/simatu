@@ -2,13 +2,6 @@ import { act, cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import HomePage from "../../src/systems/homepage/pages/HomePage";
 
-function emitTransition(target: Element, propertyName: string) {
-  const event = new Event("transitionend", { bubbles: true });
-  Object.defineProperty(event, "propertyName", { value: propertyName });
-  act(() => target.dispatchEvent(event));
-}
-
-
 vi.mock("../../src/systems/homepage/hero/Hero", async () => {
   const React = await import("react");
   return { default: () => React.createElement(React.Fragment, null,
@@ -43,7 +36,7 @@ describe("Homepage Discover transition", () => {
     fireEvent.click(screen.getByRole("button", { name: "Discover our brand network" }));
 
     expect(root).toHaveClass("phase-reveal");
-    expect(container.querySelector(".homepage-foreground")).toBeInTheDocument();
+    expect(container.querySelector(".homepage-foreground")).not.toBeInTheDocument();
     expect(container.querySelector(".kinetic-moodboard")).toHaveAttribute("data-color-reveal", "true");
     expect(container.querySelector(".kinetic-moodboard")).toHaveAttribute("data-interactive", "false");
     expect(screen.getByRole("button", { name: "Home" })).toBeInTheDocument();
