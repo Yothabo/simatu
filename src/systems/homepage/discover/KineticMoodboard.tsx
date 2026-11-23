@@ -82,7 +82,6 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const positionRef = useRef({ x: 0, y: 0 });
   const boundsRef = useRef({ x: 0, y: 0 });
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
-  const [position, setPosition] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchDismissed, setSearchDismissed] = useState(false);
@@ -133,7 +132,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   }, [sourceItems, columns]);
 
   useEffect(() => {
-    if (decorativeOnly) return;
+    if (decorativeOnly || !interactive) return;
     let cancelled = false;
     setNetworkLoading(true);
     Promise.all(NETWORK_STORES.map(async (store) => {
@@ -146,7 +145,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       .catch((error) => { if (!cancelled) setNetworkError(error instanceof Error ? error.message : 'Network search unavailable.'); })
       .finally(() => { if (!cancelled) setNetworkLoading(false); });
     return () => { cancelled = true; };
-  }, []);
+  }, [interactive, decorativeOnly]);
   const normalizedSearch = searchQuery.trim().toLowerCase();
   const searchMatches = (value: string) => value.toLowerCase().includes(normalizedSearch);
   const startsWithSearch = (value: string) => value.toLowerCase().startsWith(normalizedSearch);
@@ -168,7 +167,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       y: clamp(y, Math.min(0, viewport.height - boardHeight), 0),
     };
     positionRef.current = next;
-    setPosition(next);
+    if (boardRef.current) boardRef.current.style.transform = `translate3d(${next.x}px,${next.y}px,0)`;
   }, [boardWidth, boardHeight, viewport.width, viewport.height]);
 
   useEffect(() => {
@@ -182,7 +181,8 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
     const element = viewportRef.current;
     if (!element) return;
     const observer = new ResizeObserver(([entry]) => {
-      setViewport({ width: entry.contentRect.width, height: entry.contentRect.height });
+      const next = { width: entry.contentRect.width, height: entry.contentRect.height };
+      setViewport((current) => current.width === next.width && current.height === next.height ? current : next);
     });
     observer.observe(element);
     return () => observer.disconnect();
@@ -354,7 +354,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         onPointerCancel={onPointerUp}
         onWheel={onWheel}
       >
-        <div ref={boardRef} className="kinetic-moodboard__board" style={{ transform: `translate3d(${position.x}px,${position.y}px,0)` }}>
+        <div ref={boardRef} className="kinetic-moodboard__board" style={{ transform: `translate3d(${positionRef.current.x}px,${positionRef.current.y}px,0)` }}>
           {tiles.map((item, index) => (
             <button
               type="button"
@@ -367,7 +367,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
               style={{ '--discover-row': Math.floor(index / columns) } as React.CSSProperties}
               draggable={false}
             >
-              <img src={item.image} alt={item.alt} loading={index < 12 ? 'eager' : 'lazy'} draggable={false} style={{ objectPosition: item.objectPosition || 'center', transitionDelay: colorReveal ? `${Math.floor(index / columns) * 0.05}s` : '0s' }} />
+              <img src={item.image} alt={item.alt} loading={index < 4 ? 'eager' : 'lazy'} decoding="async" draggable={false} style={{ objectPosition: item.objectPosition || 'center', transitionDelay: colorReveal ? `${Math.floor(index / columns) * 0.05}s` : '0s' }} />
               {showLabels && <span className="kinetic-moodboard__label" style={{ transitionDelay: colorReveal ? `${Math.floor(index / columns) * 0.025}s` : "0s" }}><span className="kinetic-moodboard__category">{item.category}</span><span className="kinetic-moodboard__title">{item.title}</span></span>}
             </button>
           ))}
