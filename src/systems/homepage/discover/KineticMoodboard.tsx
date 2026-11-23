@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaHome } from 'react-icons/fa';
 
 type NetworkProduct = { id: string; name: string; price: number; category: string; subcategory?: string; brand?: string; image_url?: string | null; storeKey: 'yotaabo' | 'poshies'; storeName: string; href: string };
@@ -75,6 +76,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   style,
   onItemClick,
 }) => {
+  const navigate = useNavigate();
   const viewportRef = useRef<HTMLDivElement>(null);
   const boardRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<number | null>(null);
@@ -373,7 +375,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
           ))}
         </div>
       </div>
-      <button type="button" className="kinetic-moodboard__join-network" aria-label="Join the Simatu network" title="Join the Simatu network" onClick={() => window.location.assign('/join-network')} aria-hidden={!colorReveal || searchDismissed} tabIndex={colorReveal && !searchDismissed ? 0 : -1} disabled={!colorReveal || searchDismissed} style={!colorReveal || searchDismissed ? { opacity: 0, transform: "translate3d(0,12px,0)", pointerEvents: "none" } : undefined}>
+      <button type="button" className="kinetic-moodboard__join-network" aria-label="Join the Simatu network" title="Join the Simatu network" onPointerEnter={() => { void import("../pages/NetworkApplicationPage"); }} onFocus={() => { void import("../pages/NetworkApplicationPage"); }} onPointerDown={() => { void import("../pages/NetworkApplicationPage"); }} onClick={() => navigate('/join-network')} aria-hidden={!colorReveal || searchDismissed} tabIndex={colorReveal && !searchDismissed ? 0 : -1} disabled={!colorReveal || searchDismissed} style={!colorReveal || searchDismissed ? { opacity: 0, transform: "translate3d(0,12px,0)", pointerEvents: "none" } : undefined}>
         JOIN NETWORK <span aria-hidden="true">↗</span>
       </button>
       {normalizedSearch.length >= 1 && interactive && !searchDismissed && (
