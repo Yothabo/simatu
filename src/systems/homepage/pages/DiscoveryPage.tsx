@@ -82,7 +82,7 @@ export default function DiscoveryPage() {
           place-items: center;
           box-sizing: border-box;
           padding: max(28px, env(safe-area-inset-top)) 24px max(28px, env(safe-area-inset-bottom));
-          background: transparent;
+          background: rgba(0, 0, 0, .16);
           backdrop-filter: none;
           -webkit-backdrop-filter: none;
           text-align: center;
