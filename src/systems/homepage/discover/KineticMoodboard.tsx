@@ -87,6 +87,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const [dragging, setDragging] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchDismissed, setSearchDismissed] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => { if (colorReveal) setSearchDismissed(false); }, [colorReveal]);
   const [networkProducts, setNetworkProducts] = useState<NetworkProduct[]>([]);
   const [networkLoading, setNetworkLoading] = useState(false);
@@ -267,6 +268,16 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__join-network:focus-visible{outline:2px solid rgba(255,255,255,.85);outline-offset:4px}
         .kinetic-moodboard__join-network span{font-size:var(--hp-font-size-base);letter-spacing:normal}
         @media(max-width:640px){.kinetic-moodboard__join-network{right:max(var(--hp-size-16),env(safe-area-inset-right));bottom:max(var(--hp-size-18),env(safe-area-inset-bottom));min-height:var(--hp-size-48);padding:0 var(--hp-size-20);font-size:var(--hp-font-size-xs)}}
+        .kinetic-moodboard__menu-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:calc(var(--hp-size-24) + env(safe-area-inset-top)) var(--hp-size-20) calc(var(--hp-size-24) + env(safe-area-inset-bottom));background:rgba(128,128,128,.35);backdrop-filter:blur(26px) saturate(185%);-webkit-backdrop-filter:blur(26px) saturate(185%);color:#fff;animation:discover-menu-in .24s ease both}
+        .kinetic-moodboard__menu-panel{width:min(var(--hp-size-700),100%);display:flex;flex-direction:column;gap:var(--hp-size-8);padding:var(--hp-size-20);border:0;border-radius:var(--hp-size-22);background:rgba(128,128,128,.35);backdrop-filter:blur(26px) saturate(185%);-webkit-backdrop-filter:blur(26px) saturate(185%);box-shadow:0 var(--hp-size-12) var(--hp-size-36) rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(255,255,255,.06)}
+        .kinetic-moodboard__menu-heading{display:flex;align-items:center;justify-content:space-between;padding:var(--hp-size-8) var(--hp-size-4) var(--hp-size-18)}
+        .kinetic-moodboard__menu-title{font:var(--hp-font-weight-medium) var(--hp-font-size-display)/var(--hp-line-height-normal) var(--hp-font-family);letter-spacing:-.02em}
+        .kinetic-moodboard__menu-close{width:var(--hp-size-44);height:var(--hp-size-44);border:0;border-radius:50%;background:rgba(128,128,128,.35);color:#fff;font-size:var(--hp-size-24);cursor:pointer}
+        .kinetic-moodboard__menu-link{display:flex;align-items:center;justify-content:space-between;gap:var(--hp-size-16);min-height:var(--hp-size-60);padding:0 var(--hp-size-16);border:0;border-radius:var(--hp-size-12);background:transparent;color:#fff;text-decoration:none;font:var(--hp-font-weight-medium) var(--hp-font-size-base)/var(--hp-line-height-normal) var(--hp-font-family);text-align:left;cursor:pointer;transition:background .2s ease}
+        .kinetic-moodboard__menu-link:hover,.kinetic-moodboard__menu-link:focus-visible{background:rgba(255,255,255,.12);outline:none}
+        .kinetic-moodboard__menu-link span:last-child{opacity:.75}
+        .kinetic-moodboard__menu-note{margin:var(--hp-size-12) var(--hp-size-4) 0;color:rgba(255,255,255,.72);font:var(--hp-font-weight-regular) var(--hp-font-size-xs)/1.6 var(--hp-font-family)}
+        @keyframes discover-menu-in{from{opacity:0}to{opacity:1}}
         .kinetic-moodboard__board{position:absolute;top:0;left:0;display:grid;grid-template-columns:repeat(${columns},${tileWidth}px);gap:${gap}px;will-change:transform;background:transparent}
         .kinetic-moodboard__tile{position:relative;display:block;width:${tileWidth}px;height:${tileHeight}px;padding:0;overflow:hidden;border:0;border-radius:${borderRadius}px;background:transparent;color:inherit;text-align:left;cursor:pointer;opacity:1;transform:none}.kinetic-moodboard.is-color-revealing .kinetic-moodboard__tile{animation:none;opacity:1;transform:none}
         .kinetic-moodboard__tile img{display:block;width:100%;height:100%;object-fit:cover;filter:grayscale(1);transition:filter 1s ease,transform .34s ease}.kinetic-moodboard.is-color-revealing .kinetic-moodboard__tile img{filter:grayscale(0)}
@@ -321,7 +332,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__store-sub{color:var(--hp-color-text-muted);font:var(--hp-font-weight-regular) var(--hp-font-size-sm)/var(--hp-line-height-normal) var(--hp-font-family);margin-top:var(--hp-size-md)}
         @media(max-width:640px){.kinetic-moodboard__search-header{padding:var(--hp-size-12)}.kinetic-moodboard__search-shell{height:var(--hp-size-55);width:calc(100vw - var(--hp-size-24))}.kinetic-moodboard__search-results{top:var(--hp-size-80)}.kinetic-moodboard__dialog-backdrop{padding:0;padding-top:max(0px,env(safe-area-inset-top))}.kinetic-moodboard__dialog{width:100%;max-height:min(92vh,900px);max-height:min(92dvh,var(--hp-size-950));padding:0 var(--hp-size-18) calc(var(--hp-size-18) + env(safe-area-inset-bottom));border-radius:var(--hp-size-22) var(--hp-size-22) 0 0;overflow-y:auto;overscroll-behavior:contain}.kinetic-moodboard__dialog-heading{top:0;margin:0 -var(--hp-size-18);padding:var(--hp-size-18)}}
       `}</style>
-      <MoodboardSearchBar value={searchQuery} onChange={setSearchQuery} onBack={onExit ? () => { setSearchQuery(""); setSearchDismissed(true); onExit(); } : undefined} visible={colorReveal && !searchDismissed} showMenu />
+      <MoodboardSearchBar value={searchQuery} onChange={setSearchQuery} onBack={onExit ? () => { setSearchQuery(""); setSearchDismissed(true); onExit(); } : undefined} visible={colorReveal && !searchDismissed} showMenu onMenuClick={() => setMenuOpen(true)} />
       <span className="kinetic-moodboard__reveal-sentinel" aria-hidden="true" />
       <div
         ref={viewportRef}
@@ -351,9 +362,12 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
           ))}
         </div>
       </div>
-      <button type="button" className="kinetic-moodboard__join-network" aria-label="Join the Simatu network" title="Join the Simatu network" onPointerEnter={() => { void import("../pages/NetworkApplicationPage").catch(() => undefined); }} onFocus={() => { void import("../pages/NetworkApplicationPage").catch(() => undefined); }} onPointerDown={() => { void import("../pages/NetworkApplicationPage").catch(() => undefined); }} onClick={() => navigate('/join-network')} aria-hidden={!colorReveal || searchDismissed} tabIndex={colorReveal && !searchDismissed ? 0 : -1} disabled={!colorReveal || searchDismissed} style={!colorReveal || searchDismissed ? { opacity: 0, transform: "translate3d(0,12px,0)", pointerEvents: "none" } : undefined}>
-        JOIN NETWORK <span aria-hidden="true">↗</span>
-      </button>
+
+      {menuOpen && <div className="kinetic-moodboard__menu-overlay" role="dialog" aria-modal="true" aria-label="Simatu navigation menu" onClick={(event) => { if (event.target === event.currentTarget) setMenuOpen(false); }}><div className="kinetic-moodboard__menu-panel"><div className="kinetic-moodboard__menu-heading"><div className="kinetic-moodboard__menu-title">Menu</div><button type="button" className="kinetic-moodboard__menu-close" aria-label="Close menu" onClick={() => setMenuOpen(false)}>×</button></div>
+        <button type="button" className="kinetic-moodboard__menu-link" onClick={() => { setMenuOpen(false); navigate('/'); }}>Discover <span aria-hidden="true">↗</span></button>
+        <button type="button" className="kinetic-moodboard__menu-link" onClick={() => { setMenuOpen(false); navigate('/join-network'); }}>Join Network <span aria-hidden="true">↗</span></button>
+        <button type="button" className="kinetic-moodboard__menu-link" onClick={() => { setMenuOpen(false); navigate('/join-network'); }}>For Businesses <span aria-hidden="true">↗</span></button>
+        <p className="kinetic-moodboard__menu-note">Discover brands, explore products, and connect with the Simatu network.</p></div></div>}
       {normalizedSearch.length >= 1 && interactive && !searchDismissed && (
         <div className="kinetic-moodboard__search-results" role="listbox" aria-label="Predictive search suggestions">
           {networkLoading && <div className="kinetic-moodboard__search-status">Searching across stores…</div>}
