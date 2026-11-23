@@ -1,21 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import KineticMoodboard from '../discover/KineticMoodboard';
 
 /** Direct Discovery entry with a deliberate inactive-state brand overlay. */
 export default function DiscoveryPage() {
+  const [isInactive, setIsInactive] = useState(true);
+
   return (
-    <main className="simatu-discovery-page">
+    <main className={`simatu-discovery-page${isInactive ? ' is-inactive' : ' is-active'}`}>
       <KineticMoodboard className="simatu-discovery-page__board" colorReveal interactive />
-      <section className="simatu-discovery-page__overlay" aria-label="Simatu introduction">
-        <div className="simatu-discovery-page__content">
-          <div className="simatu-discovery-page__brand">SIMATU</div>
-          <h1>Help hustlers hustle better.</h1>
-          <p>Build your presence. Get discovered. Find opportunity. Grow your hustle.</p>
-          <a className="simatu-discovery-page__cta" href="/join-network">
-            JOIN NETWORK <span aria-hidden="true">↗</span>
-          </a>
-        </div>
-      </section>
+      {isInactive && (
+        <section className="simatu-discovery-page__overlay" aria-label="Simatu introduction">
+          <div className="simatu-discovery-page__content">
+            <div className="simatu-discovery-page__brand">SIMATU</div>
+            <h1>Help hustlers hustle better.</h1>
+            <p>Build your presence. Get discovered. Find opportunity. Grow your hustle.</p>
+            <button className="simatu-discovery-page__cta" type="button" onClick={() => setIsInactive(false)}>
+              DISCOVER <span aria-hidden="true">↗</span>
+            </button>
+          </div>
+        </section>
+      )}
       <style>{`
         .simatu-discovery-page {
           position: relative;
@@ -28,8 +32,10 @@ export default function DiscoveryPage() {
           color: #fff;
         }
         .simatu-discovery-page__board {
-          filter: grayscale(1) brightness(.58);
           transition: filter .35s ease;
+        }
+        .simatu-discovery-page.is-inactive .simatu-discovery-page__board {
+          filter: grayscale(1) brightness(.58);
         }
         .simatu-discovery-page__overlay {
           position: absolute;
@@ -43,6 +49,7 @@ export default function DiscoveryPage() {
           backdrop-filter: blur(3px);
           -webkit-backdrop-filter: blur(3px);
           text-align: center;
+          animation: simatu-discovery-overlay-in .35s ease both;
         }
         .simatu-discovery-page__content {
           width: min(100%, 660px);
@@ -82,7 +89,7 @@ export default function DiscoveryPage() {
           color: #151515;
           font: 600 12px/1 system-ui, sans-serif;
           letter-spacing: .12em;
-          text-decoration: none;
+          cursor: pointer;
           transition: background .2s ease, color .2s ease, transform .2s ease;
         }
         .simatu-discovery-page__cta:hover {
@@ -94,6 +101,10 @@ export default function DiscoveryPage() {
           outline: 2px solid #fff;
           outline-offset: 4px;
         }
+        @keyframes simatu-discovery-overlay-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
         @media (max-width: 600px) {
           .simatu-discovery-page__overlay { padding-inline: 22px; }
           .simatu-discovery-page__brand { margin-bottom: 20px; }
@@ -101,7 +112,8 @@ export default function DiscoveryPage() {
         }
         @media (prefers-reduced-motion: reduce) {
           .simatu-discovery-page__board,
-          .simatu-discovery-page__cta { transition: none; }
+          .simatu-discovery-page__cta,
+          .simatu-discovery-page__overlay { transition: none; animation: none; }
         }
       `}</style>
     </main>
