@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import type { MoodboardItem } from '../discover/KineticMoodboard';
-import { TiArrowBack } from 'react-icons/ti';
-import { FiSearch } from 'react-icons/fi';
 import MoodboardSearchBar from '../discover/MoodboardSearchBar';
 
 const stores = [
@@ -25,7 +23,6 @@ const fallback: MoodboardItem = { id: 'explore', image: 'https://images.unsplash
 const panel: React.CSSProperties = { padding: 'clamp(26px,6vw,88px)', background: '#111', color: '#f4f1ec', fontFamily: 'inherit' };
 export default function DiscoveryCategoryPage() {
   const navigate = useNavigate();
-  const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const location = useLocation();
   const { categoryId = '' } = useParams();
@@ -36,12 +33,7 @@ export default function DiscoveryCategoryPage() {
     navigate('/', { state: { revealMoodboard: true } });
   };
   return <main style={{ minHeight: '100dvh', background: '#111', color: '#f4f1ec', overflowX: 'hidden' }}>
-    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, display: 'flex', justifyContent: 'flex-end', padding: 18, pointerEvents: 'none' }}>
-      {!searchOpen ? <div className="header-floating-controls" style={{ pointerEvents: 'auto' }}>
-        <button type="button" className="header-float-button" aria-label="Back to Discover" onClick={goBack}><TiArrowBack size={21} /></button>
-        <button type="button" className="header-float-button" aria-label="Search" onClick={() => setSearchOpen(true)}><FiSearch size={20} /></button>
-      </div> : <MoodboardSearchBar value={searchQuery} onChange={setSearchQuery} ariaLabel="Search brands, products or collections" fixed />}
-    </div>
+    <MoodboardSearchBar value={searchQuery} onChange={setSearchQuery} ariaLabel="Search brands, products or collections" fixed />
     <section style={{ minHeight: 'min(76vh,760px)', paddingTop: 'calc(clamp(28px,7vw,100px) + 76px)', display: 'flex', alignItems: 'flex-end', padding: 'clamp(28px,7vw,100px)', boxSizing: 'border-box', backgroundImage: 'linear-gradient(180deg,rgba(0,0,0,.24),rgba(0,0,0,.08) 34%,rgba(0,0,0,.78)),url(' + item.image + ')', backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div style={{ width: 'min(100%,920px)', paddingTop: 90 }}>
         <div style={{ font: '600 10px/1.4 system-ui', letterSpacing: '.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,.72)' }}>{editorial.eyebrow}</div>
