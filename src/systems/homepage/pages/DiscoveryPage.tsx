@@ -5,7 +5,6 @@ import KineticMoodboard from '../discover/KineticMoodboard';
 export default function DiscoveryPage() {
   const [phase, setPhase] = useState<'intro' | 'exiting' | 'revealed'>('intro');
   const revealTimer = useRef<number | null>(null);
-  const isInactive = phase !== 'revealed';
 
   useEffect(() => () => {
     if (revealTimer.current !== null) window.clearTimeout(revealTimer.current);
@@ -71,7 +70,8 @@ export default function DiscoveryPage() {
         .simatu-discovery-page__board {
           transition: filter .35s ease;
         }
-        .simatu-discovery-page.is-intro .simatu-discovery-page__board,\n        .simatu-discovery-page.is-exiting .simatu-discovery-page__board {
+        .simatu-discovery-page.is-intro .simatu-discovery-page__board,
+        .simatu-discovery-page.is-exiting .simatu-discovery-page__board {
           filter: grayscale(1) brightness(.58);
         }
         .simatu-discovery-page__overlay {
@@ -86,15 +86,24 @@ export default function DiscoveryPage() {
           backdrop-filter: blur(3px);
           -webkit-backdrop-filter: blur(3px);
           text-align: center;
-          animation: simatu-discovery-overlay-in .35s ease both;\n          transition: opacity .65s ease, background .65s ease, backdrop-filter .65s ease;
+          animation: simatu-discovery-overlay-in .35s ease both;
+          transition: opacity .65s ease, background .65s ease, backdrop-filter .65s ease;
         }
-        .simatu-discovery-page__overlay.is-exiting {\n          opacity: 0;\n          background: rgba(13,13,13,0);\n          backdrop-filter: blur(0);\n          -webkit-backdrop-filter: blur(0);\n          pointer-events: none;\n        }\n        .simatu-discovery-page__content {
+        .simatu-discovery-page__overlay.is-exiting {
+          opacity: 0;
+          background: rgba(13,13,13,0);
+          backdrop-filter: blur(0);
+          -webkit-backdrop-filter: blur(0);
+          pointer-events: none;
+        }
+        .simatu-discovery-page__content {
           width: min(100%, 1000px);
           display: flex;
           flex-direction: column;
           align-items: center;
         }
-        .simatu-discovery-page__brand-svg {\n          animation: simatu-intro-item-in .65s cubic-bezier(.2,.65,.25,1) both;
+        .simatu-discovery-page__brand-svg {
+          animation: simatu-intro-item-in .65s cubic-bezier(.2,.65,.25,1) both;
           display: block;
           width: 100%;
           height: 25vh;
@@ -107,14 +116,16 @@ export default function DiscoveryPage() {
           font: 500 clamp(30px, 6vw, 58px)/1.08 system-ui, sans-serif;
           letter-spacing: -.045em;
         }
-        .simatu-discovery-page__content p {\n          animation: simatu-intro-item-in .65s cubic-bezier(.2,.65,.25,1) .25s both;
+        .simatu-discovery-page__content p {
+          animation: simatu-intro-item-in .65s cubic-bezier(.2,.65,.25,1) .25s both;
           max-width: 540px;
           margin: 18px 0 30px;
           color: rgba(255,255,255,.82);
           font: 400 clamp(14px, 2vw, 17px)/1.65 system-ui, sans-serif;
           letter-spacing: .005em;
         }
-        .simatu-discovery-page__cta {\n          animation: simatu-intro-item-in .65s cubic-bezier(.2,.65,.25,1) .45s both;
+        .simatu-discovery-page__cta {
+          animation: simatu-intro-item-in .65s cubic-bezier(.2,.65,.25,1) .45s both;
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -139,7 +150,11 @@ export default function DiscoveryPage() {
           outline: 2px solid #fff;
           outline-offset: 4px;
         }
-        @keyframes simatu-intro-item-in {\n          from { opacity: 0; transform: translate3d(0, 16px, 0); }\n          to { opacity: 1; transform: translate3d(0, 0, 0); }\n        }\n        @keyframes simatu-discovery-overlay-in {
+        @keyframes simatu-intro-item-in {
+          from { opacity: 0; transform: translate3d(0, 16px, 0); }
+          to { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+        @keyframes simatu-discovery-overlay-in {
           from { opacity: 0; }
           to { opacity: 1; }
         }
@@ -151,7 +166,9 @@ export default function DiscoveryPage() {
         @media (prefers-reduced-motion: reduce) {
           .simatu-discovery-page__board,
           .simatu-discovery-page__cta,
-          .simatu-discovery-page__overlay { transition: none; animation: none; }
+          .simatu-discovery-page__overlay,
+          .simatu-discovery-page__brand-svg,
+          .simatu-discovery-page__content p { transition: none; animation: none; }
         }
       `}</style>
     </main>
