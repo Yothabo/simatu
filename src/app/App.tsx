@@ -17,6 +17,7 @@ const About = React.lazy(() => import('../systems/storefront/experience').then((
 const CartPage = React.lazy(() => import('../systems/storefront/experience').then(({ CartPage }) => ({ default: CartPage })));
 const NotFound = React.lazy(() => import('../pages/NotFound'));
 const UpdatePassword = React.lazy(() => import('../pages/UpdatePassword'));
+const DiscoveryCategoryPage = React.lazy(() => import('../systems/homepage/pages/DiscoveryCategoryPage'));
 const NetworkApplicationPage = React.lazy(() => import('../systems/homepage/pages/NetworkApplicationPage'));
 const AdminPage = React.lazy(() => import('../pages/admin/AdminPage'));
 
@@ -93,6 +94,7 @@ function App() {
       <Suspense fallback={<RouteLoadingFallback />}>
         <Routes>
           <Route path="/" element={<DiscoveryPage />} />
+          <Route path="/discover/:categoryId" element={<DiscoveryCategoryPage />} />
           <Route path="/join-network" element={<NetworkApplicationPage />} />
           <Route element={<CartProvider><StorefrontThemeProvider><Outlet /></StorefrontThemeProvider></CartProvider>}>
             <Route path="/yotaabo" element={<Home />} />
