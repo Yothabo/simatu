@@ -50,7 +50,7 @@ export default function Header({
           <button type="button" className="header-float-button" aria-label="Back" onClick={() => (onBack ? onBack() : navigate("/"))}><TiArrowBack size={21} /></button>
           <button type="button" className="header-float-button" aria-label="Search" aria-expanded={searchOpen} onClick={() => { setSearchOpen((v) => !v); setMenuOpen(false); }}><FiSearch size={20} /></button>
           <button type="button" className="header-float-button" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} onClick={() => { setMenuOpen((v) => !v); setSearchOpen(false); }}>{menuOpen ? <FiX size={21} /> : <FiMenu size={21} />}</button>
-          {searchOpen && <div className="header-floating-search"><FiSearch size={18} /><input autoFocus type="search" placeholder="Search stores, products or ideas…" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} aria-label="Search stores, products or ideas" /><button type="button" onClick={() => setSearchOpen(false)} aria-label="Close search"><FiX size={18}/></button></div>}
+          {searchOpen && <div className="header-floating-search"><div className="header-floating-search-shell"><FiSearch size={18} /><input autoFocus type="search" placeholder="Search brands, products or collections…" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} aria-label="Search brands, products or collections" /><button type="button" onClick={() => setSearchOpen(false)} aria-label="Close search"><FiX size={18}/></button></div></div>}
           {menuOpen && <div className="header-floating-menu">{menuContent}</div>}
         </div>
       ) : <>
