@@ -4,11 +4,14 @@
   height: 292px;
 }
 .kinetic-moodboard__search-header.menu-expanded .kinetic-moodboard__search-shell {
+  border-radius: 28px 0 0 28px;
   padding: 16px;
   align-items: stretch;
   overflow: hidden;
 }
 .kinetic-moodboard__search-header.menu-expanded .kinetic-moodboard__menu-button {
+  border-top-right-radius: 28px;
+  border-bottom-right-radius: 28px;
   align-self: stretch;
 }
 .kinetic-moodboard__discover-tools {
@@ -73,6 +76,7 @@
   transition:
     height .36s cubic-bezier(.2,.65,.25,1),
     padding .36s cubic-bezier(.2,.65,.25,1),
+    border-radius .36s cubic-bezier(.2,.65,.25,1),
     background .24s ease,
     transform .24s ease,
     box-shadow .24s ease;
@@ -83,7 +87,12 @@
     height: 258px;
   }
   .kinetic-moodboard__search-header.menu-expanded .kinetic-moodboard__search-shell {
+    border-radius: 22px 0 0 22px;
     padding: 12px;
+  }
+  .kinetic-moodboard__search-header.menu-expanded .kinetic-moodboard__menu-button {
+    border-top-right-radius: 22px;
+    border-bottom-right-radius: 22px;
   }
   .kinetic-moodboard__discover-tools {
     gap: 3px;
