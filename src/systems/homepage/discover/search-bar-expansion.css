@@ -1,19 +1,58 @@
-/* Search expansion owns its dimensions and motion independently of the moodboard. */
+/* Discover menu expansion owns its dimensions, content, and motion. */
 .kinetic-moodboard__search-header.menu-expanded .kinetic-moodboard__search-shell,
 .kinetic-moodboard__search-header.menu-expanded .kinetic-moodboard__menu-button {
-  height: 92px;
+  height: 292px;
 }
 .kinetic-moodboard__search-header.menu-expanded .kinetic-moodboard__search-shell {
-  padding-inline: var(--hp-size-24);
+  padding: 16px;
+  align-items: stretch;
 }
-.kinetic-moodboard__search-header.menu-expanded .kinetic-moodboard__search-input {
-  font-size: var(--hp-font-size-base);
+.kinetic-moodboard__search-header.menu-expanded .kinetic-moodboard__menu-button {
+  align-self: stretch;
+}
+.kinetic-moodboard__discover-tools {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+}
+.kinetic-moodboard__discover-tool {
+  display: flex;
+  width: 100%;
+  min-height: 58px;
+  align-items: center;
+  gap: 14px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  color: #fff;
+  font: var(--hp-font-weight-medium) var(--hp-font-size-sm)/var(--hp-line-height-normal) var(--hp-font-family);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .2s ease, opacity .2s ease;
+}
+.kinetic-moodboard__discover-tool svg {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  opacity: .88;
+}
+.kinetic-moodboard__discover-tool:hover:not(:disabled) {
+  background: rgba(255,255,255,.12);
+}
+.kinetic-moodboard__discover-tool:disabled {
+  opacity: .55;
+  cursor: default;
 }
 .kinetic-moodboard__search-shell,
 .kinetic-moodboard__menu-button {
   transition:
-    height .32s cubic-bezier(.2,.65,.25,1),
-    padding .32s cubic-bezier(.2,.65,.25,1),
+    height .36s cubic-bezier(.2,.65,.25,1),
+    padding .36s cubic-bezier(.2,.65,.25,1),
     background .24s ease,
     transform .24s ease,
     box-shadow .24s ease;
@@ -21,10 +60,15 @@
 @media (max-width: 640px) {
   .kinetic-moodboard__search-header.menu-expanded .kinetic-moodboard__search-shell,
   .kinetic-moodboard__search-header.menu-expanded .kinetic-moodboard__menu-button {
-    height: 82px;
+    height: 258px;
   }
   .kinetic-moodboard__search-header.menu-expanded .kinetic-moodboard__search-shell {
-    padding-inline: var(--hp-size-18);
+    padding: 12px;
+  }
+  .kinetic-moodboard__discover-tool {
+    min-height: 54px;
+    gap: 12px;
+    padding-inline: 10px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
