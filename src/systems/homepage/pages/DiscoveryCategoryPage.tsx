@@ -40,7 +40,7 @@ export default function DiscoveryCategoryPage() {
       {!searchOpen ? <div className="header-floating-controls" style={{ pointerEvents: 'auto' }}>
         <button type="button" className="header-float-button" aria-label="Back to Discover" onClick={goBack}><TiArrowBack size={21} /></button>
         <button type="button" className="header-float-button" aria-label="Search" onClick={() => setSearchOpen(true)}><FiSearch size={20} /></button>
-      </div> : <MoodboardSearchBar value={searchQuery} onChange={setSearchQuery} ariaLabel="Search brands, products or collections" fixed />}
+      </div> : <MoodboardSearchBar value={searchQuery} onChange={setSearchQuery} ariaLabel="Search brands, products or collections" fixed className="category-search-fullwidth" />}
     </div>
     <section style={{ minHeight: 'min(76vh,760px)', paddingTop: 'calc(clamp(28px,7vw,100px) + 76px)', display: 'flex', alignItems: 'flex-end', padding: 'clamp(28px,7vw,100px)', boxSizing: 'border-box', backgroundImage: 'linear-gradient(180deg,rgba(0,0,0,.24),rgba(0,0,0,.08) 34%,rgba(0,0,0,.78)),url(' + item.image + ')', backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div style={{ width: 'min(100%,920px)', paddingTop: 90 }}>
