@@ -264,3 +264,12 @@
 @media(max-width:520px){.nav-footer-link-groups{gap:var(--hp-size-24) var(--hp-size-18)}}
 
 .nav-network-link{display:inline-flex;align-items:center;gap:10px;white-space:nowrap;padding:10px 15px;border:1px solid rgba(255,255,255,.22);border-radius:3px;color:#fff!important;background:rgba(255,255,255,.06)}.nav-network-link span{font-size:15px}.nav-network-link::after{display:none!important}
+
+
+/* Configurable brand presentation variants and inline headers. */
+.brand-spaced { letter-spacing: var(--hp-letter-spacing-brand); }
+.brand-standard { letter-spacing: normal; }
+.brand-brandmark { display: inline-flex; align-items: center; justify-content: center; }
+.header-brandmark-image { display: block; width: auto; height: clamp(24px, 3vw, 38px); object-fit: contain; }
+.header-brandmark-fallback { display: inline-flex; width: 1.35em; height: 1.35em; align-items: center; justify-content: center; border: 1px solid currentColor; border-radius: 50%; font-size: .8em; line-height: 1; }
+.hero-navigation.header-inline { position: relative; top: auto; width: auto; min-height: auto; padding: 0; background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: none; }
