@@ -338,7 +338,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       `}</style>
       <div className="kinetic-moodboard__search-header" aria-hidden={!colorReveal || searchDismissed} style={searchDismissed ? { transform: "translate3d(0,-125%,0)", opacity: 0, pointerEvents: "none" } : undefined}>
         <div className="kinetic-moodboard__search-row">
-          <button type="button" className="kinetic-moodboard__search-back" aria-label="Exit Discover and return home" onClick={() => { setSearchQuery(""); setSearchDismissed(true); onExit?.(); }} tabIndex={interactive && !searchDismissed ? 0 : -1}><FaHome size={18} aria-hidden="true" /></button>
+          {onExit && <button type="button" className="kinetic-moodboard__search-back" aria-label="Exit Discover and return home" onClick={() => { setSearchQuery(""); setSearchDismissed(true); onExit(); }} tabIndex={interactive && !searchDismissed ? 0 : -1}><FaHome size={18} aria-hidden="true" /></button>}
         <label className="kinetic-moodboard__search-shell">
 <input className="kinetic-moodboard__search-input" type="search" placeholder="Search brands, products or collections…" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} tabIndex={interactive ? 0 : -1} aria-label="Search the brand network" />
         </label>
