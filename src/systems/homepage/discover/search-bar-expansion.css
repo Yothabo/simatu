@@ -25,13 +25,14 @@
 .kinetic-moodboard__discover-tool {
   display: flex;
   box-sizing: border-box;
-  width: 100%;
+  width: calc(100% - 28px);
   min-width: 0;
   min-height: 52px;
   flex: 0 1 auto;
   align-items: center;
   gap: 12px;
   padding: 0 12px;
+  margin-left: 28px;
   border: 0;
   border-radius: 14px;
   background: transparent;
@@ -40,7 +41,13 @@
   text-align: left;
   text-decoration: none;
   cursor: pointer;
-  transition: background .2s ease, opacity .2s ease;
+  transition: margin .24s ease, width .24s ease, background .2s ease, opacity .2s ease;
+}
+/* Inset the outer rows; move the middle rows closer to the curved edge. */
+.kinetic-moodboard__discover-tool:nth-child(2),
+.kinetic-moodboard__discover-tool:nth-child(3) {
+  width: calc(100% - 12px);
+  margin-left: 12px;
 }
 .kinetic-moodboard__discover-tool span {
   min-width: 0;
@@ -84,8 +91,15 @@
   }
   .kinetic-moodboard__discover-tool {
     min-height: 48px;
+    margin-left: 20px;
+    width: calc(100% - 20px);
     gap: 10px;
     padding-inline: 10px;
+  }
+  .kinetic-moodboard__discover-tool:nth-child(2),
+  .kinetic-moodboard__discover-tool:nth-child(3) {
+    margin-left: 8px;
+    width: calc(100% - 8px);
   }
 }
 @media (prefers-reduced-motion: reduce) {
