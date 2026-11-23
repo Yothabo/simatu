@@ -5,6 +5,7 @@ import { footerLinkGroups } from "../footer/footer-links.data";
 import { brandIdentity, type BrandIdentity, type BrandPresentation } from "../brand/brand.config";
 import { TiArrowBack } from "react-icons/ti";
 import { FiSearch, FiMenu, FiX } from "react-icons/fi";
+import MoodboardSearchBar from "../discover/MoodboardSearchBar";
 import "./header.css";
 
 type HeaderProps = {
@@ -50,10 +51,7 @@ export default function Header({
           {!searchOpen ? <>
             <button type="button" className="header-float-button" aria-label="Back" onClick={() => (onBack ? onBack() : navigate("/"))}><TiArrowBack size={21} /></button>
             <button type="button" className="header-float-button" aria-label="Search" onClick={() => setSearchOpen(true)}><FiSearch size={20} /></button>
-          </> : <div className="header-floating-search"><div className="header-floating-search-row">
-            <button type="button" className="header-float-button header-search-back" aria-label="Back" onClick={() => setSearchOpen(false)}><TiArrowBack size={21} /></button>
-            <div className="header-floating-search-shell"><input autoFocus type="search" placeholder="Search brands, products or collections…" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} aria-label="Search brands, products or collections" /></div>
-          </div></div>}
+          </> : <MoodboardSearchBar value={searchQuery} onChange={setSearchQuery} onBack={() => setSearchOpen(false)} ariaLabel="Search brands, products or collections" />}
         </div>
       ) : <>
         <div className="header-brand-group">
