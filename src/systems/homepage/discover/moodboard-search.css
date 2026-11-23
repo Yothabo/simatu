@@ -15,6 +15,7 @@
 .moodboard-search-fixed{position:fixed;top:0;left:0;right:0;z-index:125;transform:translate3d(0,0,0);opacity:1;pointer-events:auto}
 @media(max-width:640px){.kinetic-moodboard__search-header{padding:var(--hp-size-12)}.kinetic-moodboard__search-row{width:100%;gap:var(--hp-size-8)}.kinetic-moodboard__search-back{width:var(--hp-size-55);height:var(--hp-size-55);flex-basis:var(--hp-size-55)}.kinetic-moodboard__search-shell{height:var(--hp-size-55);padding:0 var(--hp-size-14)}.kinetic-moodboard__search-input{font-size:var(--hp-font-size-sm)}}
 /* Category search joins the back control: square left corners. */
+.category-search-header .kinetic-moodboard__search-row{gap:0!important}
 .category-search-header .kinetic-moodboard__search-shell{border-top-left-radius:0!important;border-bottom-left-radius:0!important}
 /* Category back control joins the search field: square right corners. */
 .category-search-header .kinetic-moodboard__search-back{border-top-right-radius:0!important;border-bottom-right-radius:0!important}
