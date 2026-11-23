@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import type { MoodboardItem } from '../discover/KineticMoodboard';
+import Header from '../header/Header';
 
 const stores = [
   { key: 'yotaabo', name: 'Yotaabo', href: '/yotaabo/catalog', description: 'A considered collection of fragrance, fashion and spaces for everyday living.', note: 'Discover a lifestyle shaped by detail.' },
@@ -20,7 +21,6 @@ const copy: Record<string, { title:string; eyebrow:string; description:string }>
 };
 const fallback: MoodboardItem = { id: 'explore', image: 'https://images.unsplash.com/photo-1500534623283-312aade485b7?w=1800&q=90', alt: 'Open landscape', category: 'Explore', title: 'Find what moves you' };
 const panel: React.CSSProperties = { padding: 'clamp(26px,6vw,88px)', background: '#111', color: '#f4f1ec', fontFamily: 'inherit' };
-const button: React.CSSProperties = { border: 0, background: 'transparent', color: 'inherit', cursor: 'pointer', font: '600 11px/1 system-ui', letterSpacing: '.16em', textTransform: 'uppercase' };
 export default function DiscoveryCategoryPage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,9 +32,7 @@ export default function DiscoveryCategoryPage() {
     navigate('/', { state: { revealMoodboard: true } });
   };
   return <main style={{ minHeight: '100dvh', background: '#111', color: '#f4f1ec', overflowX: 'hidden' }}>
-    <header style={{ position: 'fixed', zIndex: 100, top: 0, left: 0, right: 0, background: 'rgba(17,17,17,.88)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(255,255,255,.08)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 'clamp(16px,3vw,30px)' }}>
-      <button style={button} onClick={goBack}>Back to discovery</button><a href="/" style={{ ...button, textDecoration: 'none', fontSize: 13, letterSpacing: '.2em' }}>SIMATU</a>
-    </header>
+    <Header brandName="SIMATU" showBackButton onBack={goBack} />
     <section style={{ minHeight: 'min(76vh,760px)', paddingTop: 'calc(clamp(28px,7vw,100px) + 76px)', display: 'flex', alignItems: 'flex-end', padding: 'clamp(28px,7vw,100px)', boxSizing: 'border-box', backgroundImage: 'linear-gradient(180deg,rgba(0,0,0,.24),rgba(0,0,0,.08) 34%,rgba(0,0,0,.78)),url(' + item.image + ')', backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div style={{ width: 'min(100%,920px)', paddingTop: 90 }}>
         <div style={{ font: '600 10px/1.4 system-ui', letterSpacing: '.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,.72)' }}>{editorial.eyebrow}</div>
