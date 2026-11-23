@@ -12,17 +12,17 @@ export default function DiscoveryPage() {
 
   const startReveal = () => {
     if (phase !== 'intro') return;
+    setPhase('exiting');
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       setPhase('revealed');
       return;
     }
-    setPhase('exiting');
-    revealTimer.current = window.setTimeout(() => setPhase('revealed'), 650);
+    revealTimer.current = window.setTimeout(() => setPhase('revealed'), 320);
   };
 
   return (
     <main className={`simatu-discovery-page is-${phase}`}>
-      <KineticMoodboard className="simatu-discovery-page__board" colorReveal={phase === 'revealed'} interactive />
+      <KineticMoodboard className="simatu-discovery-page__board" colorReveal={phase !== 'intro'} interactive />
       {phase !== 'revealed' && (
         <section className={`simatu-discovery-page__overlay${phase === 'exiting' ? ' is-exiting' : ''}`} aria-label="Simatu introduction">
           <div className="simatu-discovery-page__content">
@@ -68,11 +68,11 @@ export default function DiscoveryPage() {
           color: #fff;
         }
         .simatu-discovery-page__board {
-          transition: filter .35s ease;
+          transition: filter .3s ease;
         }
         .simatu-discovery-page.is-intro .simatu-discovery-page__board,
         .simatu-discovery-page.is-exiting .simatu-discovery-page__board {
-          filter: grayscale(1) brightness(.58);
+          filter: grayscale(1) brightness(.78);
         }
         .simatu-discovery-page__overlay {
           position: absolute;
@@ -82,12 +82,12 @@ export default function DiscoveryPage() {
           place-items: center;
           box-sizing: border-box;
           padding: max(28px, env(safe-area-inset-top)) 24px max(28px, env(safe-area-inset-bottom));
-          background: rgba(13, 13, 13, .46);
-          backdrop-filter: blur(3px);
+          background: rgba(13, 13, 13, .18);
+          backdrop-filter: blur(1px);
           -webkit-backdrop-filter: blur(3px);
           text-align: center;
           animation: simatu-discovery-overlay-in .35s ease both;
-          transition: opacity .65s ease, background .65s ease, backdrop-filter .65s ease;
+          transition: opacity .32s ease, background .32s ease, backdrop-filter .32s ease;
         }
         .simatu-discovery-page__overlay.is-exiting {
           opacity: 0;
@@ -103,7 +103,7 @@ export default function DiscoveryPage() {
           align-items: center;
         }
         .simatu-discovery-page__brand-svg {
-          animation: simatu-intro-item-in .65s cubic-bezier(.2,.65,.25,1) both;
+          animation: simatu-intro-item-in .4s cubic-bezier(.2,.65,.25,1) both;
           display: block;
           width: 100%;
           height: 25vh;
@@ -117,7 +117,7 @@ export default function DiscoveryPage() {
           letter-spacing: -.045em;
         }
         .simatu-discovery-page__content p {
-          animation: simatu-intro-item-in .65s cubic-bezier(.2,.65,.25,1) .25s both;
+          animation: simatu-intro-item-in .4s cubic-bezier(.2,.65,.25,1) .12s both;
           max-width: 540px;
           margin: 18px 0 30px;
           color: rgba(255,255,255,.82);
@@ -125,7 +125,7 @@ export default function DiscoveryPage() {
           letter-spacing: .005em;
         }
         .simatu-discovery-page__cta {
-          animation: simatu-intro-item-in .65s cubic-bezier(.2,.65,.25,1) .45s both;
+          animation: simatu-intro-item-in .4s cubic-bezier(.2,.65,.25,1) .2s both;
           display: inline-flex;
           align-items: center;
           justify-content: center;
