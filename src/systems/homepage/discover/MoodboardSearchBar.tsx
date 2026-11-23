@@ -2,6 +2,7 @@ import React from 'react';
 import { FaHome, FaBars } from 'react-icons/fa';
 import { TiArrowBack } from 'react-icons/ti';
 import './moodboard-search.css';
+import './search-bar-expansion.css';
 
 type MoodboardSearchBarProps = {
   value: string;
