@@ -8,7 +8,7 @@ import Footer from "../footer";
 const REVEAL_DURATION_MS = 1450;
 const RETURN_DURATION_MS = 780;
 export default function HomePage() {
-  const [transitionPhase, setTransitionPhase] = useState<"idle" | "exit" | "reveal" | "active" | "return">("idle");
+  const [transitionPhase, setTransitionPhase] = useState<"idle" | "reveal" | "active" | "return">("idle");
 
   useEffect(() => {
     if (transitionPhase !== "reveal") return;
@@ -43,13 +43,15 @@ export default function HomePage() {
         <div className="homepage-moodboard-gradient" aria-hidden="true" />
         <KineticMoodboard colorReveal={transitionPhase === "reveal" || transitionPhase === "active"} interactive={transitionPhase === "active"} onExit={startHomeReturn} />
       </div>
-      <div className="homepage-foreground" >
-        <main className="homepage-main">
-          <Hero />
-          <DiscoverSection onDiscover={startDiscovery} />
-        </main>
-        <Footer />
-      </div>
+      {transitionPhase === "idle" && (
+        <div className="homepage-foreground">
+          <main className="homepage-main">
+            <Hero />
+            <DiscoverSection onDiscover={startDiscovery} />
+          </main>
+          <Footer />
+        </div>
+      )}
       <style>{`
         .homepage-layered-experience{position:relative;min-height:100vh;background:#111}
         .homepage-moodboard-background{position:fixed;inset:0;z-index:0;overflow:hidden;background:linear-gradient(180deg,rgba(12,12,12,.08) 0%,rgba(12,12,12,.28) 48%,rgba(12,12,12,.62) 100%);opacity:1;transition:none;will-change:auto}
