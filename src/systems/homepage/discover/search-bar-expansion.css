@@ -11,7 +11,7 @@
 .kinetic-moodboard__search-header.menu-expanded .kinetic-moodboard__menu-button {
   border-top-right-radius: 28px;
   border-bottom-right-radius: 28px;
-  align-self: center;
+  align-self: flex-start;
 }
 .kinetic-moodboard__discover-tools {
   display: flex;
