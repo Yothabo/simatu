@@ -33,14 +33,17 @@ export default function DiscoveryCategoryPage() {
     navigate('/', { state: { revealMoodboard: true } });
   };
   return <main style={{ minHeight: '100dvh', background: '#111', color: '#f4f1ec', overflowX: 'hidden' }}>
-    <MoodboardSearchBar value={searchQuery} onChange={setSearchQuery} onBack={goBack} backIcon="arrow" ariaLabel="Search brands, products or collections" fixed />
-    <section style={{ minHeight: 'min(76vh,760px)', paddingTop: 'calc(clamp(28px,7vw,100px) + 76px)', display: 'flex', alignItems: 'flex-end', padding: 'clamp(28px,7vw,100px)', boxSizing: 'border-box', backgroundImage: 'linear-gradient(180,rgba(0,0,0,.82) 0%,rgba(0,0,0,.4) 22%,rgba(0,0,0,0) 48%),linear-gradient(0,rgba(0,0,0,.82) 0%,rgba(0,0,0,.4) 28%,rgba(0,0,0,0) 58%),url(' + item.image + ')', backgroundSize: 'cover', backgroundPosition: 'center' }}>
-      <div style={{ width: 'min(100%,920px)', paddingTop: 90 }}>
+    <MoodboardSearchBar value={searchQuery} onChange={setSearchQuery} ariaLabel="Search brands, products or collections" fixed />
+    <section style={{ position: 'relative', overflow: 'hidden', minHeight: 'min(76vh,760px)', display: 'flex', alignItems: 'flex-end', padding: 'clamp(28px,7vw,100px)', boxSizing: 'border-box', background: '#111' }}>
+      <img src={item.image} alt={item.alt} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: item.objectPosition || 'center', zIndex: 0 }} />
+      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none', background: 'linear-gradient(180,rgba(0,0,0,.82) 0%,rgba(0,0,0,.4) 22%,rgba(0,0,0,0) 48%),linear-gradient(0,rgba(0,0,0,.82) 0%,rgba(0,0,0,.4) 28%,rgba(0,0,0,0) 58%)' }} />
+      <div style={{ position: 'relative', zIndex: 2, width: 'min(100%,920px)', paddingTop: 90 }}>
         <div style={{ font: '600 10px/1.4 system-ui', letterSpacing: '.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,.72)' }}>{editorial.eyebrow}</div>
         <h1 style={{ margin: '18px 0 16px', font: '400 clamp(48px,10vw,132px)/.92 system-ui', letterSpacing: '-.07em' }}>{editorial.title}</h1>
         <p style={{ maxWidth: 560, color: 'rgba(255,255,255,.82)', font: '400 clamp(15px,1.7vw,18px)/1.65 system-ui' }}>{editorial.description}</p>
       </div>
     </section>
+    <button type="button" aria-label="Back to discovery" title="Back to discovery" onClick={goBack} style={{ position: 'fixed', zIndex: 20, right: 'clamp(18px,4vw,48px)', bottom: 'max(clamp(20px,4vh,42px),env(safe-area-inset-bottom))', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 12, minHeight: 52, padding: '0 clamp(20px,3vw,32px)', border: 0, borderRadius: 999, background: 'rgba(255,255,255,.15)', color: '#fff', font: '600 11px/1.4 system-ui', letterSpacing: '.16em', textTransform: 'uppercase', whiteSpace: 'nowrap', backdropFilter: 'blur(26px) saturate(185%)', WebkitBackdropFilter: 'blur(26px) saturate(185%)', boxShadow: '0 12px 36px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(255,255,255,.06)', cursor: 'pointer' }}>BACK <span aria-hidden="true" style={{ fontSize: 16, letterSpacing: 'normal' }}>↩</span></button>
     <section style={panel}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,320px),1fr))', gap: 18 }}>
         {stores.map(store => <a key={store.key} href={store.href} style={{ minHeight: 310, display: 'flex', flexDirection: 'column', padding: 'clamp(24px,4vw,48px)', boxSizing: 'border-box', border: '1px solid rgba(255,255,255,.13)', background: 'linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.025))', color: 'inherit', textDecoration: 'none' }}>
