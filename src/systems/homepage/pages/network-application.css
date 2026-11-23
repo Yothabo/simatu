@@ -29,6 +29,10 @@
 .na-wordmark{color:var(--na-text);font-size:13px;font-weight:700;letter-spacing:.16em;text-decoration:none}
 .na-step-count{text-align:center;font-size:10px;letter-spacing:.13em;color:var(--na-muted)}
 .na-menu{justify-self:end;border:0;background:transparent;color:var(--na-text);font-size:23px;cursor:pointer;width:40px;height:40px}
+.na-moodboard-tile{display:grid;place-items:center;border:1px solid var(--na-line);border-radius:9px;background:var(--na-surface);color:var(--na-text);transition:background .2s,border-color .2s,transform .2s}
+.na-moodboard-tile:hover{background:color-mix(in srgb,var(--na-surface) 80%,var(--na-text) 20%);border-color:var(--na-muted);transform:translateY(-1px)}
+.na-moodboard-tile:focus-visible{outline:2px solid var(--na-text);outline-offset:3px}
+.na-moodboard-tile svg{width:17px;height:17px;stroke:currentColor;stroke-width:1.6}
 .na-progress{position:fixed;top:68px;left:0;right:0;z-index:21;height:2px;background:var(--na-line);overflow:hidden}
 .na-progress span{display:block;height:100%;background:var(--na-text);transition:width .4s ease}
 .na-stage{
