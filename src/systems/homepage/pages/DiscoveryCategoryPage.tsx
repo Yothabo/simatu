@@ -41,12 +41,7 @@ export default function DiscoveryCategoryPage() {
       </div>
     </section>
     <section style={panel}>
-      <header style={{ maxWidth: 900, marginBottom: 44 }}>
-        <div style={{ font: '600 10px/1.4 system-ui', letterSpacing: '.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,.52)' }}>SIMATU · INDEPENDENT BUSINESSES</div>
-        <h2 style={{ margin: '16px 0 18px', font: '400 clamp(34px,5.5vw,76px)/.98 system-ui', letterSpacing: '-.06em' }}>Explore the network.</h2>
-        <p style={{ maxWidth: 600, margin: 0, color: 'rgba(255,255,255,.65)', font: '14px/1.75 system-ui' }}>Meet the independent storefronts behind Simatu. Each brings its own perspective, collection and character.</p>
-      </header>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,320px),1fr))', gap: 18 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,320px),1fr))', gap: 18 }}>
         {stores.map(store => <a key={store.key} href={store.href} style={{ minHeight: 310, display: 'flex', flexDirection: 'column', padding: 'clamp(24px,4vw,48px)', boxSizing: 'border-box', border: '1px solid rgba(255,255,255,.13)', background: 'linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.025))', color: 'inherit', textDecoration: 'none' }}>
           <span style={{ font: '500 clamp(26px,4vw,42px)/1 system-ui', letterSpacing: '-.05em' }}>{store.name}</span><h3 style={{ font: '400 clamp(26px,3vw,40px)/1.05 system-ui', letterSpacing: '-.04em', margin: 'auto 0 14px', paddingTop: 48 }}>{store.note}</h3><p style={{ margin: 0, maxWidth: 460, color: 'rgba(255,255,255,.68)', font: '14px/1.65 system-ui' }}>{store.description}</p><span style={{ marginTop: 24, font: '600 11px/1 system-ui', letterSpacing: '.14em', textTransform: 'uppercase' }}>Explore storefront ↗</span>
         </a>)}
