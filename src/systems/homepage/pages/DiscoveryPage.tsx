@@ -80,17 +80,26 @@ export default function DiscoveryPage() {
           transition: none;
         }
         .simatu-discovery-page__content {
+          position: relative;
           width: min(100%, 1000px);
+          height: 100%;
+          box-sizing: border-box;
           display: flex;
           flex-direction: column;
           align-items: center;
+          justify-content: flex-end;
         }
         .simatu-discovery-page__brand-svg {
+          position: absolute;
+          top: 50%;
+          left: 50%;
           display: block;
           width: 100%;
           height: 25vh;
-          margin: 0 0 26px;
+          margin: 0;
           overflow: visible;
+          transform: translate(-50%, -50%);
+          pointer-events: none;
         }
         .simatu-discovery-page__content h1 {
           margin: 0;
@@ -100,7 +109,7 @@ export default function DiscoveryPage() {
         }
         .simatu-discovery-page__content p {
           max-width: 540px;
-          margin: 18px 0 30px;
+          margin: 0 0 26px;
           color: rgba(255,255,255,.82);
           font: 400 clamp(14px, 2vw, 17px)/1.65 system-ui, sans-serif;
           letter-spacing: .005em;
