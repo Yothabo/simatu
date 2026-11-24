@@ -32,3 +32,24 @@
 /* Category search uses Moodboard's exact predictive dropdown/result styling. */
 .category-search-results{position:fixed!important;top:calc(var(--hp-size-18) + var(--hp-size-62) + var(--hp-size-18))!important;left:50%!important;transform:translateX(-50%)!important;width:min(var(--hp-size-700),calc(100vw - var(--hp-size-32)))!important;max-height:min(62vh,var(--hp-size-560))!important;z-index:130!important;background:#737373!important;border:var(--hp-border-width) solid rgba(255,255,255,.16)!important;border-radius:var(--hp-size-18)!important;padding:var(--hp-size-8)!important;color:#fff!important;box-shadow:0 var(--hp-size-24) var(--hp-size-75) rgba(0,0,0,.22)!important}
 @media(max-width:640px){.category-search-results{top:calc(var(--hp-size-12) + var(--hp-size-55) + var(--hp-size-12))!important;width:calc(100vw - var(--hp-size-24))!important}}
+
+/* Extracted shared predictive-search dropdown styles. */
+.kinetic-moodboard__search-results{position:absolute;top:var(--hp-size-100);left:50%;transform:translateX(-50%);width:min(var(--hp-size-700),calc(100vw - var(--hp-size-32)));max-height:min(62vh,var(--hp-size-560));overflow:auto;z-index:11;background:#737373;border:var(--hp-border-width) solid rgba(255,255,255,.16);border-radius:var(--hp-size-18);padding:var(--hp-size-8);color:#fff;box-shadow:0 var(--hp-size-24) var(--hp-size-75) rgba(0,0,0,.22)}
+.kinetic-moodboard__result{display:flex;align-items:center;gap:var(--hp-size-12);padding:var(--hp-size-10);border-radius:var(--hp-size-12);text-decoration:none;color:#fff;transition:background .18s}
+.kinetic-moodboard__result:hover{background:rgba(255,255,255,.1)}
+.kinetic-moodboard__result-image{width:var(--hp-size-54);height:var(--hp-size-62);object-fit:contain;border-radius:var(--hp-size-8);background:var(--hp-color-surface-raised);flex:0 0 auto}
+.kinetic-moodboard__result-meta{min-width:0;flex:1}
+.kinetic-moodboard__result-name{font:var(--hp-font-weight-medium) var(--hp-font-size-sm)/var(--hp-line-height-normal) var(--hp-font-family);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kinetic-moodboard__result-store{font:var(--hp-font-weight-regular) var(--hp-font-size-xs)/var(--hp-line-height-normal) var(--hp-font-family);color:var(--hp-color-text-muted);margin-top:var(--hp-size-md)}
+.kinetic-moodboard__result-price{font:var(--hp-font-weight-semibold) var(--hp-font-size-sm)/var(--hp-line-height-normal) var(--hp-font-family);color:#fff;white-space:nowrap}
+.kinetic-moodboard__search-status{padding:var(--hp-size-14);color:rgba(255,255,255,.78);font:var(--hp-font-weight-regular) var(--hp-font-size-sm)/var(--hp-line-height-relaxed) var(--hp-font-family)}
+.kinetic-moodboard__suggestion-group{padding:var(--hp-size-md) 0 var(--hp-size-8)}
+.kinetic-moodboard__suggestion-heading{padding:var(--hp-size-9) var(--hp-size-10) var(--hp-size-6);color:rgba(255,255,255,.62);font:var(--hp-font-weight-semibold) var(--hp-font-size-xs)/var(--hp-line-height-normal) var(--hp-font-family);letter-spacing:.14em}
+.kinetic-moodboard__suggestion{display:flex;align-items:center;gap:var(--hp-size-12);padding:var(--hp-size-9) var(--hp-size-10);border-radius:var(--hp-size-10);text-decoration:none;color:var(--hp-color-text-subtle)}
+.kinetic-moodboard__suggestion:hover,.kinetic-moodboard__suggestion:focus{background:rgba(255,255,255,.1)}
+.kinetic-moodboard__suggestion-icon{width:var(--hp-size-36);height:var(--hp-size-36);display:flex;align-items:center;justify-content:center;border-radius:var(--hp-size-8);background:rgba(255,255,255,.14);color:#fff;flex:0 0 auto;font:var(--hp-font-weight-regular) var(--hp-font-size-base)/var(--hp-line-height-tight) var(--hp-font-family)}
+.kinetic-moodboard__suggestion-text{display:flex;flex-direction:column;gap:var(--hp-size-sm);min-width:0}
+.kinetic-moodboard__suggestion-name{font:var(--hp-font-weight-medium) var(--hp-font-size-xs)/var(--hp-line-height-normal) var(--hp-font-family);color:var(--hp-color-text-subtle)}
+.kinetic-moodboard__suggestion-detail{font:var(--hp-font-weight-regular) var(--hp-font-size-xs)/var(--hp-line-height-normal) var(--hp-font-family);color:var(--hp-color-text-muted)}
+.kinetic-moodboard__suggestion-button{width:100%;border:0;background:transparent;text-align:left;font:inherit;cursor:pointer}
+@media(max-width:640px){.kinetic-moodboard__search-results{top:var(--hp-size-80)}}
