@@ -214,7 +214,7 @@ export default function MarketplaceCartPage() {
         product={selectedProduct}
         bgColor="bg-white"
         placeholderColor={selectedProduct?.placeholderColor ?? ''}
-        accentColor={primaryAccent === "#ff1493" ? "text-[#ff1493]" : "text-[#8aa89b]"}
+        accentColor="text-[var(--hp-color-primary)]"
         isDark={false}
         mode="cart"
         cartQuantity={selectedProduct?.quantity ?? 1}
