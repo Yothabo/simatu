@@ -75,6 +75,7 @@ export default function MarketplaceCartPage() {
 
           {cartItems.length === 0 ? (
             <div className="marketplace-cart__empty">
+              <FaOpencart className="marketplace-cart__empty-icon" aria-hidden="true" />
               <h2 className="marketplace-cart__empty-title">
                 Your cart is empty.
               </h2>
