@@ -14,6 +14,8 @@ export type AdminProduct = {
   description: string | null;
   image_url: string | null;
   is_active: boolean;
+  marketplace_visible: boolean;
+  storefront_visible: boolean;
   sort_order: number;
   sizes: string[];
   order_count: number;
