@@ -151,15 +151,18 @@ export default function DiscoveryCategoryPage() {
             onAnimationEnd={() => setOutgoingStoreTitle(null)}
             style={{ position: 'absolute', inset: 0, display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,260px),1fr))', gap: 16, pointerEvents: 'none' }}
           >
-            {stores.map((store) => <div className="discovery-store-card" key={store.key} style={{ color: '#f4f1ec', border: '1px solid rgba(255,255,255,.18)', borderRadius: 12, padding: 20, background: 'rgba(255,255,255,.035)' }}>
-              <strong style={{ fontSize: 18 }}>{store.name}</strong>
-              <span style={{ display: 'block', opacity: .65, fontSize: 13, marginTop: 6 }}>Explore {outgoingStoreTitle} listings</span>
+            {stores.map((store) => <div className={`discovery-store-card discovery-store-card--${store.key}`} key={store.key} style={{ color: '#f4f1ec', border: '1px solid rgba(255,255,255,.14)', borderRadius: 8, padding: '14px 15px', background: 'rgba(255,255,255,.035)' }}>
+              <strong style={{ fontSize: 15, fontWeight: 550, letterSpacing: '.015em' }}>{store.name}</strong>
+              <span style={{ display: 'block', opacity: .62, fontSize: 12, marginTop: 5 }}>Explore {outgoingStoreTitle} listings</span>
             </div>)}
           </div>}
           <div key={selectedSubcategory} className="discovery-store-enter" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,260px),1fr))', gap: 16 }}>
-            {stores.map((store, index) => <a className="discovery-store-card" key={store.key} href={store.href} style={{ animationDelay: `${index * 70}ms`, color: '#f4f1ec', border: '1px solid rgba(255,255,255,.18)', borderRadius: 12, padding: 20, textDecoration: 'none', background: 'rgba(255,255,255,.035)' }}>
-              <strong style={{ fontSize: 18 }}>{store.name}</strong>
-              <span style={{ display: 'block', opacity: .65, fontSize: 13, marginTop: 6 }}>Explore {selected.title} listings</span>
+            {stores.map((store, index) => <a className={`discovery-store-card discovery-store-card--${store.key}`} key={store.key} href={store.href} style={{ animationDelay: `${index * 70}ms`, color: '#f4f1ec', border: '1px solid rgba(255,255,255,.14)', borderRadius: 8, padding: '14px 15px', textDecoration: 'none', background: 'rgba(255,255,255,.035)' }}>
+              <span className="discovery-store-card-top">
+                <strong style={{ fontSize: 15, fontWeight: 550, letterSpacing: '.015em' }}>{store.name}</strong>
+                <span className="discovery-store-arrow" aria-hidden="true">↗</span>
+              </span>
+              <span style={{ display: 'block', opacity: .62, fontSize: 12, marginTop: 5 }}>Explore {selected.title} listings</span>
             </a>)}
           </div>
         </div>
