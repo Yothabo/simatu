@@ -214,3 +214,42 @@
   .kinetic-moodboard__discover-tool:nth-child(2),
   .kinetic-moodboard__discover-tool:nth-child(3) { margin-left: 20px; width: calc(100% - 20px); }
 }
+
+
+/* Saved discoveries use the same expanding list pattern as Browse Categories. */
+.kinetic-moodboard__discover-tool small {
+  margin-left: auto;
+  color: rgba(255,255,255,.58);
+  font: var(--hp-font-weight-medium) var(--hp-font-size-xs)/1 var(--hp-font-family);
+}
+.kinetic-moodboard__discover-category.kinetic-moodboard__saved-discovery {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  text-align: left;
+}
+.kinetic-moodboard__saved-discovery img {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.kinetic-moodboard__saved-discovery span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.kinetic-moodboard__saved-empty {
+  margin: 0 8px 6px 28px;
+  color: rgba(255,255,255,.62);
+  font: var(--hp-font-weight-regular) var(--hp-font-size-xs)/1.5 var(--hp-font-family);
+}
+@media (max-width: 640px) {
+  .kinetic-moodboard__saved-empty { margin-left: 20px; }
+}
