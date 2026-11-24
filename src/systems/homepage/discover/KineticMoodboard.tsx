@@ -85,8 +85,24 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       return Array.isArray(parsed) ? parsed as MoodboardItem[] : [];
     } catch { return []; }
   });
+  const [recentCategoryNames, setRecentCategoryNames] = useState<string[]>(() => {
+    try {
+      const stored = localStorage.getItem('simatu-recent-discovery-categories');
+      const parsed = stored ? JSON.parse(stored) : [];
+      return Array.isArray(parsed) ? parsed.filter((value): value is string => typeof value === 'string') : [];
+    } catch { return []; }
+  });
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const getDiscoveryPath = (item: MoodboardItem) => '/discover/' + item.category.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const recordVisitedCategory = (category: string) => {
+    setRecentCategoryNames((current) => {
+      const next = [category, ...current.filter((name) => name !== category)].slice(0, 8);
+      try { localStorage.setItem('simatu-recent-discovery-categories', JSON.stringify(next)); } catch {}
+      return next;
+    });
+  };
   const openDiscovery = (item: MoodboardItem) => {
+    recordVisitedCategory(item.category);
     try { sessionStorage.setItem('simatu-discover-return', JSON.stringify({ position: positionRef.current })); } catch {}
     navigate(getDiscoveryPath(item), { state: { discovery: item, position: positionRef.current } });
   };
@@ -147,7 +163,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
     );
     return [...sourceItems, ...subcategoryTiles];
   }, [sourceItems]);
-  const tiles = useMemo(() => {
+  const allTiles = useMemo(() => {
     const random = seededRandom(29);
     const uniquePool = Array.from(new Map(boardTilePool.map((item) => [item.id, item])).values());
     for (let i = uniquePool.length - 1; i > 0; i -= 1) {
@@ -157,6 +173,14 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
     const tileCount = 64;
     return uniquePool.slice(0, tileCount);
   }, [boardTilePool]);
+  const tiles = useMemo(
+    () => selectedCategory ? allTiles.filter((item) => item.category === selectedCategory) : allTiles,
+    [allTiles, selectedCategory]
+  );
+  const recentCategories = useMemo(
+    () => DISCOVERY_MARKETS.filter((market) => recentCategoryNames.includes(market.category)),
+    [recentCategoryNames]
+  );
 
   useEffect(() => {
     if (decorativeOnly || !interactive) return;
@@ -184,7 +208,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       const score = (product: NetworkProduct) => startsWithSearch(product.name) ? 0 : startsWithSearch(product.category) || startsWithSearch(product.subcategory || '') ? 1 : startsWithSearch(product.storeName) ? 2 : 3;
       return score(a) - score(b) || a.name.localeCompare(b.name);
     }).slice(0, 8) : [];
-  const boardColumns = Math.min(columns, tiles.length);
+  const boardColumns = Math.max(1, Math.min(columns, tiles.length));
   const boardRows = Math.ceil(tiles.length / boardColumns);
   const boardWidth = boardColumns * tileWidth + (boardColumns - 1) * gap;
   const boardHeight = boardRows * tileHeight + (boardRows - 1) * gap;
@@ -197,6 +221,12 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
     positionRef.current = next;
     if (boardRef.current) boardRef.current.style.transform = `translate3d(${next.x}px,${next.y}px,0)`;
   }, [boardWidth, boardHeight, viewport.width, viewport.height]);
+
+  useEffect(() => {
+    if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
+    frameRef.current = null;
+    applyPosition(0, 0);
+  }, [selectedCategory, applyPosition]);
 
   useEffect(() => {
     const savedPosition = restorePositionRef.current;
@@ -362,7 +392,26 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__store-sub{color:var(--hp-color-text-muted);font:var(--hp-font-weight-regular) var(--hp-font-size-sm)/var(--hp-line-height-normal) var(--hp-font-family);margin-top:var(--hp-size-md)}
         @media(max-width:640px){.kinetic-moodboard__search-header{padding:var(--hp-size-12)}.kinetic-moodboard__search-shell{height:var(--hp-size-55);width:calc(100vw - var(--hp-size-24))}.kinetic-moodboard__search-results{top:var(--hp-size-80)}.kinetic-moodboard__dialog-backdrop{padding:0;padding-top:max(0px,env(safe-area-inset-top))}.kinetic-moodboard__dialog{width:100%;max-height:min(92vh,900px);max-height:min(92dvh,var(--hp-size-950));padding:0 var(--hp-size-18) calc(var(--hp-size-18) + env(safe-area-inset-bottom));border-radius:var(--hp-size-22) var(--hp-size-22) 0 0;overflow-y:auto;overscroll-behavior:contain}.kinetic-moodboard__dialog-heading{top:0;margin:0 -var(--hp-size-18);padding:var(--hp-size-18)}}
       `}</style>
-      <MoodboardSearchBar value={searchQuery} onChange={setSearchQuery} onBack={onExit ? () => { setSearchQuery(""); setSearchDismissed(true); onExit(); } : undefined} visible={colorReveal && !searchDismissed} showMenu savedDiscoveries={savedDiscoveries} onSavedDiscoverySelect={(item) => navigate('/discover/' + item.category.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''), { state: { discovery: item, position: positionRef.current } })} onMenuClick={() => setMenuOpen((open) => !open)} className={menuOpen ? "menu-expanded" : ""} />
+      <MoodboardSearchBar
+        value={searchQuery}
+        onChange={setSearchQuery}
+        onBack={onExit ? () => { setSearchQuery(""); setSearchDismissed(true); onExit(); } : undefined}
+        visible={colorReveal && !searchDismissed}
+        showMenu
+        savedDiscoveries={savedDiscoveries}
+        onSavedDiscoverySelect={openDiscovery}
+        categories={DISCOVERY_MARKETS}
+        recentCategories={recentCategories}
+        activeCategory={selectedCategory}
+        onCategorySelect={(category) => { setSelectedCategory(category); setSearchQuery(""); }}
+        onRecentCategorySelect={(category) => { recordVisitedCategory(category); setSelectedCategory(category); setSearchQuery(""); }}
+        onClearCategory={() => setSelectedCategory(null)}
+        onRandomDiscovery={() => {
+          if (tiles.length) openDiscovery(tiles[Math.floor(Math.random() * tiles.length)]);
+        }}
+        onMenuClick={() => setMenuOpen((open) => !open)}
+        className={menuOpen ? "menu-expanded" : ""}
+      />
       <span className="kinetic-moodboard__reveal-sentinel" aria-hidden="true" />
       <div
         ref={viewportRef}
