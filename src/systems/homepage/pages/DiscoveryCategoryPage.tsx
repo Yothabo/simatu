@@ -107,9 +107,9 @@ export default function DiscoveryCategoryPage() {
     marketProducts.map((product) => [product.storefront, {
       key: product.storefront,
       name: product.storeName,
-      href: product.href,
+      href: product.href + '?marketplaceTerms=' + encodeURIComponent((selected?.terms || subcategories.flatMap((subcategory) => subcategory.terms)).join(',')),
     }]),
-  ).values()), [marketProducts]);
+  ).values()), [marketProducts, selected, subcategories]);
 
   const addProductToCart = (product: CategoryProduct) => {
     if (!product.storefront || typeof product.price !== 'number') return;
