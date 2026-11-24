@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { FaHome, FaBars, FaTimes, FaUsers, FaBookmark, FaHistory, FaRandom, FaThLarge } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import { FaHome, FaBars, FaTimes, FaUsers, FaBookmark, FaHistory, FaRandom, FaThLarge, FaShoppingCart, FaCreditCard } from 'react-icons/fa';
 import { TiArrowBack } from 'react-icons/ti';
 import './moodboard-search.css';
 import './search-bar-expansion.css';
@@ -73,6 +74,11 @@ export default function MoodboardSearchBar({
                 <button type="button" className="kinetic-moodboard__discover-tool" onClick={() => { onRandomDiscovery?.(); onMenuClick?.(); }}><FaRandom aria-hidden="true" /><span>Explore Randomly</span></button>
                 <button type="button" className="kinetic-moodboard__discover-tool" onClick={() => setCategoriesOpen((open) => !open)} aria-expanded={categoriesOpen}><FaThLarge aria-hidden="true" /><span>Browse Categories</span></button>
                 {categoriesOpen && <div className="kinetic-moodboard__discover-category-list" aria-label="Browse discovery categories">{categories.map((category) => <button type="button" key={category.id} className="kinetic-moodboard__discover-category" onClick={() => { onCategorySelect?.(category.category); setCategoriesOpen(false); onMenuClick?.(); }}>{category.category}</button>)}</div>}
+              </div>
+              <div className="kinetic-moodboard__discover-group">
+                <div className="kinetic-moodboard__discover-group-heading"><strong>Shopping</strong><small>Your shared Simatu basket</small></div>
+                <Link to="/cart" className="kinetic-moodboard__discover-tool"><FaShoppingCart aria-hidden="true" /><span>Cart</span></Link>
+                <Link to="/checkout" className="kinetic-moodboard__discover-tool"><FaCreditCard aria-hidden="true" /><span>Checkout</span></Link>
               </div>
               <div className="kinetic-moodboard__discover-group">
                 <div className="kinetic-moodboard__discover-group-heading"><strong>Personal Library</strong><small>Your discovery history</small></div>
