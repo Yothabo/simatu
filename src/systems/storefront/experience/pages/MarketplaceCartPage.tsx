@@ -103,7 +103,7 @@ export default function MarketplaceCartPage() {
                   <label className="marketplace-cart__store-heading">
                     <input type="checkbox" checked={selectedStorefronts.includes(group.storefront)} onChange={(event) => setSelectedStorefronts((current) => event.target.checked ? [...current, group.storefront] : current.filter((store) => store !== group.storefront))} />
                     <strong>{group.storeName}</strong>
-                    <span className="text-xs text-[#4d4d4d]/55">{group.items.length} {group.items.length === 1 ? 'product' : 'products'}</span>
+                    <span className="marketplace-cart__store-count">{group.items.length} {group.items.length === 1 ? 'product' : 'products'}</span>
                   </label>
                   {group.items.map((item) => (
                 <div
@@ -156,7 +156,7 @@ export default function MarketplaceCartPage() {
                             onClick={() => decreaseQuantity(item.id)}
                             className="marketplace-cart__quantity-button"
                             ariaLabel="Decrease quantity"
-                            rippleColor={primaryAccent}
+                            rippleColor="#c4471d"
                           >
                             <FiMinus size={16} />
                           </RippleButton>
@@ -165,9 +165,9 @@ export default function MarketplaceCartPage() {
                           </span>
                           <RippleButton
                             onClick={() => increaseQuantity(item.id)}
-                            className="flex h-8 w-8 items-center justify-center bg-[#f1f1ee] text-black/60 transition-colors hover:bg-[#e5e5e1] hover:text-black active:bg-[#dcdcd7]"
+                            className="marketplace-cart__quantity-button"
                             ariaLabel="Increase quantity"
-                            rippleColor={primaryAccent}
+                            rippleColor="#c4471d"
                           >
                             <FiPlus size={16} />
                           </RippleButton>
