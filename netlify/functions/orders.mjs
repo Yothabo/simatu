@@ -57,10 +57,6 @@ async function createOrder(body) {
     const id = String(item?.product_id || '');
     const quantity = Number(item?.quantity);
 
-    if (!['yotaabo', 'poshies'].includes(storefront)) {
-      return error('One or more cart items belong to an unsupported store.');
-    }
-
     if (!uuidPattern.test(id) || !Number.isInteger(quantity) || quantity < 1 || quantity > 20) {
       return error('One or more cart items are invalid.');
     }
@@ -68,6 +64,15 @@ async function createOrder(body) {
     const storeQuantities = quantitiesByStore.get(storefront) || new Map();
     storeQuantities.set(id, (storeQuantities.get(id) || 0) + quantity);
     quantitiesByStore.set(storefront, storeQuantities);
+  }
+
+  const requestedStorefronts = [...quantitiesByStore.keys()];
+  const registeredStores = await pool.query(
+    'SELECT slug FROM public.stores WHERE slug = ANY($1::text[])',
+    [requestedStorefronts]
+  );
+  if (registeredStores.rowCount !== requestedStorefronts.length) {
+    return error('One or more selected stores are no longer available.', 409);
   }
 
   const preparedOrders = [];
