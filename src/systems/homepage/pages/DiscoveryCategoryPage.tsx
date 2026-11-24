@@ -74,6 +74,7 @@ export default function DiscoveryCategoryPage() {
           .filter((product: any) => product && product.is_active !== false && typeof product.storefront === 'string')
           .map((product: any) => ({
             ...product,
+            price: Number(product.price),
             storeName: product.storefront === 'poshies' ? 'Poshies' : product.storefront === 'yotaabo' ? 'Yotaabo' : product.storefront,
             href: '/' + product.storefront + '/catalog',
           } as CategoryProduct));
@@ -131,9 +132,7 @@ export default function DiscoveryCategoryPage() {
     scopedProducts.forEach((product) => {
       const normalizedName = product.name.trim().toLowerCase().replace(/\s+/g, ' ');
       const normalizedSizes = (product.sizes || []).map((size) => size.toLowerCase()).sort().join(',');
-      const identity = product.sku?.trim()
-        ? 'sku:' + product.sku.trim().toLowerCase()
-        : 'name:' + normalizedName + '|sizes:' + normalizedSizes;
+      const identity = 'name:' + normalizedName + '|sizes:' + normalizedSizes;
       grouped.set(identity, [...(grouped.get(identity) || []), product]);
     });
     return Array.from(grouped.entries()).map(([id, offers]) => ({
