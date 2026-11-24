@@ -78,7 +78,6 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const [searchDismissed, setSearchDismissed] = useState(false);
   const [headerVisible, setHeaderVisible] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [openTileActions, setOpenTileActions] = useState<string | null>(null);
   const [savedDiscoveries, setSavedDiscoveries] = useState<MoodboardItem[]>(() => {
     try {
       const stored = localStorage.getItem('simatu-saved-discoveries');
@@ -107,31 +106,6 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
     try { sessionStorage.setItem('simatu-discover-return', JSON.stringify({ position: positionRef.current })); } catch {}
     navigate(getDiscoveryPath(item), { state: { discovery: item, position: positionRef.current } });
   };
-  const shareDiscovery = async (item: MoodboardItem) => {
-    const url = window.location.origin + getDiscoveryPath(item);
-    try {
-      if (typeof navigator.share === 'function') {
-        await navigator.share({ title: item.title, text: 'Discover ' + item.title + ' on Simatu', url });
-      } else if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(url);
-      } else {
-        window.prompt('Copy this discovery link:', url);
-      }
-    } catch (error) {
-      if (!(error instanceof Error && error.name === 'AbortError')) {
-        try { window.prompt('Copy this discovery link:', url); } catch {}
-      }
-    }
-  };
-  const toggleSavedDiscovery = useCallback((item: MoodboardItem) => {
-    setSavedDiscoveries((current) => {
-      const exists = current.some((saved) => saved.id === item.id);
-      const next = exists ? current.filter((saved) => saved.id !== item.id) : [item, ...current];
-      try { localStorage.setItem('simatu-saved-discoveries', JSON.stringify(next)); } catch {}
-      return next;
-    });
-  }, []);
-
   useEffect(() => { if (colorReveal) setSearchDismissed(false); }, [colorReveal]);
   const [networkProducts, setNetworkProducts] = useState<NetworkProduct[]>([]);
   const [networkLoading, setNetworkLoading] = useState(false);
@@ -347,8 +321,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__board{position:absolute;top:0;left:0;display:grid;grid-template-columns:repeat(${boardColumns},${tileWidth}px);gap:${gap}px;will-change:transform;background:transparent}
         .kinetic-moodboard__tile{position:relative;display:block;width:${tileWidth}px;height:${tileHeight}px;padding:0;overflow:hidden;border:0;border-radius:${borderRadius}px;background:transparent;color:inherit;text-align:left;cursor:pointer;opacity:1;transform:none}.kinetic-moodboard.is-color-revealing .kinetic-moodboard__tile{animation:discover-tile-in .72s cubic-bezier(.2,.65,.25,1) both;animation-delay:calc(var(--discover-row, 0) * 42ms)}
         .kinetic-moodboard__tile img{display:block;width:100%;height:100%;object-fit:cover;filter:grayscale(1);transition:filter 1s ease,transform .34s ease}.kinetic-moodboard.is-color-revealing .kinetic-moodboard__tile img{filter:grayscale(0)}
-        .kinetic-moodboard__tile-actions{position:absolute;z-index:4;top:var(--hp-size-12);right:var(--hp-size-12);display:flex;flex-direction:column;align-items:flex-end;gap:var(--hp-size-8);color:#fff;pointer-events:auto}.kinetic-moodboard__tile-menu-trigger{box-sizing:border-box;width:var(--hp-size-38);height:var(--hp-size-38);display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid rgba(255,255,255,.24);border-radius:50%;background:rgba(18,18,18,.42);color:#fff;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);cursor:pointer;line-height:1}.kinetic-moodboard__tile-menu{display:flex;flex-direction:column;gap:var(--hp-size-8);padding:var(--hp-size-8);border:1px solid rgba(255,255,255,.2);border-radius:var(--hp-size-24);background:rgba(18,18,18,.68);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);transform-origin:top right;animation:discover-tile-menu-in .22s cubic-bezier(.2,.65,.25,1) both}.kinetic-moodboard__tile-action{box-sizing:border-box;width:var(--hp-size-38);height:var(--hp-size-38);display:inline-flex;align-items:center;justify-content:center;padding:0;margin:0;border:1px solid rgba(255,255,255,.18);border-radius:50%;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;line-height:1}.kinetic-moodboard__tile-action.is-saved{background:rgba(255,255,255,.24)}.kinetic-moodboard__tile-actions svg{display:block;width:var(--hp-size-17);height:var(--hp-size-17);margin:auto;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.kinetic-moodboard__tile-menu-trigger:focus-visible,.kinetic-moodboard__tile-action:focus-visible{outline:2px solid #fff;outline-offset:3px}@keyframes discover-tile-menu-in{from{opacity:0;transform:translateY(-6px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
-        .kinetic-moodboard__tile:hover img{transform:scale(1.055);filter:brightness(.82)}
+         .kinetic-moodboard__tile:hover img{transform:scale(1.055);filter:brightness(.82)}
          .kinetic-moodboard__search-header{position:absolute;z-index:10;top:0;left:0;right:0;display:flex;justify-content:center;padding:var(--hp-size-18) var(--hp-size-20);transform:translate3d(0,-125%,0);opacity:1;pointer-events:none;transition:transform .72s cubic-bezier(.2,.65,.25,1)}.kinetic-moodboard__search-row{width:min(var(--hp-size-700),calc(100vw - var(--hp-size-40)));display:flex;align-items:center;gap:var(--hp-size-10)}.kinetic-moodboard__search-back{width:var(--hp-size-62);height:var(--hp-size-62);flex:0 0 var(--hp-size-62);display:flex;align-items:center;justify-content:center;border:0;border-radius:50%;background:rgba(128,128,128,.35);color:#fff;backdrop-filter:blur(26px) saturate(185%);-webkit-backdrop-filter:blur(26px) saturate(185%);box-shadow:0 var(--hp-size-12) var(--hp-size-36) rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(255,255,255,.06);cursor:pointer;transition:background .24s ease,transform .24s,box-shadow .24s}.kinetic-moodboard__search-back:hover{background:rgba(150,150,150,.42);color:#fff;box-shadow:0 var(--hp-size-14) var(--hp-size-40) rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.24),inset 0 -1px 0 rgba(255,255,255,.08);transform:translateY(-2px)}.kinetic-moodboard__search-back:active{transform:scale(.96)}.kinetic-moodboard__search-back:focus-visible{outline:var(--hp-size-xs) solid var(--hp-color-border-strong);outline-offset:var(--hp-size-xs)}.kinetic-moodboard__search-back svg{width:var(--hp-size-18);height:var(--hp-size-18);color:#fff}
          .kinetic-moodboard.is-color-revealing .kinetic-moodboard__search-header{transform:translate3d(0,0,0);transition-delay:0s}.kinetic-moodboard.is-interactive .kinetic-moodboard__search-header{pointer-events:auto}
         .kinetic-moodboard__search-row.menu-expanded .kinetic-moodboard__search-shell{height:var(--hp-size-200);align-items:flex-start;padding-top:var(--hp-size-18);transition:height .3s ease,padding .3s ease}.kinetic-moodboard__search-row.menu-expanded .kinetic-moodboard__search-input{align-self:flex-start}.kinetic-moodboard__search-row.menu-expanded .kinetic-moodboard__menu-button{height:var(--hp-size-200);align-self:stretch;transition:height .3s ease}
@@ -449,13 +422,6 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
               draggable={false}
             >
               <img src={item.image} alt={item.alt} loading={index < 4 ? 'eager' : 'lazy'} decoding="async" draggable={false} style={{ objectPosition: item.objectPosition || 'center', transitionDelay: colorReveal ? `${Math.floor(index / columns) * 0.05}s` : '0s' }} />
-              <span className="kinetic-moodboard__tile-actions" onClick={(event) => event.stopPropagation()}>
-                <span className="kinetic-moodboard__tile-menu-trigger" role="button" tabIndex={interactive ? 0 : -1} aria-label="Discovery actions" aria-expanded={openTileActions === item.id} title="More actions" onClick={(event) => { event.stopPropagation(); setOpenTileActions((current) => current === item.id ? null : item.id); }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.stopPropagation(); setOpenTileActions((current) => current === item.id ? null : item.id); } }}><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg></span>
-                {openTileActions === item.id && <span className="kinetic-moodboard__tile-menu" role="group" aria-label="Discovery actions">
-                  <span className={`kinetic-moodboard__tile-action${savedDiscoveries.some((saved) => saved.id === item.id) ? ' is-saved' : ''}`} role="button" tabIndex={interactive ? 0 : -1} aria-label={savedDiscoveries.some((saved) => saved.id === item.id) ? 'Remove from Saved Discoveries' : 'Save to Saved Discoveries'} title={savedDiscoveries.some((saved) => saved.id === item.id) ? 'Remove saved discovery' : 'Save discovery'} onClick={(event) => { event.stopPropagation(); toggleSavedDiscovery(item); setOpenTileActions(null); }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.stopPropagation(); toggleSavedDiscovery(item); setOpenTileActions(null); } }}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.75h11a1 1 0 0 1 1 1v14l-6.5-3.9-6.5 3.9v-14a1 1 0 0 1 1-1Z"/></svg></span>
-                  <span className="kinetic-moodboard__tile-action" role="button" tabIndex={interactive ? 0 : -1} aria-label="Share discovery" title="Share" onClick={(event) => { event.stopPropagation(); setOpenTileActions(null); void shareDiscovery(item); }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.stopPropagation(); setOpenTileActions(null); void shareDiscovery(item); } }}><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.6-4.5M8.2 13.2l7.6 4.5"/></svg></span>
-                </span>}
-              </span>
               {showLabels && <span className="kinetic-moodboard__label" style={{ transitionDelay: colorReveal ? `${Math.floor(index / columns) * 0.025}s` : "0s" }}><span className="kinetic-moodboard__category">{item.category}</span><span className="kinetic-moodboard__title">{item.title}</span></span>}
             </button>
           ))}
