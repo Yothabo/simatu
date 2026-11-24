@@ -14,6 +14,8 @@ type Product = {
   description?: string | null;
   placeholderColor?: string;
   image_url?: string | null;
+  storefront?: string;
+  storeName?: string;
 };
 
 type ProductModalProps = {
@@ -46,7 +48,7 @@ export default function ProductModal({
   const [showDuplicateConfirm, setShowDuplicateConfirm] = useState(false);
 
   const { cartItems, addToCart } = useCart();
-  const { name: storeName, primaryAccent } = useStorefront();
+  const { name: storeName, storeKey, primaryAccent } = useStorefront();
   const isYotaabo = storeName === 'Yotaabo';
 
   useEffect(() => {
@@ -106,7 +108,8 @@ export default function ProductModal({
       }
       return;
     }
-    const isAlreadyInCart = cartItems.some((item) => item.id === cartItemId);
+    const productStorefront = product.storefront || storeKey;
+    const isAlreadyInCart = cartItems.some((item) => item.id === cartItemId && item.storefront === productStorefront);
 
     if (isAlreadyInCart) {
       setShowDuplicateConfirm(true);
@@ -124,6 +127,8 @@ export default function ProductModal({
         placeholderColor: placeholderColor,
         image_url: product.image_url ?? null,
         category: 'General',
+        storefront: product.storefront || storeKey,
+        storeName: product.storeName || storeName,
       });
     }
     toast.success(`${quantity > 1 ? `${quantity}x ` : ''}${product.name} added to cart`);
