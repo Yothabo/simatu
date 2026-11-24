@@ -330,7 +330,6 @@ async function listProducts(request, requestId) {
         is_active,
         sort_order,
         order_count,
-        sizes,
         created_at
       `;
 
