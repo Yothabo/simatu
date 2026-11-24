@@ -27,11 +27,15 @@ export default function DiscoveryCategoryPage() {
   const [products, setProducts] = useState<CategoryProduct[]>([]);
   const [productsLoading, setProductsLoading] = useState(false);
   const [productsError, setProductsError] = useState('');
-  const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(null);
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(() => getSubcategories(categoryId)[0]?.id ?? null);
   const market = getMarketById(categoryId);
   const item = (location.state as { discovery?: MoodboardItem } | null)?.discovery || market || fallback;
   const subcategories = getSubcategories(market?.id || categoryId);
   const selected = subcategories.find((sub) => sub.id === selectedSubcategory);
+
+  useEffect(() => {
+    setSelectedSubcategory(subcategories[0]?.id ?? null);
+  }, [categoryId]);
 
   useEffect(() => {
     let cancelled = false;
