@@ -133,7 +133,7 @@ function App() {
           <Route path="/admin" element={<AdminErrorBoundary><Suspense fallback={<div style={{ color: 'white', padding: 30 }}>Loading admin module...</div>}><AdminPage /></Suspense></AdminErrorBoundary>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </Suspense>vider>
+      </Suspense>
 
       <Toaster
         position="top-right"
