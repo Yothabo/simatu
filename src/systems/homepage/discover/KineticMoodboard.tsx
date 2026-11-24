@@ -85,6 +85,44 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
     } catch { return []; }
   });
   const [openTileActions, setOpenTileActions] = useState<string | null>(null);
+  const [likedDiscoveries, setLikedDiscoveries] = useState<string[]>(() => {
+    try {
+      const stored = localStorage.getItem('simatu-liked-discoveries');
+      const parsed = stored ? JSON.parse(stored) : [];
+      return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : [];
+    } catch { return []; }
+  });
+  const toggleLikedDiscovery = useCallback((item: MoodboardItem) => {
+    setLikedDiscoveries((current) => {
+      const next = current.includes(item.id) ? current.filter((id) => id !== item.id) : [item.id, ...current];
+      try { localStorage.setItem('simatu-liked-discoveries', JSON.stringify(next)); } catch {}
+      return next;
+    });
+    setOpenTileActions(null);
+  }, []);
+  const getDiscoveryPath = (item: MoodboardItem) => '/discover/' + item.category.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const openDiscovery = (item: MoodboardItem) => {
+    try { sessionStorage.setItem('simatu-discover-return', JSON.stringify({ position: positionRef.current })); } catch {}
+    navigate(getDiscoveryPath(item), { state: { discovery: item, position: positionRef.current } });
+    setOpenTileActions(null);
+  };
+  const shareDiscovery = async (item: MoodboardItem) => {
+    const url = window.location.origin + getDiscoveryPath(item);
+    try {
+      if (typeof navigator.share === 'function') {
+        await navigator.share({ title: item.title, text: 'Discover ' + item.title + ' on Simatu', url });
+      } else if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        window.prompt('Copy this discovery link:', url);
+      }
+    } catch (error) {
+      if (!(error instanceof Error && error.name === 'AbortError')) {
+        try { window.prompt('Copy this discovery link:', url); } catch {}
+      }
+    }
+    setOpenTileActions(null);
+  };
   const toggleSavedDiscovery = useCallback((item: MoodboardItem) => {
     setSavedDiscoveries((current) => {
       const exists = current.some((saved) => saved.id === item.id);
@@ -297,7 +335,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__board{position:absolute;top:0;left:0;display:grid;grid-template-columns:repeat(${boardColumns},${tileWidth}px);gap:${gap}px;will-change:transform;background:transparent}
         .kinetic-moodboard__tile{position:relative;display:block;width:${tileWidth}px;height:${tileHeight}px;padding:0;overflow:hidden;border:0;border-radius:${borderRadius}px;background:transparent;color:inherit;text-align:left;cursor:pointer;opacity:1;transform:none}.kinetic-moodboard.is-color-revealing .kinetic-moodboard__tile{animation:discover-tile-in .72s cubic-bezier(.2,.65,.25,1) both;animation-delay:calc(var(--discover-row, 0) * 42ms)}
         .kinetic-moodboard__tile img{display:block;width:100%;height:100%;object-fit:cover;filter:grayscale(1);transition:filter 1s ease,transform .34s ease}.kinetic-moodboard.is-color-revealing .kinetic-moodboard__tile img{filter:grayscale(0)}
-        .kinetic-moodboard__tile-actions{position:absolute;z-index:4;top:var(--hp-size-12);right:var(--hp-size-12);display:flex;flex-direction:column;align-items:center;gap:var(--hp-size-8);color:#fff}.kinetic-moodboard__tile-action-trigger,.kinetic-moodboard__tile-action{width:var(--hp-size-36);height:var(--hp-size-36);display:flex;align-items:center;justify-content:center;border:0;border-radius:50%;background:rgba(18,18,18,.34);color:#fff;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);cursor:pointer;pointer-events:auto}.kinetic-moodboard__tile-action-list{display:flex;flex-direction:column;gap:var(--hp-size-8);animation:discover-actions-in .18s ease both}.kinetic-moodboard__tile-action.is-saved{color:#fff;background:rgba(255,255,255,.28)}.kinetic-moodboard__tile-actions svg{display:block;width:var(--hp-size-17);height:var(--hp-size-17);fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.kinetic-moodboard__tile-action-trigger:focus-visible,.kinetic-moodboard__tile-action:focus-visible{outline:2px solid #fff;outline-offset:3px}@keyframes discover-actions-in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+        .kinetic-moodboard__tile-actions{position:absolute;z-index:4;top:var(--hp-size-12);right:var(--hp-size-12);display:flex;flex-direction:column;align-items:center;gap:var(--hp-size-8);color:#fff}.kinetic-moodboard__tile-action-trigger,.kinetic-moodboard__tile-action{width:var(--hp-size-36);height:var(--hp-size-36);display:flex;align-items:center;justify-content:center;border:0;border-radius:50%;background:rgba(18,18,18,.34);color:#fff;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);cursor:pointer;pointer-events:auto}.kinetic-moodboard__tile-action-list{display:flex;flex-direction:column;gap:var(--hp-size-8);animation:discover-actions-in .18s ease both}.kinetic-moodboard__tile-action.is-saved,.kinetic-moodboard__tile-action.is-liked{color:#fff;background:rgba(255,255,255,.28)}.kinetic-moodboard__tile-actions svg{display:block;width:var(--hp-size-17);height:var(--hp-size-17);fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.kinetic-moodboard__tile-action-trigger:focus-visible,.kinetic-moodboard__tile-action:focus-visible{outline:2px solid #fff;outline-offset:3px}@keyframes discover-actions-in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
         .kinetic-moodboard__tile:hover img{transform:scale(1.055);filter:brightness(.82)}
          .kinetic-moodboard__search-header{position:absolute;z-index:10;top:0;left:0;right:0;display:flex;justify-content:center;padding:var(--hp-size-18) var(--hp-size-20);transform:translate3d(0,-125%,0);opacity:1;pointer-events:none;transition:transform .72s cubic-bezier(.2,.65,.25,1)}.kinetic-moodboard__search-row{width:min(var(--hp-size-700),calc(100vw - var(--hp-size-40)));display:flex;align-items:center;gap:var(--hp-size-10)}.kinetic-moodboard__search-back{width:var(--hp-size-62);height:var(--hp-size-62);flex:0 0 var(--hp-size-62);display:flex;align-items:center;justify-content:center;border:0;border-radius:50%;background:rgba(128,128,128,.35);color:#fff;backdrop-filter:blur(26px) saturate(185%);-webkit-backdrop-filter:blur(26px) saturate(185%);box-shadow:0 var(--hp-size-12) var(--hp-size-36) rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(255,255,255,.06);cursor:pointer;transition:background .24s ease,transform .24s,box-shadow .24s}.kinetic-moodboard__search-back:hover{background:rgba(150,150,150,.42);color:#fff;box-shadow:0 var(--hp-size-14) var(--hp-size-40) rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.24),inset 0 -1px 0 rgba(255,255,255,.08);transform:translateY(-2px)}.kinetic-moodboard__search-back:active{transform:scale(.96)}.kinetic-moodboard__search-back:focus-visible{outline:var(--hp-size-xs) solid var(--hp-color-border-strong);outline-offset:var(--hp-size-xs)}.kinetic-moodboard__search-back svg{width:var(--hp-size-18);height:var(--hp-size-18);color:#fff}
          .kinetic-moodboard.is-color-revealing .kinetic-moodboard__search-header{transform:translate3d(0,0,0);transition-delay:0s}.kinetic-moodboard.is-interactive .kinetic-moodboard__search-header{pointer-events:auto}
@@ -367,7 +405,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
               type="button"
               className="kinetic-moodboard__tile"
               key={`${item.id}-${index}`}
-              onClick={() => { if (dragRef.current.moved) { handleTileClick(item); return; } handleTileClick(item); try { sessionStorage.setItem('simatu-discover-return', JSON.stringify({ position: positionRef.current })); } catch {} navigate('/discover/' + item.category.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''), { state: { discovery: item, position: positionRef.current } }); }}
+              onClick={() => { if (dragRef.current.moved) { handleTileClick(item); return; } openDiscovery(item); dragRef.current.moved = false; }}
               aria-label={`${item.category}: ${item.title}`}
               disabled={!interactive}
               data-reveal-final={index === tiles.length - 1 ? "true" : "false"}
@@ -377,7 +415,12 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
               <img src={item.image} alt={item.alt} loading={index < 4 ? 'eager' : 'lazy'} decoding="async" draggable={false} style={{ objectPosition: item.objectPosition || 'center', transitionDelay: colorReveal ? `${Math.floor(index / columns) * 0.05}s` : '0s' }} />
               <span className="kinetic-moodboard__tile-actions" onClick={(event) => event.stopPropagation()}>
                 <span className="kinetic-moodboard__tile-action-trigger" role="button" tabIndex={interactive ? 0 : -1} aria-label={openTileActions === item.id ? 'Close discovery actions' : 'Open discovery actions'} aria-expanded={openTileActions === item.id} onClick={() => setOpenTileActions((current) => current === item.id ? null : item.id)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setOpenTileActions((current) => current === item.id ? null : item.id); } }}><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></span>
-                {openTileActions === item.id && <span className="kinetic-moodboard__tile-action-list"><span className={`kinetic-moodboard__tile-action${savedDiscoveries.some((saved) => saved.id === item.id) ? ' is-saved' : ''}`} role="button" tabIndex={interactive ? 0 : -1} aria-label={savedDiscoveries.some((saved) => saved.id === item.id) ? 'Remove from Saved Discoveries' : 'Save to Saved Discoveries'} title={savedDiscoveries.some((saved) => saved.id === item.id) ? 'Remove saved discovery' : 'Save discovery'} onClick={() => toggleSavedDiscovery(item)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggleSavedDiscovery(item); } }}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.75h11a1 1 0 0 1 1 1v14l-6.5-3.9-6.5 3.9v-14a1 1 0 0 1 1-1Z"/></svg></span></span>}
+                {openTileActions === item.id && <span className="kinetic-moodboard__tile-action-list">
+                  <span className={`kinetic-moodboard__tile-action${likedDiscoveries.includes(item.id) ? ' is-liked' : ''}`} role="button" tabIndex={interactive ? 0 : -1} aria-label={likedDiscoveries.includes(item.id) ? 'Unlike discovery' : 'Like discovery'} title={likedDiscoveries.includes(item.id) ? 'Unlike' : 'Like'} onClick={() => toggleLikedDiscovery(item)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggleLikedDiscovery(item); } }}><svg viewBox="0 0 24 24" aria-hidden="true" style={{ fill: likedDiscoveries.includes(item.id) ? 'currentColor' : 'none' }}><path d="M20.8 8.8c0 4.1-8.8 10-8.8 10s-8.8-5.9-8.8-10A4.7 4.7 0 0 1 12 6.2a4.7 4.7 0 0 1 8.8 2.6Z"/></svg></span>
+                  <span className={`kinetic-moodboard__tile-action${savedDiscoveries.some((saved) => saved.id === item.id) ? ' is-saved' : ''}`} role="button" tabIndex={interactive ? 0 : -1} aria-label={savedDiscoveries.some((saved) => saved.id === item.id) ? 'Remove from Saved Discoveries' : 'Save to Saved Discoveries'} title={savedDiscoveries.some((saved) => saved.id === item.id) ? 'Remove saved discovery' : 'Save discovery'} onClick={() => toggleSavedDiscovery(item)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggleSavedDiscovery(item); } }}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.75h11a1 1 0 0 1 1 1v14l-6.5-3.9-6.5 3.9v-14a1 1 0 0 1 1-1Z"/></svg></span>
+                  <span className="kinetic-moodboard__tile-action" role="button" tabIndex={interactive ? 0 : -1} aria-label="Share discovery" title="Share" onClick={() => { void shareDiscovery(item); }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); void shareDiscovery(item); } }}><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.6-4.5M8.2 13.2l7.6 4.5"/></svg></span>
+                  <span className="kinetic-moodboard__tile-action" role="button" tabIndex={interactive ? 0 : -1} aria-label="View discovery" title="View" onClick={() => openDiscovery(item)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openDiscovery(item); } }}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.7"/></svg></span>
+                </span>}
               </span>
               {showLabels && <span className="kinetic-moodboard__label" style={{ transitionDelay: colorReveal ? `${Math.floor(index / columns) * 0.025}s` : "0s" }}><span className="kinetic-moodboard__category">{item.category}</span><span className="kinetic-moodboard__title">{item.title}</span></span>}
             </button>
