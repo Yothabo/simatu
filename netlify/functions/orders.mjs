@@ -84,7 +84,7 @@ async function createOrder(body) {
 
     const productIds = [...quantities.keys()];
     const productResult = await pool.query(
-      'SELECT id, name, price FROM public.products WHERE id = ANY($1::uuid[]) AND is_active IS TRUE AND storefront = $2',
+      'SELECT id, name, price FROM public.products WHERE id = ANY($1::uuid[]) AND is_active IS TRUE AND (marketplace_visible IS TRUE OR storefront_visible IS TRUE) AND storefront = $2',
       [productIds, storefront]
     );
 
