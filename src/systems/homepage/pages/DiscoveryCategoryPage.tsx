@@ -37,6 +37,20 @@ export default function DiscoveryCategoryPage() {
   useEffect(() => {
     setOutgoingStoreTitle(null);
     setSelectedSubcategory(subcategories[0]?.id ?? null);
+
+    const visitedCategory = market?.category || item.category;
+    if (visitedCategory) {
+      try {
+        const stored = localStorage.getItem('simatu-recent-discovery-categories');
+        const previous = stored ? JSON.parse(stored) : [];
+        const recent = Array.isArray(previous)
+          ? previous.filter((value): value is string => typeof value === 'string' && value !== visitedCategory)
+          : [];
+        localStorage.setItem('simatu-recent-discovery-categories', JSON.stringify([visitedCategory, ...recent].slice(0, 8)));
+      } catch {
+        // Browsing the category should continue even when browser storage is unavailable.
+      }
+    }
   }, [categoryId]);
 
   useEffect(() => {
