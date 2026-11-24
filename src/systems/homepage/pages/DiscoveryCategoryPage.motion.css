@@ -97,3 +97,34 @@
     transition-duration: .01ms !important;
   }
 }
+
+
+/* Store links exchange vertically when the active subcategory changes. */
+.discovery-category-page .discovery-store-enter {
+  animation: discovery-store-rise 560ms cubic-bezier(.2,.72,.25,1) both;
+}
+.discovery-category-page .discovery-store-enter .discovery-store-card {
+  animation: discovery-store-rise 560ms cubic-bezier(.2,.72,.25,1) both;
+}
+.discovery-category-page .discovery-store-exit {
+  z-index: 2;
+  animation: discovery-store-fall 480ms cubic-bezier(.55,.05,.75,.35) both;
+}
+.discovery-category-page .discovery-store-exit .discovery-store-card {
+  animation: none;
+}
+@keyframes discovery-store-rise {
+  from { opacity: 0; transform: translate3d(0,42px,0); }
+  to { opacity: 1; transform: translate3d(0,0,0); }
+}
+@keyframes discovery-store-fall {
+  from { opacity: 1; transform: translate3d(0,0,0); }
+  to { opacity: 0; transform: translate3d(0,42px,0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .discovery-category-page .discovery-store-enter,
+  .discovery-category-page .discovery-store-enter .discovery-store-card,
+  .discovery-category-page .discovery-store-exit {
+    animation: none !important;
+  }
+}
