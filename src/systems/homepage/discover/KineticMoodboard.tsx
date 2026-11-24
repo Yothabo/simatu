@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MoodboardSearchBar from './MoodboardSearchBar';
+import MoodboardPredictiveSearch from './MoodboardPredictiveSearch';
 
 type NetworkProduct = { id: string; name: string; price: number; category: string; subcategory?: string; brand?: string; image_url?: string | null; storeKey: 'yotaabo' | 'poshies'; storeName: string; href: string };
 const NETWORK_STORES = [{ key: 'yotaabo' as const, name: 'Yotaabo', href: '/yotaabo/catalog', description: 'A curated selection of fragrance, fashion, and spaces for everyday living.', categories: ['His', 'Hers', 'Spaces'] }, { key: 'poshies' as const, name: 'Poshies', href: '/poshies/catalog', description: 'Fashion, accessories, and lifestyle pieces with a bold, expressive point of view.', categories: ['Hers', 'His', 'Lounge'] }];
@@ -287,24 +288,24 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__label{position:absolute;z-index:2;left:var(--hp-size-16);right:var(--hp-size-12);bottom:var(--hp-size-15);display:grid;gap:var(--hp-size-md);pointer-events:none;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility .45s}.kinetic-moodboard.is-color-revealing .kinetic-moodboard__label{opacity:1;visibility:visible}
         .kinetic-moodboard__category{font:var(--hp-font-weight-semibold) var(--hp-font-size-xs)/var(--hp-line-height-normal) var(--hp-font-family);letter-spacing:.18em;text-transform:uppercase;opacity:.75}
         .kinetic-moodboard__title{font:var(--hp-font-weight-medium) var(--hp-font-size-base)/var(--hp-line-height-normal) var(--hp-font-family);letter-spacing:.01em}
-        .kinetic-moodboard__search-results{position:absolute;top:var(--hp-size-100);left:50%;transform:translateX(-50%);width:min(var(--hp-size-700),calc(100vw - var(--hp-size-32)));max-height:min(62vh,var(--hp-size-560));overflow:auto;z-index:11;background:#737373;border:var(--hp-border-width) solid rgba(255,255,255,.16);border-radius:var(--hp-size-18);padding:var(--hp-size-8);color:#fff;box-shadow:0 var(--hp-size-24) var(--hp-size-75) rgba(0,0,0,.22)}
-        .kinetic-moodboard__result{display:flex;align-items:center;gap:var(--hp-size-12);padding:var(--hp-size-10);border-radius:var(--hp-size-12);text-decoration:none;color:#fff;transition:background .18s}
-        .kinetic-moodboard__result:hover{background:rgba(255,255,255,.1)}
-        .kinetic-moodboard__result-image{width:var(--hp-size-54);height:var(--hp-size-62);object-fit:contain;border-radius:var(--hp-size-8);background:var(--hp-color-surface-raised);flex:0 0 auto}
-        .kinetic-moodboard__result-meta{min-width:0;flex:1}
-        .kinetic-moodboard__result-name{font:var(--hp-font-weight-medium) var(--hp-font-size-sm)/var(--hp-line-height-normal) var(--hp-font-family);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .kinetic-moodboard__result-store{font:var(--hp-font-weight-regular) var(--hp-font-size-xs)/var(--hp-line-height-normal) var(--hp-font-family);color:var(--hp-color-text-muted);margin-top:var(--hp-size-md)}
-        .kinetic-moodboard__result-price{font:var(--hp-font-weight-semibold) var(--hp-font-size-sm)/var(--hp-line-height-normal) var(--hp-font-family);color:#fff;white-space:nowrap}
-        .kinetic-moodboard__search-status{padding:var(--hp-size-14);color:rgba(255,255,255,.78);font:var(--hp-font-weight-regular) var(--hp-font-size-sm)/var(--hp-line-height-relaxed) var(--hp-font-family)}
-        .kinetic-moodboard__suggestion-group{padding:var(--hp-size-md) 0 var(--hp-size-8)}
-        .kinetic-moodboard__suggestion-heading{padding:var(--hp-size-9) var(--hp-size-10) var(--hp-size-6);color:rgba(255,255,255,.62);font:var(--hp-font-weight-semibold) var(--hp-font-size-xs)/var(--hp-line-height-normal) var(--hp-font-family);letter-spacing:.14em}
-        .kinetic-moodboard__suggestion{display:flex;align-items:center;gap:var(--hp-size-12);padding:var(--hp-size-9) var(--hp-size-10);border-radius:var(--hp-size-10);text-decoration:none;color:var(--hp-color-text-subtle)}
-        .kinetic-moodboard__suggestion:hover,.kinetic-moodboard__suggestion:focus{background:rgba(255,255,255,.1)}
-        .kinetic-moodboard__suggestion-icon{width:var(--hp-size-36);height:var(--hp-size-36);display:flex;align-items:center;justify-content:center;border-radius:var(--hp-size-8);background:rgba(255,255,255,.14);color:#fff;flex:0 0 auto;font:var(--hp-font-weight-regular) var(--hp-font-size-base)/var(--hp-line-height-tight) var(--hp-font-family)}
-        .kinetic-moodboard__suggestion-text{display:flex;flex-direction:column;gap:var(--hp-size-sm);min-width:0}
-        .kinetic-moodboard__suggestion-name{font:var(--hp-font-weight-medium) var(--hp-font-size-xs)/var(--hp-line-height-normal) var(--hp-font-family);color:var(--hp-color-text-subtle)}
-        .kinetic-moodboard__suggestion-detail{font:var(--hp-font-weight-regular) var(--hp-font-size-xs)/var(--hp-line-height-normal) var(--hp-font-family);color:var(--hp-color-text-muted)}
-        .kinetic-moodboard__suggestion-button{width:100%;border:0;background:transparent;text-align:left;font:inherit;cursor:pointer}
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         .kinetic-moodboard__dialog-backdrop{position:fixed;inset:0;z-index:1000;display:flex;align-items:flex-end;justify-content:center;padding:0;overflow:hidden;box-sizing:border-box;background:transparent;backdrop-filter:blur(0);animation:discover-overlay-in .42s cubic-bezier(.32,.72,0,1) forwards}.kinetic-moodboard__dialog-backdrop.is-closing{animation:discover-overlay-out .48s cubic-bezier(.32,.72,0,1) forwards}
         .kinetic-moodboard__dialog{width:100%;max-height:min(90vh,var(--hp-size-950));max-height:min(90dvh,var(--hp-size-950));min-height:0;margin:0;box-sizing:border-box;overscroll-behavior:contain;overflow-x:hidden;overflow-y:auto;border:var(--hp-border-width) solid var(--hp-color-border);border-bottom:0;border-radius:var(--hp-size-22) var(--hp-size-22) 0 0;background:var(--hp-color-surface);color:var(--hp-color-text);padding:0 var(--hp-size-25) calc(var(--hp-size-25) + env(safe-area-inset-bottom));opacity:1;transform:translateY(100%);animation:discover-sheet-in .48s cubic-bezier(.32,.72,0,1) forwards}.kinetic-moodboard__dialog-backdrop.is-closing .kinetic-moodboard__dialog{animation:discover-sheet-out .48s cubic-bezier(.32,.72,0,1) forwards}
         .kinetic-moodboard__dialog-heading{position:sticky;top:0;z-index:5;display:flex;flex-direction:column;align-items:stretch;gap:0;margin:0 -26px 0;padding:var(--hp-size-18) var(--hp-size-25);background:var(--hp-color-background)}.kinetic-moodboard__dialog-title-row{display:flex;align-items:center;justify-content:space-between;gap:var(--hp-size-12);min-width:0}.kinetic-moodboard__dialog-title-row>div{min-width:0;flex:1}
@@ -356,20 +357,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       </div>
 
 
-      {normalizedSearch.length >= 1 && interactive && !searchDismissed && (
-        <div className="kinetic-moodboard__search-results" role="listbox" aria-label="Predictive search suggestions">
-          {networkLoading && <div className="kinetic-moodboard__search-status">Searching across stores…</div>}
-          {!networkLoading && networkError && <div className="kinetic-moodboard__search-status">{networkError}</div>}
-          {!networkLoading && !networkError && searchStores.length === 0 && searchCategories.length === 0 && matchingProducts.length === 0 && <div className="kinetic-moodboard__search-status">No matches yet. Try a store, product or category.</div>}
-          {searchStores.length > 0 && <div className="kinetic-moodboard__suggestion-group"><div className="kinetic-moodboard__suggestion-heading">STORES</div>{searchStores.map((store) => <a className="kinetic-moodboard__suggestion" href={store.href} key={store.key}><span className="kinetic-moodboard__suggestion-icon">⌂</span><span className="kinetic-moodboard__suggestion-text"><span className="kinetic-moodboard__suggestion-name">{store.name}</span><span className="kinetic-moodboard__suggestion-detail">Store · Fashion & lifestyle</span></span></a>)}</div>}
-          {searchCategories.length > 0 && <div className="kinetic-moodboard__suggestion-group"><div className="kinetic-moodboard__suggestion-heading">CATEGORIES</div>{searchCategories.map((category) => <button type="button" className="kinetic-moodboard__suggestion kinetic-moodboard__suggestion-button" key={category} onClick={() => setSearchQuery(category)}><span className="kinetic-moodboard__suggestion-icon">⌕</span><span className="kinetic-moodboard__suggestion-text"><span className="kinetic-moodboard__suggestion-name">{category}</span><span className="kinetic-moodboard__suggestion-detail">Browse category</span></span></button>)}</div>}
-          {matchingProducts.length > 0 && <div className="kinetic-moodboard__suggestion-group"><div className="kinetic-moodboard__suggestion-heading">PRODUCTS</div>{matchingProducts.map((product) => <a className="kinetic-moodboard__result" href={product.href} key={product.storeKey + product.id}>
-            {product.image_url ? <img className="kinetic-moodboard__result-image" src={product.image_url} alt="" /> : <div className="kinetic-moodboard__result-image" />}
-            <div className="kinetic-moodboard__result-meta"><div className="kinetic-moodboard__result-name">{product.name}</div><div className="kinetic-moodboard__result-store">{product.storeName} · {product.category}{product.subcategory ? ' / ' + product.subcategory : ''}</div></div>
-            <div className="kinetic-moodboard__result-price">{Number(product.price).toLocaleString('en-ZA', { style: 'currency', currency: 'ZAR' })}</div>
-          </a>)}</div>}
-        </div>
-      )}
+      {normalizedSearch.length >= 1 && interactive && !searchDismissed && <MoodboardPredictiveSearch query={searchQuery} loading={networkLoading} error={networkError} stores={searchStores.map(store => ({ key: store.key, name: store.name, href: store.href }))} categories={searchCategories} products={matchingProducts} onCategorySelect={setSearchQuery} />
 
     </section>
   );
