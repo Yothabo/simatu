@@ -36,6 +36,7 @@ export type Storefront = 'yotaabo' | 'poshies';
 export type Order = {
   id: string;
   storefront: Storefront;
+  checkout_group_id?: string | null;
   order_number: string;
   customer_name: string;
   customer_phone: string;
