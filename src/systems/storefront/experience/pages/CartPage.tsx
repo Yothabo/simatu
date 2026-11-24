@@ -12,10 +12,9 @@ import CheckoutModal from '../components/CheckoutModal';
 import useStorefront from '../../core/hooks/useStorefront';
 
 export default function CartPage() {
-  const { name: storeName, pathFor, primaryAccent } = useStorefront();
+  const { primaryAccent } = useStorefront();
   const location = useLocation();
   const isCheckoutView = location.pathname === '/checkout';
-  const isYotaabo = storeName === 'Yotaabo';
   const { cartItems, removeFromCart, increaseQuantity, decreaseQuantity } = useCart();
   const [selectedStorefronts, setSelectedStorefronts] = useState<string[]>([]);
   const storeGroups = Array.from(new Map(cartItems.map((item) => [item.storefront, {
