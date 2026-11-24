@@ -62,3 +62,21 @@ export default function DiscoveryCategoryPage() {
   return <main style={{ minHeight: '100dvh', background: '#111', color: '#f4f1ec', overflowX: 'hidden' }}>
     <MoodboardSearchBar value={searchQuery} onChange={setSearchQuery} ariaLabel="Search brands, products or collections" onBack={goBack} backIcon="arrow" className="category-search-header" fixed />
     {normalizedQuery && <MoodboardPredictiveSearch query={searchQuery} loading={productsLoading} error={productsError} products={matchingProducts} className="category-search-results" ariaLabel={editorial.eyebrow + ' search suggestions'} />}
+
+    <section style={{ position: 'relative', minHeight: '85vh', display: 'flex', alignItems: 'flex-end', padding: 'clamp(24px,6vw,80px)', overflow: 'hidden' }}>
+      <img src={item.image} alt={item.alt} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: item.objectPosition || 'center' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(0,0,0,.82),rgba(0,0,0,.12))' }} />
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: 760 }}>
+        <p style={{ letterSpacing: '.18em', fontSize: 12, textTransform: 'uppercase', opacity: .75 }}>{editorial.eyebrow}</p>
+        <h1 style={{ fontSize: 'clamp(44px,9vw,112px)', lineHeight: .95, fontWeight: 500, margin: '18px 0' }}>{editorial.title}</h1>
+        <p style={{ fontSize: 'clamp(14px,1.4vw,18px)', lineHeight: 1.65, maxWidth: 680, color: '#f4f1ec' }}>{editorial.description}</p>
+      </div>
+    </section>
+    <section style={panel}>
+      <h2 style={{ fontSize: 30, fontWeight: 500 }}>Explore {item.category}</h2>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, marginTop: 24 }}>
+        {stores.map(store => <a key={store.key} href={store.href} style={{ color: '#f4f1ec', border: '1px solid rgba(255,255,255,.18)', borderRadius: 12, padding: '16px 22px', textDecoration: 'none' }}>{store.name}<span style={{ display: 'block', opacity: .65, fontSize: 13, marginTop: 6 }}>{store.note}</span></a>)}
+      </div>
+    </section>
+  </main>;
+}
