@@ -121,7 +121,7 @@ export default function DiscoveryCategoryPage() {
               <span style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(0,0,0,.8),rgba(0,0,0,.02) 76%)' }} />
               <span style={{ position: 'absolute', left: 16, right: 16, bottom: 16, zIndex: 1 }}>
                 <strong style={{ display: 'block', fontSize: 18, fontWeight: 500 }}>{sub.title}</strong>
-                {selectedSubcategory === sub.id && <small style={{ display: 'block', marginTop: 6, opacity: .75 }}>Selected · tap to clear</small>}
+                <span style={{ display: 'block', marginTop: 7, fontSize: 13, lineHeight: 1.45, fontWeight: 400, color: 'rgba(255,255,255,.82)' }}>{sub.description}</span>
               </span>
             </button>
           </SwiperSlide>
