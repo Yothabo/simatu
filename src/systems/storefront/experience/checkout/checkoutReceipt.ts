@@ -10,12 +10,13 @@ export const getReceiptText = (
     name,
     'ORDER CONFIRMATION',
     `Order: ${createdOrder.order_number}`,
+    ...(createdOrder.storeOrders?.length ? ['STORE ORDERS', ...createdOrder.storeOrders.map((order) => `${order.storefront} | ${order.order_number} | R ${Number(order.subtotal).toFixed(2)}`)] : []),
     `Date: ${createdOrder.orderedAt.toLocaleString('en-ZA')}`,
     '',
     'ITEMS',
     ...createdOrder.items.map(
       (item) =>
-        `${item.name} | ${item.quantity} x R ${item.unitPrice.toFixed(2)} = R ${(item.quantity * item.unitPrice).toFixed(2)}`
+        `${item.storeName ? item.storeName + ' — ' : ''}${item.name} | ${item.quantity} x R ${item.unitPrice.toFixed(2)} = R ${(item.quantity * item.unitPrice).toFixed(2)}`
     ),
     '',
     `Subtotal: R ${Number(createdOrder.subtotal).toFixed(2)}`,
