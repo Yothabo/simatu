@@ -78,7 +78,7 @@ function loadSharedCart(): CartItem[] {
       'poshies',
     );
     const merged = [...legacyYotaabo, ...legacyPoshies];
-    const unique = new Map(merged.map((item) => [item.id, item]));
+    const unique = new Map(merged.map((item) => [item.id, item] as const));
     return Array.from(unique.values());
   } catch {
     return [];
