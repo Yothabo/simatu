@@ -21,7 +21,7 @@ export default function CartPage() {
     storefront: item.storefront,
     storeName: item.storeName,
     items: cartItems.filter((candidate) => candidate.storefront === item.storefront),
-  }])).values());
+  }] as const)).values());
   const selectedCartItems = cartItems.filter((item) => selectedStorefronts.includes(item.storefront));
   const selectedCartTotal = selectedCartItems.reduce((total, item) => total + Number(item.price.replace(/[^0-9.]/g, '')) * item.quantity, 0);
 
