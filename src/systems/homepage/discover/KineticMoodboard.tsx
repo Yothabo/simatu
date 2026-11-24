@@ -147,8 +147,8 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       const score = (product: NetworkProduct) => startsWithSearch(product.name) ? 0 : startsWithSearch(product.category) || startsWithSearch(product.subcategory || '') ? 1 : startsWithSearch(product.storeName) ? 2 : 3;
       return score(a) - score(b) || a.name.localeCompare(b.name);
     }).slice(0, 8) : [];
-  const boardColumns = Math.min(columns, sourceItems.length);
-  const boardRows = Math.ceil(sourceItems.length / boardColumns);
+  const boardColumns = Math.min(columns, tiles.length);
+  const boardRows = Math.ceil(tiles.length / boardColumns);
   const boardWidth = boardColumns * tileWidth + (boardColumns - 1) * gap;
   const boardHeight = boardRows * tileHeight + (boardRows - 1) * gap;
 
