@@ -39,3 +39,5 @@
 .marketplace-cart__button--secondary:hover{background:rgba(255,255,255,.14);color:#fff}
 .marketplace-cart__button:disabled{opacity:.35;cursor:not-allowed;transform:none}
 @media(max-width:640px){.marketplace-cart__topbar{min-height:62px;padding:0 16px}.marketplace-cart{padding:0 14px 24px}.marketplace-cart__heading{padding:26px 0 20px}.marketplace-cart__store-heading{font-size:.625rem}.marketplace-cart__item{gap:12px;padding-right:4px}.marketplace-cart__product-name{font-size:.8125rem}.marketplace-cart__product-meta{gap:8px}.marketplace-cart__quantity-button{width:30px;height:30px}.marketplace-cart__quantity-value{min-width:24px}.marketplace-cart__summary{align-items:stretch}.marketplace-cart__subtotal{text-align:right}.marketplace-cart__summary>div:last-child{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px}.marketplace-cart__button{min-height:44px;padding:0 18px;font-size:10px}}
+
+.marketplace-cart__store-count{font-size:.625rem;color:rgba(255,255,255,.56)}
