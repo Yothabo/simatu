@@ -4,6 +4,8 @@ import { TiArrowBack } from 'react-icons/ti';
 import './moodboard-search.css';
 import './search-bar-expansion.css';
 
+type SavedDiscovery = { id: string; image: string; alt: string; category: string; title: string; objectPosition?: string };
+
 type MoodboardSearchBarProps = {
   value: string;
   onChange: (value: string) => void;
@@ -15,7 +17,7 @@ type MoodboardSearchBarProps = {
   backIcon?: 'home' | 'arrow';
   fixed?: boolean;
   showMenu?: boolean;
-  onMenuClick?: () => void;
+  onMenuClick?: () => void;\n  savedDiscoveries?: SavedDiscovery[];\n  onSavedDiscoverySelect?: (item: SavedDiscovery) => void;
 };
 
 export default function MoodboardSearchBar({
@@ -31,7 +33,7 @@ export default function MoodboardSearchBar({
   showMenu = false,
   onMenuClick,
 }: MoodboardSearchBarProps) {
-  const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const [categoriesOpen, setCategoriesOpen] = useState(false);\n  const [savedOpen, setSavedOpen] = useState(false);
   const menuExpanded = className.includes("menu-expanded");
   return (
     <div className={`kinetic-moodboard__search-header ${fixed ? 'moodboard-search-fixed' : ''} ${className}`} aria-hidden={!visible} style={!visible ? { transform: 'translate3d(0,-125%,0)', opacity: 0, pointerEvents: 'none' } : undefined}>
@@ -56,7 +58,8 @@ export default function MoodboardSearchBar({
               </div>
               <div className="kinetic-moodboard__discover-group">
                 <div className="kinetic-moodboard__discover-group-heading"><strong>Personal Library</strong><small>Your discovery history</small></div>
-                <button type="button" className="kinetic-moodboard__discover-tool" disabled><FaBookmark aria-hidden="true" /><span>Saved Discoveries</span></button>
+                <button type="button" className="kinetic-moodboard__discover-tool" onClick={() => setSavedOpen((open) => !open)} aria-expanded={savedOpen}><FaBookmark aria-hidden="true" /><span>Saved Discoveries</span><small>{savedDiscoveries.length}</small></button>
+                {savedOpen && <div className="kinetic-moodboard__discover-category-list" aria-label="Saved discoveries">{savedDiscoveries.length ? savedDiscoveries.map((item) => <button type="button" key={item.id} className="kinetic-moodboard__discover-category kinetic-moodboard__saved-discovery" onClick={() => { onSavedDiscoverySelect?.(item); onMenuClick?.(); }}><img src={item.image} alt="" loading="lazy"/><span>{item.title}</span></button>) : <p className="kinetic-moodboard__saved-empty">Your saved discoveries will appear here.</p>}</div>}
                 <button type="button" className="kinetic-moodboard__discover-tool" disabled><FaHistory aria-hidden="true" /><span>Recently Viewed</span></button>
                 <button type="button" className="kinetic-moodboard__discover-tool" disabled><FaBookmark aria-hidden="true" /><span>Your Collections</span></button>
               </div>
