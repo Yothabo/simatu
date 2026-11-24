@@ -6,7 +6,8 @@ export type CreatedOrder = {
   customerName: string;
   customerPhone: string;
   orderedAt: Date;
-  items: { name: string; quantity: number; unitPrice: number }[];
+  items: { name: string; storeName?: string; quantity: number; unitPrice: number }[];
+  storeOrders?: { storefront: string; order_number: string; subtotal: number; status: string }[];
 };
 
 export type CheckoutCustomerErrors = {
