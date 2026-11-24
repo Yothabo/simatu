@@ -104,8 +104,8 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       const j = Math.floor(random() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
-    return Array.from({ length: columns * columns }, (_, index) => shuffled[index % shuffled.length]);
-  }, [sourceItems, columns]);
+    return shuffled;
+  }, [sourceItems]);
 
   useEffect(() => {
     if (decorativeOnly || !interactive) return;
@@ -133,8 +133,10 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       const score = (product: NetworkProduct) => startsWithSearch(product.name) ? 0 : startsWithSearch(product.category) || startsWithSearch(product.subcategory || '') ? 1 : startsWithSearch(product.storeName) ? 2 : 3;
       return score(a) - score(b) || a.name.localeCompare(b.name);
     }).slice(0, 8) : [];
-  const boardWidth = columns * tileWidth + (columns - 1) * gap;
-  const boardHeight = columns * tileHeight + (columns - 1) * gap;
+  const boardColumns = Math.min(columns, sourceItems.length);
+  const boardRows = Math.ceil(sourceItems.length / boardColumns);
+  const boardWidth = boardColumns * tileWidth + (boardColumns - 1) * gap;
+  const boardHeight = boardRows * tileHeight + (boardRows - 1) * gap;
 
   const applyPosition = useCallback((x: number, y: number) => {
     const next = {
@@ -261,7 +263,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__join-network span{font-size:var(--hp-font-size-base);letter-spacing:normal}
         @media(max-width:640px){.kinetic-moodboard__join-network{right:max(var(--hp-size-16),env(safe-area-inset-right));bottom:max(var(--hp-size-18),env(safe-area-inset-bottom));min-height:var(--hp-size-48);padding:0 var(--hp-size-20);font-size:var(--hp-font-size-xs)}}
 
-        .kinetic-moodboard__board{position:absolute;top:0;left:0;display:grid;grid-template-columns:repeat(${columns},${tileWidth}px);gap:${gap}px;will-change:transform;background:transparent}
+        .kinetic-moodboard__board{position:absolute;top:0;left:0;display:grid;grid-template-columns:repeat(${boardColumns},${tileWidth}px);gap:${gap}px;will-change:transform;background:transparent}
         .kinetic-moodboard__tile{position:relative;display:block;width:${tileWidth}px;height:${tileHeight}px;padding:0;overflow:hidden;border:0;border-radius:${borderRadius}px;background:transparent;color:inherit;text-align:left;cursor:pointer;opacity:1;transform:none}.kinetic-moodboard.is-color-revealing .kinetic-moodboard__tile{animation:none;opacity:1;transform:none}
         .kinetic-moodboard__tile img{display:block;width:100%;height:100%;object-fit:cover;filter:grayscale(1);transition:filter 1s ease,transform .34s ease}.kinetic-moodboard.is-color-revealing .kinetic-moodboard__tile img{filter:grayscale(0)}
         .kinetic-moodboard__tile:hover img{transform:scale(1.055);filter:brightness(.82)}
