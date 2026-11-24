@@ -16,9 +16,9 @@ export default function CartPage() {
   const location = useLocation();
   const isCheckoutView = location.pathname === '/checkout';
   const { cartItems, removeFromCart, increaseQuantity, decreaseQuantity } = useCart();
-  const [selectedStorefronts, setSelectedStorefronts] = useState<string[]>([]);
-  const previousStorefrontsRef = useRef<string[]>([]);
-  const initializedStoreSelectionRef = useRef(false);
+  const initialStorefronts = Array.from(new Set(cartItems.map((item) => item.storefront)));
+  const [selectedStorefronts, setSelectedStorefronts] = useState<string[]>(initialStorefronts);
+  const previousStorefrontsRef = useRef<string[]>(initialStorefronts);
   const storeGroups = Array.from(new Map(cartItems.map((item) => [item.storefront, {
     storefront: item.storefront,
     storeName: item.storeName,
@@ -30,11 +30,10 @@ export default function CartPage() {
   useEffect(() => {
     const availableStores = Array.from(new Set(cartItems.map((item) => item.storefront)));
     const newlyAddedStores = availableStores.filter((store) => !previousStorefrontsRef.current.includes(store));
-    const isFirstSelection = !initializedStoreSelectionRef.current;
-    initializedStoreSelectionRef.current = true;
-    setSelectedStorefronts((current) => isFirstSelection
-      ? availableStores
-      : [...current.filter((store) => availableStores.includes(store)), ...newlyAddedStores]);
+    setSelectedStorefronts((current) => [
+      ...current.filter((store) => availableStores.includes(store)),
+      ...newlyAddedStores,
+    ]);
     previousStorefrontsRef.current = availableStores;
   }, [cartItems]);
 
