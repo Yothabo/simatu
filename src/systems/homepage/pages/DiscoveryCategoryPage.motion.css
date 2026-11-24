@@ -197,12 +197,20 @@
 .discovery-category-page .discovery-store-card--poshies .discovery-store-arrow {
   border-color: rgba(244,241,236,.28);
 }
-@media (max-width: 360px) {
+@media (max-width: 767px) {
   .discovery-category-page .discovery-store-stage > .discovery-store-enter,
   .discovery-category-page .discovery-store-stage > .discovery-store-exit {
-    gap: 8px !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 10px !important;
   }
   .discovery-category-page .discovery-store-card {
-    padding: 12px 10px !important;
+    width: 100%;
+    min-height: 84px;
+    padding: 14px 16px !important;
+  }
+}
+@media (max-width: 360px) {
+  .discovery-category-page .discovery-store-card {
+    padding: 14px 12px !important;
   }
 }
