@@ -170,15 +170,18 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       const j = Math.floor(random() * (i + 1));
       [uniquePool[i], uniquePool[j]] = [uniquePool[j], uniquePool[i]];
     }
-    const tileCount = 64;
-    return uniquePool.slice(0, tileCount);
+    return uniquePool;
   }, [boardTilePool]);
   const tiles = useMemo(
-    () => selectedCategory ? allTiles.filter((item) => item.category === selectedCategory) : allTiles,
+    () => selectedCategory
+      ? allTiles.filter((item) => item.category === selectedCategory)
+      : allTiles.slice(0, 64),
     [allTiles, selectedCategory]
   );
   const recentCategories = useMemo(
-    () => DISCOVERY_MARKETS.filter((market) => recentCategoryNames.includes(market.category)),
+    () => recentCategoryNames
+      .map((name) => DISCOVERY_MARKETS.find((market) => market.category === name))
+      .filter((market): market is typeof DISCOVERY_MARKETS[number] => Boolean(market)),
     [recentCategoryNames]
   );
 
