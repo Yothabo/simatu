@@ -128,24 +128,17 @@ export default function DiscoveryCategoryPage() {
         ))}
       </Swiper>
 
-      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap', margin: '12px 0 18px' }}>
-        <h2 style={{ fontSize: 28, fontWeight: 500, margin: 0 }}>{selected ? selected.title : item.category + ' on Simatu'}</h2>
-        {selected && <button type="button" onClick={() => setSelectedSubcategory(null)} style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 999, padding: '8px 14px', color: '#f4f1ec', background: 'transparent', cursor: 'pointer' }}>Clear selection</button>}
-      </div>
+      {selected && <>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,260px),1fr))', gap: 16, marginTop: 12 }}>
+          {stores.map(store => <a key={store.key} href={store.href} style={{ color: '#f4f1ec', border: '1px solid rgba(255,255,255,.18)', borderRadius: 12, padding: 20, textDecoration: 'none', background: 'rgba(255,255,255,.035)' }}>
+            <strong style={{ fontSize: 18 }}>{store.name}</strong>
+            <span style={{ display: 'block', opacity: .65, fontSize: 13, marginTop: 6 }}>Explore {selected.title} listings</span>
+          </a>)}
+        </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,260px),1fr))', gap: 16 }}>
-        {stores.map(store => <a key={store.key} href={store.href} style={{ color: '#f4f1ec', border: '1px solid rgba(255,255,255,.18)', borderRadius: 12, padding: 20, textDecoration: 'none', background: 'rgba(255,255,255,.035)' }}>
-          <strong style={{ fontSize: 18 }}>{store.name}</strong>
-          <span style={{ display: 'block', opacity: .65, fontSize: 13, marginTop: 6 }}>{selected ? 'Explore ' + selected.title + ' listings' : store.note}</span>
-        </a>)}
-      </div>
-
-      {selected && <div style={{ marginTop: 30 }}>
-        <p style={{ color: 'rgba(244,241,236,.65)' }}>Discover matching listings and businesses.</p>
         {productsLoading && <p>Loading discoveries…</p>}
-        {!productsLoading && !scopedProducts.length && <p>No matching network listings yet. This category remains discoverable as merchants join Simatu.</p>}
         {productsError && <p role="alert">{productsError}</p>}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(100%,220px),1fr))', gap: 16, marginTop: 20 }}>
+        {scopedProducts.length > 0 && <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(100%,220px),1fr))', gap: 16, marginTop: 20 }}>
           {scopedProducts.map((product) => <a key={product.id} href={product.href} style={{ color: '#f4f1ec', textDecoration: 'none', border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, overflow: 'hidden' }}>
             {product.image_url && <img src={product.image_url} alt={product.name} loading="lazy" style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover', display: 'block' }} />}
             <span style={{ display: 'block', padding: 14 }}>
@@ -154,8 +147,8 @@ export default function DiscoveryCategoryPage() {
               {typeof product.price === 'number' && <span style={{ display: 'block', marginTop: 8 }}>R{product.price.toLocaleString('en-ZA')}</span>}
             </span>
           </a>)}
-        </div>
-      </div>}
+        </div>}
+      </>}
     </section>
   </main>;
 }
