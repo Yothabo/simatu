@@ -53,7 +53,7 @@ export default function DiscoveryCategoryPage() {
     return contextTerms.some((term) => taxonomy.includes(term));
   }), [products, contextTerms]);
   const normalizedQuery = searchQuery.trim().toLowerCase();
-  const matchingProducts = useMemo(() => normalizedQuery ? scopedProducts.filter((product) => (product.name + ' ' + (product.category || '') + ' ' + (product.subcategory || '') + ' ' + (product.brand || '') + ' ' + product.storeName).toLowerCase().includes(normalizedQuery).sort((a, b) => { const score = (product: CategoryProduct) => product.name.toLowerCase().startsWith(normalizedQuery) ? 0 : (product.category || '').toLowerCase().startsWith(normalizedQuery) || (product.subcategory || '').toLowerCase().startsWith(normalizedQuery) ? 1 : 2; return score(a) - score(b) || a.name.localeCompare(b.name); }).slice(0, 8) : [], [normalizedQuery, scopedProducts]);
+  const matchingProducts = useMemo(() => normalizedQuery ? scopedProducts.filter((product) => (product.name + ' ' + (product.category || '') + ' ' + (product.subcategory || '') + ' ' + (product.brand || '') + ' ' + product.storeName).toLowerCase().includes(normalizedQuery)).sort((a, b) => a.name.localeCompare(b.name)).slice(0, 8) : [], [normalizedQuery, scopedProducts]);
   const goBack = () => {
     try { sessionStorage.setItem('simatu-discover-return', JSON.stringify({ position: (location.state as any)?.position || null })); } catch {}
     navigate('/', { state: { revealMoodboard: true } });
