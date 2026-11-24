@@ -108,7 +108,7 @@ export default function DiscoveryCategoryPage() {
       key: product.storefront,
       name: product.storeName,
       href: product.href + '?marketplaceTerms=' + encodeURIComponent((selected?.terms || subcategories.flatMap((subcategory) => subcategory.terms)).join(',')),
-    }]),
+    }] as const),
   ).values()), [scopedProducts, selected, subcategories]);
 
   const addProductToCart = (product: CategoryProduct) => {
