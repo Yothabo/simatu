@@ -131,7 +131,7 @@ export default function DiscoveryCategoryPage() {
 
       {selected && <div className="discovery-results">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,260px),1fr))', gap: 16, marginTop: 12 }}>
-          {stores.map(store => <a className="discovery-store-card" key={store.key} href={store.href} style={{ animationDelay: `${stores.indexOf(store) * 70}ms`, color: '#f4f1ec', border: '1px solid rgba(255,255,255,.18)', borderRadius: 12, padding: 20, textDecoration: 'none', background: 'rgba(255,255,255,.035)' }}>
+          {stores.map((store, index) => <a className="discovery-store-card" key={store.key} href={store.href} style={{ animationDelay: `${index * 70}ms`, color: '#f4f1ec', border: '1px solid rgba(255,255,255,.18)', borderRadius: 12, padding: 20, textDecoration: 'none', background: 'rgba(255,255,255,.035)' }}>
             <strong style={{ fontSize: 18 }}>{store.name}</strong>
             <span style={{ display: 'block', opacity: .65, fontSize: 13, marginTop: 6 }}>Explore {selected.title} listings</span>
           </a>)}
@@ -140,7 +140,7 @@ export default function DiscoveryCategoryPage() {
         {productsLoading && <p>Loading discoveries…</p>}
         {productsError && <p role="alert">{productsError}</p>}
         {scopedProducts.length > 0 && <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(100%,220px),1fr))', gap: 16, marginTop: 20 }}>
-          {scopedProducts.map((product) => <a className="discovery-product-card" key={product.id} href={product.href} style={{ animationDelay: `${Math.min(scopedProducts.indexOf(product), 8) * 45}ms`, color: '#f4f1ec', textDecoration: 'none', border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, overflow: 'hidden' }}>
+          {scopedProducts.map((product, index) => <a className="discovery-product-card" key={product.id} href={product.href} style={{ animationDelay: `${Math.min(index, 8) * 45}ms`, color: '#f4f1ec', textDecoration: 'none', border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, overflow: 'hidden' }}>
             {product.image_url && <img src={product.image_url} alt={product.name} loading="lazy" style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover', display: 'block' }} />}
             <span style={{ display: 'block', padding: 14 }}>
               <strong>{product.name}</strong>
