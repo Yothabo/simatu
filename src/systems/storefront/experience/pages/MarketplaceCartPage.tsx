@@ -64,7 +64,7 @@ export default function MarketplaceCartPage() {
 
   return (
     <>
-      <header className="marketplace-cart__topbar"><Link to="/" className="marketplace-cart__back">← Discover</Link><Link to="/cart" className="marketplace-cart__toplink">Global cart</Link></header>
+      {cartItems.length > 0 && <header className="marketplace-cart__topbar"><Link to="/" className="marketplace-cart__back">← Discover</Link><Link to="/cart" className="marketplace-cart__toplink">Global cart</Link></header>}
       <main className="marketplace-cart">
         <div className="marketplace-cart__container">
 
@@ -75,20 +75,14 @@ export default function MarketplaceCartPage() {
 
           {cartItems.length === 0 ? (
             <div className="marketplace-cart__empty">
-              {/* Cart Icon */}
-              <FaOpencart size={64} className="marketplace-cart__empty-icon" />
-
-              {/* Heading */}
               <h2 className="marketplace-cart__empty-title">
                 Your cart is empty.
               </h2>
 
-              {/* Paragraph */}
               <p className="marketplace-cart__empty-copy">
                 Explore the Simatu marketplace to discover products across stores and add them to your global cart.
               </p>
 
-              {/* CTA */}
               <Link
                 to="/"
                 className="marketplace-cart__button marketplace-cart__button--primary"
