@@ -181,7 +181,8 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const recentCategories = useMemo(
     () => recentCategoryNames
       .map((name) => DISCOVERY_MARKETS.find((market) => market.category === name))
-      .filter((market): market is typeof DISCOVERY_MARKETS[number] => Boolean(market)),
+      .filter((market): market is typeof DISCOVERY_MARKETS[number] => Boolean(market))
+      .slice(0, 5),
     [recentCategoryNames]
   );
 
