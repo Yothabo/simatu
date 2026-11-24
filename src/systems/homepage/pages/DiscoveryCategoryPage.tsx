@@ -53,20 +53,23 @@ export default function DiscoveryCategoryPage() {
     return contextTerms.some((term) => taxonomy.includes(term));
   }), [products, contextTerms]);
   const normalizedQuery = searchQuery.trim().toLowerCase();
-  const matchingProducts = useMemo(() => normalizedQuery ? scopedProducts.filter((product) => (product.name + ' ' + (product.category || '') + ' ' + (product.subcategory || '') + ' ' + (product.brand || '') + ' ' + product.storeName).toLowerCase().includes(normalizedQuery)).sort((a, b) => a.name.localeCompare(b.name)).slice(0, 8) : [], [normalizedQuery, scopedProducts]);
+  const matchingProducts = useMemo(() => normalizedQuery ? scopedProducts.filter((product) => (product.name + ' ' + (product.category || '') + ' ' + (product.subcategory || '') + ' ' + (product.brand || '') + ' ' + product.storeName).toLowerCase().includes(normalizedQuery).sort((a, b) => { const score = (product: CategoryProduct) => product.name.toLowerCase().startsWith(normalizedQuery) ? 0 : (product.category || '').toLowerCase().startsWith(normalizedQuery) || (product.subcategory || '').toLowerCase().startsWith(normalizedQuery) ? 1 : 2; return score(a) - score(b) || a.name.localeCompare(b.name); }).slice(0, 8) : [], [normalizedQuery, scopedProducts]);
   const goBack = () => {
     try { sessionStorage.setItem('simatu-discover-return', JSON.stringify({ position: (location.state as any)?.position || null })); } catch {}
     navigate('/', { state: { revealMoodboard: true } });
   };
   return <main style={{ minHeight: '100dvh', background: '#111', color: '#f4f1ec', overflowX: 'hidden' }}>
     <MoodboardSearchBar value={searchQuery} onChange={setSearchQuery} ariaLabel="Search brands, products or collections" onBack={goBack} backIcon="arrow" className="category-search-header" fixed />
-    {normalizedQuery && <section aria-label={editorial.eyebrow + ' search results'} style={{ position: 'relative', zIndex: 5, padding: '18px clamp(18px,5vw,64px)', background: '#111', color: '#f4f1ec', borderBottom: '1px solid rgba(255,255,255,.1)' }}>
-      <div style={{ font: '600 10px/1.4 system-ui', letterSpacing: '.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,.55)', marginBottom: 14 }}>{categoryId.replace(/-/g, ' ')} · search</div>
-      {productsLoading && <p style={{ color: 'rgba(255,255,255,.65)', font: '13px system-ui' }}>Searching this category…</p>}
-      {productsError && <p role="status" style={{ color: 'rgba(255,255,255,.65)', font: '13px system-ui' }}>{productsError}</p>}
-      {!productsLoading && !productsError && matchingProducts.length > 0 && <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,230px),1fr))', gap: 10 }}>{matchingProducts.map(product => <a key={product.id} href={product.href + '?search=' + encodeURIComponent(searchQuery)} style={{ display: 'flex', flexDirection: 'column', gap: 7, padding: 15, border: '1px solid rgba(255,255,255,.13)', background: 'rgba(255,255,255,.04)', color: 'inherit', textDecoration: 'none' }}><strong style={{ font: '500 15px/1.3 system-ui' }}>{product.name}</strong><span style={{ font: '12px system-ui', color: 'rgba(255,255,255,.58)' }}>{product.brand || product.storeName} · {product.category}{product.subcategory ? ' / ' + product.subcategory : ''}</span></a>)}</div>}
-      {!productsLoading && !productsError && matchingProducts.length === 0 && <p style={{ color: 'rgba(255,255,255,.65)', font: '13px/1.6 system-ui' }}>No matches in {categoryId.replace(/-/g, ' ')}. Try a different search within this category.</p>}
-    </section>}
+    {normalizedQuery && <div className="kinetic-moodboard__search-results category-search-results" role="listbox" aria-label={editorial.eyebrow + ' search suggestions'}>
+      {productsLoading && <div className="kinetic-moodboard__search-status">Searching within {categoryId.replace(/-/g, ' ')}…</div>}
+      {!productsLoading && productsError && <div className="kinetic-moodboard__search-status">{productsError}</div>}
+      {!productsLoading && !productsError && matchingProducts.length === 0 && <div className="kinetic-moodboard__search-status">No matches in {categoryId.replace(/-/g, ' ')}. Try another search within this category.</div>}
+      {matchingProducts.length > 0 && <div className="kinetic-moodboard__suggestion-group"><div className="kinetic-moodboard__suggestion-heading">PRODUCTS · {categoryId.replace(/-/g, ' ').toUpperCase()}</div>{matchingProducts.map(product => <a className="kinetic-moodboard__result" href={product.href + '?search=' + encodeURIComponent(searchQuery)} key={product.id}>
+        {product.image_url ? <img className="kinetic-moodboard__result-image" src={product.image_url} alt="" /> : <div className="kinetic-moodboard__result-image" />}
+        <div className="kinetic-moodboard__result-meta"><div className="kinetic-moodboard__result-name">{product.name}</div><div className="kinetic-moodboard__result-store">{product.storeName} · {product.category}{product.subcategory ? ' / ' + product.subcategory : ''}</div></div>
+        <div className="kinetic-moodboard__result-price">{Number(product.price || 0).toLocaleString('en-ZA', { style: 'currency', currency: 'ZAR' })}</div>
+      </a>)}</div>}
+    </div>}
     <section style={{ position: 'relative', overflow: 'hidden', minHeight: 'min(88svh,920px)', display: 'flex', alignItems: 'flex-end', padding: 'clamp(28px,7vw,100px)', paddingBottom: 'clamp(100px,12vh,160px)', boxSizing: 'border-box', background: '#111' }}>
       <img src={item.image} alt={item.alt} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: item.objectPosition || 'center', zIndex: 0 }} />
       <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none', background: 'linear-gradient(rgba(0,0,0,.28),rgba(0,0,0,.28)),linear-gradient(to top,rgba(0,0,0,.88) 0%,rgba(0,0,0,.62) 34%,rgba(0,0,0,.24) 68%,rgba(0,0,0,0) 100%),linear-gradient(to bottom,rgba(0,0,0,.55) 0%,rgba(0,0,0,.12) 24%,rgba(0,0,0,0) 52%)' }} />
