@@ -44,3 +44,7 @@ dist/
 # Local backups and unvalidated migration
 backups/
 migrate_products.sql
+
+# Unsplash discovery curator cache/output
+.unsplash-discovery-cache.json
+discovery-image-catalogue.generated.json
