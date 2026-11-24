@@ -108,6 +108,7 @@ export default function DiscoveryCategoryPage() {
         pagination={subcategories.length > 1 ? { clickable: true } : false}
         keyboard={{ enabled: true, onlyInViewport: true }}
         grabCursor
+        slideToClickedSlide
         watchOverflow
         loop={false}
         aria-label={item.category + ' interests'}
