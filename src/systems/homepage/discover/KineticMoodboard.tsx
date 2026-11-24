@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import MoodboardSearchBar from './MoodboardSearchBar';
 import MoodboardPredictiveSearch from './MoodboardPredictiveSearch';
-import { DISCOVERY_MARKETS } from './discovery-taxonomy';
+import { DISCOVERY_MARKETS, DISCOVERY_SUBCATEGORIES } from './discovery-taxonomy';
 
 type NetworkProduct = { id: string; name: string; price: number; category: string; subcategory?: string; brand?: string; image_url?: string | null; storeKey: 'yotaabo' | 'poshies'; storeName: string; href: string };
 const NETWORK_STORES = [{ key: 'yotaabo' as const, name: 'Yotaabo', href: '/yotaabo/catalog', description: 'A curated selection of fragrance, fashion, and spaces for everyday living.', categories: ['His', 'Hers', 'Spaces'] }, { key: 'poshies' as const, name: 'Poshies', href: '/poshies/catalog', description: 'Fashion, accessories, and lifestyle pieces with a bold, expressive point of view.', categories: ['Hers', 'His', 'Lounge'] }];
@@ -97,15 +97,29 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   }, []);
 
   const sourceItems = items.length ? items : DEFAULT_ITEMS;
+  const boardTilePool = useMemo(() => {
+    if (items.length) return sourceItems;
+    const subcategoryTiles = DISCOVERY_MARKETS.flatMap((market) =>
+      (DISCOVERY_SUBCATEGORIES[market.id] || []).map((subcategory) => ({
+        id: `${market.id}-${subcategory.id}`,
+        image: subcategory.image,
+        alt: subcategory.alt,
+        category: market.category,
+        title: subcategory.title,
+      } as MoodboardItem))
+    );
+    return [...sourceItems, ...subcategoryTiles];
+  }, [items, sourceItems]);
   const tiles = useMemo(() => {
     const random = seededRandom(29);
-    const shuffled = [...sourceItems];
-    for (let i = shuffled.length - 1; i > 0; i -= 1) {
+    const uniquePool = Array.from(new Map(boardTilePool.map((item) => [item.id, item])).values());
+    for (let i = uniquePool.length - 1; i > 0; i -= 1) {
       const j = Math.floor(random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      [uniquePool[i], uniquePool[j]] = [uniquePool[j], uniquePool[i]];
     }
-    return shuffled;
-  }, [sourceItems]);
+    const tileCount = Math.min(64, uniquePool.length);
+    return uniquePool.slice(0, tileCount);
+  }, [boardTilePool]);
 
   useEffect(() => {
     if (decorativeOnly || !interactive) return;
