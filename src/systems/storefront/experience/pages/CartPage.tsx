@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import { useCart } from '../../core/context/CartContext';
@@ -14,9 +13,8 @@ import useStorefront from '../../core/hooks/useStorefront';
 
 export default function CartPage() {
   const { name: storeName, pathFor, primaryAccent } = useStorefront();
-  const location = useLocation();
   const isYotaabo = storeName === 'Yotaabo';
-  const { cartItems, removeFromCart, increaseQuantity, decreaseQuantity, cartTotal } = useCart();
+  const { cartItems, removeFromCart, increaseQuantity, decreaseQuantity } = useCart();
   const [selectedStorefronts, setSelectedStorefronts] = useState<string[]>([]);
   const storeGroups = Array.from(new Map(cartItems.map((item) => [item.storefront, {
     storefront: item.storefront,
@@ -29,15 +27,10 @@ export default function CartPage() {
   useEffect(() => {
     const availableStores = Array.from(new Set(cartItems.map((item) => item.storefront)));
     setSelectedStorefronts((current) => current.length
-      ? Array.from(new Set([...current.filter((store) => availableStores.includes(store)), ...availableStores.filter((store) => !current.includes(store))]))
+      ? current.filter((store) => availableStores.includes(store))
       : availableStores);
   }, [cartItems]);
 
-  useEffect(() => {
-    if (location.pathname === '/checkout' && selectedCartItems.length > 0) {
-      setShowCheckoutModal(true);
-    }
-  }, [location.pathname, selectedCartItems.length]);
   const [removingId, setRemovingId] = useState<string | null>(null);
   const [itemToDelete, setItemToDelete] = useState<{ id: string; name: string } | null>(null);
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
