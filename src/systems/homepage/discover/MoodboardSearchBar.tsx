@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useCart } from '../../storefront/core/context/CartContext';
+import { useCart } from '../../../shared/cart/CartContext';
 import { FaHome, FaBars, FaTimes, FaUsers, FaBookmark, FaHistory, FaRandom, FaThLarge, FaShoppingCart, FaCreditCard } from 'react-icons/fa';
 import { TiArrowBack } from 'react-icons/ti';
 import './moodboard-search.css';
