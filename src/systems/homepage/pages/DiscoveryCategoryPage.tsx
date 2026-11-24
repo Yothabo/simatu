@@ -100,7 +100,6 @@ export default function DiscoveryCategoryPage() {
         resistanceRatio={0.85}
         roundLengths
         watchSlidesProgress
-        preloadImages={false}
         breakpoints={{
           480: { slidesPerView: 2.15, spaceBetween: 16 },
           768: { slidesPerView: 3.15, spaceBetween: 20 },
