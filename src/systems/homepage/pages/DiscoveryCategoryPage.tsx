@@ -89,6 +89,12 @@ export default function DiscoveryCategoryPage() {
         slidesPerView={1.35}
         slidesPerGroup={1}
         spaceBetween={14}
+        speed={420}
+        threshold={6}
+        resistanceRatio={0.85}
+        roundLengths
+        watchSlidesProgress
+        preloadImages={false}
         breakpoints={{
           480: { slidesPerView: 2.15, spaceBetween: 16 },
           768: { slidesPerView: 3.15, spaceBetween: 20 },
@@ -111,7 +117,7 @@ export default function DiscoveryCategoryPage() {
               aria-pressed={selectedSubcategory === sub.id}
               style={{ position: 'relative', display: 'block', width: '100%', aspectRatio: '4 / 5', padding: 0, textAlign: 'left', border: selectedSubcategory === sub.id ? '1px solid #fff' : '1px solid rgba(255,255,255,.14)', borderRadius: 8, background: '#222', color: '#fff', cursor: 'pointer', overflow: 'hidden' }}
             >
-              <img src={sub.image} alt={sub.alt} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: selectedSubcategory === sub.id ? 'brightness(.72)' : 'brightness(.58)', transition: 'filter .25s' }} />
+              <img src={sub.image} alt={sub.alt} loading="lazy" decoding="async" draggable={false} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: selectedSubcategory === sub.id ? 'brightness(.72)' : 'brightness(.58)', transition: 'filter .25s' }} />
               <span style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(0,0,0,.8),rgba(0,0,0,.02) 76%)' }} />
               <span style={{ position: 'absolute', left: 16, right: 16, bottom: 16, zIndex: 1 }}>
                 <strong style={{ display: 'block', fontSize: 18, fontWeight: 500 }}>{sub.title}</strong>
