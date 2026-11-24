@@ -136,8 +136,15 @@ function loadCache() {
 function saveCache(value) { fs.writeFileSync(CACHE_FILE, JSON.stringify(value, null, 2) + '\n'); }
 function readEnv(name) {
   if (process.env[name]) return process.env[name];
-  const envPath = path.join(ROOT, '.env.local');
-  if (!fs.existsSync(envPath)) return '';
-  const line = fs.readFileSync(envPath, 'utf8').split(/\r?\n/).find((row) => row.trim().startsWith(name + '='));
-  return line ? line.slice(line.indexOf('=') + 1).trim().replace(/^['"]|['"]$/g, '') : '';
+  const envFiles = ['.env.local', '.env'];
+  for (const file of envFiles) {
+    const envPath = path.join(ROOT, file);
+    if (!fs.existsSync(envPath)) continue;
+    const line = fs.readFileSync(envPath, 'utf8').split(/\\r?\\n/).find((row) => row.trim().startsWith(name + '='));
+    if (line) {
+      const value = line.slice(line.indexOf('=') + 1).trim().replace(/^['\"]|['\"]$/g, '');
+      if (value) return value;
+    }
+  }
+  return '';
 }
