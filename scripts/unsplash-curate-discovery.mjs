@@ -25,7 +25,7 @@ const pending = entries.filter((entry) => !cache.search[entry.queryKey]);
 let requested = 0;
 
 for (const entry of pending) {
-  if (requested >= MAX_REQUESTS) break;
+  if (requested >= runLimit) break;
   const url = new URL('https://api.unsplash.com/search/photos');
   url.searchParams.set('query', entry.query);
   url.searchParams.set('per_page', '30');
@@ -124,7 +124,7 @@ function tokenize(value) {
   return new Set(String(value).toLowerCase().split(/[^a-z0-9]+/).filter((word) => word.length > 2));
 }
 function loadCache() {
-  try { return JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8')); } catch { return { search: {} }; }
+  try { return JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8')); } catch { return { search: {}, requestTimestamps: [] }; }
 }
 function saveCache(value) { fs.writeFileSync(CACHE_FILE, JSON.stringify(value, null, 2) + '\\n'); }
 function readEnv(name) {
