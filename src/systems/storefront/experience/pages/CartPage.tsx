@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import { useCart } from '../../core/context/CartContext';
@@ -13,8 +14,30 @@ import useStorefront from '../../core/hooks/useStorefront';
 
 export default function CartPage() {
   const { name: storeName, pathFor, primaryAccent } = useStorefront();
+  const location = useLocation();
   const isYotaabo = storeName === 'Yotaabo';
-  const { cartItems, removeFromCart, increaseQuantity, decreaseQuantity, cartTotal, clearCart } = useCart();
+  const { cartItems, removeFromCart, increaseQuantity, decreaseQuantity, cartTotal } = useCart();
+  const [selectedStorefronts, setSelectedStorefronts] = useState<string[]>([]);
+  const storeGroups = Array.from(new Map(cartItems.map((item) => [item.storefront, {
+    storefront: item.storefront,
+    storeName: item.storeName,
+    items: cartItems.filter((candidate) => candidate.storefront === item.storefront),
+  }])).values());
+  const selectedCartItems = cartItems.filter((item) => selectedStorefronts.includes(item.storefront));
+  const selectedCartTotal = selectedCartItems.reduce((total, item) => total + Number(item.price.replace(/[^0-9.]/g, '')) * item.quantity, 0);
+
+  useEffect(() => {
+    const availableStores = Array.from(new Set(cartItems.map((item) => item.storefront)));
+    setSelectedStorefronts((current) => current.length
+      ? Array.from(new Set([...current.filter((store) => availableStores.includes(store)), ...availableStores.filter((store) => !current.includes(store))]))
+      : availableStores);
+  }, [cartItems]);
+
+  useEffect(() => {
+    if (location.pathname === '/checkout' && selectedCartItems.length > 0) {
+      setShowCheckoutModal(true);
+    }
+  }, [location.pathname, selectedCartItems.length]);
   const [removingId, setRemovingId] = useState<string | null>(null);
   const [itemToDelete, setItemToDelete] = useState<{ id: string; name: string } | null>(null);
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
@@ -74,7 +97,14 @@ export default function CartPage() {
             </div>
           ) : (
             <div className="flex flex-1 flex-col gap-2">
-              {cartItems.map((item) => (
+              {storeGroups.map((group) => (
+                <section key={group.storefront} className="mb-5">
+                  <label className="mb-3 flex items-center gap-3 border-b border-black/10 pb-3 text-sm text-[#4d4d4d]">
+                    <input type="checkbox" checked={selectedStorefronts.includes(group.storefront)} onChange={(event) => setSelectedStorefronts((current) => event.target.checked ? [...current, group.storefront] : current.filter((store) => store !== group.storefront))} />
+                    <strong>{group.storeName}</strong>
+                    <span className="text-xs text-[#4d4d4d]/55">{group.items.length} {group.items.length === 1 ? 'product' : 'products'}</span>
+                  </label>
+                  {group.items.map((item) => (
                 <div
                   key={item.id}
                   className={`flex items-center gap-6 bg-[#fafaf9] pr-3 transition-all duration-300 ease-in-out ${
@@ -149,11 +179,13 @@ export default function CartPage() {
                     </div>
                   </div>
                 </div>
+                  ))}
+                </section>
               ))}
 
               <div className="sticky bottom-0 mt-6 flex flex-col items-end gap-4 border-t border-black/10 bg-white pt-4 pb-6">
                 <div className="font-heading text-xl text-black">
-                  Subtotal: <span className="font-medium">R {cartTotal.toFixed(0)}</span>
+                  Selected checkout subtotal: <span className="font-medium">R {selectedCartTotal.toFixed(2)}</span>
                 </div>
 
                 <div className="flex gap-4">
@@ -165,7 +197,8 @@ export default function CartPage() {
                   </Link>
                   <button
                     onClick={() => setShowCheckoutModal(true)}
-                    className={`inline-flex min-h-12 items-center justify-center border border-solid px-8 text-xs font-semibold tracking-wide text-white transition-colors hover:bg-transparent ${primaryAccent === "#ff1493" ? "border-[#ff1493] bg-[#ff1493] hover:text-[#ff1493]" : "border-[#8aa89b] bg-[#8aa89b] hover:text-[#8aa89b]"}` }
+                    disabled={selectedCartItems.length === 0}
+                    className={`inline-flex disabled:cursor-not-allowed disabled:opacity-40 min-h-12 items-center justify-center border border-solid px-8 text-xs font-semibold tracking-wide text-white transition-colors hover:bg-transparent ${primaryAccent === "#ff1493" ? "border-[#ff1493] bg-[#ff1493] hover:text-[#ff1493]" : "border-[#8aa89b] bg-[#8aa89b] hover:text-[#8aa89b]"}` }
                   >
                     Checkout
                   </button>
@@ -220,9 +253,9 @@ export default function CartPage() {
       <CheckoutModal
         isOpen={showCheckoutModal}
         onClose={() => setShowCheckoutModal(false)}
-        cartItems={cartItems}
-        cartTotal={cartTotal}
-        onSuccess={clearCart}
+        cartItems={selectedCartItems}
+        cartTotal={selectedCartTotal}
+        onSuccess={() => selectedCartItems.forEach((item) => removeFromCart(item.id))}
       />
     </>
   );
