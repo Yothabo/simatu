@@ -98,10 +98,9 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
 
   const sourceItems = items.length ? items : DEFAULT_ITEMS;
   const boardTilePool = useMemo(() => {
-    if (items.length) return sourceItems;
     const subcategoryTiles = DISCOVERY_MARKETS.flatMap((market) =>
       (DISCOVERY_SUBCATEGORIES[market.id] || []).map((subcategory) => ({
-        id: `${market.id}-${subcategory.id}`,
+        id: `${market.id-${subcategory.id`,
         image: subcategory.image,
         alt: subcategory.alt,
         category: market.category,
@@ -109,7 +108,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       } as MoodboardItem))
     );
     return [...sourceItems, ...subcategoryTiles];
-  }, [items, sourceItems]);
+  }, [sourceItems]);
   const tiles = useMemo(() => {
     const random = seededRandom(29);
     const uniquePool = Array.from(new Map(boardTilePool.map((item) => [item.id, item])).values());
@@ -117,7 +116,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       const j = Math.floor(random() * (i + 1));
       [uniquePool[i], uniquePool[j]] = [uniquePool[j], uniquePool[i]];
     }
-    const tileCount = Math.min(64, uniquePool.length);
+    const tileCount = 64;
     return uniquePool.slice(0, tileCount);
   }, [boardTilePool]);
 
