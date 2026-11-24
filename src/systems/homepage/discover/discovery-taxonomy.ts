@@ -9,7 +9,7 @@ export const DISCOVERY_MARKETS: MoodboardItem[] = [
   { id: 'culture', image: image('photo-1500530855697-b586d89ba3ee'), alt: 'Culture and creative heritage', category: 'Culture', title: 'Rooted in expression' },
   { id: 'living', image: image('photo-1494438639946-1ebd1d20bf85'), alt: 'Everyday living', category: 'Living', title: 'Make everyday yours' },
   { id: 'beauty', image: image('photo-1515886657613-9f3515b0c78f'), alt: 'Beauty and personal care', category: 'Beauty', title: 'Care in every detail' },
-  { id: 'sports', image: image('photo-1519710164239-da123dc03ef4'), alt: 'Sports and outdoors', category: 'Sports', title: 'Move with purpose' },
+  { id: 'sports', image: image('photo-1531415074968-036ba1b575da'), alt: 'Sports and outdoors', category: 'Sports', title: 'Move with purpose' },
   { id: 'food', image: image('photo-1490645935967-10de6ba17061'), alt: 'Food and specialty goods', category: 'Food', title: 'Good things, gathered' },
   { id: 'automotive', image: image('photo-1500534623283-312aade485b7'), alt: 'Automotive culture', category: 'Automotive', title: 'Driven by detail' },
   { id: 'pets', image: image('photo-1497366754035-f200968a6e72'), alt: 'Pet products and animal care', category: 'Pets', title: 'For every companion' },
