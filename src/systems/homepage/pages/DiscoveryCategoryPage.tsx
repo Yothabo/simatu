@@ -1,4 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { A11y, Keyboard, Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import type { MoodboardItem } from '../discover/KineticMoodboard';
 import MoodboardSearchBar from '../discover/MoodboardSearchBar';
@@ -79,20 +84,57 @@ export default function DiscoveryCategoryPage() {
       </div>
     </section>
     <section style={panel}>
-      <h2 style={{ fontSize: 30, fontWeight: 500, margin: 0 }}>Explore {item.category}</h2>
-      <p style={{ color: 'rgba(244,241,236,.66)', marginTop: 10 }}>Choose an interest to narrow your discovery.</p>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(100%,220px),1fr))', gap: 16, marginTop: 24 }}>
-        {subcategories.map((sub) => <button key={sub.id} type="button" onClick={() => setSelectedSubcategory((current) => current === sub.id ? null : sub.id)} aria-pressed={selectedSubcategory === sub.id} style={{ position: 'relative', overflow: 'hidden', minHeight: 220, padding: 0, textAlign: 'left', border: selectedSubcategory === sub.id ? '1px solid #fff' : '1px solid rgba(255,255,255,.14)', borderRadius: 8, background: '#222', color: '#fff', cursor: 'pointer' }}>
-          <img src={sub.image} alt={sub.alt} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: selectedSubcategory === sub.id ? 'brightness(.68)' : 'brightness(.55)', transition: 'filter .25s' }} />
-          <span style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(0,0,0,.8),rgba(0,0,0,.04) 75%)' }} />
-          <span style={{ position: 'absolute', left: 18, right: 18, bottom: 18, zIndex: 1 }}>
-            <strong style={{ display: 'block', fontSize: 19, fontWeight: 500 }}>{sub.title}</strong>
-            <small style={{ display: 'block', marginTop: 7, lineHeight: 1.5, color: 'rgba(255,255,255,.78)' }}>{sub.description}</small>
-          </span>
-        </button>)}
+      <Swiper
+        modules={[A11y, Keyboard, Navigation, Pagination]}
+        slidesPerView={1.35}
+        slidesPerGroup={1}
+        spaceBetween={14}
+        breakpoints={{
+          480: { slidesPerView: 2.15, spaceBetween: 16 },
+          768: { slidesPerView: 3.15, spaceBetween: 20 },
+          1100: { slidesPerView: 4.15, spaceBetween: 24 },
+        }}
+        navigation={subcategories.length > 2}
+        pagination={subcategories.length > 1 ? { clickable: true } : false}
+        keyboard={{ enabled: true, onlyInViewport: true }}
+        grabCursor
+        watchOverflow
+        loop={false}
+        aria-label={item.category + ' interests'}
+        style={{ paddingBottom: 34, '--swiper-theme-color': '#f4f1ec' } as React.CSSProperties}
+      >
+        {subcategories.map((sub) => (
+          <SwiperSlide key={sub.id}>
+            <button
+              type="button"
+              onClick={() => setSelectedSubcategory((current) => current === sub.id ? null : sub.id)}
+              aria-pressed={selectedSubcategory === sub.id}
+              style={{ position: 'relative', display: 'block', width: '100%', aspectRatio: '4 / 5', padding: 0, textAlign: 'left', border: selectedSubcategory === sub.id ? '1px solid #fff' : '1px solid rgba(255,255,255,.14)', borderRadius: 8, background: '#222', color: '#fff', cursor: 'pointer', overflow: 'hidden' }}
+            >
+              <img src={sub.image} alt={sub.alt} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: selectedSubcategory === sub.id ? 'brightness(.72)' : 'brightness(.58)', transition: 'filter .25s' }} />
+              <span style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(0,0,0,.8),rgba(0,0,0,.02) 76%)' }} />
+              <span style={{ position: 'absolute', left: 16, right: 16, bottom: 16, zIndex: 1 }}>
+                <strong style={{ display: 'block', fontSize: 18, fontWeight: 500 }}>{sub.title}</strong>
+                {selectedSubcategory === sub.id && <small style={{ display: 'block', marginTop: 6, opacity: .75 }}>Selected · tap to clear</small>}
+              </span>
+            </button>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap', margin: '12px 0 18px' }}>
+        <h2 style={{ fontSize: 28, fontWeight: 500, margin: 0 }}>{selected ? selected.title : item.category + ' on Simatu'}</h2>
+        {selected && <button type="button" onClick={() => setSelectedSubcategory(null)} style={{ border: '1px solid rgba(255,255,255,.22)', borderRadius: 999, padding: '8px 14px', color: '#f4f1ec', background: 'transparent', cursor: 'pointer' }}>Clear selection</button>}
       </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,260px),1fr))', gap: 16 }}>
+        {stores.map(store => <a key={store.key} href={store.href} style={{ color: '#f4f1ec', border: '1px solid rgba(255,255,255,.18)', borderRadius: 12, padding: 20, textDecoration: 'none', background: 'rgba(255,255,255,.035)' }}>
+          <strong style={{ fontSize: 18 }}>{store.name}</strong>
+          <span style={{ display: 'block', opacity: .65, fontSize: 13, marginTop: 6 }}>{selected ? 'Explore ' + selected.title + ' listings' : store.note}</span>
+        </a>)}
+      </div>
+
       {selected && <div style={{ marginTop: 30 }}>
-        <h2 style={{ fontSize: 26, fontWeight: 500 }}>{selected.title}</h2>
         <p style={{ color: 'rgba(244,241,236,.65)' }}>Discover matching listings and businesses.</p>
         {productsLoading && <p>Loading discoveries…</p>}
         {!productsLoading && !scopedProducts.length && <p>No matching network listings yet. This category remains discoverable as merchants join Simatu.</p>}
@@ -107,9 +149,6 @@ export default function DiscoveryCategoryPage() {
             </span>
           </a>)}
         </div>
-      </div>}
-      {!selected && <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 30 }}>
-        {stores.map(store => <a key={store.key} href={store.href} style={{ color: '#f4f1ec', border: '1px solid rgba(255,255,255,.18)', borderRadius: 12, padding: '16px 22px', textDecoration: 'none' }}>{store.name}<span style={{ display: 'block', opacity: .65, fontSize: 13, marginTop: 6 }}>{store.note}</span></a>)}
       </div>}
     </section>
   </main>;
