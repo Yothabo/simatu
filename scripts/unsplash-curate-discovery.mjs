@@ -140,7 +140,7 @@ function readEnv(name) {
   for (const file of envFiles) {
     const envPath = path.join(ROOT, file);
     if (!fs.existsSync(envPath)) continue;
-    const line = fs.readFileSync(envPath, 'utf8').split(/\\r?\\n/).find((row) => row.trim().startsWith(name + '='));
+    const line = fs.readFileSync(envPath, 'utf8').split(/\r?\n/).find((row) => row.trim().startsWith(name + '='));
     if (line) {
       const value = line.slice(line.indexOf('=') + 1).trim().replace(/^['\"]|['\"]$/g, '');
       if (value) return value;
