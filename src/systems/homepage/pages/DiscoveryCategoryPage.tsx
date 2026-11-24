@@ -129,7 +129,7 @@ export default function DiscoveryCategoryPage() {
   const marketplaceGroups = useMemo(() => {
     const grouped = new Map<string, CategoryProduct[]>();
     scopedProducts.forEach((product) => {
-      const normalizedName = product.name.trim().toLowerCase().replace(/\\s+/g, ' ');
+      const normalizedName = product.name.trim().toLowerCase().replace(/\s+/g, ' ');
       const normalizedSizes = (product.sizes || []).map((size) => size.toLowerCase()).sort().join(',');
       const identity = product.sku?.trim()
         ? 'sku:' + product.sku.trim().toLowerCase()
