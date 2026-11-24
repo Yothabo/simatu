@@ -4,6 +4,7 @@ import { A11y, Keyboard, Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import './DiscoveryCategoryPage.motion.css';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import type { MoodboardItem } from '../discover/KineticMoodboard';
 import MoodboardSearchBar from '../discover/MoodboardSearchBar';
@@ -71,25 +72,25 @@ export default function DiscoveryCategoryPage() {
     navigate('/', { state: { revealMoodboard: true } });
   };
 
-  return <main style={{ minHeight: '100dvh', background: '#111', color: '#f4f1ec', overflowX: 'hidden' }}>
+  return <main className="discovery-category-page" style={{ minHeight: '100dvh', background: '#111', color: '#f4f1ec', overflowX: 'hidden' }}>
     <MoodboardSearchBar value={searchQuery} onChange={setSearchQuery} ariaLabel="Search businesses, products or services" onBack={goBack} backIcon="arrow" className="category-search-header" fixed />
     {normalizedQuery && <MoodboardPredictiveSearch query={searchQuery} loading={productsLoading} error={productsError} products={matchingProducts} className="category-search-results" ariaLabel={item.category + ' search suggestions'} />}
-    <section style={{ position: 'relative', minHeight: '42vh', display: 'flex', alignItems: 'flex-end', padding: 'clamp(24px,5vw,72px)', overflow: 'hidden' }}>
-      <img src={item.image} alt={item.alt} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: item.objectPosition || 'center' }} />
+    <section className="discovery-hero" style={{ position: 'relative', minHeight: '42vh', display: 'flex', alignItems: 'flex-end', padding: 'clamp(24px,5vw,72px)', overflow: 'hidden' }}>
+      <img className="discovery-hero-image" src={item.image} alt={item.alt} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: item.objectPosition || 'center' }} />
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(0,0,0,.82),rgba(0,0,0,.12))' }} />
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: 760 }}>
+      <div className="discovery-hero-copy" style={{ position: 'relative', zIndex: 1, maxWidth: 760 }}>
         <p style={{ letterSpacing: '.18em', fontSize: 12, textTransform: 'uppercase', opacity: .75 }}>DISCOVERY · {item.category.toUpperCase()}</p>
         <h1 style={{ fontSize: 'clamp(40px,8vw,96px)', lineHeight: .95, fontWeight: 500, margin: '18px 0' }}>{item.category}</h1>
         <p style={{ fontSize: 'clamp(14px,1.4vw,18px)', lineHeight: 1.65, maxWidth: 680, color: '#f4f1ec' }}>Explore products, services, independent businesses and things worth discovering.</p>
       </div>
     </section>
-    <section style={panel}>
+    <section className="discovery-category-content" style={panel}>
       <Swiper
         modules={[A11y, Keyboard, Navigation, Pagination]}
         slidesPerView={1.35}
         slidesPerGroup={1}
         spaceBetween={14}
-        speed={420}
+        speed={520}
         threshold={6}
         resistanceRatio={0.85}
         roundLengths
@@ -115,22 +116,22 @@ export default function DiscoveryCategoryPage() {
               type="button"
               onClick={() => setSelectedSubcategory((current) => current === sub.id ? null : sub.id)}
               aria-pressed={selectedSubcategory === sub.id}
-              style={{ position: 'relative', display: 'block', width: '100%', aspectRatio: '4 / 5', padding: 0, textAlign: 'left', border: selectedSubcategory === sub.id ? '1px solid #fff' : '1px solid rgba(255,255,255,.14)', borderRadius: 8, background: '#222', color: '#fff', cursor: 'pointer', overflow: 'hidden' }}
+              className="discovery-subcategory-card" style={{ position: 'relative', display: 'block', width: '100%', aspectRatio: '4 / 5', padding: 0, textAlign: 'left', border: selectedSubcategory === sub.id ? '1px solid #fff' : '1px solid rgba(255,255,255,.14)', borderRadius: 8, background: '#222', color: '#fff', cursor: 'pointer', overflow: 'hidden' }}
             >
-              <img src={sub.image} alt={sub.alt} loading="lazy" decoding="async" draggable={false} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: selectedSubcategory === sub.id ? 'brightness(.72)' : 'brightness(.58)', transition: 'filter .25s' }} />
+              <img className="discovery-subcategory-image" src={sub.image} alt={sub.alt} loading="lazy" decoding="async" draggable={false} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: selectedSubcategory === sub.id ? 'brightness(.72)' : 'brightness(.58)', transition: 'filter .25s' }} />
               <span style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(0,0,0,.8),rgba(0,0,0,.02) 76%)' }} />
               <span style={{ position: 'absolute', left: 16, right: 16, bottom: 16, zIndex: 1 }}>
                 <strong style={{ display: 'block', fontSize: 18, fontWeight: 500 }}>{sub.title}</strong>
-                {selectedSubcategory === sub.id && <span style={{ display: 'block', marginTop: 7, fontSize: 13, lineHeight: 1.45, fontWeight: 400, color: 'rgba(255,255,255,.82)' }}>{sub.description}</span>}
+                {selectedSubcategory === sub.id && <span className="discovery-subcategory-description" style={{ display: 'block', marginTop: 7, fontSize: 13, lineHeight: 1.45, fontWeight: 400, color: 'rgba(255,255,255,.82)' }}>{sub.description}</span>}
               </span>
             </button>
           </SwiperSlide>
         ))}
       </Swiper>
 
-      {selected && <>
+      {selected && <div className="discovery-results">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,260px),1fr))', gap: 16, marginTop: 12 }}>
-          {stores.map(store => <a key={store.key} href={store.href} style={{ color: '#f4f1ec', border: '1px solid rgba(255,255,255,.18)', borderRadius: 12, padding: 20, textDecoration: 'none', background: 'rgba(255,255,255,.035)' }}>
+          {stores.map(store => <a className="discovery-store-card" key={store.key} href={store.href} style={{ animationDelay: `${stores.indexOf(store) * 70}ms`, color: '#f4f1ec', border: '1px solid rgba(255,255,255,.18)', borderRadius: 12, padding: 20, textDecoration: 'none', background: 'rgba(255,255,255,.035)' }}>
             <strong style={{ fontSize: 18 }}>{store.name}</strong>
             <span style={{ display: 'block', opacity: .65, fontSize: 13, marginTop: 6 }}>Explore {selected.title} listings</span>
           </a>)}
@@ -139,7 +140,7 @@ export default function DiscoveryCategoryPage() {
         {productsLoading && <p>Loading discoveries…</p>}
         {productsError && <p role="alert">{productsError}</p>}
         {scopedProducts.length > 0 && <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(100%,220px),1fr))', gap: 16, marginTop: 20 }}>
-          {scopedProducts.map((product) => <a key={product.id} href={product.href} style={{ color: '#f4f1ec', textDecoration: 'none', border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, overflow: 'hidden' }}>
+          {scopedProducts.map((product) => <a className="discovery-product-card" key={product.id} href={product.href} style={{ animationDelay: `${Math.min(scopedProducts.indexOf(product), 8) * 45}ms`, color: '#f4f1ec', textDecoration: 'none', border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, overflow: 'hidden' }}>
             {product.image_url && <img src={product.image_url} alt={product.name} loading="lazy" style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover', display: 'block' }} />}
             <span style={{ display: 'block', padding: 14 }}>
               <strong>{product.name}</strong>
@@ -148,7 +149,7 @@ export default function DiscoveryCategoryPage() {
             </span>
           </a>)}
         </div>}
-      </>}
+      </div>}
     </section>
   </main>;
 }
