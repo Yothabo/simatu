@@ -80,7 +80,8 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const [savedDiscoveries, setSavedDiscoveries] = useState<MoodboardItem[]>(() => {
     try {
       const stored = localStorage.getItem('simatu-saved-discoveries');
-      const parsed = stored ? JSON.parse(stored) : [];\n      return Array.isArray(parsed) ? parsed as MoodboardItem[] : [];
+      const parsed = stored ? JSON.parse(stored) : [];
+      return Array.isArray(parsed) ? parsed as MoodboardItem[] : [];
     } catch { return []; }
   });
   const [openTileActions, setOpenTileActions] = useState<string | null>(null);
