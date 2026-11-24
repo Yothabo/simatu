@@ -81,9 +81,9 @@ const catalogue = {
   remainingQueries: entries.filter((entry) => !cache.search[entry.queryKey]).map((entry) => entry.query),
   photos: selected,
 };
-fs.writeFileSync(OUTPUT_FILE, JSON.stringify(catalogue, null, 2) + '\\n');
+fs.writeFileSync(OUTPUT_FILE, JSON.stringify(catalogue, null, 2) + '\n');
 saveCache(cache);
-console.log('\\nCatalogue:', OUTPUT_FILE);
+console.log('\nCatalogue:', OUTPUT_FILE);
 console.log('Unique selected:', catalogue.selectedUniquePhotos + '/' + entries.length);
 console.log('Queries still pending:', catalogue.remainingQueries.length);
 console.log('Run again to continue the next batch. Review and curate before applying to the UI.');
@@ -91,7 +91,7 @@ console.log('Run again to continue the next batch. Review and curate before appl
 function parseTaxonomy(text) {
   const result = [];
   const marketMap = new Map();
-  const mainPattern = /\\{ id: '([^']+)', image: image\\('[^']+'\\), alt: '([^']+)', category: '([^']+)', title: '([^']+)' \\}/g;
+  const mainPattern = /\{ id: '([^']+)', image: image\('[^']+'\), alt: '([^']+)', category: '([^']+)', title: '([^']+)' \}/g;
   for (const match of text.matchAll(mainPattern)) {
     const [, id, alt, category, title] = match;
     const query = category + ' ' + title;
@@ -99,9 +99,9 @@ function parseTaxonomy(text) {
     result.push({ id, category, title, query, queryKey });
     marketMap.set(id, category);
   }
-  const subPattern = /tile\\('([^']+)', '([^']+)', 'photo-[^']+', '([^']+)'/g;
+  const subPattern = /tile\('([^']+)', '([^']+)', 'photo-[^']+', '([^']+)'/g;
   let activeMarket = '';
-  const sectionPattern = /  ([a-z-]+): \\[/g;
+  const sectionPattern = /  ([a-z-]+): \[/g;
   const sectionStarts = [...text.matchAll(sectionPattern)];
   for (let i = 0; i < sectionStarts.length; i++) {
     activeMarket = sectionStarts[i][1];
@@ -133,11 +133,11 @@ function tokenize(value) {
 function loadCache() {
   try { return JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8')); } catch { return { search: {}, requestTimestamps: [] }; }
 }
-function saveCache(value) { fs.writeFileSync(CACHE_FILE, JSON.stringify(value, null, 2) + '\\n'); }
+function saveCache(value) { fs.writeFileSync(CACHE_FILE, JSON.stringify(value, null, 2) + '\n'); }
 function readEnv(name) {
   if (process.env[name]) return process.env[name];
   const envPath = path.join(ROOT, '.env.local');
   if (!fs.existsSync(envPath)) return '';
-  const line = fs.readFileSync(envPath, 'utf8').split(/\\r?\\n/).find((row) => row.trim().startsWith(name + '='));
+  const line = fs.readFileSync(envPath, 'utf8').split(/\r?\n/).find((row) => row.trim().startsWith(name + '='));
   return line ? line.slice(line.indexOf('=') + 1).trim().replace(/^['"]|['"]$/g, '') : '';
 }
