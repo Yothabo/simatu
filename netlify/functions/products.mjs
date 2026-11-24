@@ -175,6 +175,8 @@ async function saveProduct(body, isUpdate, admin, requestId) {
       product.supplier_cost,
       product.sku,
       product.sizes,
+      product.marketplace_visible,
+      product.storefront_visible,
     ];
 
     if (isUpdate) {
@@ -194,12 +196,15 @@ async function saveProduct(body, isUpdate, admin, requestId) {
              subcategory_id = $12,
              supplier_cost = $13,
              sku = $14,
-             sizes = $15
-         WHERE id = $16
-           AND ($17::text IS NULL OR storefront = $17)
+             sizes = $15,
+             marketplace_visible = $16,
+             storefront_visible = $17
+         WHERE id = $18
+           AND ($19::text IS NULL OR storefront = $19)
          RETURNING id, name, price, supplier_cost, sku, sizes,
                    category, subcategory, description, image_url,
-                   is_active, sort_order, storefront, store_id,
+                   is_active, marketplace_visible, storefront_visible,
+                   sort_order, storefront, store_id,
                    category_id, subcategory_id, created_at`,
         [
           ...values,
@@ -212,11 +217,13 @@ async function saveProduct(body, isUpdate, admin, requestId) {
         `INSERT INTO public.products
            (name, price, category, subcategory, description, image_url,
             is_active, sort_order, storefront, store_id, category_id,
-            subcategory_id, supplier_cost, sku, sizes)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+            subcategory_id, supplier_cost, sku, sizes,
+            marketplace_visible, storefront_visible)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
          RETURNING id, name, price, supplier_cost, sku, sizes,
                    category, subcategory, description, image_url,
-                   is_active, sort_order, storefront, store_id,
+                   is_active, marketplace_visible, storefront_visible,
+                   sort_order, storefront, store_id,
                    category_id, subcategory_id, created_at`,
         values
       );
@@ -264,6 +271,7 @@ async function saveProduct(body, isUpdate, admin, requestId) {
 async function listProducts(request, requestId) {
   const url = new URL(request.url);
   const isAdminRequest = url.searchParams.get('scope') === 'admin';
+  const isMarketplaceRequest = !isAdminRequest && url.searchParams.get('scope') === 'marketplace';
   let requestedStorefront = url.searchParams.get('storefront')?.trim().toLowerCase() || null;
 
   if (requestedStorefront && !['yotaabo', 'poshies'].includes(requestedStorefront)) {
@@ -294,11 +302,13 @@ async function listProducts(request, requestId) {
     }
   }
 
-  const storefrontFilter = requestedStorefront || (isAdminRequest ? null : 'yotaabo');
+  const storefrontFilter = requestedStorefront || (isAdminRequest || isMarketplaceRequest ? null : 'yotaabo');
   const filters = [];
   const queryValues = [];
 
   if (!isAdminRequest) filters.push('is_active = TRUE');
+  if (isMarketplaceRequest) filters.push('marketplace_visible = TRUE');
+  else if (!isAdminRequest) filters.push('storefront_visible = TRUE');
 
   if (storefrontFilter) {
     queryValues.push(storefrontFilter);
@@ -312,6 +322,9 @@ async function listProducts(request, requestId) {
         id,
         name,
         price,
+        storefront,
+        marketplace_visible,
+        storefront_visible,
         category,
         subcategory,
         description,
