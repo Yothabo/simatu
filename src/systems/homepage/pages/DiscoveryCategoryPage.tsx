@@ -101,7 +101,7 @@ export default function DiscoveryCategoryPage() {
         watchOverflow
         loop={false}
         aria-label={item.category + ' interests'}
-        style={{ paddingBottom: 34, '--swiper-theme-color': '#f4f1ec' } as React.CSSProperties}
+        style={{ paddingBottom: 34, overflow: 'visible', '--swiper-theme-color': '#f4f1ec' } as React.CSSProperties}
       >
         {subcategories.map((sub) => (
           <SwiperSlide key={sub.id}>
