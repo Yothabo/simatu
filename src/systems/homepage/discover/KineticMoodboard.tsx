@@ -403,7 +403,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         categories={DISCOVERY_MARKETS}
         recentCategories={recentCategories}
         activeCategory={selectedCategory}
-        onCategorySelect={(category) => { setSelectedCategory(category); setSearchQuery(""); }}
+        onCategorySelect={(category) => { recordVisitedCategory(category); setSelectedCategory(category); setSearchQuery(""); }}
         onRecentCategorySelect={(category) => { recordVisitedCategory(category); setSelectedCategory(category); setSearchQuery(""); }}
         onClearCategory={() => setSelectedCategory(null)}
         onRandomDiscovery={() => {
