@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Header from '../components/Header';
 import { useCart } from '../../core/context/CartContext';
 import { FiTrash2, FiPlus, FiMinus } from 'react-icons/fi';
@@ -13,6 +13,8 @@ import useStorefront from '../../core/hooks/useStorefront';
 
 export default function CartPage() {
   const { name: storeName, pathFor, primaryAccent } = useStorefront();
+  const location = useLocation();
+  const isCheckoutView = location.pathname === '/checkout';
   const isYotaabo = storeName === 'Yotaabo';
   const { cartItems, removeFromCart, increaseQuantity, decreaseQuantity } = useCart();
   const [selectedStorefronts, setSelectedStorefronts] = useState<string[]>([]);
@@ -62,6 +64,11 @@ export default function CartPage() {
       <Header sticky={true} showBack={true} />
       <main className="flex min-h-screen flex-col bg-white px-6 pt-0 pb-12 sm:px-10 lg:px-12 lg:pt-0 lg:pb-20">
         <div className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col">
+
+          {cartItems.length > 0 && <header className="mb-8 mt-8">
+            <h1 className="font-heading text-3xl italic text-[#4d4d4d]">{isCheckoutView ? 'Choose stores to checkout' : 'Your shared cart'}</h1>
+            <p className="mt-2 max-w-xl font-heading text-sm leading-relaxed text-[#696964]">Your products stay together here, grouped by the stores selling them. Select the stores you want to purchase from now.</p>
+          </header>}
 
           {cartItems.length === 0 ? (
             <div className="mt-20 flex flex-col items-center justify-center text-center">
@@ -193,7 +200,7 @@ export default function CartPage() {
                     disabled={selectedCartItems.length === 0}
                     className={`inline-flex disabled:cursor-not-allowed disabled:opacity-40 min-h-12 items-center justify-center border border-solid px-8 text-xs font-semibold tracking-wide text-white transition-colors hover:bg-transparent ${primaryAccent === "#ff1493" ? "border-[#ff1493] bg-[#ff1493] hover:text-[#ff1493]" : "border-[#8aa89b] bg-[#8aa89b] hover:text-[#8aa89b]"}` }
                   >
-                    Checkout
+                    {isCheckoutView ? 'Continue to checkout' : 'Checkout selected stores'}
                   </button>
                 </div>
               </div>
