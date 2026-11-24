@@ -15,6 +15,8 @@ export const EMPTY_PRODUCT: AdminProduct = {
   description: '',
   image_url: '',
   is_active: true,
+  marketplace_visible: true,
+  storefront_visible: true,
   sort_order: 0,
   sizes: [],
   order_count: 0,
