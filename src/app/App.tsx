@@ -16,7 +16,7 @@ const ServicesPage = React.lazy(() => import('../systems/storefront/experience')
 const ViewCatalog = React.lazy(() => import('../systems/storefront/experience').then(({ CatalogPage }) => ({ default: CatalogPage })));
 const About = React.lazy(() => import('../systems/storefront/experience').then(({ AboutPage }) => ({ default: AboutPage })));
 const CartPage = React.lazy(() => import('../systems/storefront/experience').then(({ CartPage }) => ({ default: CartPage })));
-const MarketplaceCartPage = React.lazy(() => import('../systems/storefront/experience/pages/MarketplaceCartPage'));
+const MarketplaceCartPage = React.lazy(() => import('../systems/storefront/experience').then(({ MarketplaceCartPage }) => ({ default: MarketplaceCartPage })));
 const NotFound = React.lazy(() => import('../pages/NotFound'));
 const UpdatePassword = React.lazy(() => import('../pages/UpdatePassword'));
 const DiscoveryCategoryPage = React.lazy(
