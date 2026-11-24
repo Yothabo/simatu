@@ -310,14 +310,6 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
     applyPosition(positionRef.current.x - event.deltaX - (event.shiftKey ? event.deltaY : 0), positionRef.current.y - (event.shiftKey ? 0 : event.deltaY));
   };
 
-  const handleTileClick = (item: MoodboardItem) => {
-    if (!dragRef.current.moved) {
-      if (onItemClick) onItemClick(item);
-      else if (!decorativeOnly) navigate(`/discover/${item.id}`, { state: { discovery: item, position: positionRef.current } });
-    }
-    dragRef.current.moved = false;
-  };
-
   return (
     <section className={`kinetic-moodboard ${decorativeOnly ? 'is-decorative ' : ''}${className}${colorReveal ? ' is-color-revealing' : ''}${interactive ? ' is-interactive' : ''}`} style={style} aria-label="Explore the moodboard">
       <style>{`
