@@ -13,14 +13,14 @@ export const DISCOVERY_MARKETS: MoodboardItem[] = [
   { id: 'food', image: image('photo-1490645935967-10de6ba17061'), alt: 'Food and specialty goods', category: 'Food', title: 'Good things, gathered' },
   { id: 'automotive', image: image('photo-1500534623283-312aade485b7'), alt: 'Automotive culture', category: 'Automotive', title: 'Driven by detail' },
   { id: 'pets', image: image('photo-1497366754035-f200968a6e72'), alt: 'Pet products and animal care', category: 'Pets', title: 'For every companion' },
-  { id: 'kids', image: image('photo-1542291026-7eec264c27ff'), alt: 'Children and family products', category: 'Kids & Family', title: 'Little things, big moments' },
+  { id: 'kids', image: image('photo-1503454537195-1dc4e4d6a4b3'), alt: 'Children and family products', category: 'Kids & Family', title: 'Little things, big moments' },
   { id: 'creative', image: image('photo-1497366216548-37526070297c'), alt: 'Art and creative supplies', category: 'Art & Creativity', title: 'Make something yours' },
   { id: 'events', image: image('photo-1529139574466-a303027c1d8b'), alt: 'Celebrations and events', category: 'Events', title: 'Gather and celebrate' },
   { id: 'hobbies', image: image('photo-1553062407-98eeb64c6a62'), alt: 'Hobbies and collectibles', category: 'Hobbies', title: 'Follow your curiosity' },
   { id: 'services', image: image('photo-1517841905240-472988babdf9'), alt: 'Independent services', category: 'Services', title: 'Find the right people' },
   { id: 'travel', image: image('photo-1524504388940-b1c1722653e1'), alt: 'Travel and experiences', category: 'Travel & Experiences', title: 'Go somewhere new' },
-  { id: 'business', image: image('photo-1517836357463-d25dfeac3438'), alt: 'Business and professional services', category: 'Business', title: 'Built for what is next' },
-  { id: 'digital', image: image('photo-1506794778202-cad84cf45f1d'), alt: 'Digital products and software', category: 'Digital', title: 'Ideas you can use' },
+  { id: 'business', image: image('photo-1497366811353-6870744d04b2'), alt: 'Business and professional services', category: 'Business', title: 'Built for what is next' },
+  { id: 'digital', image: image('photo-1498050108023-c5249f4df085'), alt: 'Digital products and software', category: 'Digital', title: 'Ideas you can use' },
 ];
 
 export type DiscoverySubcategory = { id: string; title: string; image: string; alt: string; description: string; terms: string[] };
