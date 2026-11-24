@@ -100,7 +100,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const boardTilePool = useMemo(() => {
     const subcategoryTiles = DISCOVERY_MARKETS.flatMap((market) =>
       (DISCOVERY_SUBCATEGORIES[market.id] || []).map((subcategory) => ({
-        id: `${market.id}-${subcategory.id}``,
+        id: `${market.id}-${subcategory.id}`,
         image: subcategory.image,
         alt: subcategory.alt,
         category: market.category,
