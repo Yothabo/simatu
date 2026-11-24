@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import { randomBytes } from 'node:crypto';
+import { randomBytes, randomUUID } from 'node:crypto';
 import { requireAdmin } from './_shared/auth.mjs';
 
 const pool = new Pool({
@@ -114,6 +114,7 @@ async function createOrder(body) {
     });
   }
 
+  const checkoutGroupId = randomUUID();
   const client = await pool.connect();
   const createdOrders = [];
 
@@ -122,8 +123,8 @@ async function createOrder(body) {
 
     for (const group of preparedOrders) {
       const insertedOrder = await client.query(
-        "INSERT INTO public.orders (order_number, customer_name, customer_phone, subtotal, status, storefront) VALUES ($1, $2, $3, $4, 'pending', $5) RETURNING id, order_number, customer_name, customer_phone, subtotal, status, storefront, created_at, updated_at",
-        [orderNumber(), customerName, customerPhone, group.subtotal, group.storefront]
+        "INSERT INTO public.orders (order_number, customer_name, customer_phone, subtotal, status, storefront, checkout_group_id) VALUES ($1, $2, $3, $4, 'pending', $5, $6) RETURNING id, order_number, customer_name, customer_phone, subtotal, status, storefront, checkout_group_id, created_at, updated_at",
+        [orderNumber(), customerName, customerPhone, group.subtotal, group.storefront, checkoutGroupId]
       );
 
       const order = insertedOrder.rows[0];
@@ -151,12 +152,14 @@ async function createOrder(body) {
 
     return json({
       order: {
+        checkout_group_id: checkoutGroupId,
         order_number: createdOrders.map((order) => order.order_number).join(' / '),
-        subtotal: Number(combinedSubtotal.toFixed(2)),
+        subtotal: Number(combinedSubtotal.toFixed(2)), 
         items: combinedItems,
         store_orders: createdOrders.map((order) => ({
           id: order.id,
           storefront: order.storefront,
+          checkout_group_id: checkoutGroupId,
           order_number: order.order_number,
           subtotal: order.subtotal,
           status: order.status,
