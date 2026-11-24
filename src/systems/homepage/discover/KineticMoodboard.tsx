@@ -240,7 +240,10 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   };
 
   const handleTileClick = (item: MoodboardItem) => {
-    if (!dragRef.current.moved) onItemClick?.(item);
+    if (!dragRef.current.moved) {
+      if (onItemClick) onItemClick(item);
+      else if (!decorativeOnly) navigate(`/discover/${item.id}`, { state: { discovery: item, position: positionRef.current } });
+    }
     dragRef.current.moved = false;
   };
 
