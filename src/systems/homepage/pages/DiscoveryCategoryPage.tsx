@@ -24,6 +24,13 @@ export default function DiscoveryCategoryPage() {
   const location = useLocation();
   const { categoryId = '' } = useParams();
   const [searchQuery, setSearchQuery] = useState('');
+  const [savedDiscoveries, setSavedDiscoveries] = useState<MoodboardItem[]>(() => {
+    try {
+      const stored = localStorage.getItem('simatu-saved-discoveries');
+      const parsed = stored ? JSON.parse(stored) : [];
+      return Array.isArray(parsed) ? parsed as MoodboardItem[] : [];
+    } catch { return []; }
+  });
   const [products, setProducts] = useState<CategoryProduct[]>([]);
   const [productsLoading, setProductsLoading] = useState(false);
   const [productsError, setProductsError] = useState('');
@@ -87,6 +94,35 @@ export default function DiscoveryCategoryPage() {
       .sort((a, b) => a.name.localeCompare(b.name)).slice(0, 8);
   }, [normalizedQuery, scopedProducts]);
 
+  const isSaved = savedDiscoveries.some((saved) => saved.id === item.id);
+
+  const toggleSavedDiscovery = () => {
+    setSavedDiscoveries((current) => {
+      const next = current.some((saved) => saved.id === item.id)
+        ? current.filter((saved) => saved.id !== item.id)
+        : [item, ...current];
+      try { localStorage.setItem('simatu-saved-discoveries', JSON.stringify(next)); } catch {}
+      return next;
+    });
+  };
+
+  const shareDiscovery = async () => {
+    const url = window.location.origin + window.location.pathname;
+    try {
+      if (typeof navigator.share === 'function') {
+        await navigator.share({ title: item.title, text: 'Discover ' + item.title + ' on Simatu', url });
+      } else if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        window.prompt('Copy this discovery link:', url);
+      }
+    } catch (error) {
+      if (!(error instanceof Error && error.name === 'AbortError')) {
+        try { window.prompt('Copy this discovery link:', url); } catch {}
+      }
+    }
+  };
+
   const goBack = () => {
     try { sessionStorage.setItem('simatu-discover-return', JSON.stringify({ position: (location.state as any)?.position || null })); } catch {}
     navigate('/', { state: { revealMoodboard: true } });
@@ -101,6 +137,16 @@ export default function DiscoveryCategoryPage() {
       <div className="discovery-hero-copy" style={{ position: 'relative', zIndex: 1, maxWidth: 760 }}>
         <h1 style={{ fontSize: 'clamp(40px,8vw,96px)', lineHeight: .95, fontWeight: 500, margin: '18px 0' }}>{item.category}</h1>
         <p style={{ fontSize: 'clamp(14px,1.4vw,18px)', lineHeight: 1.65, maxWidth: 680, color: '#f4f1ec' }}>Explore products, services, independent businesses and things worth discovering.</p>
+        <div className="discovery-category-actions" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 10, marginTop: 22 }}>
+          <button type="button" onClick={toggleSavedDiscovery} aria-pressed={isSaved} aria-label={isSaved ? 'Remove from Saved Discoveries' : 'Save to Saved Discoveries'} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 9, minHeight: 42, padding: '0 16px', border: '1px solid rgba(255,255,255,.42)', borderRadius: 999, background: isSaved ? 'rgba(255,255,255,.2)' : 'rgba(0,0,0,.18)', color: '#fff', font: 'inherit', fontSize: 13, cursor: 'pointer', backdropFilter: 'blur(12px)' }}>
+            <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M6.5 4.75h11a1 1 0 0 1 1 1v14l-6.5-3.9-6.5 3.9v-14a1 1 0 0 1 1-1Z"/></svg>
+            {isSaved ? 'Saved' : 'Save discovery'}
+          </button>
+          <button type="button" onClick={() => { void shareDiscovery(); }} aria-label="Share this discovery" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 9, minHeight: 42, padding: '0 16px', border: '1px solid rgba(255,255,255,.42)', borderRadius: 999, background: 'rgba(0,0,0,.18)', color: '#fff', font: 'inherit', fontSize: 13, cursor: 'pointer', backdropFilter: 'blur(12px)' }}>
+            <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.6-4.5M8.2 13.2l7.6 4.5"/></svg>
+            Share discovery
+          </button>
+        </div>
       </div>
     </section>
     <section className="discovery-category-content" style={panel}>
