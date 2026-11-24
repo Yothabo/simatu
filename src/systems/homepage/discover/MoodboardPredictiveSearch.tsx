@@ -2,11 +2,11 @@ import React from 'react';
 import './moodboard-search.css';
 type Product={id:string;name:string;category?:string;subcategory?:string;brand?:string;image_url?:string|null;storeKey?:string;storeName:string;href:string;price?:number};
 type Store={key:string;name:string;href:string;detail?:string};
-type Props={query:string;loading?:boolean;error?:string;stores?:Store[];categories?:string[];products?:Product[];onCategorySelect?:(category:string)=>void;emptyMessage?:string;ariaLabel?:string};
-export default function MoodboardPredictiveSearch({query,loading=false,error='',stores=[],categories=[],products=[],onCategorySelect,emptyMessage='No matches yet. Try a store, product or category.',ariaLabel='Predictive search suggestions'}:Props){
+type Props={query:string;loading?:boolean;error?:string;stores?:Store[];categories?:string[];products?:Product[];onCategorySelect?:(category:string)=>void;emptyMessage?:string;ariaLabel?:string;className?:string};
+export default function MoodboardPredictiveSearch({query,loading=false,error='',stores=[],categories=[],products=[],onCategorySelect,emptyMessage='No matches yet. Try a store, product or category.',ariaLabel='Predictive search suggestions',className=''}:Props){
  if(!query.trim())return null;
  const hasResults=stores.length||categories.length||products.length;
- return <div className="kinetic-moodboard__search-results" role="listbox" aria-label={ariaLabel}>
+ return <div className={"kinetic-moodboard__search-results "+className} role="listbox" aria-label={ariaLabel}>
  {loading&&<div className="kinetic-moodboard__search-status">Searching across stores…</div>}
  {!loading&&error&&<div className="kinetic-moodboard__search-status">{error}</div>}
  {!loading&&!error&&!hasResults&&<div className="kinetic-moodboard__search-status">{emptyMessage}</div>}
