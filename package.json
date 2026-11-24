@@ -15,7 +15,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:unit": "vitest run tests/unit",
-    "check-architecture": "node scripts/check-architecture.js"
+    "check-architecture": "node scripts/check-architecture.js",
+    "images:unsplash-curate": "node scripts/unsplash-curate-discovery.mjs"
   },
   "dependencies": {
     "@emailjs/browser": "^3.11.0",
