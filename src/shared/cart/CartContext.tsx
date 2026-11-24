@@ -1,23 +1,12 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 
 export type CartItem = {
-  id: string;
-  name: string;
-  price: string;
-  placeholderColor: string;
-  image_url?: string | null;
-  description?: string | null;
-  category: string;
-  quantity: number;
-  storefront: string;
-  storeName: string;
+  id: string; name: string; price: string; placeholderColor: string;
+  image_url?: string | null; description?: string | null; category: string;
+  quantity: number; storefront: string; storeName: string;
 };
-
-type NewCartItem = Omit<CartItem, 'quantity' | 'storeName'> & {
-  storeName?: string;
-};
-
-type CartContextType = {
+export type NewCartItem = Omit<CartItem, 'quantity' | 'storeName'> & { storeName?: string };
+export type CartState = {
   cartItems: CartItem[];
   addToCart: (item: NewCartItem) => void;
   removeFromCart: (id: string) => void;
@@ -26,80 +15,48 @@ type CartContextType = {
   clearCart: () => void;
   cartTotal: number;
 };
-const CartContext = createContext<CartContextType | undefined>(undefined);
-const SHARED_CART_KEY = 'simatu-shared-cart';
+const GlobalCartContext = createContext<CartState | undefined>(undefined);
+export const MARKETPLACE_CART_KEY = 'simatu-marketplace-cart';
 const parsePrice = (price: string) => {
   const num = parseFloat(price.replace(/[^0-9.]/g, ''));
   return Number.isFinite(num) ? num : 0;
 };
-function normalizeCartItems(value: unknown, storefront: string): CartItem[] {
+function normalizeItems(value: unknown): CartItem[] {
   if (!Array.isArray(value)) return [];
-  return value
-    .filter((item): item is Record<string, unknown> => Boolean(item) && typeof item === 'object')
-    .filter((item) => typeof item.id === 'string' && typeof item.name === 'string')
-    .map((item) => {
-      const itemStorefront = typeof item.storefront === 'string' ? item.storefront : storefront;
-      return {
-        id: String(item.id),
-        name: String(item.name),
-        price: String(item.price ?? 'R 0'),
+  return value.filter((item): item is Record<string, unknown> => Boolean(item) && typeof item === 'object')
+    .filter(item => typeof item.id === 'string' && typeof item.name === 'string')
+    .map(item => {
+      const storefront = typeof item.storefront === 'string' ? item.storefront : 'unknown';
+      return { id: String(item.id), name: String(item.name), price: String(item.price ?? 'R 0'),
         placeholderColor: String(item.placeholderColor ?? 'bg-[#f1f1ee]'),
         image_url: typeof item.image_url === 'string' ? item.image_url : null,
         description: typeof item.description === 'string' ? item.description : null,
-        category: String(item.category ?? 'General'),
-        quantity: Math.max(1, Number(item.quantity) || 1),
-        storefront: itemStorefront,
-        storeName: typeof item.storeName === 'string'
-          ? item.storeName
-          : itemStorefront === 'poshies' ? 'Poshies' : itemStorefront === 'yotaabo' ? 'Yotaabo' : itemStorefront,
-      };
+        category: String(item.category ?? 'General'), quantity: Math.max(1, Number(item.quantity) || 1),
+        storefront, storeName: typeof item.storeName === 'string' ? item.storeName : storefront };
     });
 }
-function loadSharedCart(): CartItem[] {
-  if (typeof window === 'undefined') return [];
-  try {
-    const shared = window.localStorage.getItem(SHARED_CART_KEY);
-    if (shared) return normalizeCartItems(JSON.parse(shared), 'yotaabo');
-    const legacyYotaabo = normalizeCartItems(JSON.parse(window.localStorage.getItem('yotaabo-cart') || '[]'), 'yotaabo');
-    const legacyPoshies = normalizeCartItems(JSON.parse(window.localStorage.getItem('poshies-cart') || '[]'), 'poshies');
-    const merged = [...legacyYotaabo, ...legacyPoshies];
-    const unique = new Map(merged.map((item) => [item.id, item] as const));
-    return Array.from(unique.values());
-  } catch {
-    return [];
-  }
+function loadMarketplaceCart(): CartItem[] {
+  try { return normalizeItems(window.localStorage.getItem(MARKETPLACE_CART_KEY) ? JSON.parse(window.localStorage.getItem(MARKETPLACE_CART_KEY)!) : []); }
+  catch { return []; }
 }
-export function CartProvider({ children }: { children: ReactNode }) {
-  const [cartItems, setCartItems] = useState<CartItem[]>(loadSharedCart);
-  useEffect(() => {
-    try {
-      window.localStorage.setItem(SHARED_CART_KEY, JSON.stringify(cartItems));
-    } catch {
-      // Keep the in-memory cart usable when browser storage is unavailable.
-    }
-  }, [cartItems]);
-  const addToCart = (item: NewCartItem) => {
-    const storefront = item.storefront || 'yotaabo';
-    const storeName = item.storeName || (storefront === 'poshies' ? 'Poshies' : storefront === 'yotaabo' ? 'Yotaabo' : storefront);
-    setCartItems((previous) => {
-      const existing = previous.find((cartItem) => cartItem.id === item.id && cartItem.storefront === storefront);
-      if (existing) {
-        return previous.map((cartItem) => cartItem.id === item.id && cartItem.storefront === storefront
-          ? { ...cartItem, quantity: cartItem.quantity + 1 }
-          : cartItem);
-      }
-      return [...previous, { ...item, storefront, storeName, quantity: 1 }];
-    });
-  };
-  const removeFromCart = (id: string) => setCartItems((previous) => previous.filter((item) => item.id !== id));
-  const increaseQuantity = (id: string) => setCartItems((previous) => previous.map((item) => item.id === id ? { ...item, quantity: item.quantity + 1 } : item));
-  const decreaseQuantity = (id: string) => setCartItems((previous) => previous.map((item) => item.id === id ? { ...item, quantity: Math.max(1, item.quantity - 1) } : item));
+export function GlobalCartProvider({ children }: { children: ReactNode }) {
+  const [cartItems, setCartItems] = useState<CartItem[]>(loadMarketplaceCart);
+  useEffect(() => { try { localStorage.setItem(MARKETPLACE_CART_KEY, JSON.stringify(cartItems)); } catch {} }, [cartItems]);
+  const addToCart = (item: NewCartItem) => setCartItems(prev => {
+    const store = item.storefront || 'unknown';
+    const found = prev.find(p => p.id === item.id && p.storefront === store);
+    if (found) return prev.map(p => p.id === item.id && p.storefront === store ? { ...p, quantity: p.quantity + 1 } : p);
+    return [...prev, { ...item, storefront: store, storeName: item.storeName || store, quantity: 1 }];
+  });
+  const removeFromCart = (id: string) => setCartItems(prev => prev.filter(item => item.id !== id));
+  const increaseQuantity = (id: string) => setCartItems(prev => prev.map(item => item.id === id ? { ...item, quantity: item.quantity + 1 } : item));
+  const decreaseQuantity = (id: string) => setCartItems(prev => prev.map(item => item.id === id ? { ...item, quantity: Math.max(1, item.quantity - 1) } : item));
   const clearCart = () => setCartItems([]);
   const cartTotal = cartItems.reduce((total, item) => total + parsePrice(item.price) * item.quantity, 0);
-  return <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, cartTotal }}>{children}</CartContext.Provider>;
+  return <GlobalCartContext.Provider value={{ cartItems, addToCart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, cartTotal }}>{children}</GlobalCartContext.Provider>;
 }
-export function useCart() {
-  const context = useContext(CartContext);
-  if (!context) throw new Error('useCart must be used within a CartProvider');
+export function useGlobalCart() {
+  const context = useContext(GlobalCartContext);
+  if (!context) throw new Error('useGlobalCart must be used within a GlobalCartProvider');
   return context;
 }
