@@ -80,7 +80,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const [savedDiscoveries, setSavedDiscoveries] = useState<MoodboardItem[]>(() => {
     try {
       const stored = localStorage.getItem('simatu-saved-discoveries');
-      return stored ? JSON.parse(stored) as MoodboardItem[] : [];
+      const parsed = stored ? JSON.parse(stored) : [];\n      return Array.isArray(parsed) ? parsed as MoodboardItem[] : [];
     } catch { return []; }
   });
   const [openTileActions, setOpenTileActions] = useState<string | null>(null);
@@ -349,7 +349,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__store-sub{color:var(--hp-color-text-muted);font:var(--hp-font-weight-regular) var(--hp-font-size-sm)/var(--hp-line-height-normal) var(--hp-font-family);margin-top:var(--hp-size-md)}
         @media(max-width:640px){.kinetic-moodboard__search-header{padding:var(--hp-size-12)}.kinetic-moodboard__search-shell{height:var(--hp-size-55);width:calc(100vw - var(--hp-size-24))}.kinetic-moodboard__search-results{top:var(--hp-size-80)}.kinetic-moodboard__dialog-backdrop{padding:0;padding-top:max(0px,env(safe-area-inset-top))}.kinetic-moodboard__dialog{width:100%;max-height:min(92vh,900px);max-height:min(92dvh,var(--hp-size-950));padding:0 var(--hp-size-18) calc(var(--hp-size-18) + env(safe-area-inset-bottom));border-radius:var(--hp-size-22) var(--hp-size-22) 0 0;overflow-y:auto;overscroll-behavior:contain}.kinetic-moodboard__dialog-heading{top:0;margin:0 -var(--hp-size-18);padding:var(--hp-size-18)}}
       `}</style>
-      <MoodboardSearchBar value={searchQuery} onChange={setSearchQuery} onBack={onExit ? () => { setSearchQuery(""); setSearchDismissed(true); onExit(); } : undefined} visible={colorReveal && !searchDismissed} showMenu savedDiscoveries={savedDiscoveries} onSavedDiscoverySelect={(item) => navigate(`/discover/${item.id}`, { state: { discovery: item, position: positionRef.current } })} onMenuClick={() => setMenuOpen((open) => !open)} className={menuOpen ? "menu-expanded" : ""} />
+      <MoodboardSearchBar value={searchQuery} onChange={setSearchQuery} onBack={onExit ? () => { setSearchQuery(""); setSearchDismissed(true); onExit(); } : undefined} visible={colorReveal && !searchDismissed} showMenu savedDiscoveries={savedDiscoveries} onSavedDiscoverySelect={(item) => navigate('/discover/' + item.category.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''), { state: { discovery: item, position: positionRef.current } })} onMenuClick={() => setMenuOpen((open) => !open)} className={menuOpen ? "menu-expanded" : ""} />
       <span className="kinetic-moodboard__reveal-sentinel" aria-hidden="true" />
       <div
         ref={viewportRef}
