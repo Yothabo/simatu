@@ -19,6 +19,13 @@ export default function ViewCatalog() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const requestedCategory = queryParams.get('category');
+  const marketplaceTerms = (queryParams.get('marketplaceTerms') || '').split(',').map((term) => term.trim().toLowerCase()).filter(Boolean);
+  const visibleProducts = marketplaceTerms.length
+    ? allProducts.filter((product) => {
+        const searchable = [product.name, product.category, product.subcategory].filter(Boolean).join(' ').toLowerCase();
+        return marketplaceTerms.some((term) => searchable.includes(term));
+      })
+    : allProducts;
   const initialCategory = (
     storeName === 'Poshies' && requestedCategory === 'Spaces'
       ? 'Lounge'
@@ -65,7 +72,7 @@ export default function ViewCatalog() {
     }
   }, [validInitialCategory]);
 
-  const newlyAddedProducts = [...allProducts]
+  const newlyAddedProducts = [...visibleProducts]
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
     .slice(0, 5);
 
@@ -146,7 +153,7 @@ export default function ViewCatalog() {
 
         {/* ============= CATEGORY ACCORDIONS ============= */}
         {categories.map((category) => {
-          const items: Product[] = allProducts.filter((p) => p.category === category);
+          const items: Product[] = visibleProducts.filter((p) => p.category === category);
           const subcategories: string[] = Array.from(new Set(items.map((i) => i.subcategory)));
           const isOpen = openCategory === category;
 
