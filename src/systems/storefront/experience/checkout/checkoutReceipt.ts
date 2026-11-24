@@ -10,6 +10,7 @@ export const getReceiptText = (
     name,
     'ORDER CONFIRMATION',
     `Order: ${createdOrder.order_number}`,
+    ...(createdOrder.checkoutGroupId ? [`Checkout reference: ${createdOrder.checkoutGroupId}`] : []),
     ...(createdOrder.storeOrders?.length ? ['STORE ORDERS', ...createdOrder.storeOrders.map((order) => `${order.storefront} | ${order.order_number} | R ${Number(order.subtotal).toFixed(2)}`)] : []),
     `Date: ${createdOrder.orderedAt.toLocaleString('en-ZA')}`,
     '',
