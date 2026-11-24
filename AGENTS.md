@@ -93,7 +93,8 @@ Branch switching requires explicit user authorization.
 
 ## 4. Approved Permanent Branch Architecture
 
-The following branches are the only authorized development workspaces.
+The following branches are authorized development workspaces. The repository
+owner may explicitly authorize a broader task on an existing workspace.
 
 ### Admin
 
@@ -171,24 +172,43 @@ Scope:
 - Local application testing
 - Latest stable working application tree
 
-No other permanent work branches are authorized.
+### Owner-directed integrated implementation
+
+Branch:
+
+codex/simatu-work
+
+Scope, only when explicitly assigned by the repository owner:
+
+- Coordinated Simatu marketplace architecture
+- Marketplace-wide product and service taxonomy
+- Cross-store classification and category migration
+- Coordinated Yotaabo and Poshies storefront implementation
+- Related application integration required by that explicitly assigned scope
+
+This workspace does not authorize work outside the owner's stated task.
+It does not authorize merges, pushes, or changes to protected branches.
+
+No other permanent work branches are authorized unless the repository
+owner explicitly authorizes them.
 
 ---
 
 ## 5. Merge Architecture
 
-The only authorized subsystem integration destinations are:
+The standard subsystem integration destinations are:
 
 Codex/admin-work       -> Codex/local-work
 Codex/storefront-work  -> Codex/local-work
 Codex/cart-work        -> Codex/local-work
 Codex/homepage-work    -> Codex/local-work
 
-The only authorized beta integration path is:
+Owner-directed integrated work on codex/simatu-work remains on that branch
+unless the repository owner explicitly authorizes a separate integration.
+
+The only standard beta integration path is:
 
 Codex/local-work -> beta
-
-Subsystem branches MUST NEVER merge directly into beta.
 
 Subsystem branches MUST NEVER merge directly into one another.
 
@@ -196,9 +216,6 @@ The AI agent MUST NOT perform any merge without explicit authorization
 from the repository owner.
 
 Approval of implementation does not automatically authorize a merge.
-
-Approval to merge a subsystem into Codex/local-work does not authorize
-merging Codex/local-work into beta.
 
 Each merge requires explicit authorization for its destination.
 
@@ -334,6 +351,10 @@ or storefront.
 
 Cross-subsystem changes require an explanation and explicit authorization
 when they exceed the original task scope.
+
+The repository owner may explicitly authorize coordinated cross-subsystem
+implementation on codex/simatu-work. Such authorization applies only to
+the stated task scope.
 
 The Storefront must remain untouched during Admin tasks unless the
 repository owner explicitly authorizes changes to it.
@@ -486,7 +507,8 @@ Never bypass these stop conditions for convenience.
 
 ## 16. Final Principle
 
-Simatu uses permanent, dedicated subsystem workspaces.
+Simatu uses permanent, dedicated subsystem workspaces, with owner-directed
+integrated work permitted when explicitly assigned.
 
 The AI agent is an implementation assistant, not the branch manager,
 release manager, or repository owner.
@@ -523,6 +545,8 @@ The AI agent MUST NOT switch branches without explicit user authorization.
 - Cart and checkout: Codex/cart-work
 - Homepage: Codex/homepage-work
 - Integration and testing: Codex/local-work
+- Owner-directed integrated implementation: codex/simatu-work, only for
+  tasks explicitly assigned by the repository owner
 
 ### Workspace verification
 
@@ -550,9 +574,7 @@ reading it again.
 ### Authorization
 
 Approval to implement is not approval to commit.
-
 Approval to commit is not approval to push.
-
 Approval to push is not approval to merge.
 
 Approval to merge a subsystem into Codex/local-work is not approval
