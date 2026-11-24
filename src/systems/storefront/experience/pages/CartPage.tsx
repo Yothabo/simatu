@@ -82,17 +82,15 @@ export default function CartPage() {
 
               {/* Paragraph */}
               <p className="mt-3 max-w-sm font-heading text-base leading-relaxed text-[#696964]">
-                {isYotaabo
-                  ? "Looks like you haven't added a fragrance yet. Discover our collection and find a scent worth remembering."
-                  : "Looks like you haven't added anything yet. Explore our collection and find pieces for everyday comfort."}
+                Explore the Simatu marketplace to discover products from multiple stores and add them to your shared cart.
               </p>
 
               {/* CTA */}
               <Link
-                to={pathFor('catalog')}
+                to="/"
                 className={`mt-8 inline-flex min-h-12 items-center justify-center border border-solid px-8 text-xs font-semibold tracking-wide text-white transition-colors hover:bg-transparent ${primaryAccent === "#ff1493" ? "border-[#ff1493] bg-[#ff1493] hover:text-[#ff1493]" : "border-[#8aa89b] bg-[#8aa89b] hover:text-[#8aa89b]"}` }
               >
-                Explore Collection
+                Explore Marketplace
               </Link>
             </div>
           ) : (
@@ -190,7 +188,7 @@ export default function CartPage() {
 
                 <div className="flex gap-4">
                   <Link
-                    to={pathFor('catalog')}
+                    to="/"
                     className="inline-flex min-h-12 items-center justify-center bg-[#f1f1ee] px-8 text-xs font-semibold tracking-wide text-black/60 transition-colors hover:bg-[#e5e5e1] hover:text-black active:bg-[#dcdcd7]"
                   >
                     Continue Shopping
