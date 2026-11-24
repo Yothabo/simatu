@@ -30,13 +30,11 @@ export default function CartPage() {
   useEffect(() => {
     const availableStores = Array.from(new Set(cartItems.map((item) => item.storefront)));
     const newlyAddedStores = availableStores.filter((store) => !previousStorefrontsRef.current.includes(store));
-    setSelectedStorefronts((current) => {
-      if (!initializedStoreSelectionRef.current) {
-        initializedStoreSelectionRef.current = true;
-        return availableStores;
-      }
-      return [...current.filter((store) => availableStores.includes(store)), ...newlyAddedStores];
-    });
+    const isFirstSelection = !initializedStoreSelectionRef.current;
+    initializedStoreSelectionRef.current = true;
+    setSelectedStorefronts((current) => isFirstSelection
+      ? availableStores
+      : [...current.filter((store) => availableStores.includes(store)), ...newlyAddedStores]);
     previousStorefrontsRef.current = availableStores;
   }, [cartItems]);
 
