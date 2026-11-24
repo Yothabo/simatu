@@ -22,7 +22,13 @@ const source = fs.readFileSync(TAXONOMY, 'utf8');
 const cache = loadCache();
 const entries = parseTaxonomy(source);
 const pending = entries.filter((entry) => !cache.search[entry.queryKey]);
+const hourlyLimit = Number(process.env.UNSPLASH_HOURLY_LIMIT || 50);
+const cutoff = Date.now() - 60 * 60 * 1000;
+cache.requestTimestamps = (cache.requestTimestamps || []).filter((stamp) => stamp > cutoff);
+const hourlyRemaining = Math.max(0, hourlyLimit - cache.requestTimestamps.length);
+const runLimit = Math.min(MAX_REQUESTS, hourlyRemaining);
 let requested = 0;
+if (runLimit === 0) console.log('Hourly API budget is exhausted. Wait for the rolling hour to reset.');
 
 for (const entry of pending) {
   if (requested >= runLimit) break;
@@ -49,6 +55,7 @@ for (const entry of pending) {
     color: photo.color || '',
   })).filter((photo) => photo.id && photo.url);
   requested += 1;
+  cache.requestTimestamps.push(Date.now());
   saveCache(cache);
   console.log('Fetched', entry.query, '(' + requested + '/' + MAX_REQUESTS + ')');
 }
