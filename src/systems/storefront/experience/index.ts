@@ -8,3 +8,4 @@ export { default as AboutPage } from './pages/AboutPage';
 export { default as ServicesPage } from './pages/ServicesPage';
 export { default as CatalogPage } from './pages/CatalogPage';
 export { default as CartPage } from './pages/CartPage';
+export { default as MarketplaceCartPage } from './pages/MarketplaceCartPage';
