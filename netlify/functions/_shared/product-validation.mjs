@@ -171,10 +171,6 @@ export function validateProduct(body) {
     return { error: 'SKU must contain 1–80 valid letters, numbers or . _ / - characters.' };
   }
 
-  if (storefront !== null && !['yotaabo', 'poshies'].includes(storefront)) {
-    return { error: 'Please select a valid storefront.' };
-  }
-
   if (!categoryId && !category) {
     return { error: 'Please select a valid category.' };
   }
