@@ -27,6 +27,7 @@ type OrderResponse = {
   order?: {
     order_number: string;
     subtotal: number;
+    checkout_group_id?: string;
     store_orders?: { storefront: string; order_number: string; subtotal: number; status: string }[];
   };
 };
@@ -161,6 +162,7 @@ export default function CheckoutModal({
         orderedAt,
         items: orderSnapshot,
         storeOrders: data.order.store_orders || [],
+        checkoutGroupId: data.order.checkout_group_id,
       };
 
       try {
