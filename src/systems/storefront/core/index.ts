@@ -9,7 +9,7 @@ export type {
   StorefrontKey,
 } from './types/storefront';
 
-export { CartProvider, useCart } from './context/CartContext';
+export { StorefrontCartProvider, useCart } from './context/CartContext';
 export { default as useStorefront } from './hooks/useStorefront';
 export {
   useProducts,
