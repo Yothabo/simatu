@@ -14,7 +14,7 @@ import MoodboardPredictiveSearch from '../discover/MoodboardPredictiveSearch';
 import { DISCOVERY_MARKETS, getMarketById, getSubcategories } from '../discover/discovery-taxonomy';
 
 const fallback: MoodboardItem = DISCOVERY_MARKETS[0];
-type CategoryProduct = { id: string; name: string; storefront: string; category?: string; subcategory?: string; brand?: string; description?: string | null; storeName: string; href: string; price?: number; image_url?: string | null };
+type CategoryProduct = { id: string; name: string; storefront: string; sku?: string | null; sizes?: string[]; category?: string; subcategory?: string; brand?: string; description?: string | null; storeName: string; href: string; price?: number; image_url?: string | null };
 const panel: React.CSSProperties = { padding: 'clamp(24px,5vw,72px)', background: '#111', color: '#f4f1ec', fontFamily: 'inherit' };
 
 export default function DiscoveryCategoryPage() {
@@ -125,6 +125,24 @@ export default function DiscoveryCategoryPage() {
     });
     toast.success(product.name + ' added to your shared cart');
   };
+
+  const marketplaceGroups = useMemo(() => {
+    const grouped = new Map<string, CategoryProduct[]>();
+    scopedProducts.forEach((product) => {
+      const normalizedName = product.name.trim().toLowerCase().replace(/\\s+/g, ' ');
+      const normalizedSizes = (product.sizes || []).map((size) => size.toLowerCase()).sort().join(',');
+      const identity = product.sku?.trim()
+        ? 'sku:' + product.sku.trim().toLowerCase()
+        : 'name:' + normalizedName + '|sizes:' + normalizedSizes;
+      grouped.set(identity, [...(grouped.get(identity) || []), product]);
+    });
+    return Array.from(grouped.entries()).map(([id, offers]) => ({
+      id,
+      name: offers[0].name,
+      image_url: offers.find((offer) => offer.image_url)?.image_url || null,
+      offers: offers.slice().sort((a, b) => Number(a.price || 0) - Number(b.price || 0)),
+    }));
+  }, [scopedProducts]);
 
   const normalizedQuery = searchQuery.trim().toLowerCase();
   const matchingProducts = useMemo(() => {
@@ -267,19 +285,28 @@ export default function DiscoveryCategoryPage() {
 
         {productsLoading && <p>Loading discoveries…</p>}
         {productsError && <p role="alert">{productsError}</p>}
-        {scopedProducts.length > 0 && <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(100%,220px),1fr))', gap: 16, marginTop: 20 }}>
-          {scopedProducts.map((product, index) => <article className="discovery-product-card" key={product.id} style={{ animationDelay: `${Math.min(index, 8) * 45}ms`, color: '#f4f1ec', border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, overflow: 'hidden' }}>
-            {product.image_url && <img src={product.image_url} alt={product.name} loading="lazy" style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover', display: 'block' }} />}
+        {marketplaceGroups.length > 0 && <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(100%,260px),1fr))', gap: 16, marginTop: 20 }}>
+          {marketplaceGroups.map((group, index) => <article className="discovery-product-card" key={group.id} style={{ animationDelay: `${Math.min(index, 8) * 45}ms`, color: '#f4f1ec', border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, overflow: 'hidden' }}>
+            {group.image_url && <img src={group.image_url} alt={group.name} loading="lazy" style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover', display: 'block' }} />}
             <div style={{ display: 'block', padding: 14 }}>
-              <strong>{product.name}</strong>
-              <small style={{ display: 'block', opacity: .65, marginTop: 5 }}>{product.storeName}{product.subcategory ? ' · ' + product.subcategory : ''}</small>
-              {typeof product.price === 'number' && <span style={{ display: 'block', marginTop: 8 }}>R{product.price.toLocaleString('en-ZA')}</span>}
-              <button type="button" onClick={() => addProductToCart(product)} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '100%', minHeight: 42, marginTop: 14, border: '1px solid rgba(255,255,255,.55)', borderRadius: 999, background: '#f4f1ec', color: '#111', font: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
-                Add to cart
-              </button>
+              <strong>{group.name}</strong>
+              <small style={{ display: 'block', opacity: .65, marginTop: 5 }}>Compare {group.offers.length} {group.offers.length === 1 ? 'seller offer' : 'seller offers'}</small>
+              <div style={{ display: 'grid', gap: 10, marginTop: 14 }}>
+                {group.offers.map((offer, offerIndex) => <div key={`${offer.storefront}-${offer.id}`} style={{ display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 8, paddingTop: 10, borderTop: '1px solid rgba(255,255,255,.12)' }}>
+                  <div>
+                    <span style={{ display: 'block', fontSize: 13, fontWeight: 550 }}>{offer.storeName}</span>
+                    <span style={{ display: 'block', marginTop: 3, opacity: .6, fontSize: 11 }}>{offer.subcategory || offer.category || 'Marketplace offer'}{offerIndex === 0 && group.offers.length > 1 ? ' · Lowest listed price' : ''}</span>
+                    <strong style={{ display: 'block', marginTop: 5 }}>R{Number(offer.price || 0).toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
+                  </div>
+                  <button type="button" onClick={() => addProductToCart(offer)} style={{ minHeight: 38, padding: '0 12px', border: '1px solid rgba(255,255,255,.55)', borderRadius: 999, background: '#f4f1ec', color: '#111', font: 'inherit', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+                    Choose offer
+                  </button>
+                </div>)}
+              </div>
             </div>
           </article>)}
         </div>}
+        {!productsLoading && !productsError && marketplaceGroups.length === 0 && <p style={{ marginTop: 24, color: 'rgba(244,241,236,.62)' }}>No marketplace products are listed in this category yet.</p>}
       </div>}
     </section>
   </main>;
