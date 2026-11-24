@@ -178,7 +178,7 @@ async function listOrders(admin, requestId, flowId) {
   const ordersQueryStartedAt = Date.now();
   const result = await pool.query(
     `SELECT id, order_number, customer_name, customer_phone,
-            subtotal, status, storefront, created_at, updated_at
+            subtotal, status, storefront, checkout_group_id, created_at, updated_at
      FROM public.orders
      WHERE ($1::text IS NULL OR storefront = $1)
      ORDER BY created_at DESC`,
