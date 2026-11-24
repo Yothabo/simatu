@@ -109,6 +109,8 @@ export function validateProduct(body) {
     : null;
 
   const isActive = body?.is_active;
+  const marketplaceVisible = body?.marketplace_visible == null ? true : body.marketplace_visible;
+  const storefrontVisible = body?.storefront_visible == null ? true : body.storefront_visible;
   const sortOrder = parseInteger(body?.sort_order ?? 0);
   const rawSizes = body?.sizes ?? [];
 
@@ -199,6 +201,10 @@ export function validateProduct(body) {
     return { error: 'Please provide a valid product status.' };
   }
 
+  if (typeof marketplaceVisible !== 'boolean' || typeof storefrontVisible !== 'boolean') {
+    return { error: 'Please provide valid product visibility settings.' };
+  }
+
   if (!Number.isInteger(sortOrder) || sortOrder < 0) {
     return { error: 'Please provide a valid sort order.' };
   }
@@ -228,6 +234,8 @@ export function validateProduct(body) {
       description,
       image_url: imageUrl,
       is_active: isActive,
+      marketplace_visible: marketplaceVisible,
+      storefront_visible: storefrontVisible,
       sort_order: sortOrder,
     },
   };
