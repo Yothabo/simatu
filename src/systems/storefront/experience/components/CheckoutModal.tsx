@@ -24,7 +24,11 @@ type CheckoutModalProps = {
 
 type OrderResponse = {
   error?: string;
-  order?: { order_number: string; subtotal: number };
+  order?: {
+    order_number: string;
+    subtotal: number;
+    store_orders?: { storefront: string; order_number: string; subtotal: number; status: string }[];
+  };
 };
 
 async function readOrderResponse(response: Response): Promise<OrderResponse> {
@@ -45,9 +49,9 @@ export default function CheckoutModal({
   cartTotal,
   onSuccess,
 }: CheckoutModalProps) {
-  const { name, primaryAccent, pathFor } = useStorefront();
+  const { primaryAccent } = useStorefront();
   const navigate = useNavigate();
-  const pendingOrderStorageKey = `${name.toLowerCase()}-pending-order`;
+  const pendingOrderStorageKey = 'simatu-pending-order';
 
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -120,8 +124,9 @@ export default function CheckoutModal({
 
     const orderSnapshot = cartItems.map((item) => ({
       name: item.name,
+      storeName: item.storeName,
       quantity: item.quantity,
-      unitPrice: Number(item.price.replace(/[^0-9.]/g, '')),
+      unitPrice: Number(item.price.replace(/[^0-9.]/g, '')), 
     }));
     const orderedAt = new Date();
 
@@ -133,11 +138,11 @@ export default function CheckoutModal({
         body: JSON.stringify({
           customer_name: fullName.trim(),
           customer_phone: phone,
-          storefront: name.toLowerCase(),
           items: cartItems.map((item) => ({
             product_id: item.id,
             quantity: item.quantity,
-          })),
+            storefront: item.storefront,
+          })), 
         }),
       });
 
@@ -155,6 +160,7 @@ export default function CheckoutModal({
         customerPhone: phone,
         orderedAt,
         items: orderSnapshot,
+        storeOrders: data.order.store_orders || [],
       };
 
       try {
@@ -176,16 +182,16 @@ export default function CheckoutModal({
     }
   };
 
-  const getReceiptTextForOrder = () => getReceiptText(name, createdOrder);
+  const getReceiptTextForOrder = () => getReceiptText('Simatu', createdOrder);
 
   const createReceiptPdfForOrder = async () => {
     if (!createdOrder) return null;
 
     const { createReceiptPdf } = await import('../checkout/checkoutReceiptPdf');
-    return createReceiptPdf(name, primaryAccent, createdOrder);
+    return createReceiptPdf('Simatu', primaryAccent, createdOrder);
   };
 
-  const getReceiptFileNameForOrder = () => getReceiptFileName(name, createdOrder);
+  const getReceiptFileNameForOrder = () => getReceiptFileName('Simatu', createdOrder);
 
   const handleContinueShopping = () => {
     try {
@@ -196,7 +202,7 @@ export default function CheckoutModal({
 
     setCreatedOrder(null);
     onClose();
-    navigate(pathFor(''));
+    navigate('/');
   };
 
   const downloadReceipt = async () => {
@@ -230,13 +236,13 @@ export default function CheckoutModal({
     try {
       if (file && navigator.share && navigator.canShare?.({ files: [file] })) {
         await navigator.share({
-          title: `${name} order confirmation`,
+          title: 'Simatu order confirmation',
           text: `Order ${createdOrder.order_number}`,
           files: [file],
         });
       } else if (navigator.share) {
         await navigator.share({
-          title: `${name} order confirmation`,
+          title: 'Simatu order confirmation',
           text: receiptText,
         });
       } else {
