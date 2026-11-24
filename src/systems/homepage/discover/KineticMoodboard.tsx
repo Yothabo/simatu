@@ -357,7 +357,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       </div>
 
 
-      {normalizedSearch.length >= 1 && interactive && !searchDismissed && <MoodboardPredictiveSearch query={searchQuery} loading={networkLoading} error={networkError} stores={searchStores.map(store => ({ key: store.key, name: store.name, href: store.href }))} categories={searchCategories} products={matchingProducts} onCategorySelect={setSearchQuery} />
+      {normalizedSearch.length >= 1 && interactive && !searchDismissed && <MoodboardPredictiveSearch query={searchQuery} loading={networkLoading} error={networkError} stores={searchStores.map(store => ({ key: store.key, name: store.name, href: store.href }))} categories={searchCategories} products={matchingProducts} onCategorySelect={setSearchQuery} />}
 
     </section>
   );
