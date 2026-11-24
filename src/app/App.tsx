@@ -5,7 +5,8 @@ import MetaTags from './components/MetaTags';
 import ScrollToHash from './components/ScrollToHash';
 import { useTouchSelection } from '../shared/hooks/useTouchSelection';
 
-import { CartProvider, StorefrontThemeProvider } from '../systems/storefront/core';
+import { StorefrontCartProvider, StorefrontThemeProvider } from '../systems/storefront/core';
+import { GlobalCartProvider } from '../shared/cart/CartContext';
 
 const DiscoveryPage = React.lazy(
   () => import('../systems/homepage').then(({ DiscoveryPage }) => ({ default: DiscoveryPage }))
@@ -15,6 +16,7 @@ const ServicesPage = React.lazy(() => import('../systems/storefront/experience')
 const ViewCatalog = React.lazy(() => import('../systems/storefront/experience').then(({ CatalogPage }) => ({ default: CatalogPage })));
 const About = React.lazy(() => import('../systems/storefront/experience').then(({ AboutPage }) => ({ default: AboutPage })));
 const CartPage = React.lazy(() => import('../systems/storefront/experience').then(({ CartPage }) => ({ default: CartPage })));
+const MarketplaceCartPage = React.lazy(() => import('../systems/storefront/experience/pages/MarketplaceCartPage'));
 const NotFound = React.lazy(() => import('../pages/NotFound'));
 const UpdatePassword = React.lazy(() => import('../pages/UpdatePassword'));
 const DiscoveryCategoryPage = React.lazy(
@@ -87,6 +89,10 @@ function RouteLoadingFallback() {
   );
 }
 
+function MarketplaceLayout() { return <GlobalCartProvider><Outlet /></GlobalCartProvider>; }
+function YotaaboLayout() { return <StorefrontCartProvider storefront="yotaabo"><StorefrontThemeProvider><Outlet /></StorefrontThemeProvider></StorefrontCartProvider>; }
+function PoshiesLayout() { return <StorefrontCartProvider storefront="poshies"><StorefrontThemeProvider><Outlet /></StorefrontThemeProvider></StorefrontCartProvider>; }
+
 function App() {
   useTouchSelection();
 
@@ -95,22 +101,26 @@ function App() {
       <ScrollToHash />
       <MetaTags />
 
-      <CartProvider>
       <Suspense fallback={<RouteLoadingFallback />}>
         <Routes>
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/checkout" element={<CartPage />} />
-          <Route path="/" element={<DiscoveryPage />} />
-          <Route path="/discover/:categoryId" element={<DiscoveryCategoryPage />} />
+          <Route element={<MarketplaceLayout />}>
+            <Route path="/" element={<DiscoveryPage />} />
+            <Route path="/discover/:categoryId" element={<DiscoveryCategoryPage />} />
+            <Route path="/cart" element={<MarketplaceCartPage />} />
+            <Route path="/checkout" element={<MarketplaceCartPage />} />
+          </Route>
           <Route path="/join-network" element={<NetworkApplicationPage />} />
-          <Route element={<StorefrontThemeProvider><Outlet /></StorefrontThemeProvider>}>
+
+          <Route element={<YotaaboLayout />}>
             <Route path="/yotaabo" element={<Home />} />
             <Route path="/yotaabo/services" element={<ServicesPage />} />
             <Route path="/yotaabo/catalog" element={<ViewCatalog />} />
             <Route path="/yotaabo/about" element={<About />} />
             <Route path="/yotaabo/cart" element={<CartPage />} />
             <Route path="/yotaabo/*" element={<NotFound />} />
+          </Route>
 
+          <Route element={<PoshiesLayout />}>
             <Route path="/poshies" element={<Home />} />
             <Route path="/poshies/services" element={<ServicesPage />} />
             <Route path="/poshies/catalog" element={<ViewCatalog />} />
@@ -120,28 +130,10 @@ function App() {
           </Route>
 
           <Route path="/update-password" element={<UpdatePassword />} />
-
-          <Route
-            path="/admin"
-            element={
-              <AdminErrorBoundary>
-                <Suspense
-                  fallback={
-                    <div style={{ color: 'white', padding: 30 }}>
-                      Loading admin module...
-                    </div>
-                  }
-                >
-                  <AdminPage />
-                </Suspense>
-              </AdminErrorBoundary>
-            }
-          />
-
+          <Route path="/admin" element={<AdminErrorBoundary><Suspense fallback={<div style={{ color: 'white', padding: 30 }}>Loading admin module...</div>}><AdminPage /></Suspense></AdminErrorBoundary>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </Suspense>
-      </CartProvider>
+      </Suspense>vider>
 
       <Toaster
         position="top-right"
