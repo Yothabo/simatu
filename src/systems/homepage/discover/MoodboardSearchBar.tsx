@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useCart } from '../../../shared/cart/CartContext';
+import { useGlobalCart } from '../../../shared/cart/CartContext';
 import { FaHome, FaBars, FaTimes, FaUsers, FaBookmark, FaHistory, FaRandom, FaThLarge, FaShoppingCart, FaCreditCard } from 'react-icons/fa';
 import { TiArrowBack } from 'react-icons/ti';
 import './moodboard-search.css';
@@ -57,7 +57,7 @@ export default function MoodboardSearchBar({
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [savedOpen, setSavedOpen] = useState(false);
   const [recentOpen, setRecentOpen] = useState(false);
-  const { cartItems } = useCart();
+  const { cartItems } = useGlobalCart();
   const cartQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
   const menuExpanded = className.includes("menu-expanded");
   return (
