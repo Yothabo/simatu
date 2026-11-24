@@ -17,7 +17,9 @@ type MoodboardSearchBarProps = {
   backIcon?: 'home' | 'arrow';
   fixed?: boolean;
   showMenu?: boolean;
-  onMenuClick?: () => void;\n  savedDiscoveries?: SavedDiscovery[];\n  onSavedDiscoverySelect?: (item: SavedDiscovery) => void;
+  onMenuClick?: () => void;
+  savedDiscoveries?: SavedDiscovery[];
+  onSavedDiscoverySelect?: (item: SavedDiscovery) => void;
 };
 
 export default function MoodboardSearchBar({
@@ -32,8 +34,11 @@ export default function MoodboardSearchBar({
   fixed = false,
   showMenu = false,
   onMenuClick,
+  savedDiscoveries = [],
+  onSavedDiscoverySelect,
 }: MoodboardSearchBarProps) {
-  const [categoriesOpen, setCategoriesOpen] = useState(false);\n  const [savedOpen, setSavedOpen] = useState(false);
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const [savedOpen, setSavedOpen] = useState(false);
   const menuExpanded = className.includes("menu-expanded");
   return (
     <div className={`kinetic-moodboard__search-header ${fixed ? 'moodboard-search-fixed' : ''} ${className}`} aria-hidden={!visible} style={!visible ? { transform: 'translate3d(0,-125%,0)', opacity: 0, pointerEvents: 'none' } : undefined}>
