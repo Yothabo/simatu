@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import MarketplaceCartPage from '../../storefront/experience/pages/MarketplaceCartPage';
 import { Link } from 'react-router-dom';
 import { useGlobalCart } from '../../../shared/cart/CartContext';
 import { FaHome, FaBars, FaTimes, FaUsers, FaBookmark, FaHistory, FaRandom, FaThLarge, FaShoppingCart, FaCreditCard } from 'react-icons/fa';
@@ -54,18 +56,23 @@ export default function MoodboardSearchBar({
   onClearCategory,
   onRandomDiscovery,
 }: MoodboardSearchBarProps) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const cartMode = location.pathname === '/cart' || location.pathname === '/checkout';
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [savedOpen, setSavedOpen] = useState(false);
   const [recentOpen, setRecentOpen] = useState(false);
   const { cartItems } = useGlobalCart();
   const cartQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
-  const menuExpanded = className.includes("menu-expanded");
+  const menuExpanded = className.includes("menu-expanded") || cartMode;
   return (
     <div className={`kinetic-moodboard__search-header ${fixed ? 'moodboard-search-fixed' : ''} ${className}`} aria-hidden={!visible} style={!visible ? { transform: 'translate3d(0,-125%,0)', opacity: 0, pointerEvents: 'none' } : undefined}>
       <div className={`kinetic-moodboard__search-row ${showMenu ? "has-menu" : ""}`}>
         {onBack && <button type="button" className="kinetic-moodboard__search-back" aria-label="Back" onClick={onBack} tabIndex={visible ? 0 : -1}>{backIcon === 'arrow' ? <TiArrowBack size={21} aria-hidden="true" /> : <FaHome size={18} aria-hidden="true" />}</button>}
         <div className={`kinetic-moodboard__search-shell ${showMenu ? "has-menu" : ""}`}>
-          {menuExpanded ? (
+          {cartMode ? (
+            <div className="kinetic-moodboard__cart-content" aria-label="Marketplace cart"><MarketplaceCartPage /></div>
+          ) : menuExpanded ? (
             <nav className="kinetic-moodboard__discover-tools" aria-label="Discover tools">
               {activeCategory && <div className="kinetic-moodboard__active-category"><span>Showing {activeCategory}</span><button type="button" onClick={() => { onClearCategory?.(); onMenuClick?.(); }}>Show all discoveries</button></div>}
               <div className="kinetic-moodboard__discover-group">
@@ -95,7 +102,7 @@ export default function MoodboardSearchBar({
             <input className="kinetic-moodboard__search-input" type="search" placeholder={placeholder} value={value} onChange={(event) => onChange(event.target.value)} tabIndex={visible ? 0 : -1} aria-label={ariaLabel} />
           )}
         </div>
-        {showMenu && <button type="button" className="kinetic-moodboard__menu-button" aria-label={className.includes("menu-expanded") ? "Close menu" : "Open menu"} onClick={onMenuClick} tabIndex={visible ? 0 : -1}>{className.includes("menu-expanded") ? <FaTimes aria-hidden="true" /> : <FaBars aria-hidden="true" />}</button>}
+        {showMenu && <button type="button" className="kinetic-moodboard__menu-button" aria-label={cartMode ? "Close cart" : className.includes("menu-expanded") ? "Close menu" : "Open menu"} onClick={cartMode ? () => navigate('/') : onMenuClick} tabIndex={visible ? 0 : -1}>{cartMode || className.includes("menu-expanded") ? <FaTimes aria-hidden="true" /> : <FaBars aria-hidden="true" />}</button>}
       </div>
     </div>
   );
