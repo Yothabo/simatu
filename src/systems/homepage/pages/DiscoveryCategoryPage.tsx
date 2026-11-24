@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useCart } from '../../../shared/cart/CartContext';
+import { useGlobalCart } from '../../../shared/cart/CartContext';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { A11y, Keyboard, Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
@@ -22,7 +22,7 @@ export default function DiscoveryCategoryPage() {
   const location = useLocation();
   const { categoryId = '' } = useParams();
   const [searchQuery, setSearchQuery] = useState('');
-  const { addToCart } = useCart();
+  const { addToCart } = useGlobalCart();
   const [savedDiscoveries, setSavedDiscoveries] = useState<MoodboardItem[]>(() => {
     try {
       const stored = localStorage.getItem('simatu-saved-discoveries');
