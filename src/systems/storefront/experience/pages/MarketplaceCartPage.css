@@ -7,7 +7,10 @@
 .marketplace-cart__heading{padding:clamp(28px,5vh,54px) 0 26px}
 .marketplace-cart__title{margin:0;font:500 clamp(1.8rem,4vw,3rem)/1.1 var(--hp-font-family,'DM Sans',sans-serif);letter-spacing:-.045em}
 .marketplace-cart__intro{margin:12px 0 0;max-width:620px;font:400 .8125rem/1.65 var(--hp-font-family,'DM Sans',sans-serif);color:rgba(255,255,255,.62)}
-.marketplace-cart__empty{display:flex;flex:1;min-height:55vh;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 12px}
+.marketplace-cart__empty{display:flex;flex:1;min-height:calc(100vh - 48px);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 16px;gap:0}
+.marketplace-cart__empty-title{margin:0;font:500 clamp(1.5rem,3vw,2.1rem)/1.2 var(--hp-font-family,'DM Sans',sans-serif);letter-spacing:-.04em}
+.marketplace-cart__empty-copy{max-width:420px;margin:16px 0 0;font:400 .8125rem/1.6 var(--hp-font-family,'DM Sans',sans-serif);color:rgba(255,255,255,.62)}
+.marketplace-cart__empty .marketplace-cart__button{margin-top:28px}
 .marketplace-cart__empty-icon{color:rgba(255,255,255,.45)}
 .marketplace-cart__empty-title{margin:24px 0 0;font:500 clamp(1.6rem,3vw,2.4rem)/1.1 var(--hp-font-family,'DM Sans',sans-serif);letter-spacing:-.04em}
 .marketplace-cart__empty-copy{max-width:400px;margin:12px 0 0;font:400 .8125rem/1.65 var(--hp-font-family,'DM Sans',sans-serif);color:rgba(255,255,255,.62)}
