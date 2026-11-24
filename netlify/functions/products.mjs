@@ -274,10 +274,6 @@ async function listProducts(request, requestId) {
   const isMarketplaceRequest = !isAdminRequest && url.searchParams.get('scope') === 'marketplace';
   let requestedStorefront = url.searchParams.get('storefront')?.trim().toLowerCase() || null;
 
-  if (requestedStorefront && !['yotaabo', 'poshies'].includes(requestedStorefront)) {
-    return json({ error: 'Invalid storefront.' }, 400);
-  }
-
   if (isAdminRequest) {
     const authStartedAt = Date.now();
     const admin = await requireAdmin(request, pool);
@@ -322,6 +318,8 @@ async function listProducts(request, requestId) {
         id,
         name,
         price,
+        sku,
+        sizes,
         storefront,
         marketplace_visible,
         storefront_visible,
