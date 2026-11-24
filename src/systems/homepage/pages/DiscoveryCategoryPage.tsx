@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useCart } from '../../storefront/core/context/CartContext';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { A11y, Keyboard, Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
@@ -11,12 +13,8 @@ import MoodboardSearchBar from '../discover/MoodboardSearchBar';
 import MoodboardPredictiveSearch from '../discover/MoodboardPredictiveSearch';
 import { DISCOVERY_MARKETS, getMarketById, getSubcategories } from '../discover/discovery-taxonomy';
 
-const stores = [
-  { key: 'yotaabo', name: 'Yotaabo', href: '/yotaabo/catalog', note: 'Explore products from Yotaabo' },
-  { key: 'poshies', name: 'Poshies', href: '/poshies/catalog', note: 'Explore products from Poshies' },
-];
 const fallback: MoodboardItem = DISCOVERY_MARKETS[0];
-type CategoryProduct = { id: string; name: string; category?: string; subcategory?: string; brand?: string; storeName: string; href: string; price?: number; image_url?: string | null };
+type CategoryProduct = { id: string; name: string; storefront: string; category?: string; subcategory?: string; brand?: string; description?: string | null; storeName: string; href: string; price?: number; image_url?: string | null };
 const panel: React.CSSProperties = { padding: 'clamp(24px,5vw,72px)', background: '#111', color: '#f4f1ec', fontFamily: 'inherit' };
 
 export default function DiscoveryCategoryPage() {
@@ -24,6 +22,7 @@ export default function DiscoveryCategoryPage() {
   const location = useLocation();
   const { categoryId = '' } = useParams();
   const [searchQuery, setSearchQuery] = useState('');
+  const { addToCart } = useCart();
   const [savedDiscoveries, setSavedDiscoveries] = useState<MoodboardItem[]>(() => {
     try {
       const stored = localStorage.getItem('simatu-saved-discoveries');
@@ -63,21 +62,37 @@ export default function DiscoveryCategoryPage() {
   useEffect(() => {
     let cancelled = false;
     setProductsLoading(true);
-    Promise.all(stores.map(async (store) => {
-      const response = await fetch('/api/products?storefront=' + encodeURIComponent(store.key), { headers: { Accept: 'application/json' } });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || ('Unable to load ' + store.name + ' products.'));
-      return (Array.isArray(data.products) ? data.products : []).filter((product: any) => product && product.is_active !== false).map((product: any) => ({ ...product, storeName: store.name, href: store.href } as CategoryProduct));
-    })).then((results) => { if (!cancelled) { setProducts(results.flat()); setProductsError(''); } })
+    fetch('/api/products?scope=marketplace', { headers: { Accept: 'application/json' } })
+      .then(async (response) => {
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Unable to load marketplace products.');
+        return Array.isArray(data.products) ? data.products : [];
+      })
+      .then((availableProducts) => {
+        if (cancelled) return;
+        const mapped = availableProducts
+          .filter((product: any) => product && product.is_active !== false && typeof product.storefront === 'string')
+          .map((product: any) => ({
+            ...product,
+            storeName: product.storefront === 'poshies' ? 'Poshies' : product.storefront === 'yotaabo' ? 'Yotaabo' : product.storefront,
+            href: '/' + product.storefront + '/catalog',
+          } as CategoryProduct));
+        setProducts(mapped);
+        setProductsError('');
+      })
       .catch((error) => { if (!cancelled) setProductsError(error instanceof Error ? error.message : 'Discovery is unavailable.'); })
       .finally(() => { if (!cancelled) setProductsLoading(false); });
     return () => { cancelled = true; };
   }, []);
 
-  const marketProducts = useMemo(() => products.filter((product) => {
-    const text = (product.category || '') + ' ' + (product.subcategory || '');
-    return (market?.category || categoryId).toLowerCase().split(/\\s+/).some((term) => term && text.toLowerCase().includes(term));
-  }), [products, market, categoryId]);
+  const marketProducts = useMemo(() => {
+    const categoryTerms = subcategories.flatMap((subcategory) => subcategory.terms).map((term) => term.toLowerCase());
+    const categoryName = (market?.category || categoryId).toLowerCase();
+    return products.filter((product) => {
+      const searchable = [product.name, product.category, product.subcategory, product.brand].filter(Boolean).join(' ').toLowerCase();
+      return categoryTerms.some((term) => searchable.includes(term)) || searchable.includes(categoryName);
+    });
+  }, [products, market, categoryId, subcategories]);
 
   const scopedProducts = useMemo(() => {
     if (!selected) return marketProducts;
@@ -86,6 +101,30 @@ export default function DiscoveryCategoryPage() {
       return selected.terms.some((term) => searchable.includes(term.toLowerCase()));
     });
   }, [marketProducts, selected]);
+
+  const participatingStores = useMemo(() => Array.from(new Map(
+    marketProducts.map((product) => [product.storefront, {
+      key: product.storefront,
+      name: product.storeName,
+      href: product.href,
+    }]),
+  ).values()), [marketProducts]);
+
+  const addProductToCart = (product: CategoryProduct) => {
+    if (!product.storefront || typeof product.price !== 'number') return;
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: 'R ' + product.price.toFixed(2),
+      placeholderColor: 'bg-[#f1f1ee]',
+      image_url: product.image_url ?? null,
+      description: product.description ?? null,
+      category: product.category || item.category,
+      storefront: product.storefront,
+      storeName: product.storeName,
+    });
+    toast.success(product.name + ' added to your shared cart');
+  };
 
   const normalizedQuery = searchQuery.trim().toLowerCase();
   const matchingProducts = useMemo(() => {
@@ -210,13 +249,13 @@ export default function DiscoveryCategoryPage() {
             onAnimationEnd={() => setOutgoingStoreTitle(null)}
             style={{ position: 'absolute', inset: 0, display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,260px),1fr))', gap: 16, pointerEvents: 'none' }}
           >
-            {stores.map((store) => <div className={`discovery-store-card discovery-store-card--${store.key}`} key={store.key} style={{ color: '#f4f1ec', border: '1px solid rgba(255,255,255,.14)', borderRadius: 8, padding: '14px 15px', background: 'rgba(255,255,255,.035)' }}>
+            {participatingStores.map((store) => <div className={`discovery-store-card discovery-store-card--${store.key}`} key={store.key} style={{ color: '#f4f1ec', border: '1px solid rgba(255,255,255,.14)', borderRadius: 8, padding: '14px 15px', background: 'rgba(255,255,255,.035)' }}>
               <strong style={{ fontSize: 15, fontWeight: 550, letterSpacing: '.015em' }}>{store.name}</strong>
               <span style={{ display: 'block', opacity: .62, fontSize: 12, marginTop: 5 }}>Explore {outgoingStoreTitle} listings</span>
             </div>)}
           </div>}
           <div key={selectedSubcategory} className="discovery-store-enter" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,260px),1fr))', gap: 16 }}>
-            {stores.map((store, index) => <a className={`discovery-store-card discovery-store-card--${store.key}`} key={store.key} href={store.href} style={{ animationDelay: `${index * 70}ms`, color: '#f4f1ec', border: '1px solid rgba(255,255,255,.14)', borderRadius: 8, padding: '14px 15px', textDecoration: 'none', background: 'rgba(255,255,255,.035)' }}>
+            {participatingStores.map((store, index) => <a className={`discovery-store-card discovery-store-card--${store.key}`} key={store.key} href={store.href} style={{ animationDelay: `${index * 70}ms`, color: '#f4f1ec', border: '1px solid rgba(255,255,255,.14)', borderRadius: 8, padding: '14px 15px', textDecoration: 'none', background: 'rgba(255,255,255,.035)' }}>
               <span className="discovery-store-card-top">
                 <strong style={{ fontSize: 15, fontWeight: 550, letterSpacing: '.015em' }}>{store.name}</strong>
                 <span className="discovery-store-arrow" aria-hidden="true">↗</span>
@@ -229,14 +268,17 @@ export default function DiscoveryCategoryPage() {
         {productsLoading && <p>Loading discoveries…</p>}
         {productsError && <p role="alert">{productsError}</p>}
         {scopedProducts.length > 0 && <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(100%,220px),1fr))', gap: 16, marginTop: 20 }}>
-          {scopedProducts.map((product, index) => <a className="discovery-product-card" key={product.id} href={product.href} style={{ animationDelay: `${Math.min(index, 8) * 45}ms`, color: '#f4f1ec', textDecoration: 'none', border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, overflow: 'hidden' }}>
+          {scopedProducts.map((product, index) => <article className="discovery-product-card" key={product.id} style={{ animationDelay: `${Math.min(index, 8) * 45}ms`, color: '#f4f1ec', border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, overflow: 'hidden' }}>
             {product.image_url && <img src={product.image_url} alt={product.name} loading="lazy" style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover', display: 'block' }} />}
-            <span style={{ display: 'block', padding: 14 }}>
+            <div style={{ display: 'block', padding: 14 }}>
               <strong>{product.name}</strong>
               <small style={{ display: 'block', opacity: .65, marginTop: 5 }}>{product.storeName}{product.subcategory ? ' · ' + product.subcategory : ''}</small>
               {typeof product.price === 'number' && <span style={{ display: 'block', marginTop: 8 }}>R{product.price.toLocaleString('en-ZA')}</span>}
-            </span>
-          </a>)}
+              <button type="button" onClick={() => addProductToCart(product)} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '100%', minHeight: 42, marginTop: 14, border: '1px solid rgba(255,255,255,.55)', borderRadius: 999, background: '#f4f1ec', color: '#111', font: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
+                Add to cart
+              </button>
+            </div>
+          </article>)}
         </div>}
       </div>}
     </section>
