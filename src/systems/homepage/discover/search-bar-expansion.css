@@ -253,3 +253,37 @@
 @media (max-width: 640px) {
   .kinetic-moodboard__saved-empty { margin-left: 20px; }
 }
+
+/* Active moodboard filter is explicit and can be cleared without leaving discovery. */
+.kinetic-moodboard__active-category {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 8px 4px 28px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 14px;
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.9);
+  font: var(--hp-font-weight-medium) var(--hp-font-size-xs)/var(--hp-line-height-normal) var(--hp-font-family);
+}
+.kinetic-moodboard__active-category button {
+  flex: 0 0 auto;
+  padding: 5px 8px;
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+.kinetic-moodboard__active-category button:hover {
+  background: rgba(255,255,255,.16);
+}
+@media (max-width: 640px) {
+  .kinetic-moodboard__active-category {
+    margin-left: 20px;
+    flex-wrap: wrap;
+  }
+}
