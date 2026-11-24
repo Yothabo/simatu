@@ -33,14 +33,10 @@ function orderNumber() {
 }
 
 async function createOrder(body) {
-  const storefront = String(body?.storefront || '').trim().toLowerCase();
+  const fallbackStorefront = String(body?.storefront || '').trim().toLowerCase();
   const customerName = String(body?.customer_name || '').trim();
   const customerPhone = String(body?.customer_phone || '').replace(/\D/g, '');
   const submittedItems = body?.items;
-
-  if (!['yotaabo', 'poshies'].includes(storefront)) {
-    return error('Invalid storefront.');
-  }
 
   if (customerName.length < 2 || customerName.length > 120) {
     return error('Please provide a valid full name.');
@@ -54,90 +50,112 @@ async function createOrder(body) {
     return error('Your cart is empty or contains too many items.');
   }
 
-  const quantities = new Map();
+  const quantitiesByStore = new Map();
 
   for (const item of submittedItems) {
+    const storefront = String(item?.storefront || fallbackStorefront).trim().toLowerCase();
     const id = String(item?.product_id || '');
     const quantity = Number(item?.quantity);
+
+    if (!['yotaabo', 'poshies'].includes(storefront)) {
+      return error('One or more cart items belong to an unsupported store.');
+    }
 
     if (!uuidPattern.test(id) || !Number.isInteger(quantity) || quantity < 1 || quantity > 20) {
       return error('One or more cart items are invalid.');
     }
 
-    quantities.set(id, (quantities.get(id) || 0) + quantity);
+    const storeQuantities = quantitiesByStore.get(storefront) || new Map();
+    storeQuantities.set(id, (storeQuantities.get(id) || 0) + quantity);
+    quantitiesByStore.set(storefront, storeQuantities);
   }
 
-  for (const quantity of quantities.values()) {
-    if (quantity > 20) return error('Maximum quantity per product is 20.');
+  const preparedOrders = [];
+
+  for (const [storefront, quantities] of quantitiesByStore.entries()) {
+    for (const quantity of quantities.values()) {
+      if (quantity > 20) return error('Maximum quantity per product is 20.');
+    }
+
+    const productIds = [...quantities.keys()];
+    const productResult = await pool.query(
+      'SELECT id, name, price FROM public.products WHERE id = ANY($1::uuid[]) AND is_active IS TRUE AND storefront = $2',
+      [productIds, storefront]
+    );
+
+    if (productResult.rowCount !== productIds.length) {
+      return error('A product in your cart is no longer available. Please refresh your cart.', 409);
+    }
+
+    const products = productResult.rows.map((product) => {
+      const unitCents = Math.round(Number(product.price) * 100);
+      const quantity = quantities.get(product.id);
+      return {
+        product_id: product.id,
+        product_name: product.name,
+        unit_price: (unitCents / 100).toFixed(2),
+        quantity,
+        line_total: ((unitCents * quantity) / 100).toFixed(2),
+        line_cents: unitCents * quantity,
+      };
+    });
+
+    const subtotalCents = products.reduce((sum, item) => sum + item.line_cents, 0);
+    preparedOrders.push({
+      storefront,
+      products,
+      subtotal: (subtotalCents / 100).toFixed(2),
+      subtotalCents,
+    });
   }
-
-  const productIds = [...quantities.keys()];
-  const productResult = await pool.query(
-    `SELECT id, name, price
-     FROM public.products
-     WHERE id = ANY($1::uuid[])
-       AND is_active IS TRUE
-       AND storefront = $2`,
-    [productIds, storefront]
-  );
-
-  if (productResult.rowCount !== productIds.length) {
-    return error('A product in your cart is no longer available. Please refresh your cart.', 409);
-  }
-
-  const products = productResult.rows.map((product) => {
-    const unitCents = Math.round(Number(product.price) * 100);
-    return {
-      product_id: product.id,
-      product_name: product.name,
-      unit_price: (unitCents / 100).toFixed(2),
-      quantity: quantities.get(product.id),
-      line_total: ((unitCents * quantities.get(product.id)) / 100).toFixed(2),
-      line_cents: unitCents * quantities.get(product.id),
-    };
-  });
-
-  const subtotalCents = products.reduce((sum, item) => sum + item.line_cents, 0);
-  const subtotal = (subtotalCents / 100).toFixed(2);
 
   const client = await pool.connect();
+  const createdOrders = [];
 
   try {
     await client.query('BEGIN');
 
-    const insertedOrder = await client.query(
-      `INSERT INTO public.orders
-         (order_number, customer_name, customer_phone, subtotal, status, storefront)
-       VALUES ($1, $2, $3, $4, 'pending', $5)
-       RETURNING id, order_number, customer_name, customer_phone,
-                 subtotal, status, storefront, created_at, updated_at`,
-      [orderNumber(), customerName, customerPhone, subtotal, storefront]
-    );
-
-    const order = insertedOrder.rows[0];
-
-    for (const item of products) {
-      await client.query(
-        `INSERT INTO public.order_items
-           (order_id, product_id, product_name, unit_price, quantity)
-         VALUES ($1, $2, $3, $4, $5)`,
-        [
-          order.id,
-          item.product_id,
-          item.product_name,
-          item.unit_price,
-          item.quantity,
-        ]
+    for (const group of preparedOrders) {
+      const insertedOrder = await client.query(
+        "INSERT INTO public.orders (order_number, customer_name, customer_phone, subtotal, status, storefront) VALUES ($1, $2, $3, $4, 'pending', $5) RETURNING id, order_number, customer_name, customer_phone, subtotal, status, storefront, created_at, updated_at",
+        [orderNumber(), customerName, customerPhone, group.subtotal, group.storefront]
       );
+
+      const order = insertedOrder.rows[0];
+
+      for (const item of group.products) {
+        await client.query(
+          'INSERT INTO public.order_items (order_id, product_id, product_name, unit_price, quantity) VALUES ($1, $2, $3, $4, $5)',
+          [order.id, item.product_id, item.product_name, item.unit_price, item.quantity]
+        );
+      }
+
+      createdOrders.push({
+        ...order,
+        subtotal: Number(order.subtotal),
+        items: group.products.map(({ line_cents, ...item }) => item),
+      });
     }
 
     await client.query('COMMIT');
 
+    const combinedItems = createdOrders.flatMap((order) =>
+      order.items.map((item) => ({ ...item, storefront: order.storefront }))
+    );
+    const combinedSubtotal = createdOrders.reduce((sum, order) => sum + Number(order.subtotal), 0);
+
     return json({
       order: {
-        ...order,
-        subtotal: Number(order.subtotal),
-        items: products.map(({ line_cents, ...item }) => item),
+        order_number: createdOrders.map((order) => order.order_number).join(' / '),
+        subtotal: Number(combinedSubtotal.toFixed(2)),
+        items: combinedItems,
+        store_orders: createdOrders.map((order) => ({
+          id: order.id,
+          storefront: order.storefront,
+          order_number: order.order_number,
+          subtotal: order.subtotal,
+          status: order.status,
+        })),
       },
     }, 201);
   } catch (err) {
