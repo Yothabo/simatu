@@ -128,3 +128,15 @@
     animation: none !important;
   }
 }
+
+/* Keep the discovery page scrollable while hiding the browser scrollbar. */
+.discovery-category-page {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.discovery-category-page::-webkit-scrollbar,
+.discovery-category-page *::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
