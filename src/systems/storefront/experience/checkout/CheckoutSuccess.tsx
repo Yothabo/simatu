@@ -45,8 +45,9 @@ export default function CheckoutSuccess({
 
       <div className="mx-auto mt-7 max-w-xs border-y border-[#4d4d4d]/10 py-5">
         <p className="font-heading text-[10px] font-semibold uppercase tracking-[0.2em] text-[#4d4d4d]/45">
-          Order reference
+          {createdOrder.storeOrders?.length ? 'Seller order references' : 'Order reference'}
         </p>
+        {createdOrder.checkoutGroupId && <p className="mt-2 font-heading text-xs text-[#4d4d4d]/55">Checkout {createdOrder.checkoutGroupId.slice(0, 8).toUpperCase()}</p>}
         {createdOrder.storeOrders?.length ? (
           <div className="mt-2 space-y-2">
             {createdOrder.storeOrders.map((order) => (
