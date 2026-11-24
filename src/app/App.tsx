@@ -89,6 +89,7 @@ function RouteLoadingFallback() {
   );
 }
 
+function MarketplaceCartOverlayRoute() { return <><DiscoveryPage /><MarketplaceCartPage /></>; }
 function MarketplaceLayout() { return <GlobalCartProvider><Outlet /></GlobalCartProvider>; }
 function YotaaboLayout() { return <StorefrontCartProvider storefront="yotaabo"><StorefrontThemeProvider><Outlet /></StorefrontThemeProvider></StorefrontCartProvider>; }
 function PoshiesLayout() { return <StorefrontCartProvider storefront="poshies"><StorefrontThemeProvider><Outlet /></StorefrontThemeProvider></StorefrontCartProvider>; }
@@ -106,8 +107,8 @@ function App() {
           <Route element={<MarketplaceLayout />}>
             <Route path="/" element={<DiscoveryPage />} />
             <Route path="/discover/:categoryId" element={<DiscoveryCategoryPage />} />
-            <Route path="/cart" element={<MarketplaceCartPage />} />
-            <Route path="/checkout" element={<MarketplaceCartPage />} />
+            <Route path="/cart" element={<MarketplaceCartOverlayRoute />} />
+            <Route path="/checkout" element={<MarketplaceCartOverlayRoute />} />
           </Route>
           <Route path="/join-network" element={<NetworkApplicationPage />} />
 
