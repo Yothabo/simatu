@@ -1,7 +1,8 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Link, Outlet, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import MetaTags from './components/MetaTags';
+import './MarketplaceCartOverlay.css';
 import ScrollToHash from './components/ScrollToHash';
 import { useTouchSelection } from '../shared/hooks/useTouchSelection';
 
@@ -89,7 +90,7 @@ function RouteLoadingFallback() {
   );
 }
 
-function MarketplaceCartOverlayRoute() { return <DiscoveryPage />; }
+function MarketplaceCartOverlayRoute() { return (<> <DiscoveryPage /> <section className="marketplace-cart-overlay" aria-label="Marketplace cart"><Link to="/" className="marketplace-cart-overlay__close" aria-label="Close cart and return to discovery">×</Link><div className="marketplace-cart-overlay__content"><MarketplaceCartPage /></div></section></>); }
 function MarketplaceLayout() { return <GlobalCartProvider><Outlet /></GlobalCartProvider>; }
 function YotaaboLayout() { return <StorefrontCartProvider storefront="yotaabo"><StorefrontThemeProvider><Outlet /></StorefrontThemeProvider></StorefrontCartProvider>; }
 function PoshiesLayout() { return <StorefrontCartProvider storefront="poshies"><StorefrontThemeProvider><Outlet /></StorefrontThemeProvider></StorefrontCartProvider>; }
