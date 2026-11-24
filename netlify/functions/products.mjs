@@ -357,7 +357,9 @@ async function listProducts(request, requestId) {
       'X-Request-ID': requestId,
       'Cache-Control': isAdminRequest
         ? 'private, no-store'
-        : 'public, max-age=30, s-maxage=300, stale-while-revalidate=600',
+        : isMarketplaceRequest
+          ? 'public, max-age=15, s-maxage=60, stale-while-revalidate=120'
+          : 'public, max-age=30, s-maxage=300, stale-while-revalidate=600',
     },
   });
 }
