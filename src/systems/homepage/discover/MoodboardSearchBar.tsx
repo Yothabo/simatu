@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import MarketplaceCartPage from '../../storefront/experience/pages/MarketplaceCartPage';
 import { Link } from 'react-router-dom';
 import { useGlobalCart } from '../../../shared/cart/CartContext';
-import { FaHome, FaBars, FaTimes, FaUsers, FaBookmark, FaHistory, FaRandom, FaThLarge, FaShoppingCart, FaCreditCard } from 'react-icons/fa';
+import { FaHome, FaBars, FaTimes, FaUsers, FaBookmark, FaHistory, FaRandom, FaThLarge, FaOpencart, FaCreditCard } from 'react-icons/fa';
 import { TiArrowBack } from 'react-icons/ti';
 import './moodboard-search.css';
 import './search-bar-expansion.css';
@@ -87,7 +87,7 @@ export default function MoodboardSearchBar({
               </div>
               <div className="kinetic-moodboard__discover-group">
                 <div className="kinetic-moodboard__discover-group-heading"><strong>Shopping</strong><small>Your shared Simatu basket</small></div>
-                <Link to="/cart" className="kinetic-moodboard__discover-tool"><FaShoppingCart aria-hidden="true" /><span>Cart</span><small>{cartQuantity}</small></Link>
+                <Link to="/cart" className="kinetic-moodboard__discover-tool"><FaOpencart aria-hidden="true" /><span>Cart</span><small>{cartQuantity}</small></Link>
                 <Link to="/checkout" className="kinetic-moodboard__discover-tool"><FaCreditCard aria-hidden="true" /><span>Checkout</span></Link>
               </div>
               <div className="kinetic-moodboard__discover-group">
