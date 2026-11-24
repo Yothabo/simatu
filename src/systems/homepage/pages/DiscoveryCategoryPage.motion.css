@@ -140,3 +140,69 @@
   width: 0;
   height: 0;
 }
+
+
+/* Compact, minimal destination tiles beneath the subcategory carousel. */
+.discovery-category-page .discovery-store-stage > .discovery-store-enter,
+.discovery-category-page .discovery-store-stage > .discovery-store-exit {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+.discovery-category-page .discovery-store-card {
+  display: block;
+  min-width: 0;
+  min-height: 78px;
+  box-sizing: border-box;
+  border-radius: 8px !important;
+  padding: 13px 14px !important;
+  text-decoration: none;
+}
+.discovery-category-page a.discovery-store-card {
+  position: relative;
+  transition: transform 240ms cubic-bezier(.2,.75,.25,1), border-color 220ms ease, background 220ms ease;
+}
+.discovery-category-page .discovery-store-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.discovery-category-page .discovery-store-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 50%;
+  color: rgba(255,255,255,.8);
+  font-size: 14px;
+  line-height: 1;
+  transition: transform 220ms ease, background 220ms ease, border-color 220ms ease;
+}
+.discovery-category-page a.discovery-store-card:hover .discovery-store-arrow {
+  transform: translate(2px,-2px);
+  border-color: rgba(255,255,255,.5);
+  background: rgba(255,255,255,.08);
+}
+.discovery-category-page a.discovery-store-card:active {
+  transform: scale(.985);
+}
+.discovery-category-page .discovery-store-card--poshies {
+  background: rgba(244,241,236,.075) !important;
+  border-color: rgba(244,241,236,.22) !important;
+}
+.discovery-category-page .discovery-store-card--poshies .discovery-store-arrow {
+  border-color: rgba(244,241,236,.28);
+}
+@media (max-width: 360px) {
+  .discovery-category-page .discovery-store-stage > .discovery-store-enter,
+  .discovery-category-page .discovery-store-stage > .discovery-store-exit {
+    gap: 8px !important;
+  }
+  .discovery-category-page .discovery-store-card {
+    padding: 12px 10px !important;
+  }
+}
