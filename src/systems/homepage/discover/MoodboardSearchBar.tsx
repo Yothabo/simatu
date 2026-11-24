@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useCart } from '../../storefront/core/context/CartContext';
 import { FaHome, FaBars, FaTimes, FaUsers, FaBookmark, FaHistory, FaRandom, FaThLarge, FaShoppingCart, FaCreditCard } from 'react-icons/fa';
 import { TiArrowBack } from 'react-icons/ti';
 import './moodboard-search.css';
@@ -56,6 +57,8 @@ export default function MoodboardSearchBar({
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [savedOpen, setSavedOpen] = useState(false);
   const [recentOpen, setRecentOpen] = useState(false);
+  const { cartItems } = useCart();
+  const cartQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
   const menuExpanded = className.includes("menu-expanded");
   return (
     <div className={`kinetic-moodboard__search-header ${fixed ? 'moodboard-search-fixed' : ''} ${className}`} aria-hidden={!visible} style={!visible ? { transform: 'translate3d(0,-125%,0)', opacity: 0, pointerEvents: 'none' } : undefined}>
@@ -77,7 +80,7 @@ export default function MoodboardSearchBar({
               </div>
               <div className="kinetic-moodboard__discover-group">
                 <div className="kinetic-moodboard__discover-group-heading"><strong>Shopping</strong><small>Your shared Simatu basket</small></div>
-                <Link to="/cart" className="kinetic-moodboard__discover-tool"><FaShoppingCart aria-hidden="true" /><span>Cart</span></Link>
+                <Link to="/cart" className="kinetic-moodboard__discover-tool"><FaShoppingCart aria-hidden="true" /><span>Cart</span><small>{cartQuantity}</small></Link>
                 <Link to="/checkout" className="kinetic-moodboard__discover-tool"><FaCreditCard aria-hidden="true" /><span>Checkout</span></Link>
               </div>
               <div className="kinetic-moodboard__discover-group">
