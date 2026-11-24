@@ -47,9 +47,18 @@ export default function CheckoutSuccess({
         <p className="font-heading text-[10px] font-semibold uppercase tracking-[0.2em] text-[#4d4d4d]/45">
           Order reference
         </p>
-        <p className="mt-2 font-heading text-xl font-semibold text-[#4d4d4d]">
-          {createdOrder.order_number}
-        </p>
+        {createdOrder.storeOrders?.length ? (
+          <div className="mt-2 space-y-2">
+            {createdOrder.storeOrders.map((order) => (
+              <div key={order.order_number} className="flex items-center justify-between gap-3 text-left">
+                <span className="font-heading text-sm text-[#4d4d4d]">{order.storefront}</span>
+                <span className="font-heading text-sm font-semibold text-[#4d4d4d]">{order.order_number}</span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-2 font-heading text-xl font-semibold text-[#4d4d4d]">{createdOrder.order_number}</p>
+        )}
         <p className="mt-3 font-heading text-lg tabular-nums text-[#4d4d4d]">
           R {Number(createdOrder.subtotal).toFixed(2)}
         </p>
