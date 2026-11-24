@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Header from '../components/Header';
 import { useCart } from '../../core/context/CartContext';
@@ -17,6 +17,8 @@ export default function CartPage() {
   const isCheckoutView = location.pathname === '/checkout';
   const { cartItems, removeFromCart, increaseQuantity, decreaseQuantity } = useCart();
   const [selectedStorefronts, setSelectedStorefronts] = useState<string[]>([]);
+  const previousStorefrontsRef = useRef<string[]>([]);
+  const initializedStoreSelectionRef = useRef(false);
   const storeGroups = Array.from(new Map(cartItems.map((item) => [item.storefront, {
     storefront: item.storefront,
     storeName: item.storeName,
@@ -27,9 +29,15 @@ export default function CartPage() {
 
   useEffect(() => {
     const availableStores = Array.from(new Set(cartItems.map((item) => item.storefront)));
-    setSelectedStorefronts((current) => current.length
-      ? current.filter((store) => availableStores.includes(store))
-      : availableStores);
+    const newlyAddedStores = availableStores.filter((store) => !previousStorefrontsRef.current.includes(store));
+    setSelectedStorefronts((current) => {
+      if (!initializedStoreSelectionRef.current) {
+        initializedStoreSelectionRef.current = true;
+        return availableStores;
+      }
+      return [...current.filter((store) => availableStores.includes(store)), ...newlyAddedStores];
+    });
+    previousStorefrontsRef.current = availableStores;
   }, [cartItems]);
 
   const [removingId, setRemovingId] = useState<string | null>(null);
