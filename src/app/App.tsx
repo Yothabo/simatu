@@ -89,7 +89,7 @@ function RouteLoadingFallback() {
   );
 }
 
-function MarketplaceCartOverlayRoute() { return <><DiscoveryPage /><MarketplaceCartPage /></>; }
+function MarketplaceCartOverlayRoute() { return <DiscoveryPage />; }
 function MarketplaceLayout() { return <GlobalCartProvider><Outlet /></GlobalCartProvider>; }
 function YotaaboLayout() { return <StorefrontCartProvider storefront="yotaabo"><StorefrontThemeProvider><Outlet /></StorefrontThemeProvider></StorefrontCartProvider>; }
 function PoshiesLayout() { return <StorefrontCartProvider storefront="poshies"><StorefrontThemeProvider><Outlet /></StorefrontThemeProvider></StorefrontCartProvider>; }
