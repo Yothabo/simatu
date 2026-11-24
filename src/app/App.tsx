@@ -95,12 +95,15 @@ function App() {
       <ScrollToHash />
       <MetaTags />
 
+      <CartProvider>
       <Suspense fallback={<RouteLoadingFallback />}>
         <Routes>
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<CartPage />} />
           <Route path="/" element={<DiscoveryPage />} />
           <Route path="/discover/:categoryId" element={<DiscoveryCategoryPage />} />
           <Route path="/join-network" element={<NetworkApplicationPage />} />
-          <Route element={<CartProvider><StorefrontThemeProvider><Outlet /></StorefrontThemeProvider></CartProvider>}>
+          <Route element={<StorefrontThemeProvider><Outlet /></StorefrontThemeProvider>}>
             <Route path="/yotaabo" element={<Home />} />
             <Route path="/yotaabo/services" element={<ServicesPage />} />
             <Route path="/yotaabo/catalog" element={<ViewCatalog />} />
@@ -138,6 +141,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
+      </CartProvider>
 
       <Toaster
         position="top-right"
