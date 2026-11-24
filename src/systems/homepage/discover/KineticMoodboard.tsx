@@ -76,6 +76,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const [dragging, setDragging] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchDismissed, setSearchDismissed] = useState(false);
+  const [headerVisible, setHeaderVisible] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [openTileActions, setOpenTileActions] = useState<string | null>(null);
   const [savedDiscoveries, setSavedDiscoveries] = useState<MoodboardItem[]>(() => {
@@ -299,7 +300,9 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
     if (!drag.active) return;
     const dx = event.clientX - drag.startX;
     const dy = event.clientY - drag.startY;
+    const verticalDelta = event.clientY - drag.lastY;
     if (Math.abs(dx) + Math.abs(dy) > 6) drag.moved = true;
+    if (Math.abs(verticalDelta) > 2) setHeaderVisible(verticalDelta > 0);
     const now = performance.now();
     const elapsed = Math.max(1, now - drag.lastTime);
     drag.velocityX = (event.clientX - drag.lastX) / elapsed * 16;
@@ -322,6 +325,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const onWheel = (event: React.WheelEvent<HTMLDivElement>) => {
     if (!enableWheel || !interactive) return;
     event.preventDefault();
+    if (!event.shiftKey && Math.abs(event.deltaY) > 2) setHeaderVisible(event.deltaY < 0);
     stopMotion();
     applyPosition(positionRef.current.x - event.deltaX - (event.shiftKey ? event.deltaY : 0), positionRef.current.y - (event.shiftKey ? 0 : event.deltaY));
   };
@@ -400,7 +404,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         value={searchQuery}
         onChange={setSearchQuery}
         onBack={onExit ? () => { setSearchQuery(""); setSearchDismissed(true); onExit(); } : undefined}
-        visible={colorReveal && !searchDismissed}
+        visible={colorReveal && !searchDismissed && (headerVisible || menuOpen || normalizedSearch.length > 0)}
         showMenu
         savedDiscoveries={savedDiscoveries}
         onSavedDiscoverySelect={openDiscovery}
