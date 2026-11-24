@@ -56,6 +56,8 @@ export function useProductFormSubmit({
       description: form.description?.trim() || null,
       image_url: form.image_url?.trim() || null,
       is_active: form.is_active,
+      marketplace_visible: form.marketplace_visible,
+      storefront_visible: form.storefront_visible,
       sort_order: form.sort_order,
       sizes: form.sizes,
       order_count: form.order_count,
