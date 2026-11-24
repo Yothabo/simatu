@@ -28,12 +28,14 @@ export default function DiscoveryCategoryPage() {
   const [productsLoading, setProductsLoading] = useState(false);
   const [productsError, setProductsError] = useState('');
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(() => getSubcategories(categoryId)[0]?.id ?? null);
+  const [outgoingStoreTitle, setOutgoingStoreTitle] = useState<string | null>(null);
   const market = getMarketById(categoryId);
   const item = (location.state as { discovery?: MoodboardItem } | null)?.discovery || market || fallback;
   const subcategories = getSubcategories(market?.id || categoryId);
   const selected = subcategories.find((sub) => sub.id === selectedSubcategory);
 
   useEffect(() => {
+    setOutgoingStoreTitle(null);
     setSelectedSubcategory(subcategories[0]?.id ?? null);
   }, [categoryId]);
 
@@ -118,7 +120,15 @@ export default function DiscoveryCategoryPage() {
           <SwiperSlide key={sub.id}>
             <button
               type="button"
-              onClick={() => setSelectedSubcategory((current) => current === sub.id ? null : sub.id)}
+              onClick={() => {
+                if (selectedSubcategory === sub.id) {
+                  setOutgoingStoreTitle(selected?.title ?? null);
+                  setSelectedSubcategory(null);
+                  return;
+                }
+                setOutgoingStoreTitle(selected?.title ?? null);
+                setSelectedSubcategory(sub.id);
+              }}
               aria-pressed={selectedSubcategory === sub.id}
               className="discovery-subcategory-card" style={{ position: 'relative', display: 'block', width: '100%', aspectRatio: '4 / 5', padding: 0, textAlign: 'left', border: selectedSubcategory === sub.id ? '1px solid #fff' : '1px solid rgba(255,255,255,.14)', borderRadius: 8, background: '#222', color: '#fff', cursor: 'pointer', overflow: 'hidden' }}
             >
@@ -134,11 +144,24 @@ export default function DiscoveryCategoryPage() {
       </Swiper>
 
       {selected && <div className="discovery-results">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,260px),1fr))', gap: 16, marginTop: 12 }}>
-          {stores.map((store, index) => <a className="discovery-store-card" key={store.key} href={store.href} style={{ animationDelay: `${index * 70}ms`, color: '#f4f1ec', border: '1px solid rgba(255,255,255,.18)', borderRadius: 12, padding: 20, textDecoration: 'none', background: 'rgba(255,255,255,.035)' }}>
-            <strong style={{ fontSize: 18 }}>{store.name}</strong>
-            <span style={{ display: 'block', opacity: .65, fontSize: 13, marginTop: 6 }}>Explore {selected.title} listings</span>
-          </a>)}
+        <div className="discovery-store-stage" style={{ position: 'relative', marginTop: 12 }}>
+          {outgoingStoreTitle && <div
+            className="discovery-store-exit"
+            aria-hidden="true"
+            onAnimationEnd={() => setOutgoingStoreTitle(null)}
+            style={{ position: 'absolute', inset: 0, display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,260px),1fr))', gap: 16, pointerEvents: 'none' }}
+          >
+            {stores.map((store) => <div className="discovery-store-card" key={store.key} style={{ color: '#f4f1ec', border: '1px solid rgba(255,255,255,.18)', borderRadius: 12, padding: 20, background: 'rgba(255,255,255,.035)' }}>
+              <strong style={{ fontSize: 18 }}>{store.name}</strong>
+              <span style={{ display: 'block', opacity: .65, fontSize: 13, marginTop: 6 }}>Explore {outgoingStoreTitle} listings</span>
+            </div>)}
+          </div>}
+          <div key={selectedSubcategory} className="discovery-store-enter" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,260px),1fr))', gap: 16 }}>
+            {stores.map((store, index) => <a className="discovery-store-card" key={store.key} href={store.href} style={{ animationDelay: `${index * 70}ms`, color: '#f4f1ec', border: '1px solid rgba(255,255,255,.18)', borderRadius: 12, padding: 20, textDecoration: 'none', background: 'rgba(255,255,255,.035)' }}>
+              <strong style={{ fontSize: 18 }}>{store.name}</strong>
+              <span style={{ display: 'block', opacity: .65, fontSize: 13, marginTop: 6 }}>Explore {selected.title} listings</span>
+            </a>)}
+          </div>
         </div>
 
         {productsLoading && <p>Loading discoveries…</p>}
