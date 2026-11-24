@@ -29,3 +29,6 @@
 .kinetic-moodboard__menu-button:active{transform:scale(.96)}
 .kinetic-moodboard__menu-button:focus-visible{outline:var(--hp-size-xs) solid var(--hp-color-border-strong);outline-offset:var(--hp-size-xs)}
 @media(max-width:640px){.kinetic-moodboard__menu-button{width:var(--hp-size-55);height:var(--hp-size-55);flex-basis:var(--hp-size-55)}}
+/* Category search uses Moodboard's exact predictive dropdown/result styling. */
+.category-search-results{position:fixed!important;top:calc(var(--hp-size-18) + var(--hp-size-62) + var(--hp-size-18))!important;left:50%!important;transform:translateX(-50%)!important;width:min(var(--hp-size-700),calc(100vw - var(--hp-size-32)))!important;max-height:min(62vh,var(--hp-size-560))!important;z-index:130!important;background:#737373!important;border:var(--hp-border-width) solid rgba(255,255,255,.16)!important;border-radius:var(--hp-size-18)!important;padding:var(--hp-size-8)!important;color:#fff!important;box-shadow:0 var(--hp-size-24) var(--hp-size-75) rgba(0,0,0,.22)!important}
+@media(max-width:640px){.category-search-results{top:calc(var(--hp-size-12) + var(--hp-size-55) + var(--hp-size-12))!important;width:calc(100vw - var(--hp-size-24))!important}}
