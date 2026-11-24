@@ -5,6 +5,7 @@ import './moodboard-search.css';
 import './search-bar-expansion.css';
 
 type SavedDiscovery = { id: string; image: string; alt: string; category: string; title: string; objectPosition?: string };
+type DiscoveryCategory = { id: string; category: string; title: string; image: string; alt: string };
 
 type MoodboardSearchBarProps = {
   value: string;
@@ -20,6 +21,13 @@ type MoodboardSearchBarProps = {
   onMenuClick?: () => void;
   savedDiscoveries?: SavedDiscovery[];
   onSavedDiscoverySelect?: (item: SavedDiscovery) => void;
+  categories?: DiscoveryCategory[];
+  recentCategories?: DiscoveryCategory[];
+  activeCategory?: string | null;
+  onCategorySelect?: (category: string) => void;
+  onRecentCategorySelect?: (category: string) => void;
+  onClearCategory?: () => void;
+  onRandomDiscovery?: () => void;
 };
 
 export default function MoodboardSearchBar({
@@ -36,9 +44,17 @@ export default function MoodboardSearchBar({
   onMenuClick,
   savedDiscoveries = [],
   onSavedDiscoverySelect,
+  categories = [],
+  recentCategories = [],
+  activeCategory = null,
+  onCategorySelect,
+  onRecentCategorySelect,
+  onClearCategory,
+  onRandomDiscovery,
 }: MoodboardSearchBarProps) {
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [savedOpen, setSavedOpen] = useState(false);
+  const [recentOpen, setRecentOpen] = useState(false);
   const menuExpanded = className.includes("menu-expanded");
   return (
     <div className={`kinetic-moodboard__search-header ${fixed ? 'moodboard-search-fixed' : ''} ${className}`} aria-hidden={!visible} style={!visible ? { transform: 'translate3d(0,-125%,0)', opacity: 0, pointerEvents: 'none' } : undefined}>
@@ -47,32 +63,23 @@ export default function MoodboardSearchBar({
         <div className={`kinetic-moodboard__search-shell ${showMenu ? "has-menu" : ""}`}>
           {menuExpanded ? (
             <nav className="kinetic-moodboard__discover-tools" aria-label="Discover tools">
+              {activeCategory && <div className="kinetic-moodboard__active-category"><span>Showing {activeCategory}</span><button type="button" onClick={() => { onClearCategory?.(); onMenuClick?.(); }}>Show all discoveries</button></div>}
               <div className="kinetic-moodboard__discover-group">
                 <div className="kinetic-moodboard__discover-group-heading"><strong>Network</strong><small>Connect and participate</small></div>
                 <a href="/join-network" className="kinetic-moodboard__discover-tool"><FaUsers aria-hidden="true" /><span>Join Network</span></a>
-                <button type="button" className="kinetic-moodboard__discover-tool" disabled><FaUsers aria-hidden="true" /><span>Become a Brand Partner</span></button>
-                <button type="button" className="kinetic-moodboard__discover-tool" disabled><FaUsers aria-hidden="true" /><span>Submit Your Brand</span></button>
               </div>
               <div className="kinetic-moodboard__discover-group">
                 <div className="kinetic-moodboard__discover-group-heading"><strong>Discovery</strong><small>Find something different</small></div>
-                <button type="button" className="kinetic-moodboard__discover-tool" disabled><FaRandom aria-hidden="true" /><span>Explore Randomly</span></button>
-                <button type="button" className="kinetic-moodboard__discover-tool" disabled><FaRandom aria-hidden="true" /><span>Trending Discoveries</span></button>
-                <button type="button" className="kinetic-moodboard__discover-tool" disabled><FaRandom aria-hidden="true" /><span>New Discoveries</span></button>
+                <button type="button" className="kinetic-moodboard__discover-tool" onClick={() => { onRandomDiscovery?.(); onMenuClick?.(); }}><FaRandom aria-hidden="true" /><span>Explore Randomly</span></button>
                 <button type="button" className="kinetic-moodboard__discover-tool" onClick={() => setCategoriesOpen((open) => !open)} aria-expanded={categoriesOpen}><FaRandom aria-hidden="true" /><span>Browse Categories</span></button>
-                {categoriesOpen && <div className="kinetic-moodboard__discover-category-list" aria-label="Browse discovery categories">{['Spaces','Style','Fashion','Living','Objects','Culture','Ideas','Workspaces','Everyday','Explore'].map((category) => <button type="button" key={category} className="kinetic-moodboard__discover-category" onClick={() => { onChange(category); setCategoriesOpen(false); onMenuClick?.(); }}>{category}</button>)}</div>}
+                {categoriesOpen && <div className="kinetic-moodboard__discover-category-list" aria-label="Browse discovery categories">{categories.map((category) => <button type="button" key={category.id} className="kinetic-moodboard__discover-category" onClick={() => { onCategorySelect?.(category.category); setCategoriesOpen(false); onMenuClick?.(); }}>{category.category}</button>)}</div>}
               </div>
               <div className="kinetic-moodboard__discover-group">
                 <div className="kinetic-moodboard__discover-group-heading"><strong>Personal Library</strong><small>Your discovery history</small></div>
                 <button type="button" className="kinetic-moodboard__discover-tool" onClick={() => setSavedOpen((open) => !open)} aria-expanded={savedOpen}><FaBookmark aria-hidden="true" /><span>Saved Discoveries</span><small>{savedDiscoveries.length}</small></button>
                 {savedOpen && <div className="kinetic-moodboard__discover-category-list" aria-label="Saved discoveries">{savedDiscoveries.length ? savedDiscoveries.map((item) => <button type="button" key={item.id} className="kinetic-moodboard__discover-category kinetic-moodboard__saved-discovery" onClick={() => { onSavedDiscoverySelect?.(item); onMenuClick?.(); }}><img src={item.image} alt="" loading="lazy"/><span>{item.title}</span></button>) : <p className="kinetic-moodboard__saved-empty">Your saved discoveries will appear here.</p>}</div>}
-                <button type="button" className="kinetic-moodboard__discover-tool" disabled><FaHistory aria-hidden="true" /><span>Recently Viewed</span></button>
-                <button type="button" className="kinetic-moodboard__discover-tool" disabled><FaBookmark aria-hidden="true" /><span>Your Collections</span></button>
-              </div>
-              <div className="kinetic-moodboard__discover-group">
-                <div className="kinetic-moodboard__discover-group-heading"><strong>Curated</strong><small>Explore collections of brands</small></div>
-                <button type="button" className="kinetic-moodboard__discover-tool" disabled><FaBookmark aria-hidden="true" /><span>Editor's Picks</span></button>
-                <button type="button" className="kinetic-moodboard__discover-tool" disabled><FaBookmark aria-hidden="true" /><span>Featured Collections</span></button>
-                <button type="button" className="kinetic-moodboard__discover-tool" disabled><FaBookmark aria-hidden="true" /><span>Hidden Gems</span></button>
+                <button type="button" className="kinetic-moodboard__discover-tool" onClick={() => setRecentOpen((open) => !open)} aria-expanded={recentOpen}><FaHistory aria-hidden="true" /><span>Recently Visited Categories</span><small>{recentCategories.length}</small></button>
+                {recentOpen && <div className="kinetic-moodboard__discover-category-list" aria-label="Recently visited categories">{recentCategories.length ? recentCategories.map((category) => <button type="button" key={category.id} className="kinetic-moodboard__discover-category kinetic-moodboard__saved-discovery" onClick={() => { onRecentCategorySelect?.(category.category); onMenuClick?.(); }}><img src={category.image} alt="" loading="lazy"/><span>{category.category}</span></button>) : <p className="kinetic-moodboard__saved-empty">Categories you visit will appear here.</p>}</div>}
               </div>
             </nav>
           ) : (
