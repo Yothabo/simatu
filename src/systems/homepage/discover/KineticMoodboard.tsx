@@ -407,7 +407,12 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         recentCategories={recentCategories}
         activeCategory={selectedCategory}
         onCategorySelect={(category) => { recordVisitedCategory(category); setSelectedCategory(category); setSearchQuery(""); }}
-        onRecentCategorySelect={(category) => { recordVisitedCategory(category); setSelectedCategory(category); setSearchQuery(""); }}
+        onRecentCategorySelect={(category) => {
+          const market = DISCOVERY_MARKETS.find((entry) => entry.category === category);
+          if (!market) return;
+          try { sessionStorage.setItem('simatu-discover-return', JSON.stringify({ position: positionRef.current })); } catch {}
+          navigate('/discover/' + market.id, { state: { discovery: market, position: positionRef.current } });
+        }}
         onClearCategory={() => setSelectedCategory(null)}
         onRandomDiscovery={() => {
           if (tiles.length) openDiscovery(tiles[Math.floor(Math.random() * tiles.length)]);
