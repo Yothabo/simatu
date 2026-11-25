@@ -8,6 +8,7 @@ import './search-bar-expansion.css';
 
 type SavedDiscovery = { id: string; image: string; alt: string; category: string; title: string; objectPosition?: string };
 type DiscoveryCategory = { id: string; category: string; title: string; image: string; alt: string };
+type StorefrontMenuLink = { label: string; to: string };
 
 type MoodboardSearchBarProps = {
   value: string;
@@ -29,7 +30,7 @@ type MoodboardSearchBarProps = {
   onCategorySelect?: (category: string) => void;
   onRecentCategorySelect?: (category: string) => void;
   onClearCategory?: () => void;
-  onRandomDiscovery?: () => void;
+  onRandomDiscovery?: () => void;\n  storefrontMenuLinks?: StorefrontMenuLink[];
 };
 
 export default function MoodboardSearchBar({
