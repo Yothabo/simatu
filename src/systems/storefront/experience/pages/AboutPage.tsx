@@ -23,7 +23,7 @@ export default function About() {
   return (
     <>
       <Header sticky={false} />
-      <main className="flex-1 bg-[#f5f5f2]">
+      <main className="flex-1 bg-[#292426]">
       <section className="px-6 pb-16 pt-14 sm:px-10 sm:pb-20 sm:pt-20 lg:px-12 lg:pb-24 lg:pt-24">
         <div className="mx-auto max-w-[1120px]">
           <p className="mb-5 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--color-grey)]">
@@ -42,12 +42,12 @@ export default function About() {
               Our point of view
             </p>
             <div className="max-w-2xl">
-              <p className="text-base leading-[1.9] text-[#444440] sm:text-lg">
+              <p className="text-base leading-[1.9] text-white sm:text-lg">
                 {isYotaabo
                   ? 'We believe fragrance is more than a scent. It is an expression of personality, a reflection of mood, and a detail that can make a lasting impression.'
                   : 'We believe what you wear close to you should feel comfortable, considered, and true to your personal style.'}
               </p>
-              <p className="mt-5 text-sm leading-[1.95] text-[#555550]">
+              <p className="mt-5 text-sm leading-[1.95] text-white/75">
                 {isYotaabo
                   ? `${storeName} is about discovering fragrances that feel like you. Whether you gravitate towards warm and captivating notes, soft florals, or fresh citrus, the right fragrance should feel personal rather than prescribed.`
                   : `${storeName} brings together intimate essentials, everyday underwear, and comfortable sleepwear. From pieces for him and her to relaxed styles for winding down, find what feels right for you.`}
@@ -67,7 +67,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="border-y border-black/10 bg-white px-6 py-14 sm:px-10 lg:px-12 lg:py-20">
+      <section className="border-y border-black/10 bg-[#292426] px-6 py-14 sm:px-10 lg:px-12 lg:py-20">
         <div className="mx-auto grid max-w-[1120px] gap-8 sm:grid-cols-3 sm:gap-10">
           {principles.map((item) => (
             <article key={item.number} className="border-t border-black/10 pt-5">
@@ -77,7 +77,7 @@ export default function About() {
               <h2 className="mt-4 font-heading text-3xl font-medium text-black">
                 {item.title}
               </h2>
-              <p className="mt-2 text-xs leading-[1.85] text-[#555550]">
+              <p className="mt-2 text-xs leading-[1.85] text-white/75">
                 {item.copy}
               </p>
             </article>
