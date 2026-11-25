@@ -103,6 +103,7 @@
   box-shadow: none;
 }
 :root[data-storefront='poshies'] .poshies-campaign::after { content: none; }
+:root[data-storefront='poshies'] .poshies-campaign { position: relative; }
 :root[data-storefront='poshies'] .poshies-campaign__image {
   position: static;
   display: block;
@@ -110,10 +111,33 @@
   height: auto;
   max-height: 82svh;
   object-fit: cover;
-  object-position: center 42%;
+  object-position: center 34%;
   filter: none;
   transform: none;
   transition: none;
+}
+:root[data-storefront='poshies'] .poshies-campaign__wordmark {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 4%;
+  right: 4%;
+  color: #ff1493;
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(76px, 17vw, 190px);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 0.82;
+  text-align: center;
+  text-shadow: 0 5px 24px rgba(0, 0, 0, 0.24);
+  mix-blend-mode: screen;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+@media (max-width: 640px) {
+  :root[data-storefront='poshies'] .poshies-campaign__wordmark {
+    font-size: clamp(68px, 19vw, 118px);
+  }
 }
 :root[data-storefront='poshies'] .poshies-featured {
   margin-top: 0;

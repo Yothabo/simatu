@@ -3,7 +3,7 @@ import { formatPrice } from '../../../../shared/utilities/formatPrice';
 import ProductCarousel from './ProductCarousel';
 import useStorefront from '../../core/hooks/useStorefront.ts';
 
-const POSHIES_CAMPAIGN_IMAGE = 'https://mediaslide-us.storage.googleapis.com/soulartist/pictures/1011/9431/large-1663688680-b10c77c1427eca5267cf9e6d506e7583.jpg';
+const POSHIES_CAMPAIGN_IMAGE = 'https://images.pexels.com/photos/12512512/pexels-photo-12512512.jpeg?auto=compress&cs=tinysrgb&w=1800';
 
 export default function Hero() {
   const { products, isLoading, error } = useProducts();
@@ -22,9 +22,10 @@ export default function Hero() {
             <img
               className="poshies-campaign__image"
               src={POSHIES_CAMPAIGN_IMAGE}
-              alt="Black male model wearing boxer briefs in a softly lit interior"
+              alt="Black woman in black lingerie photographed in a dramatic editorial style"
               fetchPriority="high"
             />
+            <span className="poshies-campaign__wordmark" aria-label="Poshies">Poshies</span>
           </div>
         </div>
         <div className="poshies-featured">
