@@ -96,7 +96,6 @@ export default function MoodboardSearchBar({
                 <button type="button" className="kinetic-moodboard__discover-tool" onClick={() => setRecentOpen((open) => !open)} aria-expanded={recentOpen}><FaHistory aria-hidden="true" /><span>Recently Visited Categories</span><small>{recentCategories.length}</small></button>
                 {recentOpen && <div className="kinetic-moodboard__discover-category-list" aria-label="Recently visited categories">{recentCategories.length ? recentCategories.map((category) => <button type="button" key={category.id} className="kinetic-moodboard__discover-category kinetic-moodboard__saved-discovery" onClick={() => { onRecentCategorySelect?.(category.category); onMenuClick?.(); }}><img src={category.image} alt="" loading="lazy"/><span>{category.category}</span></button>) : <p className="kinetic-moodboard__saved-empty">Categories you visit will appear here.</p>}</div>}
               </div>
-              )}
               </>
               )}
             </nav>
