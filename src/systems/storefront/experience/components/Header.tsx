@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { FiMenu, FiX, FiShoppingCart } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { FiMenu, FiX } from 'react-icons/fi';
+import { FaOpencart } from 'react-icons/fa';
 import useStorefront from '../../core/hooks/useStorefront.ts';
 import './storefront-header.css';
 
@@ -17,7 +19,7 @@ const scrollTargets = [
 export default function Header({ sticky = true }: HeaderProps) {
   const [query, setQuery] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
-  const { name: storeName } = useStorefront();
+  const { name: storeName, pathFor } = useStorefront();
 
   const scrollToSection = (id: string) => {
     setMenuOpen(false);
@@ -38,9 +40,9 @@ export default function Header({ sticky = true }: HeaderProps) {
           />
           {query && <button type="button" className="storefront-controls__clear" onClick={() => setQuery('')} aria-label="Clear search"><FiX /></button>}
         </div>
-        <button type="button" className="storefront-controls__icon" aria-label="Shopping cart">
-          <FiShoppingCart aria-hidden="true" />
-        </button>
+        <Link to={pathFor('cart')} className="storefront-controls__icon" aria-label="Open shopping cart">
+          <FaOpencart aria-hidden="true" />
+        </Link>
         <button
           type="button"
           className="storefront-controls__icon"
