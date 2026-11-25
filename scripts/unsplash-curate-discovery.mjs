@@ -21,7 +21,16 @@ if (!ACCESS_KEY) {
 const source = fs.readFileSync(TAXONOMY, 'utf8');
 const cache = loadCache();
 const entries = parseTaxonomy(source);
-const pending = entries.filter((entry) => !cache.search[entry.queryKey]);
+const fallbackQueries = {
+  'subcategory:fashion:clothing': 'fashion clothing street style outfit',
+  'subcategory:spaces:furniture': 'modern furniture interior design',
+  'subcategory:travel:experiences': 'travel adventure activities experiences',
+  'subcategory:business:business-support': 'business office workspace professional',
+};
+const pending = entries.filter((entry) => {
+  const cached = cache.search[entry.queryKey];
+  return !Array.isArray(cached) || cached.length === 0;
+});
 const hourlyLimit = Number(process.env.UNSPLASH_HOURLY_LIMIT || 50);
 const cutoff = Date.now() - 60 * 60 * 1000;
 cache.requestTimestamps = (cache.requestTimestamps || []).filter((stamp) => stamp > cutoff);
@@ -33,7 +42,7 @@ if (runLimit === 0) console.log('Hourly API budget is exhausted. Wait for the ro
 for (const entry of pending) {
   if (requested >= runLimit) break;
   const url = new URL('https://api.unsplash.com/search/photos');
-  url.searchParams.set('query', entry.query);
+  url.searchParams.set('query', fallbackQueries[entry.queryKey] || entry.query);
   url.searchParams.set('per_page', '30');
   url.searchParams.set('orientation', 'landscape');
   url.searchParams.set('content_filter', 'high');
