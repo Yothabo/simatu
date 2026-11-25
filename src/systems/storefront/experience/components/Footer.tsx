@@ -38,7 +38,6 @@ export default function Footer() {
         </div>
         <div className="flex flex-col gap-3 pt-6 text-xs opacity-60 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} {storeName}. All rights reserved.</p>
-          <p>Designed with intention.</p>
         </div>
       </div>
     </footer>
