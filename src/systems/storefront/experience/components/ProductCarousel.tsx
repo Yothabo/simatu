@@ -234,7 +234,6 @@ export default function ProductCarousel({
             </SwiperSlide>
           )}
         </Swiper>
-      )}
 
       <ProductModal
         product={
