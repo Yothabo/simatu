@@ -7,7 +7,7 @@ export default function ServicesPage() {
   return (
     <>
       <Header sticky={false} />
-      <main className="flex-1 bg-[#f5f5f2]">
+      <main className="flex-1 bg-[#292426]">
       <Services />
     <Footer />
     </main>
