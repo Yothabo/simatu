@@ -17,12 +17,6 @@ export default function Hero() {
       <section id="home" aria-label="Poshies home" className="storefront-hero poshies-home">
         <div className="poshies-campaign-wrap">
           <div className="poshies-campaign">
-            <img
-              className="poshies-campaign__image"
-              src={POSHIES_CAMPAIGN_IMAGE}
-              alt="Black woman in black lingerie photographed in a dramatic editorial style"
-              fetchPriority="high"
-            />
             <span className="poshies-campaign__wordmark" aria-label="Poshies">Poshies</span>
           </div>
         </div>
