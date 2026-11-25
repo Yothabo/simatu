@@ -200,10 +200,10 @@ export default function ProductModal({
             <span className={`min-w-0 text-2xl leading-tight text-black ${mode === "preview" ? "" : "font-heading"}`} style={mode === "preview" ? { fontFamily: "Antony, sans-serif" } : undefined}>
               {product.name}
             </span>
-            <span className={`whitespace-nowrap text-base leading-tight ${accentColor} ${mode === "preview" ? "opacity-50" : "font-heading"}`} style={mode === "preview" ? { fontFamily: "Montserrat, sans-serif" } : undefined}>
+            <span className={`self-end whitespace-nowrap text-base leading-[1.25] ${accentColor} ${mode === "preview" ? "opacity-50" : "font-heading"}`} style={mode === "preview" ? { fontFamily: "Montserrat, sans-serif" } : undefined}>
               {product.price}
             </span>
-          </div>
+          </div>v>
         </div>
 
         {/* 3. Description */}
@@ -216,8 +216,8 @@ export default function ProductModal({
         </div>
 
         {/* 4. Quantity & Actions */}
-        <div className={`flex gap-3 px-5 py-5 ${mode === 'preview' ? 'opacity-45' : ''}`}>
-          <div className="flex items-center border border-[#4d4d4d]/20">
+        <div className={`grid grid-cols-[auto_minmax(0,1fr)] items-stretch gap-3 px-5 py-5 ${mode === 'preview' ? 'opacity-45' : ''}`}>
+          <div className="flex h-12 items-stretch border border-[#4d4d4d]/20">
             <RippleButton
               onClick={() => handleQuantityChange(quantity - 1)}
               className="flex h-12 w-10 items-center justify-center bg-[#f1f1ee] text-black/60 transition-colors hover:bg-[#e5e5e1] hover:text-black active:bg-[#dcdcd7]"
