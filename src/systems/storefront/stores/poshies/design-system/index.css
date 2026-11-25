@@ -556,3 +556,11 @@
   font-family: 'Anton', sans-serif !important;
 }
 
+/* Poshies brand wordmarks: one consistent pink across every storefront identity mark. */
+:root[data-storefront='poshies'] .poshies-campaign__wordmark,
+:root[data-storefront='poshies'] .poshies-collection-panel svg text,
+:root[data-storefront='poshies'] .poshies-collection-panel--about svg text,
+:root[data-storefront='poshies'] .poshies-collection-section svg text {
+  fill: #e94b9b !important;
+  color: #e94b9b !important;
+}
