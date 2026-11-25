@@ -280,3 +280,14 @@
   :root[data-storefront='poshies'] .storefront-hero { padding-top: 2.5rem; }
   :root[data-storefront='poshies'] .poshies-campaign__wordmark { font-size: clamp(68px, 19vw, 118px); }
 }
+
+/* Keep contrast correct on every hot-pink primary action. */
+:root[data-storefront='poshies'] .storefront-header__cta,
+:root[data-storefront='poshies'] .storefront-page button[type='submit'],
+:root[data-storefront='poshies'] .storefront-page .button-primary,
+:root[data-storefront='poshies'] .storefront-page [class*='bg-[#FF1493]'],
+:root[data-storefront='poshies'] .storefront-page [class*='bg-pink'] {
+  background-color: var(--poshies-color-accent) !important;
+  border-color: var(--poshies-color-accent) !important;
+  color: var(--poshies-color-button-text) !important;
+}
