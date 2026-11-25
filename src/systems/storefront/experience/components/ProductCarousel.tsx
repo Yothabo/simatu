@@ -201,13 +201,13 @@ export default function ProductCarousel({
                           <div
                             aria-hidden="true"
                             className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
-                            style={{ background: 'linear-gradient(180deg, rgba(255,20,147,0) 0%, #FFFFFF 100%)' }}
+                            style={{ background: '#FF1493' }}
                           />
                         )}
                       </div>
 
                       <div
-                        className={`relative mt-0 grid min-w-0 grid-rows-[20px_20px] gap-y-3 pt-3 pl-3 ${isPoshiesMockCarousel ? "bg-white" : ""}`}
+                        className={`relative mt-0 grid min-w-0 grid-rows-[20px_20px] gap-y-3 pt-3 pl-3 ${isPoshiesMockCarousel ? "bg-[#292426]" : ""}`}
                       >
                         <h4
                           className={`min-w-0 truncate font-heading text-base ${textColor}`}
@@ -232,7 +232,7 @@ export default function ProductCarousel({
               <Link
                 to={viewAllHref}
                 aria-label={`View more ${title} products`}
-                className="flex aspect-[4/5] w-full items-center justify-center font-heading text-lg italic text-[#292426] outline-none transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4"
+                className="flex aspect-[4/5] w-full items-center justify-center font-heading text-lg italic text-[#FFFFFF] outline-none transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4"
               >
                 View more
               </Link>
