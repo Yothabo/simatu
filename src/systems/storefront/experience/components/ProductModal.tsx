@@ -182,7 +182,7 @@ export default function ProductModal({
         {/* 1. Full-bleed image with integrated gradient, title and price */}
         <div className={`relative aspect-[4/5] w-full overflow-hidden ${placeholderColor}`}>
           {mode === 'preview' ? (
-            <div className="absolute inset-0 bg-[#f8d9ce]" />
+            <div className="absolute inset-0 bg-[#FF1493]" />
           ) : product.image_url ? (
             <SharedImage
               src={product.image_url}
@@ -220,7 +220,7 @@ export default function ProductModal({
           <div className="flex h-12 items-stretch border border-[#4d4d4d]/20">
             <RippleButton
               onClick={() => handleQuantityChange(quantity - 1)}
-              className="flex h-12 w-10 items-center justify-center bg-[#f1f1ee] text-black/60 transition-colors hover:bg-[#e5e5e1] hover:text-black active:bg-[#dcdcd7]"
+              className="flex h-12 w-10 items-center justify-center bg-[#292426] text-black/60 transition-colors hover:bg-[#FF1493] hover:text-black active:bg-[#FF1493]"
               ariaLabel="Decrease quantity"
               rippleColor={primaryAccent}
             >
@@ -229,7 +229,7 @@ export default function ProductModal({
             <span className="flex h-12 w-8 items-center justify-center text-center font-heading text-lg text-black">{quantity}</span>
             <RippleButton
               onClick={() => handleQuantityChange(quantity + 1)}
-              className="flex h-12 w-10 items-center justify-center bg-[#f1f1ee] text-black/60 transition-colors hover:bg-[#e5e5e1] hover:text-black active:bg-[#dcdcd7]"
+              className="flex h-12 w-10 items-center justify-center bg-[#292426] text-black/60 transition-colors hover:bg-[#FF1493] hover:text-black active:bg-[#FF1493]"
               ariaLabel="Increase quantity"
               rippleColor={primaryAccent}
             >
