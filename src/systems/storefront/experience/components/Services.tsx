@@ -130,63 +130,41 @@ export default function Services() {
 
             {/* Main Content Area */}
             <div className="relative flex h-full w-full items-center justify-center">
-              {/* Giant Background Word (Stretched) */}
-              <div
-                className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center"
-                style={{ height: '45vh', margin: 'auto' }}
-              >
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 100 100"
-                  preserveAspectRatio="none"
-                  style={{ display: 'block', width: '100%', height: '100%' }}
+              {/* Oversized collection watermark is intentionally omitted from About. */}
+              {category.id !== 'about' && (
+                <div
+                  className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center"
+                  style={{ height: '45vh', margin: 'auto' }}
                 >
-                  <text
-                    x="50"
-                    y="50%"
-                    dominantBaseline="middle"
-                    textAnchor="middle"
-                    textLength="100"
-                    lengthAdjust="spacingAndGlyphs"
-                    style={{ fontFamily: '"Anton", sans-serif', fontWeight: 400 }}
-                    className={category.textFill}
-                    fontSize="100"
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 100 100"
+                    preserveAspectRatio="none"
+                    style={{ display: 'block', width: '100%', height: '100%' }}
                   >
-                    {category.title}
-                  </text>
-                </svg>
-              </div>
+                    <text
+                      x="50"
+                      y="50%"
+                      dominantBaseline="middle"
+                      textAnchor="middle"
+                      textLength="100"
+                      lengthAdjust="spacingAndGlyphs"
+                      style={{ fontFamily: '"Anton", sans-serif', fontWeight: 400 }}
+                      className={category.textFill}
+                      fontSize="100"
+                    >
+                      {category.title}
+                    </text>
+                  </svg>
+                </div>
+              )}
 
               {/* Decorative Script Text */}
               <div className="pointer-events-none absolute inset-0 z-20">
                 {category.id === 'about' ? (
                   /* About: Bottom-Right, not rotated */
                   <div className="absolute bottom-20 inset-x-0 w-full min-w-0 sm:bottom-32">
-                    {storeName === 'Poshies' ? (
-                      <svg
-                        aria-hidden="true"
-                        viewBox="0 0 100 100"
-                        preserveAspectRatio="none"
-                        className="block h-[clamp(80px,12vw,160px)] w-full max-w-none"
-                      >
-                        <text
-                          x="50"
-                          y="50%"
-                          dominantBaseline="middle"
-                          textAnchor="middle"
-                          textLength="100"
-                          lengthAdjust="spacingAndGlyphs"
-                          style={{
-                            fontFamily: '"Anton", sans-serif',
-                            fontWeight: 400,
-                            fill: '#ff1493',
-                          }}
-                          fontSize="100"
-                        >
-                          poshies
-                        </text>
-                      </svg>
-                    ) : (
+                    {storeName !== 'Poshies' && (
                       <span className={`whitespace-nowrap font-accent text-[clamp(80px,12vw,160px)] font-normal leading-[0.7] tracking-normal ${category.accentColor}`}>
                         {storeName.toLowerCase()}
                       </span>
@@ -195,16 +173,20 @@ export default function Services() {
                 ) : (
                   /* Other sections: Rotated on the left */
                   <>
-                    <div className="flex flex-col items-center justify-center w-full h-full lg:hidden">
-                      <span className={`absolute left-6 top-1/2 origin-left -translate-y-1/2 -rotate-90 whitespace-nowrap font-accent text-[clamp(80px,12vw,120px)] font-normal leading-[0.7] tracking-normal ${category.accentColor}`}>
-                        For
-                      </span>
-                    </div>
-                    <div className="hidden lg:flex absolute left-8 top-1/2 -translate-y-1/2 items-center justify-center">
-                      <span className={`origin-left -rotate-90 whitespace-nowrap font-accent text-[clamp(100px,16vw,200px)] font-normal leading-[0.7] tracking-normal ${category.accentColor}`}>
-                        For
-                      </span>
-                    </div>
+                    {category.id !== 'about' && (
+                      <>
+                        <div className="flex flex-col items-center justify-center w-full h-full lg:hidden">
+                          <span className={`absolute left-6 top-1/2 origin-left -translate-y-1/2 -rotate-90 whitespace-nowrap font-accent text-[clamp(80px,12vw,120px)] font-normal leading-[0.7] tracking-normal ${category.accentColor}`}>
+                            For
+                          </span>
+                        </div>
+                        <div className="hidden lg:flex absolute left-8 top-1/2 -translate-y-1/2 items-center justify-center">
+                          <span className={`origin-left -rotate-90 whitespace-nowrap font-accent text-[clamp(100px,16vw,200px)] font-normal leading-[0.7] tracking-normal ${category.accentColor}`}>
+                            For
+                          </span>
+                        </div>
+                      </>
+                    )}
                   </>
                 )}
               </div>
