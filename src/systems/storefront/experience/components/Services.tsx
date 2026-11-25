@@ -41,12 +41,12 @@ export default function Services() {
       topText: isYotaabo ? 'REFINED. GROUNDED. REMEMBERED.' : 'COMFORT THAT FEELS LIKE YOURS.',
       description:
         isYotaabo ? 'Crafted for presence. Distinctive scents for the modern man, refined in character, grounded in confidence, and made to be remembered.' : 'Everyday briefs, boxers and trunks with a comfortable fit and a little more confidence in every layer.',
-      bgColor: isPoshies ? 'bg-[#292426]' : 'bg-white',
-      textColor: isPoshies ? 'text-white' : 'text-[#4d4d4d]',
+      bgColor: 'bg-white',
+      textColor: 'text-[#292426]',
       textFill: isPoshies ? 'fill-[#FF1493]' : 'fill-[#8aa89b]',
-      accentColor: isPoshies ? 'text-white' : 'text-[#4d4d4d]',
+      accentColor: 'text-[#292426]',
       placeholderColor: isPoshies ? 'bg-[#FF1493]' : 'bg-[#8aa89b]',
-      overlayColor: isPoshies ? '#292426' : '#000000',
+      overlayColor: '#FFFFFF',
       hasImage: isYotaabo,
       imageSrc: isYotaabo ? '/systems/storefront/shared/images/hisimage.webp' : undefined,
       isDark: false,
@@ -60,12 +60,12 @@ export default function Services() {
       topText: isYotaabo ? 'ELEGANCE IN EVERY NOTE' : 'MADE TO FEEL GOOD ON YOUR SKIN.',
       description:
         isYotaabo ? 'Fragrances crafted to complement elegance and individuality, whether soft and floral or bold and warm.' : 'Discover bras, panties, matching sets and lingerie chosen for the way they feel, fit and let you express yourself.',
-      bgColor: isPoshies ? 'bg-[#292426]' : 'bg-white',
-      textColor: isPoshies ? 'text-white' : 'text-white',
+      bgColor: 'bg-white',
+      textColor: 'text-[#292426]',
       textFill: isPoshies ? 'fill-[#FF1493]' : 'fill-[#ff1493]',
-      accentColor: 'text-white',
+      accentColor: 'text-[#292426]',
       placeholderColor: isPoshies ? 'bg-[#FF1493]' : 'bg-[#ff1493]',
-      overlayColor: '#292426',
+      overlayColor: '#FFFFFF',
       hasImage: isYotaabo,
       imageSrc: isYotaabo ? '/systems/storefront/shared/images/herimage.webp' : undefined,
       isDark: false,
@@ -79,12 +79,12 @@ export default function Services() {
       topText: isYotaabo ? 'SCENTS FOR EVERY ROOM' : 'SOFT MOMENTS. YOUR OWN SPACE.',
       description:
         isYotaabo ? 'Extend your signature into every space. Ambient scents for the home and car, quietly shaping the atmosphere wherever you go.' : 'Slip into soft sleepwear, robes and relaxed sets made for slow mornings, quiet evenings and time that belongs to you.',
-      bgColor: isPoshies ? 'bg-[#292426]' : 'bg-white',
-      textColor: isPoshies ? 'text-white' : 'text-white',
+      bgColor: 'bg-white',
+      textColor: 'text-[#292426]',
       textFill: isPoshies ? 'fill-[#FF1493]' : 'fill-[#c8ad8d]',
-      accentColor: 'text-white',
+      accentColor: 'text-[#292426]',
       placeholderColor: isPoshies ? 'bg-[#FF1493]' : 'bg-[#c8ad8d]',
-      overlayColor: '#292426',
+      overlayColor: '#FFFFFF',
       hasImage: false,
       isDark: false,
       collectionTitle: isYotaabo ? 'Collections' : 'Collection',
@@ -97,10 +97,10 @@ export default function Services() {
       topText: isYotaabo ? 'THE STORY BEHIND THE SCENT' : 'INTIMACY, ON YOUR OWN TERMS.',
       description:
         isYotaabo ? 'Born from a simple, enduring belief: fragrance is not merely something you wear, but a reflection of who you are. We curate distinctive scents that speak quietly yet linger long, carefully designed to become an unforgettable part of how you are remembered.' : 'Poshies is a space for intimate essentials, everyday comfort and personal expression. Find pieces that feel right against your skin and let confidence begin with you.',
-      bgColor: isPoshies ? 'bg-[#292426]' : 'bg-white',
-      textColor: isPoshies ? 'text-white' : 'text-white',
+      bgColor: 'bg-white',
+      textColor: 'text-[#292426]',
       textFill: isYotaabo ? 'fill-[#8aa89b]' : 'fill-[#FF1493]',
-      accentColor: 'text-white',
+      accentColor: 'text-[#292426]',
       hasImage: false,
     },
   ];
@@ -117,7 +117,7 @@ export default function Services() {
   ];
 
   return (
-    <section id="services" className={`storefront-collections w-full ${isPoshies ? 'bg-[#292426] text-white poshies-collections' : 'bg-white'}`}>
+    <section id="services" className={`storefront-collections w-full ${isPoshies ? 'bg-white text-[#292426] poshies-collections' : 'bg-white'}`}>
       {orderedCategories.map((category) => (
         <div key={category.id} id={category.id} className={`flex flex-col w-full ${isPoshies ? `poshies-collection-section poshies-collection-section--${category.id}` : ""}`}>
           <div
