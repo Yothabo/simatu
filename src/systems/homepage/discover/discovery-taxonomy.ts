@@ -109,7 +109,7 @@ export const DISCOVERY_SUBCATEGORIES: Record<string, DiscoverySubcategory[]> = {
   ],
   kids: [
     tile('baby', 'Baby & Maternity', 'photo-1601512310580-da458161fcab', 'Baby essentials, maternity and feeding', ['baby','maternity']),
-    tile('kids-clothing', 'Kids Clothing', 'photo-1787713321914-7ad3a8555417', 'Children's clothing, shoes and accessories', ['kids','child']),
+    tile('kids-clothing', 'Kids Clothing', 'photo-1787713321914-7ad3a8555417', "Children's clothing, shoes and accessories", ['kids','child']),
     tile('toys', 'Toys & Games', 'photo-1558060370-d644479cb6f7', 'Play, toys and games for all ages', ['toy','game']),
     tile('learning', 'School & Learning', 'photo-1787978941837-f1f55ff29ac8', 'School supplies, learning materials and educational tools', ['school','learning','education']),
     tile('nursery', 'Nursery & Baby Room', 'photo-1774578342155-8d7e44a18bfd', 'Nursery furniture, room decor and baby-room essentials', ['nursery']),
