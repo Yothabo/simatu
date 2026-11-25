@@ -30,7 +30,8 @@ type MoodboardSearchBarProps = {
   onCategorySelect?: (category: string) => void;
   onRecentCategorySelect?: (category: string) => void;
   onClearCategory?: () => void;
-  onRandomDiscovery?: () => void;\n  storefrontMenuLinks?: StorefrontMenuLink[];
+  onRandomDiscovery?: () => void;
+  storefrontMenuLinks?: StorefrontMenuLink[];
 };
 
 export default function MoodboardSearchBar({
@@ -67,7 +68,8 @@ export default function MoodboardSearchBar({
         {onBack && <button type="button" className="kinetic-moodboard__search-back" aria-label="Back" onClick={onBack} tabIndex={visible ? 0 : -1}>{backIcon === 'arrow' ? <TiArrowBack size={21} aria-hidden="true" /> : <FaHome size={18} aria-hidden="true" />}</button>}
         <div className={`kinetic-moodboard__search-shell ${showMenu ? "has-menu" : ""}`}>
           {menuExpanded ? (
-            <nav className="kinetic-moodboard__discover-tools" aria-label="Discover tools">
+            <nav className="kinetic-moodboard__discover-tools" aria-label={storefrontMenuLinks ? 'Storefront navigation' : 'Discover tools'}>
+              {storefrontMenuLinks ? storefrontMenuLinks.map((link) => <Link key={link.label} to={link.to} className="kinetic-moodboard__discover-tool" onClick={() => onMenuClick?.()}><span>{link.label}</span></Link>) : (
               {activeCategory && <div className="kinetic-moodboard__active-category"><span>Showing {activeCategory}</span><button type="button" onClick={() => { onClearCategory?.(); onMenuClick?.(); }}>Show all discoveries</button></div>}
               <div className="kinetic-moodboard__discover-group">
                 <div className="kinetic-moodboard__discover-group-heading"><strong>Network</strong><small>Connect and participate</small></div>
@@ -91,6 +93,7 @@ export default function MoodboardSearchBar({
                 <button type="button" className="kinetic-moodboard__discover-tool" onClick={() => setRecentOpen((open) => !open)} aria-expanded={recentOpen}><FaHistory aria-hidden="true" /><span>Recently Visited Categories</span><small>{recentCategories.length}</small></button>
                 {recentOpen && <div className="kinetic-moodboard__discover-category-list" aria-label="Recently visited categories">{recentCategories.length ? recentCategories.map((category) => <button type="button" key={category.id} className="kinetic-moodboard__discover-category kinetic-moodboard__saved-discovery" onClick={() => { onRecentCategorySelect?.(category.category); onMenuClick?.(); }}><img src={category.image} alt="" loading="lazy"/><span>{category.category}</span></button>) : <p className="kinetic-moodboard__saved-empty">Categories you visit will appear here.</p>}</div>}
               </div>
+              )}
             </nav>
           ) : (
             <input className="kinetic-moodboard__search-input" type="search" placeholder={placeholder} value={value} onChange={(event) => onChange(event.target.value)} tabIndex={visible ? 0 : -1} aria-label={ariaLabel} />
