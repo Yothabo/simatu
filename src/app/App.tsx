@@ -17,6 +17,7 @@ const ServicesPage = React.lazy(() => import('../systems/storefront/experience')
 const ViewCatalog = React.lazy(() => import('../systems/storefront/experience').then(({ CatalogPage }) => ({ default: CatalogPage })));
 const About = React.lazy(() => import('../systems/storefront/experience').then(({ AboutPage }) => ({ default: AboutPage })));
 const CartPage = React.lazy(() => import('../systems/storefront/experience').then(({ CartPage }) => ({ default: CartPage })));
+const StorefrontDocumentPage = React.lazy(() => import('../systems/storefront/experience/pages/StorefrontDocumentPage'));
 const MarketplaceCartPage = React.lazy(() => import('../systems/storefront/experience').then(({ MarketplaceCartPage }) => ({ default: MarketplaceCartPage })));
 const NotFound = React.lazy(() => import('../pages/NotFound'));
 const UpdatePassword = React.lazy(() => import('../pages/UpdatePassword'));
@@ -128,6 +129,9 @@ function App() {
             <Route path="/poshies/catalog" element={<ViewCatalog />} />
             <Route path="/poshies/about" element={<About />} />
             <Route path="/poshies/cart" element={<CartPage />} />
+            <Route path="/poshies/privacy" element={<StorefrontDocumentPage />} />
+            <Route path="/poshies/terms" element={<StorefrontDocumentPage />} />
+            <Route path="/poshies/delivery" element={<StorefrontDocumentPage />} />
             <Route path="/poshies/*" element={<NotFound />} />
           </Route>
 
