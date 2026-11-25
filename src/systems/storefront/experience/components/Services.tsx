@@ -210,7 +210,7 @@ export default function Services() {
               {/* Image Overlay */}
               {category.hasImage && (
                 <img
-                  src={category.imageSrc || "https://images.unsplash.com/photo-1750064139819-da3bf362e7b3?auto=format&fit=crop&w=1200&q=85"}
+                  src={category.imageSrc || "/systems/storefront/shared/images/hisimage.webp"}
                   alt={`${category.title} collection`}
                   className="poshies-panel-image pointer-events-none absolute bottom-[15%] right-0 z-40 h-[35vh] w-auto object-contain object-right-bottom drop-shadow-2xl sm:bottom-[20%]"
                 />
