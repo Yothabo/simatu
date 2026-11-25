@@ -214,8 +214,8 @@ export default function ProductCarousel({
                         </h4>
 
                         <p
-                          className={`mt-1 font-heading text-xs tracking-[0.14em] uppercase ${cardAccent}`}
-                          style={{ lineHeight: '1', margin: 0, padding: 0 }}
+                          className={`mt-3 font-heading text-sm tracking-[0.08em] uppercase ${cardAccent}`}
+                          style={{ lineHeight: '1.2', margin: 0, padding: 0 }}
                         >
                           {product.price}
                         </p>
