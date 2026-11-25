@@ -3,7 +3,7 @@ import { formatPrice } from '../../../../shared/utilities/formatPrice';
 import ProductCarousel from './ProductCarousel';
 import useStorefront from '../../core/hooks/useStorefront.ts';
 
-const POSHIES_CAMPAIGN_IMAGE = 'https://www.netterose.com/cdn/shop/products/NetteRose5_900x.jpg?v=1669900445';
+const POSHIES_CAMPAIGN_IMAGE = 'https://mediaslide-us.storage.googleapis.com/soulartist/pictures/1011/9431/large-1663688680-b10c77c1427eca5267cf9e6d506e7583.jpg';
 
 export default function Hero() {
   const { products, isLoading, error } = useProducts();
@@ -18,23 +18,15 @@ export default function Hero() {
     return (
       <section id="home" aria-label="Poshies home" className="storefront-hero poshies-home">
         <div className="poshies-campaign-wrap">
-          <a className="poshies-campaign" href={pathFor('catalog')} aria-label="Discover Poshies intimate apparel">
+          <a className="poshies-campaign" href={pathFor('catalog')} aria-label="Poshies">
             <img
               className="poshies-campaign__image"
               src={POSHIES_CAMPAIGN_IMAGE}
-              alt="Intimate apparel from a South African lingerie label"
+              alt="Black male model wearing boxer briefs in a softly lit interior"
               fetchPriority="high"
             />
-            <span className="poshies-campaign__topline">INTIMATES, MADE IN SOUTH AFRICA</span>
             <span className="poshies-campaign__wordmark" aria-label="Poshies">poshies</span>
-            <span className="poshies-campaign__bottomline">Feel good, close to yourself</span>
-            <span className="poshies-campaign__arrow" aria-hidden="true">↗</span>
-          </a>
-          <div className="poshies-campaign__meta">
-            <span>DISCOVER POSHIES</span>
-            <span>02 / 02</span>
-          </div>
-          <p className="poshies-campaign__description">Soft against your skin. Made for your comfort, confidence and every version of you.</p>
+                      </a>
         </div>
         <div className="poshies-featured">
           <ProductCarousel
