@@ -76,8 +76,8 @@ export default function Services() {
       topText: isYotaabo ? 'SCENTS FOR EVERY ROOM' : 'SOFT MOMENTS. YOUR OWN SPACE.',
       description:
         isYotaabo ? 'Extend your signature into every space. Ambient scents for the home and car, quietly shaping the atmosphere wherever you go.' : 'Slip into soft sleepwear, robes and relaxed sets made for slow mornings, quiet evenings and time that belongs to you.',
-      bgColor: isPoshies ? 'bg-[#242424]' : 'bg-white',
-      textColor: isPoshies ? 'text-white' : 'text-[#4d4d4d]',
+      bgColor: isPoshies ? 'bg-[#f4c8b8]' : 'bg-white',
+      textColor: isPoshies ? 'text-[#292426]' : 'text-[#4d4d4d]',
       textFill: isPoshies ? 'fill-[#79634e]' : 'fill-[#c8ad8d]',
       accentColor: 'text-[#4d4d4d]',
       placeholderColor: 'bg-[#c8ad8d]',
@@ -93,8 +93,8 @@ export default function Services() {
       topText: isYotaabo ? 'THE STORY BEHIND THE SCENT' : 'INTIMACY, ON YOUR OWN TERMS.',
       description:
         isYotaabo ? 'Born from a simple, enduring belief: fragrance is not merely something you wear, but a reflection of who you are. We curate distinctive scents that speak quietly yet linger long, carefully designed to become an unforgettable part of how you are remembered.' : 'Poshies is a space for intimate essentials, everyday comfort and personal expression. Find pieces that feel right against your skin and let confidence begin with you.',
-      bgColor: isPoshies ? 'bg-[#242424]' : 'bg-white',
-      textColor: isPoshies ? 'text-white' : 'text-[#4d4d4d]',
+      bgColor: isPoshies ? 'bg-[#f4c8b8]' : 'bg-white',
+      textColor: isPoshies ? 'text-[#292426]' : 'text-[#4d4d4d]',
       textFill: isYotaabo ? 'fill-[#8aa89b]' : 'fill-[#79634e]',
       accentColor: 'text-[#4d4d4d]',
       hasImage: false,
