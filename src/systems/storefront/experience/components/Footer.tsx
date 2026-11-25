@@ -41,23 +41,17 @@ export default function Footer() {
               <li><Link to={pathFor('cart')} className="footer-link">Shopping bag</Link></li>
             </ul>
           </nav>
-          <div>
-            <h2 className="footer-column-title">Policies & information</h2>
-            <ul className="mt-5 space-y-3 text-sm">
-              <li><a href="#poshies-privacy" className="footer-link">Privacy information</a></li>
-              <li><a href="#poshies-terms" className="footer-link">Terms of use</a></li>
-              <li><a href="#poshies-delivery" className="footer-link">Delivery & returns</a></li>
-            </ul>
-            <p className="mt-4 text-xs leading-6 opacity-55">Policy details are being prepared. Please review the final terms before placing an order.</p>
-          </div>
+          {isPoshies && (
+            <nav aria-label="Policies and information">
+              <h2 className="footer-column-title">Information</h2>
+              <ul className="mt-5 space-y-3 text-sm">
+                <li><Link to={pathFor('privacy')} className="footer-link">Privacy policy</Link></li>
+                <li><Link to={pathFor('terms')} className="footer-link">Terms of use</Link></li>
+                <li><Link to={pathFor('delivery')} className="footer-link">Delivery & returns</Link></li>
+              </ul>
+            </nav>
+          )}
         </div>
-        {isPoshies && (
-          <div className="grid gap-5 border-b border-white/10 py-8 text-xs leading-6 text-white/60 sm:grid-cols-3">
-            <div id="poshies-privacy"><h3 className="mb-1 font-semibold text-white/85">Privacy</h3><p>We are preparing clear information about the personal information collected, how it is used, and how customers can contact us about their data.</p></div>
-            <div id="poshies-terms"><h3 className="mb-1 font-semibold text-white/85">Terms of use</h3><p>Terms covering orders, payments, product availability and customer responsibilities will be published here before launch.</p></div>
-            <div id="poshies-delivery"><h3 className="mb-1 font-semibold text-white/85">Delivery & returns</h3><p>Delivery timelines, shipping charges, exchange eligibility and returns procedures will be confirmed in the final customer policy.</p></div>
-          </div>
-        )}
         <div className="flex flex-col gap-3 pt-6 text-xs opacity-60 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} {storeName}. All rights reserved.</p>
           <p>Designed with intention.</p>
