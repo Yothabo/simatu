@@ -383,3 +383,45 @@
 :root[data-storefront='poshies'] .poshies-collection-section .poshies-collection-carousel {
   background: transparent;
 }
+
+
+/* Ensure the full-bleed section surface is visible behind the watermark
+   typography as well as the copy and product carousel. Older charcoal
+   selectors and Tailwind bg utilities must not paint opaque inner panels. */
+:root[data-storefront='poshies'] .poshies-collection-section > .poshies-collection-panel {
+  background: transparent !important;
+}
+:root[data-storefront='poshies'] .poshies-collection-section > .poshies-collection-carousel {
+  background: transparent !important;
+}
+:root[data-storefront='poshies'] .poshies-collection-section--his {
+  background-image: linear-gradient(
+    to bottom,
+    #34443e 0%,
+    #344f45 16%,
+    #405f50 45%,
+    #405f50 70%,
+    #514b3f 100%
+  ) !important;
+}
+:root[data-storefront='poshies'] .poshies-collection-section--hers {
+  background-image: linear-gradient(
+    to bottom,
+    #3a2831 0%,
+    #633b4d 24%,
+    #75485d 58%,
+    #4b3440 82%,
+    #34443e 100%
+  ) !important;
+}
+:root[data-storefront='poshies'] .poshies-collection-section--spaces {
+  background-image: linear-gradient(
+    to bottom,
+    #514b3f 0%,
+    #655544 18%,
+    #79634e 48%,
+    #79634e 72%,
+    #4a3d35 90%,
+    #242424 100%
+  ) !important;
+}
