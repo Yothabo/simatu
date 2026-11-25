@@ -182,11 +182,7 @@ export default function ProductModal({
         {/* 1. Full-bleed image with integrated gradient, title and price */}
         <div className={`relative aspect-[4/5] w-full overflow-hidden ${placeholderColor}`}>
           {mode === 'preview' ? (
-            <div className="absolute inset-0 flex items-center justify-center bg-[#f8d9ce] text-[#79634e]/65">
-              <svg aria-hidden="true" viewBox="0 0 120 120" className="h-28 w-28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M38 22 20 32 10 49l18 9 8-11v43h48V46l8 12 18-9-10-17-18-10c-4 7-10 11-17 11s-13-4-17-11Z" />
-              </svg>
-            </div>
+            <div className="absolute inset-0 bg-[#f8d9ce]" />
           ) : product.image_url ? (
             <SharedImage
               src={product.image_url}
@@ -201,7 +197,7 @@ export default function ProductModal({
             className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-[58%] to-white"
           />
           <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 px-5 pb-5 pt-24">
-            <span className="min-w-0 font-heading text-2xl italic leading-tight text-black">
+            <span className={`min-w-0 text-2xl italic leading-tight text-black ${mode === "preview" ? "font-serif" : "font-heading"}`}>
               {product.name}
             </span>
             <span className={`shrink-0 font-heading text-xl leading-none ${accentColor} ${mode === 'preview' ? 'opacity-50' : ''}`}>
@@ -212,7 +208,7 @@ export default function ProductModal({
 
         {/* 3. Description */}
         <div className="px-5 pt-3">
-          <p className="font-heading text-sm leading-relaxed text-[#4d4d4d]/70">
+          <p className={`text-sm leading-relaxed text-[#4d4d4d]/70 ${mode === "preview" ? "font-serif" : "font-heading"}`}>
             {product.description || (isYotaabo
               ? `Experience the essence of ${product.name}. A carefully crafted fragrance designed to leave a lasting impression, blending premium notes for a sophisticated and memorable profile.`
               : 'A thoughtfully selected piece chosen for comfort, quality, and everyday confidence.')}
