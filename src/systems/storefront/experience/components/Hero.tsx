@@ -3,7 +3,7 @@ import { formatPrice } from '../../../../shared/utilities/formatPrice';
 import ProductCarousel from './ProductCarousel';
 import useStorefront from '../../core/hooks/useStorefront.ts';
 
-const POSHIES_HERO_IMAGE = 'https://images.unsplash.com/photo-1770290924629-5c74da19051c?auto=format&fit=crop&w=1800&q=85';
+const POSHIES_CAMPAIGN_IMAGE = 'https://www.netterose.com/cdn/shop/products/NetteRose5_900x.jpg?v=1669900445';
 
 export default function Hero() {
   const { products, isLoading, error } = useProducts();
@@ -17,32 +17,31 @@ export default function Hero() {
   if (isPoshies) {
     return (
       <section id="home" aria-label="Poshies home" className="storefront-hero poshies-home">
-        <div className="poshies-hero">
-          <div className="poshies-hero__copy">
-            <span className="poshies-kicker">THE POSHIES EDIT · INTIMATE ESSENTIALS</span>
-            <h1>Feel good<br /><em>in your own skin.</em></h1>
-            <p>Thoughtfully chosen intimate essentials, everyday comfort and pieces that make getting dressed feel like a little act of self-care.</p>
-            <a className="poshies-button" href={pathFor('catalog')}>Shop the collection <span aria-hidden="true">↗</span></a>
-            <span className="poshies-hero__note">Comfort first. Confidence always.</span>
+        <div className="poshies-campaign-wrap">
+          <a className="poshies-campaign" href={pathFor('catalog')} aria-label="Discover Poshies intimate apparel">
+            <img
+              className="poshies-campaign__image"
+              src={POSHIES_CAMPAIGN_IMAGE}
+              alt="South African intimate apparel campaign photographed outdoors"
+              fetchPriority="high"
+            />
+            <span className="poshies-campaign__topline">THE LANGUAGE OF STYLE</span>
+            <span className="poshies-campaign__wordmark" aria-label="Poshies">poshies</span>
+            <span className="poshies-campaign__bottomline">A world of personal style</span>
+            <span className="poshies-campaign__arrow" aria-hidden="true">↗</span>
+          </a>
+          <div className="poshies-campaign__meta">
+            <span>DISCOVER POSHIES</span>
+            <span>02 / 02</span>
           </div>
-          <div className="poshies-hero__visual">
-            <img src={POSHIES_HERO_IMAGE} alt="Editorial intimate apparel campaign photography" fetchPriority="high" />
-            <div className="poshies-hero__image-caption"><span>01 / THE EVERYDAY EDIT</span><span>Made for you</span></div>
-            <div className="poshies-hero__seal">POSHIES<br /><span>FEEL YOURSELF</span></div>
-          </div>
-          <div className="poshies-hero__vertical">INTIMATE · EVERYDAY · ESSENTIAL</div>
+          <p className="poshies-campaign__description">Intimate apparel for the modern life.</p>
         </div>
-        <div className="poshies-benefits" aria-label="Poshies shopping highlights">
-          <span>THE EVERYDAY EDIT</span><i />
-          <span>COMFORT THAT FITS</span><i />
-          <span>CONFIDENCE IN EVERY DETAIL</span>
-        </div>
-        <div className="w-full poshies-featured">
+        <div className="poshies-featured">
           <ProductCarousel
-            title="The pieces to know"
-            description="Everyday essentials and intimate pieces chosen for comfort, confidence and your own kind of style."
+            title="Trending"
+            description="Intimate essentials and considered pieces for the way you live."
             products={featuredProducts}
-            placeholderColor="bg-[#f5eeee]"
+            placeholderColor="bg-[#f5f5f5]"
             bgColor="bg-white"
             textColor="text-black"
             accentColor="text-[#ff1493]"
