@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FiSearch, FiMenu, FiX } from 'react-icons/fi';
+import { FiMenu, FiX } from 'react-icons/fi';
 import useStorefront from '../../core/hooks/useStorefront.ts';
 import './storefront-header.css';
 
@@ -28,12 +28,12 @@ export default function Header({ sticky = true }: HeaderProps) {
     <header className={`storefront-header ${sticky ? 'storefront-header--sticky' : ''}`} aria-label={`${storeName} header`}>
       <div className="storefront-header__bar">
         <div className="storefront-header__search">
-          <FiSearch aria-hidden="true" className="storefront-header__search-icon" />
           <input
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder={`Search ${storeName}…`}
+            placeholder="Search products…"
+            autoComplete="off"
             aria-label={`Search ${storeName}`}
           />
           {query && <button type="button" className="storefront-header__clear" onClick={() => setQuery('')} aria-label="Clear search"><FiX /></button>}
