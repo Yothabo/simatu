@@ -205,17 +205,16 @@ export default function ProductCarousel({
                         ) : null}
                       </div>
 
-                      <div className="mt-1 flex min-w-0 flex-col pt-3 pl-3">
+                      <div className="mt-1 grid min-w-0 grid-rows-[20px_20px] gap-y-3 pt-3 pl-3">
                         <h4
-                          className={`truncate font-heading text-base ${textColor}`}
-                          style={{ lineHeight: '1', margin: 0, padding: 0 }}
+                          className={`min-w-0 truncate font-heading text-base ${textColor}`}
+                          style={{ lineHeight: '20px', margin: 0, padding: 0 }}
                         >
                           {product.name}
                         </h4>
-
                         <p
-                          className={`mt-3 font-heading text-base tracking-normal uppercase ${cardAccent}`}
-                          style={{ lineHeight: '1.25', margin: 0, padding: 0 }}
+                          className={`font-heading text-base tracking-normal uppercase ${cardAccent}`}
+                          style={{ lineHeight: '20px', margin: 0, padding: 0 }}
                         >
                           {product.price}
                         </p>
