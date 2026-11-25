@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 
 export default function Home() {
   return (
-    <main>
+    <main className="storefront-page storefront-page--home">
       <Header sticky={false} />
       <Hero />
       <Services />
