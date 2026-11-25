@@ -40,9 +40,9 @@ export default function Services() {
       topText: isYotaabo ? 'REFINED. GROUNDED. REMEMBERED.' : 'COMFORT THAT FEELS LIKE YOURS.',
       description:
         isYotaabo ? 'Crafted for presence. Distinctive scents for the modern man, refined in character, grounded in confidence, and made to be remembered.' : 'Everyday briefs, boxers and trunks with a comfortable fit and a little more confidence in every layer.',
-      bgColor: isPoshies ? 'bg-[#242424]' : 'bg-white',
-      textColor: isPoshies ? 'text-white' : 'text-[#4d4d4d]',
-      textFill: 'fill-[#8aa89b]',
+      bgColor: isPoshies ? 'bg-[#f4c8b8]' : 'bg-white',
+      textColor: isPoshies ? 'text-[#292426]' : 'text-[#4d4d4d]',
+      textFill: isPoshies ? 'fill-[#79634e]' : 'fill-[#8aa89b]',
       accentColor: 'text-[#4d4d4d]',
       placeholderColor: 'bg-[#8aa89b]',
       overlayColor: '#000000',
@@ -58,9 +58,9 @@ export default function Services() {
       topText: isYotaabo ? 'ELEGANCE IN EVERY NOTE' : 'MADE TO FEEL GOOD ON YOUR SKIN.',
       description:
         isYotaabo ? 'Fragrances crafted to complement elegance and individuality, whether soft and floral or bold and warm.' : 'Discover bras, panties, matching sets and lingerie chosen for the way they feel, fit and let you express yourself.',
-      bgColor: isPoshies ? 'bg-[#242424]' : 'bg-white',
-      textColor: isPoshies ? 'text-white' : 'text-[#4d4d4d]',
-      textFill: 'fill-[#ff1493]',
+      bgColor: isPoshies ? 'bg-[#f4c8b8]' : 'bg-white',
+      textColor: isPoshies ? 'text-[#292426]' : 'text-[#4d4d4d]',
+      textFill: isPoshies ? 'fill-[#79634e]' : 'fill-[#ff1493]',
       accentColor: 'text-[#4d4d4d]',
       placeholderColor: 'bg-[#ff1493]',
       overlayColor: '#f2e9d8',
@@ -78,7 +78,7 @@ export default function Services() {
         isYotaabo ? 'Extend your signature into every space. Ambient scents for the home and car, quietly shaping the atmosphere wherever you go.' : 'Slip into soft sleepwear, robes and relaxed sets made for slow mornings, quiet evenings and time that belongs to you.',
       bgColor: isPoshies ? 'bg-[#242424]' : 'bg-white',
       textColor: isPoshies ? 'text-white' : 'text-[#4d4d4d]',
-      textFill: 'fill-[#c8ad8d]',
+      textFill: isPoshies ? 'fill-[#79634e]' : 'fill-[#c8ad8d]',
       accentColor: 'text-[#4d4d4d]',
       placeholderColor: 'bg-[#c8ad8d]',
       overlayColor: '#e8dec9',
@@ -95,7 +95,7 @@ export default function Services() {
         isYotaabo ? 'Born from a simple, enduring belief: fragrance is not merely something you wear, but a reflection of who you are. We curate distinctive scents that speak quietly yet linger long, carefully designed to become an unforgettable part of how you are remembered.' : 'Poshies is a space for intimate essentials, everyday comfort and personal expression. Find pieces that feel right against your skin and let confidence begin with you.',
       bgColor: isPoshies ? 'bg-[#242424]' : 'bg-white',
       textColor: isPoshies ? 'text-white' : 'text-[#4d4d4d]',
-      textFill: isYotaabo ? 'fill-[#8aa89b]' : 'fill-[#ff1493]',
+      textFill: isYotaabo ? 'fill-[#8aa89b]' : 'fill-[#79634e]',
       accentColor: 'text-[#4d4d4d]',
       hasImage: false,
     },
@@ -113,7 +113,7 @@ export default function Services() {
   ];
 
   return (
-    <section id="services" className={`storefront-collections w-full ${isPoshies ? 'bg-[#242424] text-white poshies-collections' : 'bg-white'}`}>
+    <section id="services" className={`storefront-collections w-full ${isPoshies ? 'bg-[#f4c8b8] text-[#292426] poshies-collections' : 'bg-white'}`}>
       {orderedCategories.map((category) => (
         <div key={category.id} className={`flex flex-col w-full ${isPoshies ? `poshies-collection-section poshies-collection-section--${category.id}` : ""}`}>
           <div
@@ -181,7 +181,7 @@ export default function Services() {
                           style={{
                             fontFamily: '"Anton", sans-serif',
                             fontWeight: 400,
-                            fill: '#ff1493',
+                            fill: '#79634e',
                           }}
                           fontSize="100"
                         >
@@ -239,13 +239,7 @@ export default function Services() {
                 bgColor={category.bgColor}
                 textColor={category.textColor}
                 accentColor={category.accentColor}
-                themeColor={
-                  category.id === 'his'
-                    ? '#8aa89b'
-                    : category.id === 'hers'
-                      ? '#ff1493'
-                      : '#c8ad8d'
-                }
+                themeColor={isPoshies ? '#79634e' : category.id === 'his' ? '#8aa89b' : category.id === 'hers' ? '#ff1493' : '#c8ad8d'}
                 isDark={category.isDark}
                 isLoading={isLoading}
                 error={error}
