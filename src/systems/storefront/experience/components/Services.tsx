@@ -131,7 +131,7 @@ export default function Services() {
             {/* Main Content Area */}
             <div className="relative flex h-full w-full items-center justify-center">
               {/* Oversized collection watermark is intentionally omitted from About. */}
-              {category.id !== 'about' && (
+              {(category.id !== 'about' || isPoshies) && (
                 <div
                   className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center"
                   style={{ height: '45vh', margin: 'auto' }}
@@ -161,7 +161,7 @@ export default function Services() {
 
               {/* Decorative Script Text */}
               <div className="pointer-events-none absolute inset-0 z-20">
-                {category.id === 'about' ? (
+                {category.id === 'about' && !isPoshies ? (
                   /* About: Bottom-Right, not rotated */
                   <div className="absolute bottom-20 inset-x-0 w-full min-w-0 sm:bottom-32">
                     {storeName === 'Poshies' ? (
