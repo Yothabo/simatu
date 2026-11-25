@@ -24,30 +24,14 @@ export default function Footer() {
               <a href="#" aria-label="Email" className="footer-social-link"><FaEnvelope size={19} aria-hidden="true" /></a>
             </div>
           </div>
-          <nav aria-label="Shop links">
-            <h2 className="footer-column-title">Explore</h2>
-            <ul className="mt-5 space-y-3 text-sm">
-              <li><Link to={pathFor()} className="footer-link">Home</Link></li>
-              <li><Link to={pathFor('services')} className="footer-link">{isPoshies ? 'Collections' : 'Explore'}</Link></li>
-              <li><Link to={pathFor('catalog')} className="footer-link">Full catalogue</Link></li>
-              <li><Link to={pathFor('about')} className="footer-link">Our story</Link></li>
-            </ul>
-          </nav>
-          <nav aria-label="Customer information">
-            <h2 className="footer-column-title">Customer care</h2>
-            <ul className="mt-5 space-y-3 text-sm">
-              <li><Link to={pathFor('about')} className="footer-link">About {storeName}</Link></li>
-              <li><Link to={pathFor('services')} className="footer-link">Product collections</Link></li>
-              <li><Link to={pathFor('cart')} className="footer-link">Shopping bag</Link></li>
-            </ul>
-          </nav>
           {isPoshies && (
-            <nav aria-label="Policies and information">
+            <nav aria-label="Policies and information" className="col-span-2 md:col-span-1">
               <h2 className="footer-column-title">Policies & information</h2>
               <ul className="mt-5 space-y-3 text-sm">
                 <li><Link to={pathFor('privacy')} className="footer-link">Privacy policy</Link></li>
                 <li><Link to={pathFor('terms')} className="footer-link">Terms of use</Link></li>
-                <li><Link to={pathFor('delivery')} className="footer-link">Delivery & returns</Link></li>
+                <li><Link to={pathFor('delivery')} className="footer-link">Delivery policy</Link></li>
+                <li><Link to={pathFor('refund')} className="footer-link">Refund & returns policy</Link></li>
               </ul>
             </nav>
           )}
