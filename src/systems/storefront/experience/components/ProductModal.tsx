@@ -6,6 +6,7 @@ import { useCart } from '../../core/context/CartContext.tsx';
 import RippleButton from './RippleButton.tsx';
 import useStorefront from '../../core/hooks/useStorefront.ts';
 import ConfirmModal from '../../../../shared/components/ConfirmModal.tsx';
+import SharedImage from '../../../../components/SharedImage';
 
 type Product = {
   id: string;
@@ -154,12 +155,12 @@ export default function ProductModal({
 
       {/* Modal Content */}
       <div
-        className={`relative w-full max-w-sm overflow-hidden rounded-[var(--product-modal-radius,1.5rem)] bg-white shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+        className={`relative w-full max-w-sm overflow-hidden rounded-none bg-white shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
           isOpen
             ? 'translate-y-0 scale-100 opacity-100'
             : 'translate-y-12 scale-90 opacity-0'
         }`}
-        style={{ '--product-modal-radius': '1.5rem' } as React.CSSProperties}
+        style={{ borderRadius: 0 }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -171,33 +172,33 @@ export default function ProductModal({
           style={{
             WebkitAppearance: 'none',
             appearance: 'none',
-            top: 'calc(var(--product-modal-radius) * 0.45)',
-            right: 'calc(var(--product-modal-radius) * 0.45)',
+            top: '1rem',
+            right: '1rem',
           }}
         >
           <FiX size={20} aria-hidden="true" />
         </button>
 
-        {/* 1. Image */}
-        <div className={`aspect-square w-full overflow-hidden ${placeholderColor}`}>
+        {/* 1. Full-bleed image with integrated gradient, title and price */}
+        <div className={`relative aspect-[4/5] w-full overflow-hidden ${placeholderColor}`}>
           {product.image_url && (
-            <img
+            <SharedImage
               src={product.image_url}
               alt={product.name}
-              className="h-full w-full object-contain p-6"
+              loading="eager"
+              fetchPriority="high"
+              className="absolute inset-0 h-full w-full"
             />
           )}
-        </div>
-
-        {/* 2. Title & Price Row */}
-        <div className="grid grid-cols-[1fr_auto] items-center gap-3 border-b border-black/10 px-5 py-3">
-          <div className="min-w-0">
-            <span className="block truncate font-heading text-2xl italic leading-none text-black">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-[58%] to-white"
+          />
+          <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 px-5 pb-5 pt-24">
+            <span className="min-w-0 font-heading text-2xl italic leading-tight text-black">
               {product.name}
             </span>
-          </div>
-          <div>
-            <span className={`block font-heading text-xl leading-none ${accentColor}`}>
+            <span className={`shrink-0 font-heading text-xl leading-none ${accentColor}`}>
               {product.price}
             </span>
           </div>
