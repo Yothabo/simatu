@@ -23,6 +23,7 @@ type CarouselProduct = {
 
 type ProductCarouselProps = {
   title: string;
+  sectionHeading?: string;
   description?: string;
   products: CarouselProduct[];
   placeholderColor: string;
@@ -39,6 +40,7 @@ type ProductCarouselProps = {
 
 export default function ProductCarousel({
   title,
+  sectionHeading,
   description,
   products,
   placeholderColor,
@@ -73,18 +75,31 @@ export default function ProductCarousel({
       } as CSSProperties}
       aria-label={`${title} product collection`}
     >
-      <div className="flex items-baseline justify-between px-6 sm:px-10 lg:px-12">
-        <h3 className={`font-heading text-3xl italic ${title === "Trending" ? "text-[#3a3a3a]" : accentColor}`}>
-          {title}
-        </h3>
+      <div className="px-6 sm:px-10 lg:px-12">
+        <div className="flex items-baseline justify-between">
+          {sectionHeading ? (
+            <h3 className={`font-heading text-2xl italic ${accentColor}`}>
+              {sectionHeading}
+            </h3>
+          ) : (
+            <h3 className={`font-heading text-3xl italic ${title === "Trending" ? "text-[#3a3a3a]" : accentColor}`}>
+              {title}
+            </h3>
+          )}
 
-        {showHeaderViewMore && (
-          <Link
-            to={viewAllHref}
-            className="shrink-0 cursor-pointer font-heading text-sm italic tracking-wide text-[#3a3a3a] opacity-70 transition-opacity hover:opacity-100"
-          >
-            View more
-          </Link>
+          {showHeaderViewMore && (
+            <Link
+              to={viewAllHref}
+              className="shrink-0 cursor-pointer font-heading text-sm italic tracking-wide text-[#3a3a3a] opacity-70 transition-opacity hover:opacity-100"
+            >
+              View more
+            </Link>
+          )}
+        </div>
+        {sectionHeading && (
+          <h4 className={`mt-1 font-heading text-3xl italic ${accentColor}`}>
+            {title}
+          </h4>
         )}
       </div>
 
