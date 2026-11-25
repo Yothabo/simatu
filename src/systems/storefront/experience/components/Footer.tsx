@@ -43,7 +43,7 @@ export default function Footer() {
           </nav>
           {isPoshies && (
             <nav aria-label="Policies and information">
-              <h2 className="footer-column-title">Information</h2>
+              <h2 className="footer-column-title">Policies & information</h2>
               <ul className="mt-5 space-y-3 text-sm">
                 <li><Link to={pathFor('privacy')} className="footer-link">Privacy policy</Link></li>
                 <li><Link to={pathFor('terms')} className="footer-link">Terms of use</Link></li>
