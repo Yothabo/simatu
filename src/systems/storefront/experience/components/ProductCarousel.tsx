@@ -9,6 +9,7 @@ import 'swiper/css/pagination';
 
 import ProductModal from './ProductModal.tsx';
 import ProductCardSkeleton from './ProductCardSkeleton.tsx';
+import { getMockPoshiesProducts } from './mock-products.ts';
 import { getCategoryTheme } from '../../core/configuration/categoryTheme';
 import type { ProductCategory } from '../../core/hooks/useProducts.ts';
 
@@ -58,7 +59,19 @@ export default function ProductCarousel({
     useState<CarouselProduct | null>(null);
   const [showHeaderViewMore, setShowHeaderViewMore] = useState(true);
 
-  const visibleProducts = products.slice(0, 5);
+  const mockCategory = sectionHeading === 'His'
+    ? 'His'
+    : sectionHeading === 'Her'
+      ? 'Hers'
+      : sectionHeading === 'Lounge'
+        ? 'Lounge'
+        : undefined;
+  const carouselProducts = products.length > 0
+    ? products
+    : !isLoading && mockCategory
+      ? getMockPoshiesProducts(mockCategory)
+      : [];
+  const visibleProducts = carouselProducts.slice(0, 5);
 
   const selectedTheme = selectedProduct && useProductTheme
     ? getCategoryTheme(selectedProduct.category)
