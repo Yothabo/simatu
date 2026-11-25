@@ -110,7 +110,7 @@ export default function Services() {
   ];
 
   return (
-    <section id="services" className="w-full bg-white">
+    <section id="services" className="storefront-collections w-full bg-white">
       {orderedCategories.map((category) => (
         <div key={category.id} className="flex flex-col w-full">
           <div
