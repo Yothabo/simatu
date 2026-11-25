@@ -61,9 +61,9 @@ export default function Services() {
       description:
         isYotaabo ? 'Fragrances crafted to complement elegance and individuality, whether soft and floral or bold and warm.' : 'Discover bras, panties, matching sets and lingerie chosen for the way they feel, fit and let you express yourself.',
       bgColor: 'bg-white',
-      textColor: 'text-[#292426]',
+      textColor: isPoshies ? 'text-[#292426]' : 'text-white',
       textFill: isPoshies ? 'fill-[#FF1493]' : 'fill-[#ff1493]',
-      accentColor: 'text-[#292426]',
+      accentColor: isPoshies ? 'text-[#292426]' : 'text-white',
       placeholderColor: isPoshies ? 'bg-[#FF1493]' : 'bg-[#ff1493]',
       overlayColor: '#FFFFFF',
       hasImage: isYotaabo,
@@ -80,9 +80,9 @@ export default function Services() {
       description:
         isYotaabo ? 'Extend your signature into every space. Ambient scents for the home and car, quietly shaping the atmosphere wherever you go.' : 'Slip into soft sleepwear, robes and relaxed sets made for slow mornings, quiet evenings and time that belongs to you.',
       bgColor: 'bg-white',
-      textColor: 'text-[#292426]',
+      textColor: isPoshies ? 'text-[#292426]' : 'text-white',
       textFill: isPoshies ? 'fill-[#FF1493]' : 'fill-[#c8ad8d]',
-      accentColor: 'text-[#292426]',
+      accentColor: isPoshies ? 'text-[#292426]' : 'text-white',
       placeholderColor: isPoshies ? 'bg-[#FF1493]' : 'bg-[#c8ad8d]',
       overlayColor: '#FFFFFF',
       hasImage: false,
@@ -98,9 +98,9 @@ export default function Services() {
       description:
         isYotaabo ? 'Born from a simple, enduring belief: fragrance is not merely something you wear, but a reflection of who you are. We curate distinctive scents that speak quietly yet linger long, carefully designed to become an unforgettable part of how you are remembered.' : 'Poshies is a space for intimate essentials, everyday comfort and personal expression. Find pieces that feel right against your skin and let confidence begin with you.',
       bgColor: 'bg-white',
-      textColor: 'text-[#292426]',
+      textColor: isPoshies ? 'text-[#292426]' : 'text-white',
       textFill: isYotaabo ? 'fill-[#8aa89b]' : 'fill-[#FF1493]',
-      accentColor: 'text-[#292426]',
+      accentColor: isPoshies ? 'text-[#292426]' : 'text-white',
       hasImage: false,
     },
   ];
