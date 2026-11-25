@@ -21,6 +21,7 @@ export default function Header({ sticky = true }: HeaderProps) {
   const [query, setQuery] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const { name: storeName, pathFor } = useStorefront();
+  const isPoshies = storeName === "Poshies";
   const { cartItems } = useCart();
   const cartCount = cartItems.reduce((total, item) => total + Math.max(0, item.quantity), 0);
   const hasCartItems = cartCount > 0;
@@ -31,7 +32,7 @@ export default function Header({ sticky = true }: HeaderProps) {
   };
 
   return (
-    <div className={`storefront-controls ${sticky ? 'storefront-controls--fixed' : ''}`} aria-label={`${storeName} storefront controls`}>
+    <div className={`storefront-controls ${isPoshies ? 'storefront-controls--poshies' : ''} ${sticky ? 'storefront-controls--fixed' : ''}`} aria-label={`${storeName} storefront controls`}>
       <div className="storefront-controls__row">
         <div className="storefront-controls__search">
           <input
