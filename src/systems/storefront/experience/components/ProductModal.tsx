@@ -202,29 +202,25 @@ export default function ProductModal({
           />
           <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 px-5 pb-5 pt-24">
             <span className="min-w-0 font-heading text-2xl italic leading-tight text-black">
-              {mode === 'preview' ? 'Preview item' : product.name}
+              {product.name}
             </span>
-            {mode !== 'preview' && (
-              <span className={`shrink-0 font-heading text-xl leading-none ${accentColor}`}>
-                {product.price}
-              </span>
-            )}
+            <span className={`shrink-0 font-heading text-xl leading-none ${accentColor} ${mode === 'preview' ? 'opacity-50' : ''}`}>
+              {product.price}
+            </span>
           </div>
         </div>
 
         {/* 3. Description */}
         <div className="px-5 pt-3">
           <p className="font-heading text-sm leading-relaxed text-[#4d4d4d]/70">
-            {mode === 'preview'
-              ? 'This is a preview of the Poshies shopping experience. Product details, imagery and availability will appear here once our catalogue is live.'
-              : product.description || (isYotaabo
-                ? `Experience the essence of ${product.name}. A carefully crafted fragrance designed to leave a lasting impression, blending premium notes for a sophisticated and memorable profile.`
-                : 'A thoughtfully selected piece chosen for comfort, quality, and everyday confidence.')}
+            {product.description || (isYotaabo
+              ? `Experience the essence of ${product.name}. A carefully crafted fragrance designed to leave a lasting impression, blending premium notes for a sophisticated and memorable profile.`
+              : 'A thoughtfully selected piece chosen for comfort, quality, and everyday confidence.')}
           </p>
         </div>
 
         {/* 4. Quantity & Actions */}
-        {mode !== 'preview' && <div className="flex gap-3 px-5 py-5">
+        <div className={`flex gap-3 px-5 py-5 ${mode === 'preview' ? 'opacity-45' : ''}`}>
           <div className="flex items-center border border-[#4d4d4d]/20">
             <RippleButton
               onClick={() => handleQuantityChange(quantity - 1)}
@@ -260,7 +256,7 @@ export default function ProductModal({
                 : '↗'}
             </span>
           </button>
-        </div>}
+        </div>
       </div>
 
       {/* Duplicate Warning Dialog */}
