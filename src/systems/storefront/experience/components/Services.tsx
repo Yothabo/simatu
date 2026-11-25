@@ -70,7 +70,7 @@ export default function Services() {
       imageSrc: isYotaabo ? '/systems/storefront/shared/images/herimage.webp' : undefined,
       isDark: false,
       collectionTitle: isPoshies ? 'Collection' : 'Her Collection',
-      collectionHeading: isPoshies ? 'Hers' : undefined,
+      collectionHeading: isPoshies ? 'Her' : undefined,
       productCategory: 'Hers',
     },
     {
