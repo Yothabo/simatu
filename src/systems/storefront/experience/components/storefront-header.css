@@ -1,5 +1,5 @@
-/* Floating storefront controls — no enclosing header chrome */
-.storefront-header {
+/* Independent floating controls — no header, bar, or background container */
+.storefront-controls {
   position: fixed;
   top: 14px;
   left: 0;
@@ -10,7 +10,7 @@
   color: #292426;
   pointer-events: none;
 }
-.storefront-header__bar {
+.storefront-controls__row {
   display: flex;
   width: min(760px, 100%);
   margin: 0 auto;
@@ -18,7 +18,7 @@
   align-items: center;
   pointer-events: auto;
 }
-.storefront-header__search {
+.storefront-controls__search {
   display: flex;
   align-items: center;
   flex: 1;
@@ -34,7 +34,7 @@
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
 }
-.storefront-header__search input {
+.storefront-controls__search input {
   flex: 1;
   width: 100%;
   min-width: 0;
@@ -46,9 +46,9 @@
   font: inherit;
   font-size: 14px;
 }
-.storefront-header__search input::placeholder { color: currentColor; opacity: .6; }
-.storefront-header__clear,
-.storefront-header__toggle {
+.storefront-controls__search input::placeholder { color: currentColor; opacity: .6; }
+.storefront-controls__clear,
+.storefront-controls__icon {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -65,19 +65,19 @@
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   transition: background .2s ease, transform .2s ease;
 }
-.storefront-header__clear {
+.storefront-controls__icon svg { width: 20px; height: 20px; }
+.storefront-controls__clear {
   width: 30px;
   height: 30px;
   border: 0;
   background: transparent;
   box-shadow: none;
 }
-.storefront-header__toggle svg { width: 20px; height: 20px; }
-.storefront-header__clear:hover,
-.storefront-header__toggle:hover { background: rgba(255,255,255,.52); }
-.storefront-header__clear:active,
-.storefront-header__toggle:active { transform: scale(.96); }
-.storefront-header__menu {
+.storefront-controls__clear:hover,
+.storefront-controls__icon:hover { background: rgba(255,255,255,.52); }
+.storefront-controls__clear:active,
+.storefront-controls__icon:active { transform: scale(.96); }
+.storefront-controls__menu {
   width: min(760px, 100%);
   max-height: 0;
   overflow: hidden;
@@ -87,14 +87,14 @@
   pointer-events: none;
   transition: max-height .35s ease, opacity .22s ease, transform .28s ease, margin .3s ease;
 }
-.storefront-header__menu.is-open {
+.storefront-controls__menu.is-open {
   max-height: 260px;
   margin-top: 8px;
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
 }
-.storefront-header__menu nav {
+.storefront-controls__menu nav {
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -108,7 +108,7 @@
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
 }
-.storefront-header__menu button {
+.storefront-controls__menu button {
   display: flex;
   align-items: center;
   min-height: 46px;
@@ -123,18 +123,18 @@
   cursor: pointer;
   transition: background .18s ease;
 }
-.storefront-header__menu button:hover,
-.storefront-header__menu button:focus-visible { background: rgba(255,255,255,.38); outline: none; }
+.storefront-controls__menu button:hover,
+.storefront-controls__menu button:focus-visible { background: rgba(255,255,255,.38); outline: none; }
 @media (max-width: 640px) {
-  .storefront-header { top: 10px; padding: 0 12px; }
-  .storefront-header__bar { gap: 6px; }
-  .storefront-header__search,
-  .storefront-header__toggle { height: 50px; }
-  .storefront-header__toggle { width: 50px; }
-  .storefront-header__search { padding-inline: 14px; }
+  .storefront-controls { top: 10px; padding: 0 12px; }
+  .storefront-controls__row { gap: 6px; }
+  .storefront-controls__search,
+  .storefront-controls__icon { height: 50px; }
+  .storefront-controls__icon { width: 50px; }
+  .storefront-controls__search { padding-inline: 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .storefront-header__menu,
-  .storefront-header__clear,
-  .storefront-header__toggle { transition-duration: .01ms; }
+  .storefront-controls__menu,
+  .storefront-controls__clear,
+  .storefront-controls__icon { transition-duration: .01ms; }
 }
