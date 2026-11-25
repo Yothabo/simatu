@@ -46,7 +46,7 @@ export default function Services() {
       textFill: isPoshies ? 'fill-[#FF1493]' : 'fill-[#8aa89b]',
       accentColor: isPoshies ? 'text-white' : 'text-[#4d4d4d]',
       placeholderColor: isPoshies ? 'bg-[#FF1493]' : 'bg-[#8aa89b]',
-      overlayColor: '#000000',
+      overlayColor: isPoshies ? '#292426' : '#000000',
       hasImage: isYotaabo,
       imageSrc: isYotaabo ? '/systems/storefront/shared/images/hisimage.webp' : undefined,
       isDark: false,
