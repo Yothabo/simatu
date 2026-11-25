@@ -28,23 +28,6 @@ export default function Hero() {
             <span className="poshies-campaign__wordmark" aria-label="Poshies">Poshies</span>
           </div>
         </div>
-        <div className="poshies-featured">
-          <ProductCarousel
-            title="The intimate edit"
-            description="Bras, underwear, sleepwear and feel-good pieces selected for comfort, fit and self-expression."
-            products={featuredProducts}
-            placeholderColor="bg-[#f5f5f5]"
-            bgColor="bg-white"
-            textColor="text-black"
-            accentColor="text-[#ff1493]"
-            themeColor={primaryAccent}
-            isDark={false}
-            isLoading={isLoading}
-            error={error}
-            viewAllHref={pathFor('catalog')}
-            useProductTheme
-          />
-        </div>
       </section>
     );
   }
