@@ -221,7 +221,7 @@ export default function ProductCarousel({
                           className={`mt-1 font-heading text-xs tracking-[0.14em] uppercase ${cardAccent}`}
                           style={{ lineHeight: '1', margin: 0, padding: 0 }}
                         >
-                          {product.id.startsWith('mock-poshies-') ? 'Preview item' : product.price}
+                          {product.price}
                         </p>
                       </div>
                     </button>
