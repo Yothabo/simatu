@@ -197,6 +197,17 @@ export default function Services() {
                 ) : null}
               </div>
 
+              {/* Poshies Her editorial cutout: transparent PNG layered over the oversized wordmark. */}
+              {isPoshies && category.id === 'hers' && (
+                <img
+                  src="https://thumbs.wbm.im/pw/medium/75c66ab7c75f8c5b32e5fa4550c8561f.png"
+                  alt="Woman reclining in a bikini"
+                  className="pointer-events-none absolute bottom-[2%] right-[4%] z-10 h-[68vh] max-h-[680px] w-auto max-w-[82vw] object-contain object-bottom drop-shadow-2xl sm:right-[10%] sm:h-[76vh]"
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
+
               {/* Image Overlay */}
               {category.hasImage && (
                 <img
