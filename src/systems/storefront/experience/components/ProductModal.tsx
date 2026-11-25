@@ -196,11 +196,11 @@ export default function ProductModal({
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-[58%] to-white"
           />
-          <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 px-5 pb-5 pt-24">
-            <span className={`min-w-0 flex-1 text-2xl leading-tight text-black ${mode === "preview" ? "" : "font-heading"}`} style={mode === "preview" ? { fontFamily: "Antony, sans-serif" } : undefined}>
+          <div className="absolute inset-x-0 bottom-0 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-3 px-5 pb-5 pt-24">
+            <span className={`min-w-0 text-2xl leading-tight text-black ${mode === "preview" ? "" : "font-heading"}`} style={mode === "preview" ? { fontFamily: "Antony, sans-serif" } : undefined}>
               {product.name}
             </span>
-            <span className={`shrink-0 text-base leading-tight ${accentColor} ${mode === "preview" ? "opacity-50" : "font-heading"}`} style={mode === "preview" ? { fontFamily: "Montserrat, sans-serif" } : undefined}>
+            <span className={`whitespace-nowrap text-base leading-tight ${accentColor} ${mode === "preview" ? "opacity-50" : "font-heading"}`} style={mode === "preview" ? { fontFamily: "Montserrat, sans-serif" } : undefined}>
               {product.price}
             </span>
           </div>
