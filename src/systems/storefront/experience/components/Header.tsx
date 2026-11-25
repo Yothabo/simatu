@@ -27,7 +27,7 @@ export default function Header({ sticky = true }: HeaderProps) {
   return (
     <header className={`storefront-header ${sticky ? 'storefront-header--sticky' : ''}`} aria-label={`${storeName} header`}>
       <div className="storefront-header__bar">
-        <form className="storefront-header__search" onSubmit={(event) => { event.preventDefault(); scrollToSection('services'); }}>
+        <div className="storefront-header__search">
           <FiSearch aria-hidden="true" className="storefront-header__search-icon" />
           <input
             type="search"
@@ -37,7 +37,7 @@ export default function Header({ sticky = true }: HeaderProps) {
             aria-label={`Search ${storeName}`}
           />
           {query && <button type="button" className="storefront-header__clear" onClick={() => setQuery('')} aria-label="Clear search"><FiX /></button>}
-        </form>
+        </div>
         <button
           type="button"
           className="storefront-header__toggle"
