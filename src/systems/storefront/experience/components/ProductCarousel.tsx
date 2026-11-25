@@ -89,7 +89,7 @@ export default function ProductCarousel({
       <div className="px-6 sm:px-10 lg:px-12">
         <div className="flex items-baseline justify-between">
           <h3
-            className={`font-heading text-3xl italic ${title === "Trending" ? "text-[#292426]" : accentColor}`}
+            className={`font-heading text-3xl italic ${isPoshiesMockCarousel ? "text-white" : title === "Trending" ? "text-[#292426]" : accentColor}`}
             style={{ lineHeight: 0.9, margin: 0 }}
           >
             {sectionHeading ? (
@@ -102,7 +102,7 @@ export default function ProductCarousel({
         </div>
       </div>
       {description && (
-        <p className="mt-2 px-6 font-heading text-base leading-relaxed text-black/60 sm:px-10 lg:px-12">
+        <p className={`mt-2 px-6 font-heading text-base leading-relaxed sm:px-10 lg:px-12 ${isPoshiesMockCarousel ? "text-white/75" : "text-black/60"}`}>
           {description}
         </p>
       )}
