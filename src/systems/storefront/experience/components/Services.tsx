@@ -119,7 +119,7 @@ export default function Services() {
   return (
     <section id="services" className={`storefront-collections w-full ${isPoshies ? 'bg-[#f4c8b8] text-[#292426] poshies-collections' : 'bg-white'}`}>
       {orderedCategories.map((category) => (
-        <div key={category.id} className={`flex flex-col w-full ${isPoshies ? `poshies-collection-section poshies-collection-section--${category.id}` : ""}`}>
+        <div key={category.id} id={category.id} className={`flex flex-col w-full ${isPoshies ? `poshies-collection-section poshies-collection-section--${category.id}` : ""}`}>
           <div
             className={`relative grid min-h-[100svh] w-full grid-rows-[auto_1fr_auto] overflow-hidden ${category.bgColor} ${category.textColor} ${isPoshies ? `poshies-collection-panel poshies-collection-panel--${category.id}` : ""} px-6 py-12 sm:px-12 lg:px-20 lg:py-16`}
           >
