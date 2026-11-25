@@ -203,7 +203,7 @@ export default function ProductModal({
             <span className={`self-end whitespace-nowrap text-base leading-[1.25] ${accentColor} ${mode === "preview" ? "opacity-50" : "font-heading"}`} style={mode === "preview" ? { fontFamily: "Montserrat, sans-serif" } : undefined}>
               {product.price}
             </span>
-          </div>v>
+          </div>
         </div>
 
         {/* 3. Description */}
