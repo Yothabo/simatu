@@ -197,13 +197,6 @@ export default function ProductCarousel({
                             className="h-full w-full object-contain"
                           />
                         ) : null}
-                        {isPoshiesMockCarousel && (
-                          <div
-                            aria-hidden="true"
-                            className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
-                            style={{ background: '#FF1493' }}
-                          />
-                        )}
                       </div>
 
                       <div
