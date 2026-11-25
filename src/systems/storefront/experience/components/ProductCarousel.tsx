@@ -74,11 +74,8 @@ export default function ProductCarousel({
   const visibleProducts = carouselProducts.slice(0, 5);
   const isPoshiesMockCarousel = Boolean(mockCategory);
 
-  const selectedTheme = selectedProduct && useProductTheme
-    ? getCategoryTheme(selectedProduct.category)
-    : null;
-  const selectedPlaceholder = selectedTheme?.placeholderColor ?? placeholderColor;
-  const selectedAccent = selectedTheme?.accentColor ?? accentColor;
+  const selectedPlaceholder = placeholderColor;
+  const selectedAccent = accentColor;
 
   return (
     <section
@@ -159,21 +156,16 @@ export default function ProductCarousel({
             : visibleProducts.length === 0
               ? Array.from({ length: 5 }).map((_, index) => (
                   <SwiperSlide key={"placeholder-" + index}>
-                    <div aria-hidden="true" className="flex aspect-[4/5] w-full flex-col items-center justify-center overflow-hidden bg-[#f4c8b8] px-4 text-center">
-                      <div className={"mb-5 h-1 w-10 " + (index % 2 === 0 ? "bg-[#79634e]/35" : "bg-[#79634e]/20")} />
-                      <span className="font-heading text-base italic text-[#79634e]/70">Coming soon</span>
-                      <span className="mt-2 font-heading text-xs tracking-[0.16em] text-[#79634e]/45">POSHIES</span>
+                    <div aria-hidden="true" className="flex aspect-[4/5] w-full flex-col items-center justify-center overflow-hidden bg-[#E94B9B] px-4 text-center">
+                      <div className={"mb-5 h-1 w-10 " + "bg-white/50"} />
+                      <span className="font-heading text-base italic text-white">Coming soon</span>
+                      <span className="mt-2 font-heading text-xs tracking-[0.16em] text-white/75">POSHIES</span>
                     </div>
                   </SwiperSlide>
                 ))
               : visibleProducts.map((product, index) => {
-                const productTheme = getCategoryTheme(product.category);
-                const cardPlaceholder = useProductTheme
-                  ? productTheme.placeholderColor
-                  : placeholderColor;
-                const cardAccent = useProductTheme
-                  ? productTheme.accentColor
-                  : accentColor;
+                const cardPlaceholder = isPoshiesMockCarousel ? "bg-[#E94B9B]" : placeholderColor;
+                const cardAccent = isPoshiesMockCarousel ? "text-[#E94B9B]" : accentColor;
 
                 return (
                   <SwiperSlide key={product.id}>
@@ -188,10 +180,7 @@ export default function ProductCarousel({
                       }}
                     >
                       <div
-                        className={`aspect-[4/5] w-full overflow-hidden ${isPoshiesMockCarousel ? "poshies-product-preview" : cardPlaceholder}`}
-                        style={isPoshiesMockCarousel ? {
-                          background: 'linear-gradient(180deg, #E94B9B 0%, #F4A9CB 42%, #FFFFFF 100%)',
-                        } : undefined}
+                        className={`relative aspect-[4/5] w-full overflow-hidden ${isPoshiesMockCarousel ? "bg-[#E94B9B]" : cardPlaceholder}`}
                       >
                         {product.id.startsWith('mock-poshies-') ? (
                           <div className="h-full w-full bg-transparent" aria-label="Preview placeholder" />
@@ -205,12 +194,21 @@ export default function ProductCarousel({
                             onError={(event) => {
                               event.currentTarget.style.display = 'none';
                             }}
-                            className="h-full w-full"
+                            className="h-full w-full object-contain"
                           />
                         ) : null}
+                        {isPoshiesMockCarousel && (
+                          <div
+                            aria-hidden="true"
+                            className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
+                            style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, #FFFFFF 100%)' }}
+                          />
+                        )}
                       </div>
 
-                      <div className="mt-1 grid min-w-0 grid-rows-[20px_20px] gap-y-3 pt-3 pl-3">
+                      <div
+                        className={`relative mt-0 grid min-w-0 grid-rows-[20px_20px] gap-y-3 pt-3 pl-3 ${isPoshiesMockCarousel ? "bg-white" : ""}`}
+                      >
                         <h4
                           className={`min-w-0 truncate font-heading text-base ${textColor}`}
                           style={{ lineHeight: '20px', margin: 0, padding: 0 }}
