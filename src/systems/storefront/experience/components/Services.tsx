@@ -21,6 +21,7 @@ type ServiceCategory = {
   imageSrc?: string;
   isDark?: boolean;
   collectionTitle?: string;
+  collectionHeading?: string;
   productCategory?: ProductCategory;
 };
 
@@ -49,7 +50,8 @@ export default function Services() {
       hasImage: isYotaabo,
       imageSrc: isYotaabo ? '/systems/storefront/shared/images/hisimage.webp' : undefined,
       isDark: false,
-      collectionTitle: isYotaabo ? 'His Collection' : 'Him Collection',
+      collectionTitle: isYotaabo ? 'His Collection' : 'Collection',
+      collectionHeading: isPoshies ? 'His' : undefined,
       productCategory: 'His',
     },
     {
@@ -67,7 +69,8 @@ export default function Services() {
       hasImage: isYotaabo,
       imageSrc: isYotaabo ? '/systems/storefront/shared/images/herimage.webp' : undefined,
       isDark: false,
-      collectionTitle: 'Her Collection',
+      collectionTitle: isPoshies ? 'Collection' : 'Her Collection',
+      collectionHeading: isPoshies ? 'Hers' : undefined,
       productCategory: 'Hers',
     },
     {
@@ -84,7 +87,8 @@ export default function Services() {
       overlayColor: '#e8dec9',
       hasImage: false,
       isDark: false,
-      collectionTitle: isYotaabo ? 'Collections' : 'Lounge Collection',
+      collectionTitle: isYotaabo ? 'Collections' : 'Collection',
+      collectionHeading: isPoshies ? 'Lounge' : undefined,
       productCategory: isYotaabo ? 'Spaces' : 'Lounge',
     },
     {
@@ -227,6 +231,7 @@ export default function Services() {
             <div className={`w-full ${category.bgColor} ${isPoshies ? `poshies-collection-carousel poshies-collection-carousel--${category.id}` : ""}`}>
               <ProductCarousel
                 title={category.collectionTitle}
+                sectionHeading={category.collectionHeading}
                 products={getCategoryProducts(
                   products,
                   category.productCategory,
