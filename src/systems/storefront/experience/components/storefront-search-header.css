@@ -24,11 +24,11 @@
 .storefront-search-header .kinetic-moodboard__menu-button:hover {
   background: rgba(255, 20, 147, .24);
 }
-.storefront-search-header .kinetic-moodboard__search-header.menu-expanded .kinetic-moodboard__search-shell {
+.storefront-search-header.menu-expanded .kinetic-moodboard__search-shell {
   height: min(420px, 72vh);
 }
 @media (max-width: 640px) {
-  .storefront-search-header .kinetic-moodboard__search-header.menu-expanded .kinetic-moodboard__search-shell {
+  .storefront-search-header.menu-expanded .kinetic-moodboard__search-shell {
     height: min(360px, 66vh);
   }
 }
