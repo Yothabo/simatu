@@ -197,7 +197,7 @@ export default function ProductModal({
             className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-[58%] to-white"
           />
           <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 px-5 pb-5 pt-24">
-            <span className={`min-w-0 text-2xl italic leading-tight text-black ${mode === "preview" ? "font-serif" : "font-heading"}`}>
+            <span className={`min-w-0 text-2xl italic leading-tight text-black ${mode === "preview" ? "font-montserrat" : "font-heading"}`}>
               {product.name}
             </span>
             <span className={`shrink-0 font-heading text-xl leading-none ${accentColor} ${mode === 'preview' ? 'opacity-50' : ''}`}>
