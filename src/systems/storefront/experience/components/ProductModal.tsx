@@ -197,10 +197,10 @@ export default function ProductModal({
             className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-[58%] to-white"
           />
           <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 px-5 pb-5 pt-24">
-            <span className={`min-w-0 text-2xl italic leading-tight text-black ${mode === "preview" ? "font-montserrat" : "font-heading"}`}>
+            <span className={`min-w-0 text-2xl leading-tight text-black ${mode === "preview" ? "" : "font-heading"}`} style={mode === "preview" ? { fontFamily: "Antony, sans-serif" } : undefined}>
               {product.name}
             </span>
-            <span className={`shrink-0 font-heading text-xl leading-none ${accentColor} ${mode === 'preview' ? 'opacity-50' : ''}`}>
+            <span className={`shrink-0 text-xl leading-none ${accentColor} ${mode === "preview" ? "opacity-50" : "font-heading"}`} style={mode === "preview" ? { fontFamily: "Montserrat, sans-serif" } : undefined}>
               {product.price}
             </span>
           </div>
@@ -208,7 +208,7 @@ export default function ProductModal({
 
         {/* 3. Description */}
         <div className="px-5 pt-3">
-          <p className={`text-sm leading-relaxed text-[#4d4d4d]/70 ${mode === "preview" ? "font-serif" : "font-heading"}`}>
+          <p className={`text-sm leading-relaxed text-[#4d4d4d]/70 ${mode === "preview" ? "" : "font-heading"}`} style={mode === "preview" ? { fontFamily: "Montserrat, sans-serif" } : undefined}>
             {product.description || (isYotaabo
               ? `Experience the essence of ${product.name}. A carefully crafted fragrance designed to leave a lasting impression, blending premium notes for a sophisticated and memorable profile.`
               : 'A thoughtfully selected piece chosen for comfort, quality, and everyday confidence.')}
