@@ -1,7 +1,7 @@
 import { useState, type CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { A11y, Keyboard, Navigation, Pagination } from 'swiper/modules';
+import { A11y, FreeMode, Keyboard, Navigation, Pagination } from 'swiper/modules';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -72,6 +72,7 @@ export default function ProductCarousel({
       ? getMockPoshiesProducts(mockCategory)
       : [];
   const visibleProducts = carouselProducts.slice(0, 5);
+  const isPoshiesMockCarousel = Boolean(mockCategory);
 
   const selectedTheme = selectedProduct && useProductTheme
     ? getCategoryTheme(selectedProduct.category)
@@ -124,11 +125,11 @@ export default function ProductCarousel({
       )}
       <Swiper
 
-          modules={[A11y, Keyboard, Navigation, Pagination]}
-          className="yotaabo-product-swiper mt-6"
-          slidesPerView={2.15}
+          modules={[A11y, FreeMode, Keyboard, Navigation, Pagination]}
+          className={`yotaabo-product-swiper mt-6 ${isPoshiesMockCarousel ? "poshies-product-swiper" : ""}`}
+          slidesPerView={isPoshiesMockCarousel ? 1.25 : 2.15}
           slidesPerGroup={1}
-          spaceBetween={16}
+          spaceBetween={isPoshiesMockCarousel ? 12 : 16}
           breakpoints={{
             640: {
               slidesPerView: 3.15,
@@ -210,7 +211,7 @@ export default function ProductCarousel({
                             onError={(event) => {
                               event.currentTarget.style.display = 'none';
                             }}
-                            className="h-full w-full object-contain p-4"
+                            className="h-full w-full object-cover"
                           />
                         )}
                       </div>
