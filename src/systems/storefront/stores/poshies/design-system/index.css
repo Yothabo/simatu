@@ -666,20 +666,9 @@
   outline-color: #E94B9B !important;
 }
 
-/* Poshies product preview surfaces use the rose brand accent consistently. */
-:root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-slide,
-:root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-slide > div,
-:root[data-storefront='poshies'] .yotaabo-product-carousel [class*='product-image'],
-:root[data-storefront='poshies'] .yotaabo-product-carousel [class*='image-container'],
-:root[data-storefront='poshies'] .yotaabo-product-carousel [class*='image-wrapper'],
-:root[data-storefront='poshies'] .yotaabo-product-carousel [class*='media-wrapper'] {
-  background-color: #E94B9B !important;
-  background-image: none !important;
-}
-:root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-slide img,
-:root[data-storefront='poshies'] .yotaabo-product-carousel [class*='product-image'] img,
-:root[data-storefront='poshies'] .yotaabo-product-carousel [class*='image-container'] img,
-:root[data-storefront='poshies'] .yotaabo-product-carousel [class*='image-wrapper'] img,
-:root[data-storefront='poshies'] .yotaabo-product-carousel [class*='media-wrapper'] img {
-  background-color: #E94B9B !important;
+/* Keep the carousel track and slides transparent; colour only the product preview frame. */
+:root[data-storefront='poshies'] .yotaabo-product-swiper,
+:root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-wrapper,
+:root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-slide {
+  background: transparent !important;
 }
