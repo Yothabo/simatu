@@ -22,24 +22,24 @@ export default function Hero() {
             <img
               className="poshies-campaign__image"
               src={POSHIES_CAMPAIGN_IMAGE}
-              alt="South African intimate apparel campaign photographed outdoors"
+              alt="Intimate apparel from a South African lingerie label"
               fetchPriority="high"
             />
-            <span className="poshies-campaign__topline">THE LANGUAGE OF STYLE</span>
+            <span className="poshies-campaign__topline">INTIMATES, MADE IN SOUTH AFRICA</span>
             <span className="poshies-campaign__wordmark" aria-label="Poshies">poshies</span>
-            <span className="poshies-campaign__bottomline">A world of personal style</span>
+            <span className="poshies-campaign__bottomline">Feel good, close to yourself</span>
             <span className="poshies-campaign__arrow" aria-hidden="true">↗</span>
           </a>
           <div className="poshies-campaign__meta">
             <span>DISCOVER POSHIES</span>
             <span>02 / 02</span>
           </div>
-          <p className="poshies-campaign__description">Intimate apparel for the modern life.</p>
+          <p className="poshies-campaign__description">Soft against your skin. Made for your comfort, confidence and every version of you.</p>
         </div>
         <div className="poshies-featured">
           <ProductCarousel
-            title="Trending"
-            description="Intimate essentials and considered pieces for the way you live."
+            title="The intimate edit"
+            description="Bras, underwear, sleepwear and feel-good pieces selected for comfort, fit and self-expression."
             products={featuredProducts}
             placeholderColor="bg-[#f5f5f5]"
             bgColor="bg-white"
