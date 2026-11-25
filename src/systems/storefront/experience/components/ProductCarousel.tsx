@@ -83,23 +83,35 @@ export default function ProductCarousel({
           >
             {sectionHeading ? sectionHeading : title}
           </h3>
-
-          {showHeaderViewMore && (
-            <Link
-              to={viewAllHref}
-              className="shrink-0 cursor-pointer font-heading text-sm italic tracking-wide text-[#3a3a3a] opacity-70 transition-opacity hover:opacity-100"
-            >
-              View more
-            </Link>
-          )}
         </div>
-        {sectionHeading && (
-          <h4
-            className={`font-heading text-3xl italic ${accentColor}`}
-            style={{ lineHeight: 0.82, marginTop: '-0.18em', marginBottom: 0 }}
-          >
-            Collection
-          </h4>
+        {sectionHeading ? (
+          <div className="flex items-baseline justify-between">
+            <h4
+              className={`font-heading text-3xl italic ${accentColor}`}
+              style={{ lineHeight: 0.82, marginTop: '-0.18em', marginBottom: 0 }}
+            >
+              Collection
+            </h4>
+            {showHeaderViewMore && (
+              <Link
+                to={viewAllHref}
+                className="shrink-0 cursor-pointer font-heading text-sm italic tracking-wide text-[#3a3a3a] opacity-70 transition-opacity hover:opacity-100"
+              >
+                View more
+              </Link>
+            )}
+          </div>
+        ) : (
+          showHeaderViewMore && (
+            <div className="flex justify-end">
+              <Link
+                to={viewAllHref}
+                className="shrink-0 cursor-pointer font-heading text-sm italic tracking-wide text-[#3a3a3a] opacity-70 transition-opacity hover:opacity-100"
+              >
+                View more
+              </Link>
+            </div>
+          )
         )}
       </div>
 
