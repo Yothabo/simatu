@@ -188,7 +188,13 @@ export default function ProductCarousel({
                       }}
                     >
                       <div className={`aspect-[4/5] w-full overflow-hidden ${cardPlaceholder}`}>
-                        {product.image_url && (
+                        {product.id.startsWith('mock-poshies-') ? (
+                          <div className="flex h-full w-full items-center justify-center bg-[#f8d9ce] text-[#79634e]/70" aria-label="Preview placeholder">
+                            <svg aria-hidden="true" viewBox="0 0 120 120" className="h-20 w-20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M38 22 20 32 10 49l18 9 8-11v43h48V46l8 12 18-9-10-17-18-10c-4 7-10 11-17 11s-13-4-17-11Z" />
+                            </svg>
+                          </div>
+                        ) : product.image_url ? (
                           <SharedImage
                             src={product.image_url}
                             alt={product.name}
@@ -199,8 +205,8 @@ export default function ProductCarousel({
                               event.currentTarget.style.display = 'none';
                             }}
                             className="h-full w-full"
-/>
-                        )}
+                          />
+                        ) : null}
                       </div>
 
                       <div className="mt-1 flex min-w-0 flex-col pt-3 pl-3">
@@ -212,10 +218,10 @@ export default function ProductCarousel({
                         </h4>
 
                         <p
-                          className={`mt-1 font-heading text-base tracking-wide ${cardAccent}`}
+                          className={`mt-1 font-heading text-xs tracking-[0.14em] uppercase ${cardAccent}`}
                           style={{ lineHeight: '1', margin: 0, padding: 0 }}
                         >
-                          {product.price}
+                          {product.id.startsWith('mock-poshies-') ? 'Preview item' : product.price}
                         </p>
                       </div>
                     </button>
@@ -246,6 +252,7 @@ export default function ProductCarousel({
             : null
         }
         bgColor={bgColor}
+        mode={selectedProduct?.id.startsWith('mock-poshies-') ? 'preview' : 'storefront'}
         placeholderColor={selectedPlaceholder}
         accentColor={selectedAccent}
         isDark={isDark}
