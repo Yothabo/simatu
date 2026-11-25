@@ -40,6 +40,26 @@ business:'South African entrepreneur small business shop owner working retail st
 digital:'digital products laptop tablet software interface graphic design online creator workspace'
 };
 const entries=markets.map(m=>({...m,query:queries[m.id]||('African South African '+m.category+' lifestyle photography'),queryKey:'parent-africa:'+m.id}));
+const categoryTerms={
+fashion:['fashion','clothing','streetwear','outfit','style','wear','model'],
+spaces:['interior','home','living','room','furniture','decor','design'],
+technology:['technology','computer','electronics','coding','laptop','workspace','tech'],
+culture:['art','culture','heritage','craft','gallery','festival','museum'],
+living:['home','kitchen','furniture','decor','living','household','product'],
+beauty:['beauty','skincare','skin','makeup','cosmetics','hair','portrait'],
+sports:['sport','sports','fitness','athlete','running','gym','football','basketball','training'],
+food:['food','cuisine','meal','dish','restaurant','cooking','market','braai'],
+automotive:['car','cars','vehicle','automotive','motor','driving','suv'],
+pets:['pet','pets','dog','dogs','puppy','cat','cats','kitten','animal'],
+kids:['kid','kids','child','children','family','play','toy','school'],
+creative:['art','artist','creative','painting','craft','illustration','pottery','studio'],
+events:['event','party','celebration','wedding','concert','festival','guests'],
+hobbies:['hobby','collection','collecting','craft','game','gaming','model','leisure'],
+services:['service','professional','barber','hairdresser','mechanic','electrician','repair','working'],
+travel:['travel','landscape','destination','mountain','beach','coast','safari','city'],
+business:['business','entrepreneur','shop','store','retail','office','owner','startup'],
+digital:['digital','software','interface','laptop','tablet','app','online','website','design']
+};
 const cutoff=Date.now()-3600000;cache.requestTimestamps=cache.requestTimestamps.filter(t=>t>cutoff);
 const budget=Math.max(0,HOURLY_LIMIT-cache.requestTimestamps.length),limit=Math.min(MAX_REQUESTS,budget);let fetched=0;
 for(const entry of entries){
@@ -65,26 +85,6 @@ const output={generatedAt:new Date().toISOString(),source:'Unsplash API',visualD
 fs.writeFileSync(OUTPUT_FILE,JSON.stringify(output,null,2)+'\n');saveCache(cache);
 console.log('\nReview catalogue:',OUTPUT_FILE,'\nUnique candidates:',output.selectedUniquePhotos+'/'+entries.length,'\nPending queries:',output.pendingQueries.length,'\nCandidates require review; they are not auto-applied.');
 function parseMarkets(text){const re=/\{ id: '([^']+)', image: image\('[^']+'\), alt: '([^']+)', category: '([^']+)', title: '([^']+)' \}/g;return [...text.matchAll(re)].map(m=>({id:m[1],alt:m[2],category:m[3],title:m[4]}));}
-const categoryTerms={
-fashion:['fashion','clothing','streetwear','outfit','style','wear','model'],
-spaces:['interior','home','living','room','furniture','decor','design'],
-technology:['technology','computer','electronics','coding','laptop','workspace','tech'],
-culture:['art','culture','heritage','craft','gallery','festival','museum'],
-living:['home','kitchen','furniture','decor','living','household','product'],
-beauty:['beauty','skincare','skin','makeup','cosmetics','hair','portrait'],
-sports:['sport','sports','fitness','athlete','running','gym','football','basketball','training'],
-food:['food','cuisine','meal','dish','restaurant','cooking','market','braai'],
-automotive:['car','cars','vehicle','automotive','motor','driving','suv'],
-pets:['pet','pets','dog','dogs','puppy','cat','cats','kitten','animal'],
-kids:['kid','kids','child','children','family','play','toy','school'],
-creative:['art','artist','creative','painting','craft','illustration','pottery','studio'],
-events:['event','party','celebration','wedding','concert','festival','guests'],
-hobbies:['hobby','collection','collecting','craft','game','gaming','model','leisure'],
-services:['service','professional','barber','hairdresser','mechanic','electrician','repair','working'],
-travel:['travel','landscape','destination','mountain','beach','coast','safari','city'],
-business:['business','entrepreneur','shop','store','retail','office','owner','startup'],
-digital:['digital','software','interface','laptop','tablet','app','online','website','design']
-};
 function scorePhoto(photo,query,category,id){
  const text=tokenize([photo.description,...(photo.tags||[])].join(' '));
  const terms=categoryTerms[id]||tokenize(category);
