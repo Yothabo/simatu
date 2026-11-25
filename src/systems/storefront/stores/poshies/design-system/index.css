@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 /* Poshies brand theme: intimate essentials with a calm editorial finish.
    The shared storefront layout and commerce behaviour remain unchanged. */
 :root[data-storefront='poshies'] {
@@ -538,12 +539,20 @@
   border-color: #79634e;
 }
 
-/* Poshies typography trial: use Anton consistently across storefront content. */
+/* Poshies typography: Anton for display headings, Montserrat for readable UI copy. */
 :root[data-storefront='poshies'] .storefront-page,
-:root[data-storefront='poshies'] .storefront-page *,
 :root[data-storefront='poshies'] .storefront-header,
+:root[data-storefront='poshies'] .poshies-footer {
+  font-family: 'Montserrat', sans-serif;
+}
+:root[data-storefront='poshies'] .storefront-page *,
 :root[data-storefront='poshies'] .storefront-header *,
-:root[data-storefront='poshies'] .poshies-footer,
 :root[data-storefront='poshies'] .poshies-footer * {
+  font-family: 'Montserrat', sans-serif;
+}
+:root[data-storefront='poshies'] .poshies-campaign__wordmark,
+:root[data-storefront='poshies'] .poshies-collection-panel svg text,
+:root[data-storefront='poshies'] .poshies-collection-panel--about svg text {
   font-family: 'Anton', sans-serif !important;
 }
+
