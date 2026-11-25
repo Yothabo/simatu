@@ -22,7 +22,8 @@ export default function Header({ sticky = true }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { name: storeName, pathFor } = useStorefront();
   const { cartItems } = useCart();
-  const hasCartItems = cartItems.some((item) => item.quantity > 0);
+  const cartCount = cartItems.reduce((total, item) => total + Math.max(0, item.quantity), 0);
+  const hasCartItems = cartCount > 0;
 
   const scrollToSection = (id: string) => {
     setMenuOpen(false);
@@ -44,8 +45,9 @@ export default function Header({ sticky = true }: HeaderProps) {
           {query && <button type="button" className="storefront-controls__clear" onClick={() => setQuery('')} aria-label="Clear search"><FiX /></button>}
         </div>
         {hasCartItems && (
-          <Link to={pathFor('cart')} className="storefront-controls__icon" aria-label="Open shopping cart">
+          <Link to={pathFor('cart')} className="storefront-controls__icon storefront-controls__cart" aria-label={`Open shopping cart, ${cartCount} ${cartCount === 1 ? 'item' : 'items'}`}>
             <FaOpencart aria-hidden="true" />
+            <span className="storefront-controls__cart-count" aria-hidden="true">{cartCount > 99 ? '99+' : cartCount}</span>
           </Link>
         )}
         <button
