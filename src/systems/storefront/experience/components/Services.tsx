@@ -35,9 +35,9 @@ export default function Services() {
     {
       id: 'his',
       title: isYotaabo ? 'His' : 'Him',
-      topText: isYotaabo ? 'REFINED. GROUNDED. REMEMBERED.' : 'EVERYDAY COMFORT. MADE FOR HIM.',
+      topText: isYotaabo ? 'REFINED. GROUNDED. REMEMBERED.' : 'COMFORT THAT FEELS LIKE YOURS.',
       description:
-        isYotaabo ? 'Crafted for presence. Distinctive scents for the modern man, refined in character, grounded in confidence, and made to be remembered.' : 'Everyday underwear designed with comfort in mind. From classic boxers to briefs and trunks, find the essentials that fit your day.',
+        isYotaabo ? 'Crafted for presence. Distinctive scents for the modern man, refined in character, grounded in confidence, and made to be remembered.' : 'Everyday briefs, boxers and trunks with a comfortable fit and a little more confidence in every layer.',
       bgColor: 'bg-white',
       textColor: 'text-[#4d4d4d]',
       textFill: 'fill-[#8aa89b]',
@@ -53,9 +53,9 @@ export default function Services() {
     {
       id: 'hers',
       title: isYotaabo ? 'Hers' : 'Her',
-      topText: isYotaabo ? 'ELEGANCE IN EVERY NOTE' : 'INTIMATE. COMFORTABLE. CONFIDENT.',
+      topText: isYotaabo ? 'ELEGANCE IN EVERY NOTE' : 'MADE TO FEEL GOOD ON YOUR SKIN.',
       description:
-        isYotaabo ? 'Fragrances crafted to complement elegance and individuality, whether soft and floral or bold and warm.' : 'Discover bras, panties, bikinis, lingerie and matching sets chosen to help you feel comfortable and confident.',
+        isYotaabo ? 'Fragrances crafted to complement elegance and individuality, whether soft and floral or bold and warm.' : 'Discover bras, panties, matching sets and lingerie chosen for the way they feel, fit and let you express yourself.',
       bgColor: 'bg-white',
       textColor: 'text-[#4d4d4d]',
       textFill: 'fill-[#ff1493]',
@@ -71,9 +71,9 @@ export default function Services() {
     {
       id: 'spaces',
       title: isYotaabo ? 'Spaces' : 'Lounge',
-      topText: isYotaabo ? 'SCENTS FOR EVERY ROOM' : 'SLOW DOWN. SETTLE IN. FEEL GOOD.',
+      topText: isYotaabo ? 'SCENTS FOR EVERY ROOM' : 'SOFT MOMENTS. YOUR OWN SPACE.',
       description:
-        isYotaabo ? 'Extend your signature into every space. Ambient scents for the home and car, quietly shaping the atmosphere wherever you go.' : 'Comfortable pyjamas, nightwear, robes and relaxed sets for slowing down and enjoying your time at home.',
+        isYotaabo ? 'Extend your signature into every space. Ambient scents for the home and car, quietly shaping the atmosphere wherever you go.' : 'Slip into soft sleepwear, robes and relaxed sets made for slow mornings, quiet evenings and time that belongs to you.',
       bgColor: 'bg-white',
       textColor: 'text-[#4d4d4d]',
       textFill: 'fill-[#c8ad8d]',
@@ -88,9 +88,9 @@ export default function Services() {
     {
       id: 'about',
       title: 'about',
-      topText: isYotaabo ? 'THE STORY BEHIND THE SCENT' : 'THE COMFORT OF BEING YOURSELF',
+      topText: isYotaabo ? 'THE STORY BEHIND THE SCENT' : 'INTIMACY, ON YOUR OWN TERMS.',
       description:
-        isYotaabo ? 'Born from a simple, enduring belief: fragrance is not merely something you wear, but a reflection of who you are. We curate distinctive scents that speak quietly yet linger long, carefully designed to become an unforgettable part of how you are remembered.' : 'Poshies is about feeling comfortable and confident in what you wear. From everyday intimate essentials to pieces made for relaxing, we bring together styles that fit naturally into your life.',
+        isYotaabo ? 'Born from a simple, enduring belief: fragrance is not merely something you wear, but a reflection of who you are. We curate distinctive scents that speak quietly yet linger long, carefully designed to become an unforgettable part of how you are remembered.' : 'Poshies is a space for intimate essentials, everyday comfort and personal expression. Find pieces that feel right against your skin and let confidence begin with you.',
       bgColor: 'bg-white',
       textColor: 'text-[#4d4d4d]',
       textFill: isYotaabo ? 'fill-[#8aa89b]' : 'fill-[#ff1493]',
