@@ -28,7 +28,7 @@ export default function Header({ sticky = false, showBack = false }: HeaderProps
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-white text-black">
+    <header className="storefront-header sticky top-0 z-50 bg-white text-black">
       <div className="mx-auto flex min-h-[76px] w-[min(1180px,calc(100%-48px))] items-center justify-between">
 
         {/* Left Side */}
@@ -65,7 +65,7 @@ export default function Header({ sticky = false, showBack = false }: HeaderProps
         <div className="flex items-center gap-4">
           <Link
             to={pathFor('services')}
-            className="hidden items-center gap-2 bg-[#4d4d4d] px-4 py-3 text-xs font-semibold text-white transition-colors hover:bg-[#3a3a3a] md:inline-flex"
+            className="storefront-header__cta hidden items-center gap-2 bg-[#4d4d4d] px-4 py-3 text-xs font-semibold text-white transition-colors hover:bg-[#3a3a3a] md:inline-flex"
           >
             Explore Collection
             <FiArrowUpRight size={16} aria-hidden="true" />
@@ -123,7 +123,7 @@ export default function Header({ sticky = false, showBack = false }: HeaderProps
           <Link
             to={pathFor('services')}
             onClick={closeMenu}
-            className="mt-4 flex min-h-12 items-center justify-between bg-[#4d4d4d] px-4 text-xs font-semibold text-white transition-colors hover:bg-[#3a3a3a]"
+            className="storefront-header__cta mt-4 flex min-h-12 items-center justify-between bg-[#4d4d4d] px-4 text-xs font-semibold text-white transition-colors hover:bg-[#3a3a3a]"
           >
             Explore Collection
             <FiArrowUpRight size={16} aria-hidden="true" />
