@@ -564,3 +564,104 @@
   fill: #e94b9b !important;
   color: #e94b9b !important;
 }
+
+/* Poshies unified brand palette: white, rose, blush, berry and charcoal.
+   This final layer intentionally supersedes the legacy peach, brown, green,
+   plum and charcoal section treatments above. */
+:root[data-storefront='poshies'] {
+  --storefront-accent: #E94B9B;
+  --storefront-accent-contrast: #FFFFFF;
+  --storefront-page: #FFFFFF;
+  --storefront-surface: #FFFFFF;
+  --storefront-surface-soft: #FCEFF4;
+  --storefront-text: #292426;
+  --storefront-muted: #817579;
+  --storefront-border: rgba(41, 36, 38, 0.12);
+  --poshies-rose: #E94B9B;
+  --poshies-blush: #EBC3D4;
+  --poshies-berry: #8B536B;
+  --poshies-charcoal: #292426;
+  --poshies-warm-grey: #817579;
+}
+:root[data-storefront='poshies'] .storefront-page,
+:root[data-storefront='poshies'] main.storefront-page,
+:root[data-storefront='poshies'] .storefront-hero,
+:root[data-storefront='poshies'] .poshies-home,
+:root[data-storefront='poshies'] .poshies-campaign,
+:root[data-storefront='poshies'] .storefront-collections,
+:root[data-storefront='poshies'] .poshies-collections,
+:root[data-storefront='poshies'] .poshies-collection-section,
+:root[data-storefront='poshies'] .poshies-collection-panel,
+:root[data-storefront='poshies'] .poshies-collection-carousel,
+:root[data-storefront='poshies'] .poshies-featured,
+:root[data-storefront='poshies'] .yotaabo-product-carousel,
+:root[data-storefront='poshies'] .poshies-footer {
+  background: #FFFFFF !important;
+  background-image: none !important;
+  color: #292426 !important;
+}
+:root[data-storefront='poshies'] .storefront-header,
+:root[data-storefront='poshies'] .storefront-controls__search,
+:root[data-storefront='poshies'] .storefront-controls__icon,
+:root[data-storefront='poshies'] .storefront-controls__menu {
+  background: #FFFFFF !important;
+  color: #292426 !important;
+}
+:root[data-storefront='poshies'] .storefront-page h1,
+:root[data-storefront='poshies'] .storefront-page h2,
+:root[data-storefront='poshies'] .storefront-page h3,
+:root[data-storefront='poshies'] .storefront-page h4,
+:root[data-storefront='poshies'] .storefront-page p,
+:root[data-storefront='poshies'] .storefront-page a,
+:root[data-storefront='poshies'] .storefront-header a,
+:root[data-storefront='poshies'] .storefront-header button,
+:root[data-storefront='poshies'] .storefront-footer__inner,
+:root[data-storefront='poshies'] .yotaabo-product-carousel h3,
+:root[data-storefront='poshies'] .yotaabo-product-carousel h4,
+:root[data-storefront='poshies'] .yotaabo-product-carousel p {
+  color: #292426;
+}
+:root[data-storefront='poshies'] .poshies-campaign__wordmark,
+:root[data-storefront='poshies'] .poshies-collection-panel svg text,
+:root[data-storefront='poshies'] .poshies-collection-panel--about svg text,
+:root[data-storefront='poshies'] .poshies-collection-section svg text {
+  fill: #E94B9B !important;
+  color: #E94B9B !important;
+}
+:root[data-storefront='poshies'] .storefront-header__cta,
+:root[data-storefront='poshies'] .storefront-page button[type='submit'],
+:root[data-storefront='poshies'] .storefront-page .button-primary {
+  background: #E94B9B !important;
+  border-color: #E94B9B !important;
+  color: #FFFFFF !important;
+}
+:root[data-storefront='poshies'] .storefront-header__cta:hover,
+:root[data-storefront='poshies'] .storefront-page button[type='submit']:hover,
+:root[data-storefront='poshies'] .storefront-page .button-primary:hover {
+  background: #8B536B !important;
+  border-color: #8B536B !important;
+  color: #FFFFFF !important;
+}
+:root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-button-next,
+:root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-button-prev {
+  background: #FFFFFF !important;
+  border-color: rgba(41, 36, 38, 0.16) !important;
+  color: #292426 !important;
+  box-shadow: 0 6px 20px rgba(41, 36, 38, 0.06) !important;
+}
+:root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-pagination-bullet-active {
+  background: #E94B9B !important;
+}
+:root[data-storefront='poshies'] .footer-column-title { color: #292426 !important; }
+:root[data-storefront='poshies'] .footer-link,
+:root[data-storefront='poshies'] .storefront-page .text-muted {
+  color: #817579 !important;
+}
+:root[data-storefront='poshies'] .footer-link:hover,
+:root[data-storefront='poshies'] .footer-social-link:hover {
+  color: #E94B9B !important;
+  border-color: #E94B9B !important;
+}
+:root[data-storefront='poshies'] .storefront-page :focus-visible {
+  outline-color: #E94B9B !important;
+}
