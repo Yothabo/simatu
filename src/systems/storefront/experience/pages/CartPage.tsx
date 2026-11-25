@@ -66,12 +66,12 @@ export default function CartPage() {
   return (
     <>
       <Header sticky={true} showBack={true} />
-      <main className="flex min-h-screen flex-col bg-white px-6 pt-0 pb-12 sm:px-10 lg:px-12 lg:pt-0 lg:pb-20">
+      <main className="flex min-h-screen flex-col bg-[#292426] px-6 pt-0 pb-12 sm:px-10 lg:px-12 lg:pt-0 lg:pb-20">
         <div className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col">
 
           {cartItems.length > 0 && <header className="mb-8 mt-8">
-            <h1 className="font-heading text-3xl italic text-[#4d4d4d]">{isCheckoutView ? 'Choose stores to checkout' : 'Your shared cart'}</h1>
-            <p className="mt-2 max-w-xl font-heading text-sm leading-relaxed text-[#696964]">Your products stay together here, grouped by the stores selling them. Select the stores you want to purchase from now.</p>
+            <h1 className="font-heading text-3xl italic text-white">{isCheckoutView ? 'Choose stores to checkout' : 'Your shared cart'}</h1>
+            <p className="mt-2 max-w-xl font-heading text-sm leading-relaxed text-white/75">Your products stay together here, grouped by the stores selling them. Select the stores you want to purchase from now.</p>
           </header>}
 
           {cartItems.length === 0 ? (
@@ -85,7 +85,7 @@ export default function CartPage() {
               </h2>
 
               {/* Paragraph */}
-              <p className="mt-3 max-w-sm font-heading text-base leading-relaxed text-[#696964]">
+              <p className="mt-3 max-w-sm font-heading text-base leading-relaxed text-white/75">
                 Explore the Simatu marketplace to discover products from multiple stores and add them to your shared cart.
               </p>
 
@@ -101,15 +101,15 @@ export default function CartPage() {
             <div className="flex flex-1 flex-col gap-2">
               {storeGroups.map((group) => (
                 <section key={group.storefront} className="mb-5">
-                  <label className="mb-3 flex items-center gap-3 border-b border-black/10 pb-3 text-sm text-[#4d4d4d]">
+                  <label className="mb-3 flex items-center gap-3 border-b border-black/10 pb-3 text-sm text-white">
                     <input type="checkbox" checked={selectedStorefronts.includes(group.storefront)} onChange={(event) => setSelectedStorefronts((current) => event.target.checked ? [...current, group.storefront] : current.filter((store) => store !== group.storefront))} />
                     <strong>{group.storeName}</strong>
-                    <span className="text-xs text-[#4d4d4d]/55">{group.items.length} {group.items.length === 1 ? 'product' : 'products'}</span>
+                    <span className="text-xs text-white/55">{group.items.length} {group.items.length === 1 ? 'product' : 'products'}</span>
                   </label>
                   {group.items.map((item) => (
                 <div
                   key={item.id}
-                  className={`flex items-center gap-6 bg-[#fafaf9] pr-3 transition-all duration-300 ease-in-out ${
+                  className={`flex items-center gap-6 bg-[#292426] pr-3 transition-all duration-300 ease-in-out ${
                     removingId === item.id
                       ? 'opacity-0 scale-95 translate-x-4 pointer-events-none'
                       : 'opacity-100 scale-100 translate-x-0'
@@ -136,7 +136,7 @@ export default function CartPage() {
                       <button
                         type="button"
                         onClick={() => setSelectedProduct(item)}
-                        className="truncate text-left font-heading text-base text-[#4d4d4d]"
+                        className="truncate text-left font-heading text-base text-white"
                         aria-label={`View ${item.name} details`}
                       >
                         {item.name}
@@ -155,18 +155,18 @@ export default function CartPage() {
                         <div className="flex items-center border border-black/10">
                           <RippleButton
                             onClick={() => decreaseQuantity(item.id)}
-                            className="flex h-8 w-8 items-center justify-center bg-[#f1f1ee] text-black/60 transition-colors hover:bg-[#e5e5e1] hover:text-black active:bg-[#dcdcd7]"
+                            className="flex h-8 w-8 items-center justify-center bg-[#292426] text-black/60 transition-colors hover:bg-[#FF1493] hover:text-black active:bg-[#FF1493]"
                             ariaLabel="Decrease quantity"
                             rippleColor={primaryAccent}
                           >
                             <FiMinus size={16} />
                           </RippleButton>
-                          <span className="min-w-[1.75rem] text-center font-heading text-base text-[#4d4d4d]">
+                          <span className="min-w-[1.75rem] text-center font-heading text-base text-white">
                             {item.quantity}
                           </span>
                           <RippleButton
                             onClick={() => increaseQuantity(item.id)}
-                            className="flex h-8 w-8 items-center justify-center bg-[#f1f1ee] text-black/60 transition-colors hover:bg-[#e5e5e1] hover:text-black active:bg-[#dcdcd7]"
+                            className="flex h-8 w-8 items-center justify-center bg-[#292426] text-black/60 transition-colors hover:bg-[#FF1493] hover:text-black active:bg-[#FF1493]"
                             ariaLabel="Increase quantity"
                             rippleColor={primaryAccent}
                           >
@@ -175,7 +175,7 @@ export default function CartPage() {
                         </div>
                       </div>
 
-                      <span className="shrink-0 text-right font-heading text-base text-[#4d4d4d]/60 tabular-nums">
+                      <span className="shrink-0 text-right font-heading text-base text-white/60 tabular-nums">
                         {item.price}
                       </span>
                     </div>
@@ -193,7 +193,7 @@ export default function CartPage() {
                 <div className="flex gap-4">
                   <Link
                     to="/"
-                    className="inline-flex min-h-12 items-center justify-center bg-[#f1f1ee] px-8 text-xs font-semibold tracking-wide text-black/60 transition-colors hover:bg-[#e5e5e1] hover:text-black active:bg-[#dcdcd7]"
+                    className="inline-flex min-h-12 items-center justify-center bg-[#292426] px-8 text-xs font-semibold tracking-wide text-black/60 transition-colors hover:bg-[#FF1493] hover:text-black active:bg-[#FF1493]"
                   >
                     Continue Shopping
                   </Link>
