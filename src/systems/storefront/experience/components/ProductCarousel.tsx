@@ -106,19 +106,11 @@ export default function ProductCarousel({
         </p>
       )}
 
-      {error && !visibleProducts.length && !isLoading ? (
-        <p
-          role="alert"
-          className="px-6 py-10 text-sm text-[#4d4d4d]/60 sm:px-10 lg:px-12"
-        >
-          Products could not be loaded. Please try again shortly.
-        </p>
-      ) : !isLoading && visibleProducts.length === 0 ? (
-        <p className="px-6 py-10 text-sm text-[#4d4d4d]/60 sm:px-10 lg:px-12">
-          No active products in this collection yet.
-        </p>
-      ) : (
-        <Swiper
+      {error && !visibleProducts.length && !isLoading && (
+        <p role="status" className="sr-only">Product feed unavailable; showing placeholders.</p>
+      )}
+      <Swiper
+
           modules={[A11y, Keyboard, Navigation, Pagination]}
           className="yotaabo-product-swiper mt-6"
           slidesPerView={2.15}
@@ -134,9 +126,9 @@ export default function ProductCarousel({
               spaceBetween: 24,
             },
           }}
-          navigation={!isLoading && visibleProducts.length > 2}
+          navigation={!isLoading && (visibleProducts.length > 2 || visibleProducts.length === 0)}
           pagination={
-            !isLoading && visibleProducts.length > 1
+            !isLoading && (visibleProducts.length > 1 || visibleProducts.length === 0)
               ? { clickable: true }
               : false
           }
@@ -159,11 +151,21 @@ export default function ProductCarousel({
         >
           {isLoading
             ? Array.from({ length: 5 }).map((_, index) => (
-                <SwiperSlide key={`skeleton-${index}`}>
+                <SwiperSlide key={"skeleton-" + index}>
                   <ProductCardSkeleton />
                 </SwiperSlide>
               ))
-            : visibleProducts.map((product, index) => {
+            : visibleProducts.length === 0
+              ? Array.from({ length: 5 }).map((_, index) => (
+                  <SwiperSlide key={"placeholder-" + index}>
+                    <div aria-hidden="true" className="flex aspect-[4/5] w-full flex-col items-center justify-center overflow-hidden bg-[#f4c8b8] px-4 text-center">
+                      <div className={"mb-5 h-1 w-10 " + (index % 2 === 0 ? "bg-[#79634e]/35" : "bg-[#79634e]/20")} />
+                      <span className="font-heading text-base italic text-[#79634e]/70">Coming soon</span>
+                      <span className="mt-2 font-heading text-xs tracking-[0.16em] text-[#79634e]/45">POSHIES</span>
+                    </div>
+                  </SwiperSlide>
+                ))
+              : visibleProducts.map((product, index) => {
                 const productTheme = getCategoryTheme(product.category);
                 const cardPlaceholder = useProductTheme
                   ? productTheme.placeholderColor
