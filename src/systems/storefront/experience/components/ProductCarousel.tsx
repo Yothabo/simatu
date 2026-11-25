@@ -11,7 +11,6 @@ import SharedImage from '../../../../components/SharedImage';
 import ProductModal from './ProductModal.tsx';
 import ProductCardSkeleton from './ProductCardSkeleton.tsx';
 import { getMockPoshiesProducts } from './mock-products.ts';
-import { getCategoryTheme } from '../../core/configuration/categoryTheme';
 import type { ProductCategory } from '../../core/hooks/useProducts.ts';
 
 type CarouselProduct = {
