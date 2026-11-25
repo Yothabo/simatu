@@ -3,8 +3,6 @@ import { formatPrice } from '../../../../shared/utilities/formatPrice';
 import ProductCarousel from './ProductCarousel';
 import useStorefront from '../../core/hooks/useStorefront.ts';
 
-const POSHIES_CAMPAIGN_IMAGE = 'https://images.pexels.com/photos/12512512/pexels-photo-12512512.jpeg?auto=compress&cs=tinysrgb&w=1800';
-
 export default function Hero() {
   const { products, isLoading, error } = useProducts();
   const { name: storeName, pathFor, primaryAccent } = useStorefront();
