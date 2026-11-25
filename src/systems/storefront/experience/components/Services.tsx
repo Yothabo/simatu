@@ -44,7 +44,7 @@ export default function Services() {
       placeholderColor: 'bg-[#8aa89b]',
       overlayColor: '#000000',
       hasImage: true,
-      imageSrc: '/systems/storefront/shared/images/hisimage.webp',
+      imageSrc: 'https://images.unsplash.com/photo-1561504599-f900052636b3?auto=format&fit=crop&w=1200&q=85',
       isDark: false,
       collectionTitle: isYotaabo ? 'His Collection' : 'Him Collection',
       productCategory: 'His',
@@ -62,7 +62,7 @@ export default function Services() {
       placeholderColor: 'bg-[#ff1493]',
       overlayColor: '#f2e9d8',
       hasImage: true,
-      imageSrc: '/systems/storefront/shared/images/herimage.webp',
+      imageSrc: 'https://images.unsplash.com/photo-1687092278358-81642bbdb6b0?auto=format&fit=crop&w=1200&q=85',
       isDark: false,
       collectionTitle: 'Her Collection',
       productCategory: 'Hers',
@@ -79,7 +79,8 @@ export default function Services() {
       accentColor: 'text-[#4d4d4d]',
       placeholderColor: 'bg-[#c8ad8d]',
       overlayColor: '#e8dec9',
-      hasImage: false,
+      hasImage: !isYotaabo,
+      imageSrc: 'https://images.unsplash.com/photo-1750064139819-da3bf362e7b3?auto=format&fit=crop&w=1200&q=85',
       isDark: false,
       collectionTitle: isYotaabo ? 'Collections' : 'Lounge Collection',
       productCategory: isYotaabo ? 'Spaces' : 'Lounge',
@@ -94,7 +95,8 @@ export default function Services() {
       textColor: 'text-[#4d4d4d]',
       textFill: isYotaabo ? 'fill-[#8aa89b]' : 'fill-[#ff1493]',
       accentColor: 'text-[#4d4d4d]',
-      hasImage: false,
+      hasImage: !isYotaabo,
+      imageSrc: 'https://images.unsplash.com/photo-1748696920340-452f1f4144be?auto=format&fit=crop&w=1200&q=85',
     },
   ];
 
@@ -110,7 +112,7 @@ export default function Services() {
   ];
 
   return (
-    <section id="services" className="storefront-collections w-full bg-white">
+    <section id="services" className={`storefront-collections w-full bg-white ${isYotaabo ? '' : 'poshies-collections'}`}>
       {orderedCategories.map((category) => (
         <div key={category.id} className="flex flex-col w-full">
           <div
@@ -211,7 +213,7 @@ export default function Services() {
                 <img
                   src={category.imageSrc || "/systems/storefront/shared/images/hisimage.webp"}
                   alt={`${category.title} collection`}
-                  className="pointer-events-none absolute bottom-[15%] right-0 z-40 h-[35vh] w-auto object-contain object-right-bottom drop-shadow-2xl sm:bottom-[20%]"
+                  className="poshies-panel-image pointer-events-none absolute bottom-[15%] right-0 z-40 h-[35vh] w-auto object-contain object-right-bottom drop-shadow-2xl sm:bottom-[20%]"
                 />
               )}
             </div>
