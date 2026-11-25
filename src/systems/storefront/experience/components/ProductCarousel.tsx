@@ -187,9 +187,14 @@ export default function ProductCarousel({
                         userSelect: 'none',
                       }}
                     >
-                      <div className={`aspect-[4/5] w-full overflow-hidden ${cardPlaceholder}`}>
+                      <div
+                        className={`aspect-[4/5] w-full overflow-hidden ${isPoshiesMockCarousel ? "poshies-product-preview" : cardPlaceholder}`}
+                        style={isPoshiesMockCarousel ? {
+                          background: 'linear-gradient(180deg, #E94B9B 0%, #F4A9CB 42%, #FFFFFF 100%)',
+                        } : undefined}
+                      >
                         {product.id.startsWith('mock-poshies-') ? (
-                          <div className="h-full w-full bg-[#f8d9ce]" aria-label="Preview placeholder" />
+                          <div className="h-full w-full bg-transparent" aria-label="Preview placeholder" />
                         ) : product.image_url ? (
                           <SharedImage
                             src={product.image_url}
