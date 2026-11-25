@@ -16,9 +16,14 @@ const documents = {
     copy: 'This document will set out the terms that apply when using Poshies, including ordering, payment, product availability, pricing and customer responsibilities.',
   },
   delivery: {
-    title: 'Delivery & returns',
+    title: 'Delivery policy',
     intro: 'The details you need before placing an order.',
-    copy: 'This document will explain delivery areas and timelines, shipping charges, order tracking, returns, exchanges and eligibility. Final operational details will be published here once confirmed.',
+    copy: 'This document will explain delivery areas and timelines, shipping charges and order tracking. Final operational details will be published here once confirmed.',
+  },
+  refund: {
+    title: 'Refund & returns policy',
+    intro: 'Information about returns, exchanges and refunds.',
+    copy: 'This document will explain return eligibility, exchange conditions, refund timelines and the process for requesting a return. Final operational details will be published here once confirmed.',
   },
 } as const;
 
