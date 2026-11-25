@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FiMenu, FiX } from 'react-icons/fi';
+import { FiMenu, FiX, FiShoppingCart } from 'react-icons/fi';
 import useStorefront from '../../core/hooks/useStorefront.ts';
 import './storefront-header.css';
 
@@ -25,9 +25,9 @@ export default function Header({ sticky = true }: HeaderProps) {
   };
 
   return (
-    <header className={`storefront-header ${sticky ? 'storefront-header--sticky' : ''}`} aria-label={`${storeName} header`}>
-      <div className="storefront-header__bar">
-        <div className="storefront-header__search">
+    <div className={`storefront-controls ${sticky ? 'storefront-controls--fixed' : ''}`} aria-label={`${storeName} storefront controls`}>
+      <div className="storefront-controls__row">
+        <div className="storefront-controls__search">
           <input
             type="search"
             value={query}
@@ -36,11 +36,14 @@ export default function Header({ sticky = true }: HeaderProps) {
             autoComplete="off"
             aria-label={`Search ${storeName}`}
           />
-          {query && <button type="button" className="storefront-header__clear" onClick={() => setQuery('')} aria-label="Clear search"><FiX /></button>}
+          {query && <button type="button" className="storefront-controls__clear" onClick={() => setQuery('')} aria-label="Clear search"><FiX /></button>}
         </div>
+        <button type="button" className="storefront-controls__icon" aria-label="Shopping cart">
+          <FiShoppingCart aria-hidden="true" />
+        </button>
         <button
           type="button"
-          className="storefront-header__toggle"
+          className="storefront-controls__icon"
           onClick={() => setMenuOpen((open) => !open)}
           aria-expanded={menuOpen}
           aria-label={menuOpen ? 'Close storefront menu' : 'Open storefront menu'}
@@ -48,7 +51,7 @@ export default function Header({ sticky = true }: HeaderProps) {
           {menuOpen ? <FiX aria-hidden="true" /> : <FiMenu aria-hidden="true" />}
         </button>
       </div>
-      <div className={`storefront-header__menu ${menuOpen ? 'is-open' : ''}`} aria-hidden={!menuOpen}>
+      <div className={`storefront-controls__menu ${menuOpen ? 'is-open' : ''}`} aria-hidden={!menuOpen}>
         <nav aria-label={`${storeName} page sections`}>
           {scrollTargets.map((target) => (
             <button key={target.id} type="button" tabIndex={menuOpen ? 0 : -1} onClick={() => scrollToSection(target.id)}>
@@ -57,6 +60,6 @@ export default function Header({ sticky = true }: HeaderProps) {
           ))}
         </nav>
       </div>
-    </header>
+    </div>
   );
 }
