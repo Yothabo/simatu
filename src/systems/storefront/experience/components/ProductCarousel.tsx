@@ -89,7 +89,7 @@ export default function ProductCarousel({
       <div className="px-6 sm:px-10 lg:px-12">
         <div className="flex items-baseline justify-between">
           <h3
-            className={`font-heading text-3xl italic ${title === "Trending" ? "text-[#3a3a3a]" : accentColor}`}
+            className={`font-heading text-3xl italic ${title === "Trending" ? "text-[#292426]" : accentColor}`}
             style={{ lineHeight: 0.9, margin: 0 }}
           >
             {sectionHeading ? (
@@ -156,7 +156,7 @@ export default function ProductCarousel({
             : visibleProducts.length === 0
               ? Array.from({ length: 5 }).map((_, index) => (
                   <SwiperSlide key={"placeholder-" + index}>
-                    <div aria-hidden="true" className="flex aspect-[4/5] w-full flex-col items-center justify-center overflow-hidden bg-[#E94B9B] px-4 text-center">
+                    <div aria-hidden="true" className="flex aspect-[4/5] w-full flex-col items-center justify-center overflow-hidden bg-[#FF1493] px-4 text-center">
                       <div className={"mb-5 h-1 w-10 " + "bg-white/50"} />
                       <span className="font-heading text-base italic text-white">Coming soon</span>
                       <span className="mt-2 font-heading text-xs tracking-[0.16em] text-white/75">POSHIES</span>
@@ -164,8 +164,8 @@ export default function ProductCarousel({
                   </SwiperSlide>
                 ))
               : visibleProducts.map((product, index) => {
-                const cardPlaceholder = isPoshiesMockCarousel ? "bg-[#E94B9B]" : placeholderColor;
-                const cardAccent = isPoshiesMockCarousel ? "text-[#E94B9B]" : accentColor;
+                const cardPlaceholder = isPoshiesMockCarousel ? "bg-[#FF1493]" : placeholderColor;
+                const cardAccent = isPoshiesMockCarousel ? "text-[#FF1493]" : accentColor;
 
                 return (
                   <SwiperSlide key={product.id}>
@@ -180,7 +180,7 @@ export default function ProductCarousel({
                       }}
                     >
                       <div
-                        className={`relative aspect-[4/5] w-full overflow-hidden ${isPoshiesMockCarousel ? "bg-[#E94B9B]" : cardPlaceholder}`}
+                        className={`relative aspect-[4/5] w-full overflow-hidden ${isPoshiesMockCarousel ? "bg-[#FF1493]" : cardPlaceholder}`}
                       >
                         {product.id.startsWith('mock-poshies-') ? (
                           <div className="h-full w-full bg-transparent" aria-label="Preview placeholder" />
@@ -201,7 +201,7 @@ export default function ProductCarousel({
                           <div
                             aria-hidden="true"
                             className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
-                            style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, #FFFFFF 100%)' }}
+                            style={{ background: 'linear-gradient(180deg, rgba(255,20,147,0) 0%, #FFFFFF 100%)' }}
                           />
                         )}
                       </div>
@@ -232,7 +232,7 @@ export default function ProductCarousel({
               <Link
                 to={viewAllHref}
                 aria-label={`View more ${title} products`}
-                className="flex aspect-[4/5] w-full items-center justify-center font-heading text-lg italic text-[#3a3a3a] outline-none transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4"
+                className="flex aspect-[4/5] w-full items-center justify-center font-heading text-lg italic text-[#292426] outline-none transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4"
               >
                 View more
               </Link>
