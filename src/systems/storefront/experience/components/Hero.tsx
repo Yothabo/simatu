@@ -18,15 +18,14 @@ export default function Hero() {
     return (
       <section id="home" aria-label="Poshies home" className="storefront-hero poshies-home">
         <div className="poshies-campaign-wrap">
-          <a className="poshies-campaign" href={pathFor('catalog')} aria-label="Poshies">
+          <div className="poshies-campaign">
             <img
               className="poshies-campaign__image"
               src={POSHIES_CAMPAIGN_IMAGE}
               alt="Black male model wearing boxer briefs in a softly lit interior"
               fetchPriority="high"
             />
-            <span className="poshies-campaign__wordmark" aria-label="Poshies">Poshies</span>
-          </a>
+          </div>
         </div>
         <div className="poshies-featured">
           <ProductCarousel
