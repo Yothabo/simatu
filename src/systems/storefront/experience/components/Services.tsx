@@ -27,6 +27,8 @@ type ServiceCategory = {
 export default function Services() {
   const { products, isLoading, error } = useProducts();
   const { categoryOrder, name: storeName, pathFor } = useStorefront();
+  // Each collection is filtered by its exact catalogue category; never combine
+  // products from neighbouring collections in the Poshies storefront.
   const orderedCategoryTypes: readonly ProductCategory[] = categoryOrder;
   const isYotaabo = storeName === 'Yotaabo';
   const isPoshies = storeName === 'Poshies';
@@ -38,8 +40,8 @@ export default function Services() {
       topText: isYotaabo ? 'REFINED. GROUNDED. REMEMBERED.' : 'COMFORT THAT FEELS LIKE YOURS.',
       description:
         isYotaabo ? 'Crafted for presence. Distinctive scents for the modern man, refined in character, grounded in confidence, and made to be remembered.' : 'Everyday briefs, boxers and trunks with a comfortable fit and a little more confidence in every layer.',
-      bgColor: 'bg-white',
-      textColor: 'text-[#4d4d4d]',
+      bgColor: isPoshies ? 'bg-[#242424]' : 'bg-white',
+      textColor: isPoshies ? 'text-white' : 'text-[#4d4d4d]',
       textFill: 'fill-[#8aa89b]',
       accentColor: 'text-[#4d4d4d]',
       placeholderColor: 'bg-[#8aa89b]',
@@ -56,8 +58,8 @@ export default function Services() {
       topText: isYotaabo ? 'ELEGANCE IN EVERY NOTE' : 'MADE TO FEEL GOOD ON YOUR SKIN.',
       description:
         isYotaabo ? 'Fragrances crafted to complement elegance and individuality, whether soft and floral or bold and warm.' : 'Discover bras, panties, matching sets and lingerie chosen for the way they feel, fit and let you express yourself.',
-      bgColor: 'bg-white',
-      textColor: 'text-[#4d4d4d]',
+      bgColor: isPoshies ? 'bg-[#242424]' : 'bg-white',
+      textColor: isPoshies ? 'text-white' : 'text-[#4d4d4d]',
       textFill: 'fill-[#ff1493]',
       accentColor: 'text-[#4d4d4d]',
       placeholderColor: 'bg-[#ff1493]',
@@ -74,8 +76,8 @@ export default function Services() {
       topText: isYotaabo ? 'SCENTS FOR EVERY ROOM' : 'SOFT MOMENTS. YOUR OWN SPACE.',
       description:
         isYotaabo ? 'Extend your signature into every space. Ambient scents for the home and car, quietly shaping the atmosphere wherever you go.' : 'Slip into soft sleepwear, robes and relaxed sets made for slow mornings, quiet evenings and time that belongs to you.',
-      bgColor: 'bg-white',
-      textColor: 'text-[#4d4d4d]',
+      bgColor: isPoshies ? 'bg-[#242424]' : 'bg-white',
+      textColor: isPoshies ? 'text-white' : 'text-[#4d4d4d]',
       textFill: 'fill-[#c8ad8d]',
       accentColor: 'text-[#4d4d4d]',
       placeholderColor: 'bg-[#c8ad8d]',
@@ -91,8 +93,8 @@ export default function Services() {
       topText: isYotaabo ? 'THE STORY BEHIND THE SCENT' : 'INTIMACY, ON YOUR OWN TERMS.',
       description:
         isYotaabo ? 'Born from a simple, enduring belief: fragrance is not merely something you wear, but a reflection of who you are. We curate distinctive scents that speak quietly yet linger long, carefully designed to become an unforgettable part of how you are remembered.' : 'Poshies is a space for intimate essentials, everyday comfort and personal expression. Find pieces that feel right against your skin and let confidence begin with you.',
-      bgColor: 'bg-white',
-      textColor: 'text-[#4d4d4d]',
+      bgColor: isPoshies ? 'bg-[#242424]' : 'bg-white',
+      textColor: isPoshies ? 'text-white' : 'text-[#4d4d4d]',
       textFill: isYotaabo ? 'fill-[#8aa89b]' : 'fill-[#ff1493]',
       accentColor: 'text-[#4d4d4d]',
       hasImage: false,
@@ -111,7 +113,7 @@ export default function Services() {
   ];
 
   return (
-    <section id="services" className={`storefront-collections w-full bg-white ${isPoshies ? 'poshies-collections' : ''}`}>
+    <section id="services" className={`storefront-collections w-full ${isPoshies ? 'bg-[#242424] text-white poshies-collections' : 'bg-white'}`}>
       {orderedCategories.map((category) => (
         <div key={category.id} className="flex flex-col w-full">
           <div
