@@ -45,4 +45,5 @@ export default function Header({ showBack = false }: HeaderProps) {
       onMenuClick={() => setMenuOpen((open) => !open)}
       className={menuOpen ? 'menu-expanded storefront-search-header' : 'storefront-search-header'}
     />
+  );
 }
