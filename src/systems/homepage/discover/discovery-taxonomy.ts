@@ -3,7 +3,7 @@ import type { MoodboardItem } from './KineticMoodboard';
 const image = (id: string) => `https://images.unsplash.com/${id}?w=900&q=85`;
 
 export const DISCOVERY_MARKETS: MoodboardItem[] = [
-  { id: 'fashion', image: image('photo-1564518160120-94178fcdf5d4'), alt: 'Fashion collection', category: 'Fashion', title: 'Express your style, your way' },
+  { id: 'fashion', image: image('photo-1595175131427-97f688d9000a'), alt: 'Fashion collection', category: 'Fashion', title: 'Express your style, your way' },
   { id: 'spaces', image: image('photo-1576344671262-e7d3697ac226'), alt: 'Home and interior spaces', category: 'Home & Spaces', title: 'Make the spaces around you feel like yours' },
   { id: 'technology', image: image('photo-1550751827-4bd374c3f58b'), alt: 'Technology and electronics', category: 'Technology', title: 'Discover technology for life and work' },
   { id: 'culture', image: image('photo-1616235891569-a69fa8558037'), alt: 'African culture and heritage', category: 'African Culture & Heritage', title: 'Explore stories, identity and cultural expression' },
