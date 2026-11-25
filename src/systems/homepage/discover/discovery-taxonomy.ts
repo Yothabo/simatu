@@ -103,8 +103,8 @@ export const DISCOVERY_SUBCATEGORIES: Record<string, DiscoverySubcategory[]> = {
   pets: [
     tile('pet-food', 'Pet Food & Treats', 'https://images.pexels.com/photos/6568944/pexels-photo-6568944.jpeg?cs=srgb&dl=pexels-cottonbro-6568944.jpg&fm=jpg', 'Food, treats and pet nutrition', ['pet food','treat']),
     tile('pet-accessories', 'Pet Accessories', 'https://upload.wikimedia.org/wikipedia/commons/6/65/Africanis_dog_KwaZulu_Natal.jpg', 'Collars, leads and everyday pet essentials', ['pet','collar','lead']),
-    tile('pet-toys', 'Pet Toys', 'https://images.pexels.com/photos/18423201/pexels-photo-18423201.jpeg?cs=srgb&dl=pexels-agnes-tafadzwa-734725238-18423201.jpg&fm=jpg', 'Toys, play and enrichment', ['toy']),
-    tile('pet-care', 'Pet Grooming & Care', 'https://images.pexels.com/photos/12882851/pexels-photo-12882851.jpeg?cs=srgb&dl=pexels-aurglowphotography-12882851.jpg&fm=jpg', 'Grooming, hygiene and pet care', ['groom','care']),
+    tile('pet-toys', 'Pet Toys', 'https://images.pexels.com/photos/1739093/pexels-photo-1739093.jpeg?auto=compress&cs=tinysrgb&w=900', 'Dogs playing tug-of-war and enjoying their toys', ['toy']),
+    tile('pet-care', 'Pet Grooming & Care', 'https://images.pexels.com/photos/6131161/pexels-photo-6131161.jpeg?auto=compress&cs=tinysrgb&w=900', 'Dogs receiving a bath and professional grooming care', ['groom','care']),
     tile('pet-services', 'Pet Services', 'https://images.pexels.com/photos/5256178/pexels-photo-5256178.jpeg?cs=srgb&dl=pexels-samson-katt-5256178.jpg&fm=jpg', 'Walking, sitting, boarding and training', ['pet service','walking','training']),
   ],
   kids: [
