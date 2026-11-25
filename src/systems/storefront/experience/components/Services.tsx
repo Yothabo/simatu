@@ -164,7 +164,31 @@ export default function Services() {
                 {category.id === 'about' ? (
                   /* About: Bottom-Right, not rotated */
                   <div className="absolute bottom-20 inset-x-0 w-full min-w-0 sm:bottom-32">
-                    {storeName !== 'Poshies' && (
+                    {storeName === 'Poshies' ? (
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 100 100"
+                        preserveAspectRatio="none"
+                        className="block h-[clamp(80px,12vw,160px)] w-full max-w-none"
+                      >
+                        <text
+                          x="50"
+                          y="50%"
+                          dominantBaseline="middle"
+                          textAnchor="middle"
+                          textLength="100"
+                          lengthAdjust="spacingAndGlyphs"
+                          style={{
+                            fontFamily: '"Anton", sans-serif',
+                            fontWeight: 400,
+                            fill: '#ff1493',
+                          }}
+                          fontSize="100"
+                        >
+                          poshies
+                        </text>
+                      </svg>
+                    ) : (
                       <span className={`whitespace-nowrap font-accent text-[clamp(80px,12vw,160px)] font-normal leading-[0.7] tracking-normal ${category.accentColor}`}>
                         {storeName.toLowerCase()}
                       </span>
