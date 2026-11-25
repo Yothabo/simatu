@@ -42,7 +42,7 @@ export default function Services() {
       description:
         isYotaabo ? 'Crafted for presence. Distinctive scents for the modern man, refined in character, grounded in confidence, and made to be remembered.' : 'Everyday briefs, boxers and trunks with a comfortable fit and a little more confidence in every layer.',
       bgColor: isPoshies ? 'bg-[#292426]' : 'bg-white',
-      textColor: isPoshies ? 'text-[#292426]' : 'text-white',
+      textColor: isPoshies ? 'text-white' : 'text-white',
       textFill: isPoshies ? 'fill-[#FF1493]' : 'fill-[#FF1493]',
       accentColor: 'text-white',
       placeholderColor: 'bg-[#FF1493]',
@@ -61,7 +61,7 @@ export default function Services() {
       description:
         isYotaabo ? 'Fragrances crafted to complement elegance and individuality, whether soft and floral or bold and warm.' : 'Discover bras, panties, matching sets and lingerie chosen for the way they feel, fit and let you express yourself.',
       bgColor: isPoshies ? 'bg-[#292426]' : 'bg-white',
-      textColor: isPoshies ? 'text-[#292426]' : 'text-white',
+      textColor: isPoshies ? 'text-white' : 'text-white',
       textFill: isPoshies ? 'fill-[#FF1493]' : 'fill-[#FF1493]',
       accentColor: 'text-white',
       placeholderColor: 'bg-[#FF1493]',
@@ -80,7 +80,7 @@ export default function Services() {
       description:
         isYotaabo ? 'Extend your signature into every space. Ambient scents for the home and car, quietly shaping the atmosphere wherever you go.' : 'Slip into soft sleepwear, robes and relaxed sets made for slow mornings, quiet evenings and time that belongs to you.',
       bgColor: isPoshies ? 'bg-[#292426]' : 'bg-white',
-      textColor: isPoshies ? 'text-[#292426]' : 'text-white',
+      textColor: isPoshies ? 'text-white' : 'text-white',
       textFill: isPoshies ? 'fill-[#FF1493]' : 'fill-[#FF1493]',
       accentColor: 'text-white',
       placeholderColor: 'bg-[#FF1493]',
@@ -98,7 +98,7 @@ export default function Services() {
       description:
         isYotaabo ? 'Born from a simple, enduring belief: fragrance is not merely something you wear, but a reflection of who you are. We curate distinctive scents that speak quietly yet linger long, carefully designed to become an unforgettable part of how you are remembered.' : 'Poshies is a space for intimate essentials, everyday comfort and personal expression. Find pieces that feel right against your skin and let confidence begin with you.',
       bgColor: isPoshies ? 'bg-[#292426]' : 'bg-white',
-      textColor: isPoshies ? 'text-[#292426]' : 'text-white',
+      textColor: isPoshies ? 'text-white' : 'text-white',
       textFill: isYotaabo ? 'fill-[#FF1493]' : 'fill-[#FF1493]',
       accentColor: 'text-white',
       hasImage: false,
