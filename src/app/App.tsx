@@ -132,6 +132,7 @@ function App() {
             <Route path="/poshies/privacy" element={<StorefrontDocumentPage />} />
             <Route path="/poshies/terms" element={<StorefrontDocumentPage />} />
             <Route path="/poshies/delivery" element={<StorefrontDocumentPage />} />
+            <Route path="/poshies/refund" element={<StorefrontDocumentPage />} />
             <Route path="/poshies/*" element={<NotFound />} />
           </Route>
 
