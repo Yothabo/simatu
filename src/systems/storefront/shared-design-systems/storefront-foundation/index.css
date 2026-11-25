@@ -1,9 +1,76 @@
-/* Shared storefront foundations. Brand identity is layered by each store. */
+/* Shared storefront theme foundation.
+   Brand-specific stores override tokens without replacing shared commerce UI. */
 :root {
   --storefront-accent: #8aa89b;
+  --storefront-accent-contrast: #ffffff;
   --storefront-surface: #ffffff;
-  --storefront-text: #4d4d4d;
-  --storefront-border: rgba(0, 0, 0, 0.12);
+  --storefront-surface-soft: #f7f7f5;
+  --storefront-page: #ffffff;
+  --storefront-text: #252525;
+  --storefront-muted: #777777;
+  --storefront-border: rgba(37, 37, 37, 0.12);
+  --storefront-radius-sm: 2px;
+  --storefront-radius-md: 6px;
+  --storefront-radius-lg: 12px;
+  --storefront-shadow-soft: 0 12px 36px rgba(0, 0, 0, 0.06);
+  --storefront-content-width: 1180px;
   --storefront-font-body: var(--font-body, 'Manrope', sans-serif);
   --storefront-font-heading: var(--font-heading, 'Cormorant Garamond', serif);
+}
+
+.storefront-page {
+  min-height: 100vh;
+  background: var(--storefront-page);
+  color: var(--storefront-text);
+  font-family: var(--storefront-font-body);
+}
+.storefront-container {
+  width: min(var(--storefront-content-width), calc(100% - 48px));
+  margin-inline: auto;
+}
+.storefront-eyebrow {
+  color: var(--storefront-muted);
+  font-family: var(--storefront-font-body);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+.storefront-section-title {
+  color: var(--storefront-text);
+  font-family: var(--storefront-font-heading);
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 500;
+  line-height: 1.05;
+}
+.storefront-button {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  border: 1px solid var(--storefront-text);
+  border-radius: var(--storefront-radius-sm);
+  background: var(--storefront-text);
+  color: #ffffff;
+  padding: 0.75rem 1.15rem;
+  font-family: var(--storefront-font-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+.storefront-button:hover {
+  border-color: var(--storefront-accent);
+  background: var(--storefront-accent);
+  color: var(--storefront-accent-contrast);
+}
+.storefront-product-card { min-width: 0; color: var(--storefront-text); }
+.storefront-product-card__media { overflow: hidden; background: var(--storefront-surface-soft); }
+
+@media (max-width: 639px) {
+  .storefront-container { width: min(100% - 32px, var(--storefront-content-width)); }
 }
