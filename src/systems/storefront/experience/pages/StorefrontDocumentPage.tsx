@@ -27,7 +27,8 @@ type DocumentKey = keyof typeof documents;
 export default function StorefrontDocumentPage() {
   const { pathname } = useLocation();
   const { name: storeName, pathFor } = useStorefront();
-  const slug = pathname.split('/').filter(Boolean).at(-1) as DocumentKey;
+  const segments = pathname.split('/').filter(Boolean);
+  const slug = segments[segments.length - 1] as DocumentKey;
   const document = documents[slug];
 
   if (storeName !== 'Poshies' || !document) return <Navigate to={pathFor()} replace />;
