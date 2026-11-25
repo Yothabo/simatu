@@ -14,7 +14,7 @@
   --storefront-radius-sm: 2px;
   --storefront-radius-md: 5px;
   --storefront-radius-lg: 10px;
-  --storefront-shadow-soft: 0 16px 44px rgba(50, 25, 35, 0.08);
+  --storefront-shadow-soft: 0 16px 44px rgba(41, 36, 38, 0.08);
 }
 :root[data-storefront='poshies'] .storefront-header {
   border-bottom: 1px solid var(--storefront-border);
@@ -131,7 +131,7 @@
   letter-spacing: -0.045em;
   line-height: 0.82;
   text-align: center;
-  text-shadow: 0 5px 24px rgba(0, 0, 0, 0.24);
+  text-shadow: 0 5px 24px rgba(41, 36, 38, 0.24);
   mix-blend-mode: screen;
   transform: translateY(-50%);
   pointer-events: none;
@@ -244,7 +244,7 @@
   text-transform: uppercase;
 }
 :root[data-storefront='poshies'] .footer-link {
-  color: rgba(245,241,242,.68);
+  color: rgba(255,255,255,.68);
   text-decoration: none;
   transition: color .2s ease;
 }
@@ -256,7 +256,7 @@
   align-items: center;
   justify-content: center;
   border: 1px solid rgba(255,255,255,.18);
-  color: rgba(245,241,242,.78);
+  color: rgba(255,255,255,.78);
   transition: color .2s ease, border-color .2s ease, background .2s ease;
 }
 :root[data-storefront='poshies'] .footer-social-link:hover {
@@ -308,7 +308,7 @@
 }
 :root[data-storefront='poshies'] .poshies-collection-carousel .yotaabo-product-swiper .swiper-button-next,
 :root[data-storefront='poshies'] .poshies-collection-carousel .yotaabo-product-swiper .swiper-button-prev {
-  background: rgba(24, 24, 24, 0.28);
+  background: rgba(41, 36, 38, 0.28);
   border-color: rgba(255, 255, 255, 0.28);
   color: #FFFFFFFFF;
 }
@@ -505,13 +505,13 @@
   --storefront-accent-contrast: #FFFFFFFFF;
   --storefront-page: #FFFFFFFFF;
   --storefront-surface: #FFFFFFFFF;
-  --storefront-surface-soft: #FCEFF4;
+  --storefront-surface-soft: #292426;
   --storefront-text: #292426;
   --storefront-muted: #FFFFFF;
   --storefront-border: rgba(41, 36, 38, 0.12);
   --poshies-rose: #FF1493;
-  --poshies-blush: #EBC3D4;
-  --poshies-berry: #8B536B;
+  --poshies-blush: #292426;
+  --poshies-berry: #FF1493;
   --poshies-charcoal: #292426;
   --poshies-warm-grey: #FFFFFF;
 }
@@ -570,8 +570,8 @@
 :root[data-storefront='poshies'] .storefront-header__cta:hover,
 :root[data-storefront='poshies'] .storefront-page button[type='submit']:hover,
 :root[data-storefront='poshies'] .storefront-page .button-primary:hover {
-  background: #8B536B !important;
-  border-color: #8B536B !important;
+  background: #FF1493 !important;
+  border-color: #FF1493 !important;
   color: #FFFFFFFFF !important;
 }
 :root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-button-next,
