@@ -185,7 +185,7 @@ export default function CartPage() {
                 </section>
               ))}
 
-              <div className="sticky bottom-0 mt-6 flex flex-col items-end gap-4 border-t border-black/10 bg-white pt-4 pb-6">
+              <div className="sticky bottom-0 mt-6 flex flex-col items-end gap-4 border-t border-black/10 bg-[#292426] pt-4 pb-6">
                 <div className="font-heading text-xl text-black">
                   Selected checkout subtotal: <span className="font-medium">R {selectedCartTotal.toFixed(2)}</span>
                 </div>
