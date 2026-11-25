@@ -32,6 +32,13 @@ export const STOREFRONTS = {
       name: 'storefront-foundation',
       overrides: {
         '--storefront-accent': '#ff1493',
+        '--storefront-accent-contrast': '#ffffff',
+        '--storefront-page': '#292426',
+        '--storefront-surface': '#292426',
+        '--storefront-surface-soft': '#292426',
+        '--storefront-text': '#ffffff',
+        '--storefront-muted': '#ffffff',
+        '--storefront-border': 'rgba(255,255,255,.18)',
       },
     },
   },
