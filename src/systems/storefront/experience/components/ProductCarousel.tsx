@@ -132,12 +132,12 @@ export default function ProductCarousel({
           spaceBetween={isPoshiesMockCarousel ? 12 : 16}
           breakpoints={{
             640: {
-              slidesPerView: 3.15,
-              spaceBetween: 20,
+              slidesPerView: isPoshiesMockCarousel ? 2.2 : 3.15,
+              spaceBetween: isPoshiesMockCarousel ? 16 : 20,
             },
             1024: {
-              slidesPerView: 4.15,
-              spaceBetween: 24,
+              slidesPerView: isPoshiesMockCarousel ? 3.2 : 4.15,
+              spaceBetween: isPoshiesMockCarousel ? 20 : 24,
             },
           }}
           navigation={!isLoading && (visibleProducts.length > 2 || visibleProducts.length === 0)}
@@ -150,6 +150,8 @@ export default function ProductCarousel({
             enabled: true,
             onlyInViewport: true,
           }}
+          speed={480}
+          freeMode={isPoshiesMockCarousel ? { enabled: true, sticky: true, momentum: true } : false}
           grabCursor
           watchOverflow
           loop={false}
