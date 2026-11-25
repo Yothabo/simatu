@@ -152,3 +152,15 @@
   .storefront-controls__clear,
   .storefront-controls__icon { transition-duration: .01ms; }
 }
+
+
+/* Poshies floating navigation: charcoal, hot pink and white only. */
+.storefront-controls--poshies { color: #FFFFFF; }
+.storefront-controls--poshies .storefront-controls__search input,
+.storefront-controls--poshies .storefront-controls__menu { background: #292426; border-color: rgba(255,255,255,.2); color: #FFFFFF; }
+.storefront-controls--poshies .storefront-controls__search input::placeholder { color: rgba(255,255,255,.65); }
+.storefront-controls--poshies .storefront-controls__icon { background: #292426; border-color: rgba(255,255,255,.25); color: #FFFFFF; }
+.storefront-controls--poshies .storefront-controls__icon:hover,
+.storefront-controls--poshies .storefront-controls__menu button:hover,
+.storefront-controls--poshies .storefront-controls__menu button:focus-visible { background: #FF1493; color: #FFFFFF; }
+.storefront-controls--poshies .storefront-controls__cart-count { background: #FF1493; color: #FFFFFF; }
