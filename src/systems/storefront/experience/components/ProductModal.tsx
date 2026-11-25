@@ -148,7 +148,7 @@ export default function ProductModal({
     >
       {/* Backdrop */}
       <div
-        className={`absolute inset-0 bg-white/40 backdrop-blur-sm transition-opacity duration-400 ease-out ${
+        className={`absolute inset-0 bg-[#292426]/90 backdrop-blur-sm transition-opacity duration-400 ease-out ${
           isOpen ? 'opacity-100' : 'opacity-0'
         }`}
       />
@@ -168,7 +168,7 @@ export default function ProductModal({
           type="button"
           onClick={onClose}
           aria-label="Close product details"
-          className="absolute z-20 flex h-9 w-9 items-center justify-center rounded-full border-0 bg-white/70 p-0 text-[#4d4d4d]/70 shadow-[0_2px_12px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.8)] backdrop-blur-md outline-none transition-all duration-200 hover:bg-white/90 hover:text-[#4d4d4d] active:scale-95"
+          className="absolute z-20 flex h-9 w-9 items-center justify-center rounded-full border-0 bg-[#292426] p-0 text-white/70 shadow-[0_2px_12px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.8)] backdrop-blur-md outline-none transition-all duration-200 hover:bg-[#FF1493] hover:text-white active:scale-95"
           style={{
             WebkitAppearance: 'none',
             appearance: 'none',
@@ -208,7 +208,7 @@ export default function ProductModal({
 
         {/* 3. Description */}
         <div className="px-5 pt-3">
-          <p className={`text-sm leading-relaxed text-[#4d4d4d]/70 ${mode === "preview" ? "" : "font-heading"}`} style={mode === "preview" ? { fontFamily: "Montserrat, sans-serif" } : undefined}>
+          <p className={`text-sm leading-relaxed text-white/70 ${mode === "preview" ? "" : "font-heading"}`} style={mode === "preview" ? { fontFamily: "Montserrat, sans-serif" } : undefined}>
             {product.description || (isYotaabo
               ? `Experience the essence of ${product.name}. A carefully crafted fragrance designed to leave a lasting impression, blending premium notes for a sophisticated and memorable profile.`
               : 'A thoughtfully selected piece chosen for comfort, quality, and everyday confidence.')}
@@ -217,7 +217,7 @@ export default function ProductModal({
 
         {/* 4. Quantity & Actions */}
         <div className={`grid grid-cols-[auto_minmax(0,1fr)] items-stretch gap-3 px-5 py-5 ${mode === 'preview' ? 'opacity-45' : ''}`}>
-          <div className="flex h-12 items-stretch border border-[#4d4d4d]/20">
+          <div className="flex h-12 items-stretch border border-white/20">
             <RippleButton
               onClick={() => handleQuantityChange(quantity - 1)}
               className="flex h-12 w-10 items-center justify-center bg-[#292426] text-black/60 transition-colors hover:bg-[#FF1493] hover:text-black active:bg-[#FF1493]"
@@ -239,7 +239,7 @@ export default function ProductModal({
 
           <button
             onClick={handleAddToCart}
-            className="group flex h-12 flex-1 items-center justify-between border border-solid border-[#4d4d4d] bg-[#4d4d4d] px-5 text-xs font-semibold tracking-wide text-white transition-colors duration-300 hover:bg-transparent hover:text-[#4d4d4d]"
+            className="group flex h-12 flex-1 items-center justify-between border border-solid border-white bg-[#FF1493] px-5 text-xs font-semibold tracking-wide text-white transition-colors duration-300 hover:bg-[#292426] hover:text-[#FF1493]"
           >
             <span>
               {mode === 'cart'
