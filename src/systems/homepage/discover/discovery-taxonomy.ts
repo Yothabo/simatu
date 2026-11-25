@@ -1,6 +1,6 @@
 import type { MoodboardItem } from './KineticMoodboard';
 
-const image = (id: string) => `https://images.unsplash.com/${id}?w=900&q=85`;
+const image = (id: string) => id.startsWith('http') ? id : `https://images.unsplash.com/${id}?w=900&q=85`;
 
 export const DISCOVERY_MARKETS: MoodboardItem[] = [
   { id: 'fashion', image: image('photo-1595175131427-97f688d9000a'), alt: 'Fashion collection', category: 'Fashion', title: 'Express your style, your way' },
@@ -101,11 +101,11 @@ export const DISCOVERY_SUBCATEGORIES: Record<string, DiscoverySubcategory[]> = {
     tile('auto-electrical', 'Auto Electrical', 'photo-1597766325363-f5576d851d6a', 'Vehicle electrical systems and installations', ['electrical']),
   ],
   pets: [
-    tile('pet-food', 'Pet Food & Treats', 'photo-1714068691210-073dc52c6c1d', 'Food, treats and pet nutrition', ['pet food','treat']),
-    tile('pet-accessories', 'Pet Accessories', 'photo-1705351738451-5c8998e63941', 'Collars, leads and everyday pet essentials', ['pet','collar','lead']),
-    tile('pet-toys', 'Pet Toys', 'photo-1672393808326-fcdf7d82de1c', 'Toys, play and enrichment', ['toy']),
-    tile('pet-care', 'Pet Grooming & Care', 'photo-1625279138876-8910c2af9a30', 'Grooming, hygiene and pet care', ['groom','care']),
-    tile('pet-services', 'Pet Services', 'photo-1548199973-03cce0bbc87b', 'Walking, sitting, boarding and training', ['pet service','walking','training']),
+    tile('pet-food', 'Pet Food & Treats', 'https://images.pexels.com/photos/6568944/pexels-photo-6568944.jpeg?cs=srgb&dl=pexels-cottonbro-6568944.jpg&fm=jpg', 'Food, treats and pet nutrition', ['pet food','treat']),
+    tile('pet-accessories', 'Pet Accessories', 'https://upload.wikimedia.org/wikipedia/commons/6/65/Africanis_dog_KwaZulu_Natal.jpg', 'Collars, leads and everyday pet essentials', ['pet','collar','lead']),
+    tile('pet-toys', 'Pet Toys', 'https://images.pexels.com/photos/18423201/pexels-photo-18423201.jpeg?cs=srgb&dl=pexels-agnes-tafadzwa-734725238-18423201.jpg&fm=jpg', 'Toys, play and enrichment', ['toy']),
+    tile('pet-care', 'Pet Grooming & Care', 'https://images.pexels.com/photos/12882851/pexels-photo-12882851.jpeg?cs=srgb&dl=pexels-aurglowphotography-12882851.jpg&fm=jpg', 'Grooming, hygiene and pet care', ['groom','care']),
+    tile('pet-services', 'Pet Services', 'https://images.pexels.com/photos/5256178/pexels-photo-5256178.jpeg?cs=srgb&dl=pexels-samson-katt-5256178.jpg&fm=jpg', 'Walking, sitting, boarding and training', ['pet service','walking','training']),
   ],
   kids: [
     tile('baby', 'Baby & Maternity', 'photo-1601512310580-da458161fcab', 'Baby essentials, maternity and feeding', ['baby','maternity']),
