@@ -272,7 +272,7 @@ export default function CheckoutModal({
             />
           ) : (
             <>
-              <h2 className="text-2xl font-bold text-[#4d4d4d]">Checkout</h2>
+              <h2 className="text-2xl font-bold text-white">Checkout</h2>
               <CheckoutCartSummary
                 cartItems={cartItems}
                 cartTotal={cartTotal}
@@ -289,14 +289,14 @@ export default function CheckoutModal({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="flex h-12 flex-1 items-center justify-center bg-[#f5f5f5] font-heading text-base text-[#4d4d4d] transition-colors hover:bg-[#e5e5e5]"
+                  className="flex h-12 flex-1 items-center justify-center bg-[#292426] font-heading text-base text-white transition-colors hover:bg-[#FF1493]"
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
                   onClick={handleContinue}
-                  className="flex h-12 flex-1 items-center justify-center border border-[#4d4d4d] bg-[#4d4d4d] font-heading text-base text-white transition-colors hover:bg-[#3b3b3b]"
+                  className="flex h-12 flex-1 items-center justify-center border border-[#FF1493] bg-[#FF1493] font-heading text-base text-white transition-colors hover:bg-[#292426]"
                 >
                   Continue
                 </button>
