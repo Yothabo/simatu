@@ -79,42 +79,27 @@ export default function ProductCarousel({
         <div className="flex items-baseline justify-between">
           <h3
             className={`font-heading text-3xl italic ${title === "Trending" ? "text-[#3a3a3a]" : accentColor}`}
-            style={{ lineHeight: 0.82, margin: 0 }}
+            style={{ lineHeight: 0.9, margin: 0 }}
           >
-            {sectionHeading ? sectionHeading : title}
+            {sectionHeading ? (
+              <>
+                {sectionHeading}{' '}
+                <span className="inline-block">Collection</span>
+              </>
+            ) : title}
           </h3>
         </div>
-        {sectionHeading ? (
-          <div className="flex items-baseline justify-between">
-            <h4
-              className={`font-heading text-3xl italic ${accentColor}`}
-              style={{ lineHeight: 0.82, marginTop: '-0.18em', marginBottom: 0 }}
+        {showHeaderViewMore && (
+          <div className="flex justify-end">
+            <Link
+              to={viewAllHref}
+              className="shrink-0 cursor-pointer font-heading text-sm italic tracking-wide text-[#3a3a3a] opacity-70 transition-opacity hover:opacity-100"
             >
-              Collection
-            </h4>
-            {showHeaderViewMore && (
-              <Link
-                to={viewAllHref}
-                className="shrink-0 cursor-pointer font-heading text-sm italic tracking-wide text-[#3a3a3a] opacity-70 transition-opacity hover:opacity-100"
-              >
-                View more
-              </Link>
-            )}
+              View more
+            </Link>
           </div>
-        ) : (
-          showHeaderViewMore && (
-            <div className="flex justify-end">
-              <Link
-                to={viewAllHref}
-                className="shrink-0 cursor-pointer font-heading text-sm italic tracking-wide text-[#3a3a3a] opacity-70 transition-opacity hover:opacity-100"
-              >
-                View more
-              </Link>
-            </div>
-          )
         )}
       </div>
-
       {description && (
         <p className="mt-2 px-6 font-heading text-base leading-relaxed text-black/60 sm:px-10 lg:px-12">
           {description}
