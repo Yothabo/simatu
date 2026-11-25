@@ -13,7 +13,7 @@ export type MockStorefrontProduct = {
 const mockPoshiesProducts: MockStorefrontProduct[] = [
   {
     id: 'mock-poshies-his-01',
-    name: 'Everyday Boxer Brief',
+    name: 'Product',
     price: 'R 0.00',
     category: 'His',
     subcategory: 'Underwear',
@@ -22,7 +22,7 @@ const mockPoshiesProducts: MockStorefrontProduct[] = [
   },
   {
     id: 'mock-poshies-his-02',
-    name: 'Classic Cotton Trunk',
+    name: 'Product',
     price: 'R 0.00',
     category: 'His',
     subcategory: 'Underwear',
@@ -31,7 +31,7 @@ const mockPoshiesProducts: MockStorefrontProduct[] = [
   },
   {
     id: 'mock-poshies-his-03',
-    name: 'Soft Touch Brief',
+    name: 'Product',
     price: 'R 0.00',
     category: 'His',
     subcategory: 'Underwear',
@@ -40,7 +40,7 @@ const mockPoshiesProducts: MockStorefrontProduct[] = [
   },
   {
     id: 'mock-poshies-hers-01',
-    name: 'Satin Ease Set',
+    name: 'Product',
     price: 'R 0.00',
     category: 'Hers',
     subcategory: 'Intimates',
@@ -49,7 +49,7 @@ const mockPoshiesProducts: MockStorefrontProduct[] = [
   },
   {
     id: 'mock-poshies-hers-02',
-    name: 'Everyday Comfort Bra',
+    name: 'Product',
     price: 'R 0.00',
     category: 'Hers',
     subcategory: 'Intimates',
@@ -58,7 +58,7 @@ const mockPoshiesProducts: MockStorefrontProduct[] = [
   },
   {
     id: 'mock-poshies-hers-03',
-    name: 'Lace Detail Set',
+    name: 'Product',
     price: 'R 0.00',
     category: 'Hers',
     subcategory: 'Intimates',
@@ -67,7 +67,7 @@ const mockPoshiesProducts: MockStorefrontProduct[] = [
   },
   {
     id: 'mock-poshies-lounge-01',
-    name: 'Slow Morning Lounge Set',
+    name: 'Product',
     price: 'R 0.00',
     category: 'Lounge',
     subcategory: 'Loungewear',
@@ -76,7 +76,7 @@ const mockPoshiesProducts: MockStorefrontProduct[] = [
   },
   {
     id: 'mock-poshies-lounge-02',
-    name: 'Soft Knit Sleep Set',
+    name: 'Product',
     price: 'R 0.00',
     category: 'Lounge',
     subcategory: 'Sleepwear',
@@ -85,7 +85,7 @@ const mockPoshiesProducts: MockStorefrontProduct[] = [
   },
   {
     id: 'mock-poshies-lounge-03',
-    name: 'Weekend Wrap Robe',
+    name: 'Product',
     price: 'R 0.00',
     category: 'Lounge',
     subcategory: 'Loungewear',
