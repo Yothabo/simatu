@@ -232,3 +232,39 @@
   :root[data-storefront='poshies'] .storefront-hero { padding-top: 2.5rem; }
   :root[data-storefront='poshies'] .poshies-campaign__wordmark { font-size: clamp(68px, 19vw, 118px); }
 }
+
+
+/* Route-level coverage for catalogue, document, cart and checkout pages.
+   Neutral utility backgrounds are flattened to the same charcoal canvas. */
+:root[data-storefront='poshies'] main,
+:root[data-storefront='poshies'] main section,
+:root[data-storefront='poshies'] main article,
+:root[data-storefront='poshies'] [role='dialog'] {
+  background-color: var(--poshies-color-canvas);
+  color: var(--poshies-color-text);
+}
+:root[data-storefront='poshies'] main [class*='bg-white'],
+:root[data-storefront='poshies'] main [class*='bg-stone'],
+:root[data-storefront='poshies'] main [class*='bg-gray'],
+:root[data-storefront='poshies'] main [class*='bg-neutral'],
+:root[data-storefront='poshies'] main [class*='bg-orange'],
+:root[data-storefront='poshies'] main [class*='bg-amber'],
+:root[data-storefront='poshies'] main [class*='bg-rose'],
+:root[data-storefront='poshies'] [role='dialog'] [class*='bg-white'],
+:root[data-storefront='poshies'] [role='dialog'] [class*='bg-stone'],
+:root[data-storefront='poshies'] [role='dialog'] [class*='bg-gray'],
+:root[data-storefront='poshies'] [role='dialog'] [class*='bg-neutral'] {
+  background: var(--poshies-color-surface) !important;
+  background-image: none !important;
+}
+:root[data-storefront='poshies'] input,
+:root[data-storefront='poshies'] textarea,
+:root[data-storefront='poshies'] select {
+  background-color: var(--poshies-color-surface) !important;
+  border-color: var(--poshies-color-border) !important;
+  color: var(--poshies-color-text) !important;
+}
+:root[data-storefront='poshies'] input::placeholder,
+:root[data-storefront='poshies'] textarea::placeholder {
+  color: var(--poshies-color-text-muted) !important;
+}
