@@ -672,3 +672,45 @@
 :root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-slide {
   background: transparent !important;
 }
+ 
+/* Poshies carousel: restrict carousel surfaces to white, charcoal and hot pink. */
+:root[data-storefront='poshies'] .poshies-collection-section,
+:root[data-storefront='poshies'] .poshies-collection-panel,
+:root[data-storefront='poshies'] .poshies-collection-carousel,
+:root[data-storefront='poshies'] .poshies-collection-section--his,
+:root[data-storefront='poshies'] .poshies-collection-section--hers,
+:root[data-storefront='poshies'] .poshies-collection-section--spaces,
+:root[data-storefront='poshies'] .poshies-collection-section--about {
+  background: #FFFFFF !important;
+  background-image: none !important;
+  color: #292426 !important;
+}
+:root[data-storefront='poshies'] .poshies-product-swiper,
+:root[data-storefront='poshies'] .poshies-product-swiper .swiper-wrapper,
+:root[data-storefront='poshies'] .poshies-product-swiper .swiper-slide {
+  background: transparent !important;
+}
+:root[data-storefront='poshies'] .poshies-product-swiper .swiper-slide > button > div:first-child {
+  background: #FF1493 !important;
+  background-image: none !important;
+}
+:root[data-storefront='poshies'] .poshies-product-swiper .swiper-slide > button > div:last-child {
+  background: #FFFFFF !important;
+  color: #292426 !important;
+}
+:root[data-storefront='poshies'] .poshies-product-swiper .swiper-slide h4 {
+  color: #292426 !important;
+}
+:root[data-storefront='poshies'] .poshies-product-swiper .swiper-slide p {
+  color: #FF1493 !important;
+}
+:root[data-storefront='poshies'] .poshies-product-swiper .swiper-button-next,
+:root[data-storefront='poshies'] .poshies-product-swiper .swiper-button-prev {
+  background: #FFFFFF !important;
+  border-color: #292426 !important;
+  color: #292426 !important;
+  box-shadow: none !important;
+}
+:root[data-storefront='poshies'] .poshies-product-swiper .swiper-pagination-bullet-active {
+  background: #FF1493 !important;
+}
