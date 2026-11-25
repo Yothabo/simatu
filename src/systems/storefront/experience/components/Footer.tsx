@@ -12,11 +12,6 @@ export default function Footer() {
         <div className="grid grid-cols-2 gap-x-8 gap-y-12 border-b border-current/15 pb-12 md:grid-cols-4 lg:gap-12">
           <div className="col-span-2 md:col-span-1">
             <p className="font-heading text-3xl tracking-tight">{storeName}</p>
-            <p className="mt-4 max-w-xs text-sm leading-7 opacity-70">
-              {isPoshies
-                ? 'Intimate essentials, everyday comfort and personal expression. Made for the way you feel.'
-                : 'Discover considered products and experiences, curated with intention.'}
-            </p>
             <div className="mt-6 flex items-center gap-3">
               <a href="#" aria-label="Instagram" className="footer-social-link"><FaInstagram size={19} aria-hidden="true" /></a>
               <a href="#" aria-label="TikTok" className="footer-social-link"><FaTiktok size={19} aria-hidden="true" /></a>
