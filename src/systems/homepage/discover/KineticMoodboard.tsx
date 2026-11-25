@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MoodboardSearchBar from './MoodboardSearchBar';
+import SharedImage from '../../../components/SharedImage';
 import MoodboardPredictiveSearch from './MoodboardPredictiveSearch';
 import { DISCOVERY_MARKETS, DISCOVERY_SUBCATEGORIES } from './discovery-taxonomy';
 
@@ -421,7 +422,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
               style={{ '--discover-row': Math.floor(index / columns) } as React.CSSProperties}
               draggable={false}
             >
-              <img src={item.image} alt={item.alt} loading={index < 4 ? 'eager' : 'lazy'} decoding="async" draggable={false} style={{ objectPosition: item.objectPosition || 'center', transitionDelay: colorReveal ? `${Math.floor(index / columns) * 0.05}s` : '0s' }} />
+              <SharedImage src={item.image} alt={item.alt} loading={index < 4 ? 'eager' : 'lazy'} decoding="async" draggable={false} objectPosition={item.objectPosition || 'center'} style={{ transitionDelay: colorReveal ? `${Math.floor(index / columns) * 0.05}s` : '0s' }} />
               {showLabels && <span className="kinetic-moodboard__label" style={{ transitionDelay: colorReveal ? `${Math.floor(index / columns) * 0.025}s` : "0s" }}><span className="kinetic-moodboard__category">{item.category}</span></span>}
             </button>
           ))}
