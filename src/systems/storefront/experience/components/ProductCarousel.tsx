@@ -77,15 +77,9 @@ export default function ProductCarousel({
     >
       <div className="px-6 sm:px-10 lg:px-12">
         <div className="flex items-baseline justify-between">
-          {sectionHeading ? (
-            <h3 className={`font-heading text-2xl italic ${accentColor}`}>
-              {sectionHeading}
-            </h3>
-          ) : (
-            <h3 className={`font-heading text-3xl italic ${title === "Trending" ? "text-[#3a3a3a]" : accentColor}`}>
-              {title}
-            </h3>
-          )}
+          <h3 className={`font-heading text-3xl italic ${title === "Trending" ? "text-[#3a3a3a]" : accentColor}`}>
+            {sectionHeading ? sectionHeading : title}
+          </h3>
 
           {showHeaderViewMore && (
             <Link
@@ -97,8 +91,8 @@ export default function ProductCarousel({
           )}
         </div>
         {sectionHeading && (
-          <h4 className={`mt-1 font-heading text-3xl italic ${accentColor}`}>
-            {title}
+          <h4 className={`-mt-1 font-heading text-3xl italic leading-none ${accentColor}`}>
+            Collection
           </h4>
         )}
       </div>
