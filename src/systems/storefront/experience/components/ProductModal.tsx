@@ -226,7 +226,7 @@ export default function ProductModal({
             >
               <FiMinus size={14} />
             </RippleButton>
-            <span className="w-8 text-center font-heading text-lg text-black">{quantity}</span>
+            <span className="flex h-12 w-8 items-center justify-center text-center font-heading text-lg text-black">{quantity}</span>
             <RippleButton
               onClick={() => handleQuantityChange(quantity + 1)}
               className="flex h-12 w-10 items-center justify-center bg-[#f1f1ee] text-black/60 transition-colors hover:bg-[#e5e5e1] hover:text-black active:bg-[#dcdcd7]"
