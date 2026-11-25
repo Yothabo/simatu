@@ -77,7 +77,10 @@ export default function ProductCarousel({
     >
       <div className="px-6 sm:px-10 lg:px-12">
         <div className="flex items-baseline justify-between">
-          <h3 className={`font-heading text-3xl italic ${title === "Trending" ? "text-[#3a3a3a]" : accentColor}`}>
+          <h3
+            className={`font-heading text-3xl italic ${title === "Trending" ? "text-[#3a3a3a]" : accentColor}`}
+            style={{ lineHeight: 0.82, margin: 0 }}
+          >
             {sectionHeading ? sectionHeading : title}
           </h3>
 
@@ -91,7 +94,10 @@ export default function ProductCarousel({
           )}
         </div>
         {sectionHeading && (
-          <h4 className={`-mt-1 font-heading text-3xl italic leading-none ${accentColor}`}>
+          <h4
+            className={`font-heading text-3xl italic ${accentColor}`}
+            style={{ lineHeight: 0.82, marginTop: '-0.18em', marginBottom: 0 }}
+          >
             Collection
           </h4>
         )}
