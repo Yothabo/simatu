@@ -117,7 +117,7 @@ export default function Services() {
       {orderedCategories.map((category) => (
         <div key={category.id} className="flex flex-col w-full">
           <div
-            className={`relative grid min-h-[100svh] w-full grid-rows-[auto_1fr_auto] overflow-hidden ${category.bgColor} ${category.textColor} px-6 py-12 sm:px-12 lg:px-20 lg:py-16`}
+            className={`relative grid min-h-[100svh] w-full grid-rows-[auto_1fr_auto] overflow-hidden ${category.bgColor} ${category.textColor} ${isPoshies ? `poshies-collection-panel poshies-collection-panel--${category.id}` : ""} px-6 py-12 sm:px-12 lg:px-20 lg:py-16`}
           >
             {/* Top Center Text */}
             {category.topText && (
@@ -234,7 +234,7 @@ export default function Services() {
             category.collectionTitle &&
             category.placeholderColor &&
             category.isDark !== undefined && (
-            <div className={`w-full ${category.bgColor}`}>
+            <div className={`w-full ${category.bgColor} ${isPoshies ? `poshies-collection-carousel poshies-collection-carousel--${category.id}` : ""}`}>
               <ProductCarousel
                 title={category.collectionTitle}
                 products={getCategoryProducts(
