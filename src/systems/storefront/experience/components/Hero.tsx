@@ -25,8 +25,8 @@ export default function Hero() {
               alt="Black male model wearing boxer briefs in a softly lit interior"
               fetchPriority="high"
             />
-            <span className="poshies-campaign__wordmark" aria-label="Poshies">poshies</span>
-                      </a>
+            <span className="poshies-campaign__wordmark" aria-label="Poshies">Poshies</span>
+          </a>
         </div>
         <div className="poshies-featured">
           <ProductCarousel
