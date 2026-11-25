@@ -425,3 +425,114 @@
     #242424 100%
   ) !important;
 }
+
+
+/* Poshies simplified peach direction: remove editorial photography and legacy charcoal/gradient treatments. */
+:root[data-storefront='poshies'] {
+  --storefront-accent: #79634e;
+  --storefront-accent-contrast: #ffffff;
+  --storefront-page: #f4c8b8;
+  --storefront-surface: #f8d9ce;
+  --storefront-surface-soft: #f8d9ce;
+  --storefront-text: #292426;
+  --storefront-muted: #65544d;
+  --storefront-border: rgba(41, 36, 38, 0.14);
+}
+:root[data-storefront='poshies'] .storefront-page,
+:root[data-storefront='poshies'] main.storefront-page,
+:root[data-storefront='poshies'] .storefront-hero,
+:root[data-storefront='poshies'] .poshies-home,
+:root[data-storefront='poshies'] .storefront-collections,
+:root[data-storefront='poshies'] .poshies-collections,
+:root[data-storefront='poshies'] .poshies-collection-section,
+:root[data-storefront='poshies'] .poshies-collection-panel,
+:root[data-storefront='poshies'] .poshies-collection-carousel,
+:root[data-storefront='poshies'] .yotaabo-product-carousel,
+:root[data-storefront='poshies'] .poshies-featured,
+:root[data-storefront='poshies'] .poshies-footer {
+  background: #f4c8b8 !important;
+  background-image: none !important;
+  color: #292426 !important;
+}
+:root[data-storefront='poshies'] .storefront-header {
+  background: #f4c8b8 !important;
+  color: #292426 !important;
+  border-bottom-color: rgba(41, 36, 38, 0.14);
+}
+:root[data-storefront='poshies'] .storefront-header a,
+:root[data-storefront='poshies'] .storefront-header button,
+:root[data-storefront='poshies'] .storefront-footer__inner,
+:root[data-storefront='poshies'] .poshies-collection-carousel .yotaabo-product-carousel h3,
+:root[data-storefront='poshies'] .poshies-collection-carousel .yotaabo-product-carousel h4,
+:root[data-storefront='poshies'] .poshies-collection-carousel .yotaabo-product-carousel a,
+:root[data-storefront='poshies'] .poshies-collection-carousel .yotaabo-product-carousel p {
+  color: #292426 !important;
+}
+:root[data-storefront='poshies'] .storefront-header__cta {
+  background: #79634e !important;
+  border-color: #79634e !important;
+  color: #ffffff !important;
+}
+:root[data-storefront='poshies'] .poshies-campaign {
+  min-height: 42vh;
+  background: #f4c8b8 !important;
+}
+:root[data-storefront='poshies'] .poshies-campaign::after,
+:root[data-storefront='poshies'] .poshies-campaign__image {
+  display: none !important;
+  content: none !important;
+}
+:root[data-storefront='poshies'] .poshies-campaign__wordmark {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #79634e !important;
+  font-size: clamp(76px, 17vw, 190px);
+  text-shadow: none !important;
+  mix-blend-mode: normal !important;
+  transform: none !important;
+}
+:root[data-storefront='poshies'] .poshies-collection-section {
+  background: #f4c8b8 !important;
+  background-image: none !important;
+  color: #292426 !important;
+}
+:root[data-storefront='poshies'] .poshies-collection-panel,
+:root[data-storefront='poshies'] .poshies-collection-carousel {
+  background: #f4c8b8 !important;
+  color: #292426 !important;
+}
+:root[data-storefront='poshies'] .poshies-collection-panel svg text {
+  fill: #79634e !important;
+}
+:root[data-storefront='poshies'] .poshies-collection-panel .poshies-collection-panel--about svg text,
+:root[data-storefront='poshies'] .poshies-collection-panel--about svg text {
+  fill: #79634e !important;
+}
+:root[data-storefront='poshies'] .poshies-collection-carousel .yotaabo-product-swiper .swiper-button-next,
+:root[data-storefront='poshies'] .poshies-collection-carousel .yotaabo-product-swiper .swiper-button-prev {
+  background: #f8d9ce !important;
+  border-color: rgba(41, 36, 38, 0.18) !important;
+  color: #292426 !important;
+  box-shadow: none !important;
+}
+:root[data-storefront='poshies'] .poshies-collection-carousel .swiper-pagination-bullet-active,
+:root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-pagination-bullet-active {
+  background: #79634e !important;
+}
+:root[data-storefront='poshies'] .poshies-footer {
+  color: #292426 !important;
+}
+:root[data-storefront='poshies'] .footer-column-title,
+:root[data-storefront='poshies'] .footer-link,
+:root[data-storefront='poshies'] .footer-social-link {
+  color: #292426 !important;
+  border-color: rgba(41, 36, 38, 0.2);
+}
+:root[data-storefront='poshies'] .footer-link:hover,
+:root[data-storefront='poshies'] .footer-social-link:hover {
+  color: #79634e !important;
+  border-color: #79634e;
+}
