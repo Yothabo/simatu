@@ -170,25 +170,7 @@ export default function Services() {
                       </span>
                     )}
                   </div>
-                ) : (
-                  /* Other sections: Rotated on the left */
-                  <>
-                    {category.id !== 'about' && (
-                      <>
-                        <div className="flex flex-col items-center justify-center w-full h-full lg:hidden">
-                          <span className={`absolute left-6 top-1/2 origin-left -translate-y-1/2 -rotate-90 whitespace-nowrap font-accent text-[clamp(80px,12vw,120px)] font-normal leading-[0.7] tracking-normal ${category.accentColor}`}>
-                            For
-                          </span>
-                        </div>
-                        <div className="hidden lg:flex absolute left-8 top-1/2 -translate-y-1/2 items-center justify-center">
-                          <span className={`origin-left -rotate-90 whitespace-nowrap font-accent text-[clamp(100px,16vw,200px)] font-normal leading-[0.7] tracking-normal ${category.accentColor}`}>
-                            For
-                          </span>
-                        </div>
-                      </>
-                    )}
-                  </>
-                )}
+                ) : null}
               </div>
 
               {/* Image Overlay */}
