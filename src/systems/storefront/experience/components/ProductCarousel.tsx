@@ -7,6 +7,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
+import SharedImage from '../../../../components/SharedImage';
 import ProductModal from './ProductModal.tsx';
 import ProductCardSkeleton from './ProductCardSkeleton.tsx';
 import { getMockPoshiesProducts } from './mock-products.ts';
@@ -188,7 +189,7 @@ export default function ProductCarousel({
                     >
                       <div className={`aspect-[4/5] w-full overflow-hidden ${cardPlaceholder}`}>
                         {product.image_url && (
-                          <img
+                          <SharedImage
                             src={product.image_url}
                             alt={product.name}
                             loading={index < 2 ? 'eager' : 'lazy'}
@@ -197,8 +198,8 @@ export default function ProductCarousel({
                             onError={(event) => {
                               event.currentTarget.style.display = 'none';
                             }}
-                            className={`h-full w-full ${isPoshiesMockCarousel ? "object-contain p-2" : "object-cover"}`}
-                          />
+                            className="h-full w-full"
+/>
                         )}
                       </div>
 
