@@ -181,7 +181,13 @@ export default function ProductModal({
 
         {/* 1. Full-bleed image with integrated gradient, title and price */}
         <div className={`relative aspect-[4/5] w-full overflow-hidden ${placeholderColor}`}>
-          {product.image_url && (
+          {mode === 'preview' ? (
+            <div className="absolute inset-0 flex items-center justify-center bg-[#f8d9ce] text-[#79634e]/65">
+              <svg aria-hidden="true" viewBox="0 0 120 120" className="h-28 w-28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M38 22 20 32 10 49l18 9 8-11v43h48V46l8 12 18-9-10-17-18-10c-4 7-10 11-17 11s-13-4-17-11Z" />
+              </svg>
+            </div>
+          ) : product.image_url ? (
             <SharedImage
               src={product.image_url}
               alt={product.name}
@@ -189,7 +195,7 @@ export default function ProductModal({
               fetchPriority="high"
               className="absolute inset-0 h-full w-full"
             />
-          )}
+          ) : null}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-[58%] to-white"
