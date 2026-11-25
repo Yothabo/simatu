@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MoodboardSearchBar from '../../../homepage/discover/MoodboardSearchBar';
 import useStorefront from '../../core/hooks/useStorefront.ts';
+import './storefront-search-header.css';
 
 type HeaderProps = {
   sticky?: boolean;
