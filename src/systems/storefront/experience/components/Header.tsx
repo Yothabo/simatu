@@ -21,7 +21,7 @@ export default function Header({ sticky = false, showBack = false }: HeaderProps
 
   const navLinks = [
     { label: 'Home', to: pathFor() },
-    { label: storeName === 'Yotaabo' ? 'Fragrances' : 'Shop', to: pathFor('services') },
+    { label: storeName === 'Yotaabo' ? 'Fragrances' : storeName === 'Poshies' ? 'Intimates' : 'Shop', to: pathFor('services') },
     { label: 'Our story', to: pathFor('about') },
   ];
 
@@ -67,7 +67,7 @@ export default function Header({ sticky = false, showBack = false }: HeaderProps
             to={pathFor('services')}
             className="storefront-header__cta hidden items-center gap-2 bg-[#4d4d4d] px-4 py-3 text-xs font-semibold text-white transition-colors hover:bg-[#3a3a3a] md:inline-flex"
           >
-            Explore Collection
+            {storeName === 'Poshies' ? 'Shop intimates' : 'Explore Collection'}
             <FiArrowUpRight size={16} aria-hidden="true" />
           </Link>
 
