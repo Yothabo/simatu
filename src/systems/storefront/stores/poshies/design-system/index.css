@@ -83,4 +83,4 @@
 :root[data-storefront='poshies'] .poshies-collections{padding-top:0;background:#f7f8f9}
 :root[data-storefront='poshies'] .poshies-collections>div>div:first-child,:root[data-storefront='poshies'] .poshies-collections>div.flex.flex-col.w-full>div.relative.grid{background:#f7f8f9}
 @media(max-width:640px){:root[data-storefront='poshies'] .poshies-campaign-wrap{width:calc(100% - 32px)}:root[data-storefront='poshies'] .poshies-campaign{min-height:0;max-height:none;aspect-ratio:4/5.5}:root[data-storefront='poshies'] .poshies-campaign__wordmark{font-size:clamp(68px,19vw,118px)}:root[data-storefront='poshies'] .poshies-campaign__bottomline{max-width:55%;font-size:9px}}
-@media(prefers-reduced-motion:reduce){:root[data-storefront='poshies'] .poshies-campaign__image,:root[data-storefront='poshies'] .poshies-campaign__arrow{transition:none}}
+@media(prefers-reduced-motion:reduce){:root[data-storefront='poshies'] .poshies-campaign__image{transition:none}}
