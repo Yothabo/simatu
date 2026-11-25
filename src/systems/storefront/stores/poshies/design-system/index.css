@@ -1,6 +1,69 @@
-/* Poshies identity overrides. Shared storefront foundations remain intact. */
+/* Poshies brand theme: intimate essentials with a calm editorial finish.
+   The shared storefront layout and commerce behaviour remain unchanged. */
 :root[data-storefront='poshies'] {
   --storefront-accent: #ff1493;
+  --storefront-accent-contrast: #ffffff;
   --storefront-surface: #ffffff;
-  --storefront-text: #4d4d4d;
+  --storefront-surface-soft: #f7f0f1;
+  --storefront-page: #fcf9f8;
+  --storefront-text: #292426;
+  --storefront-muted: #817579;
+  --storefront-border: rgba(41, 36, 38, 0.12);
+  --storefront-radius-sm: 2px;
+  --storefront-radius-md: 5px;
+  --storefront-radius-lg: 10px;
+  --storefront-shadow-soft: 0 16px 44px rgba(50, 25, 35, 0.08);
+}
+:root[data-storefront='poshies'] .storefront-header {
+  border-bottom: 1px solid var(--storefront-border);
+  background: rgba(252, 249, 248, 0.96);
+  color: var(--storefront-text);
+  backdrop-filter: blur(14px);
+}
+:root[data-storefront='poshies'] .storefront-header a,
+:root[data-storefront='poshies'] .storefront-header button { color: var(--storefront-text); }
+:root[data-storefront='poshies'] .storefront-header a:hover,
+:root[data-storefront='poshies'] .storefront-header button:hover { color: var(--storefront-accent); }
+:root[data-storefront='poshies'] .storefront-header__cta {
+  border: 1px solid var(--storefront-text);
+  background: var(--storefront-text);
+  color: #ffffff;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+:root[data-storefront='poshies'] .storefront-header__cta:hover {
+  border-color: var(--storefront-accent);
+  background: var(--storefront-accent);
+  color: #ffffff;
+}
+:root[data-storefront='poshies'] .storefront-page {
+  background: var(--storefront-page);
+  color: var(--storefront-text);
+}
+:root[data-storefront='poshies'] .storefront-hero { background: var(--storefront-page); }
+:root[data-storefront='poshies'] .storefront-hero__wordmark { max-width: 1500px; }
+:root[data-storefront='poshies'] .storefront-collections { background: var(--storefront-page); }
+:root[data-storefront='poshies'] .storefront-collections > div > div:first-child { background: var(--storefront-page); }
+:root[data-storefront='poshies'] .yotaabo-product-carousel {
+  background: var(--storefront-page);
+  color: var(--storefront-text);
+}
+:root[data-storefront='poshies'] .yotaabo-product-carousel h3 { color: var(--storefront-text); }
+:root[data-storefront='poshies'] .yotaabo-product-carousel p { color: var(--storefront-muted); }
+:root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-button-next,
+:root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-button-prev {
+  border-color: var(--storefront-border);
+  background: var(--storefront-surface);
+  color: var(--storefront-text);
+  box-shadow: var(--storefront-shadow-soft);
+}
+:root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-pagination-bullet-active { background: var(--storefront-accent); }
+:root[data-storefront='poshies'] main.storefront-page { background: var(--storefront-page); }
+:root[data-storefront='poshies'] .storefront-page button:focus-visible,
+:root[data-storefront='poshies'] .storefront-page a:focus-visible {
+  outline: 2px solid var(--storefront-accent);
+  outline-offset: 3px;
+}
+@media (max-width: 639px) {
+  :root[data-storefront='poshies'] .storefront-hero { padding-top: 2.5rem; }
 }
