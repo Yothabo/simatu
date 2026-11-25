@@ -197,7 +197,7 @@ export default function ProductCarousel({
                             onError={(event) => {
                               event.currentTarget.style.display = 'none';
                             }}
-                            className="h-full w-full object-cover"
+                            className={`h-full w-full ${isPoshiesMockCarousel ? "object-contain p-2" : "object-cover"}`}
                           />
                         )}
                       </div>
