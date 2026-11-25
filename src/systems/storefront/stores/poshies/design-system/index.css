@@ -154,3 +154,56 @@
   box-shadow: none;
 }
 :root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-pagination-bullet-active { background: var(--storefront-accent); }
+
+
+/* Poshies charcoal storefront surface and collection-specific merchandising. */
+:root[data-storefront='poshies'] {
+  --storefront-page: #242424;
+  --storefront-surface: #2d2d2d;
+  --storefront-surface-soft: #353535;
+  --storefront-text: #f5f1f2;
+  --storefront-muted: #c0b7ba;
+  --storefront-border: rgba(255, 255, 255, 0.14);
+}
+:root[data-storefront='poshies'] .storefront-page,
+:root[data-storefront='poshies'] main.storefront-page,
+:root[data-storefront='poshies'] .storefront-hero,
+:root[data-storefront='poshies'] .poshies-home,
+:root[data-storefront='poshies'] .storefront-collections,
+:root[data-storefront='poshies'] .storefront-collections > div > div:first-child,
+:root[data-storefront='poshies'] .yotaabo-product-carousel,
+:root[data-storefront='poshies'] .poshies-featured,
+:root[data-storefront='poshies'] .poshies-collections,
+:root[data-storefront='poshies'] .poshies-collections > div > div:first-child,
+:root[data-storefront='poshies'] .poshies-collections > div.flex.flex-col.w-full > div.relative.grid {
+  background: #242424;
+  color: #f5f1f2;
+}
+:root[data-storefront='poshies'] .storefront-header {
+  background: #242424;
+  color: #f5f1f2;
+  border-bottom-color: rgba(255,255,255,.14);
+}
+:root[data-storefront='poshies'] .storefront-header a,
+:root[data-storefront='poshies'] .storefront-header button { color: #f5f1f2; }
+:root[data-storefront='poshies'] .storefront-header__cta {
+  background: #f5f1f2;
+  border-color: #f5f1f2;
+  color: #242424;
+}
+:root[data-storefront='poshies'] .storefront-header__cta:hover {
+  background: #ff1493;
+  border-color: #ff1493;
+  color: #ffffff;
+}
+:root[data-storefront='poshies'] .poshies-campaign { background: #242424; }
+:root[data-storefront='poshies'] .yotaabo-product-carousel h3,
+:root[data-storefront='poshies'] .yotaabo-product-carousel h4,
+:root[data-storefront='poshies'] .yotaabo-product-carousel a,
+:root[data-storefront='poshies'] .yotaabo-product-carousel p { color: #f5f1f2; }
+:root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-button-next,
+:root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-button-prev {
+  background: #353535;
+  color: #f5f1f2;
+  border-color: rgba(255,255,255,.18);
+}
