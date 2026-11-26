@@ -241,7 +241,7 @@ async function saveProduct(body, isUpdate, admin, requestId) {
                    category, subcategory, description, image_url,
                    is_active, marketplace_visible, storefront_visible,
                    sort_order, storefront, store_id,
-                   category_id, subcategory_id, created_at`,
+                   category_id, subcategory_id, marketplace_subcategory_id, created_at`,
         values
       );
     }
