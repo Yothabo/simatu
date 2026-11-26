@@ -114,9 +114,8 @@ for (const file of collectFiles(storefrontExperienceRoot)) {
     errors.push(relativeFile + ' contains a hard-coded store identity; read the active store name or copy from configuration');
   }
   const importsStoreOwnedModule = /(?:from\s*|import\s*)['"][^'"]*\/stores\/(?:poshies|yotaabo)\//.test(source);
-  const isThemeStylesheetRegistry = file === path.join(storefrontExperienceRoot, 'index.ts');
-  if (importsStoreOwnedModule && !isThemeStylesheetRegistry) {
-    errors.push(relativeFile + ' imports a store-owned implementation; shared experience files may only register theme stylesheets at the experience entry point');
+  if (importsStoreOwnedModule) {
+    errors.push(relativeFile + ' imports a store-owned implementation; store themes must be discovered by key, not registered in shared experience files');
   }
   if (/\b(?:poshies|yotaabo)-[a-z0-9_-]+/i.test(source)) {
     errors.push(relativeFile + ' contains a brand-prefixed presentation selector; use a neutral storefront class');
@@ -159,8 +158,10 @@ const storefrontThemeProviderPath = path.join(systemsRoot, 'storefront', 'core',
 const storefrontThemeProviderSource = fs.existsSync(storefrontThemeProviderPath)
   ? fs.readFileSync(storefrontThemeProviderPath, 'utf8')
   : '';
-if (!/designSystem\.overrides/.test(storefrontThemeProviderSource)) {
-  errors.push('StorefrontThemeProvider must apply semantic theme overrides from configuration');
+if (!/designSystem\.overrides/.test(storefrontThemeProviderSource) ||
+    !/import\.meta\.glob/.test(storefrontThemeProviderSource) ||
+    !/query:\s*['"]\?url['"]/.test(storefrontThemeProviderSource)) {
+  errors.push('StorefrontThemeProvider must apply semantic overrides and auto-discover store theme stylesheets');
 }
 
 const storefrontCategoriesApiPath = path.resolve('netlify/functions/categories.mjs');
