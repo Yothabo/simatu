@@ -1,4 +1,4 @@
-export type StorefrontCategory = 'His' | 'Hers' | 'Spaces' | 'Lounge';
+export type StorefrontCategory = string;
 export type StorefrontKey = string;
 
 export type StorefrontDesignSystem =
