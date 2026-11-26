@@ -131,15 +131,26 @@ export default function AdminProductForm({
   );
 
   const addSize = useCallback(() => {
-    const trimmed = sizeInput.trim();
-    if (!trimmed) return;
-    if (form.sizes.includes(trimmed)) {
-      setSizeInput('');
-      return;
-    }
-    setForm((prev) => ({ ...prev, sizes: [...prev.sizes, trimmed] }));
+    const enteredSizes = sizeInput
+      .split(/[,;\n\r]+/)
+      .map((size) => size.trim())
+      .filter(Boolean);
+
+    if (enteredSizes.length === 0) return;
+
+    setForm((prev) => {
+      const existing = new Set(prev.sizes.map((size) => size.toLocaleLowerCase()));
+      const additions = enteredSizes.filter((size) => {
+        const key = size.toLocaleLowerCase();
+        if (existing.has(key)) return false;
+        existing.add(key);
+        return true;
+      });
+
+      return { ...prev, sizes: [...prev.sizes, ...additions] };
+    });
     setSizeInput('');
-  }, [form.sizes, sizeInput]);
+  }, [sizeInput]);
 
   const removeSize = useCallback((size: string) => {
     setForm((prev) => ({
