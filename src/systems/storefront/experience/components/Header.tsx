@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiMenu, FiX, FiHome, FiGrid, FiShoppingBag } from 'react-icons/fi';
-import { FaOpencart } from 'react-icons/fa';
+import { FaBars, FaTimes, FaHome, FaThLarge, FaShoppingBag, FaOpencart } from 'react-icons/fa';
 import useStorefront from '../../core/hooks/useStorefront.ts';
 import { useCart } from '../../core/context/CartContext';
 import './storefront-header.css';
@@ -39,10 +38,10 @@ export default function Header({ sticky = true }: HeaderProps) {
           {isPoshies && menuOpen ? (
             <nav className="storefront-controls__inline-menu" aria-label="Poshies navigation">
               <Link to={pathFor()} className="storefront-controls__menu-item" onClick={() => setMenuOpen(false)}>
-                <FiHome aria-hidden="true" /><span>Home</span>
+                <FaHome aria-hidden="true" /><span>Home</span>
               </Link>
               <div className="storefront-controls__menu-item storefront-controls__categories-label">
-                <FiGrid aria-hidden="true" /><span>Categories</span>
+                <FaThLarge aria-hidden="true" /><span>Categories</span>
               </div>
               <div className="storefront-controls__category-submenu">
                 <button type="button" onClick={() => scrollToSection('hers')}><span>Hers</span></button>
@@ -50,7 +49,7 @@ export default function Header({ sticky = true }: HeaderProps) {
                 <button type="button" onClick={() => scrollToSection('lounge')}><span>Lounge</span></button>
               </div>
               <Link to={pathFor('catalog')} className="storefront-controls__menu-item" onClick={() => setMenuOpen(false)}>
-                <FiShoppingBag aria-hidden="true" /><span>Catalogue</span>
+                <FaShoppingBag aria-hidden="true" /><span>Catalogue</span>
               </Link>
             </nav>
           ) : (
@@ -63,7 +62,7 @@ export default function Header({ sticky = true }: HeaderProps) {
                 autoComplete="off"
                 aria-label={`Search ${storeName}`}
               />
-              {query && <button type="button" className="storefront-controls__clear" onClick={() => setQuery('')} aria-label="Clear search"><FiX /></button>}
+              {query && <button type="button" className="storefront-controls__clear" onClick={() => setQuery('')} aria-label="Clear search"><FaTimes /></button>}
             </>
           )}
         </div>
@@ -80,7 +79,7 @@ export default function Header({ sticky = true }: HeaderProps) {
           aria-expanded={menuOpen}
           aria-label={menuOpen ? 'Close storefront menu' : 'Open storefront menu'}
         >
-          {menuOpen ? <FiX aria-hidden="true" /> : <FiMenu aria-hidden="true" />}
+          {menuOpen ? <FaTimes aria-hidden="true" /> : <FaBars aria-hidden="true" />}
         </button>
       </div>
       {!isPoshies && (
