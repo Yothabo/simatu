@@ -13,7 +13,7 @@ describe('marketplace discovery taxonomy governance', () => {
 
     expect(new Set(ids).size).toBe(ids.length);
     expect(new Set(names).size).toBe(names.length);
-    expect(DISCOVERY_MARKETS).toHaveLength(17);
+    expect(DISCOVERY_MARKETS).toHaveLength(18);
   });
 
   it('uses unique subcategory IDs and display titles across markets', () => {
@@ -39,11 +39,11 @@ describe('marketplace discovery taxonomy governance', () => {
     expect(DISCOVERY_MARKETS.some((market) => market.id === 'living')).toBe(false);
   });
 
-  it('keeps restricted sexual wellness out of general marketplace tiles', () => {
-    expect(
-      DISCOVERY_MARKETS.some((market) =>
-        /sexual wellness|adult toys|intimate devices/i.test(market.category)
-      )
-    ).toBe(false);
+  it('exposes a single Age-Restricted destination, not adult products in general categories', () => {
+    const restricted = DISCOVERY_MARKETS.filter((market) => market.id === 'age-restricted');
+    expect(restricted).toHaveLength(1);
+    expect(restricted[0].category).toBe('Age-Restricted');
+    expect(DISCOVERY_MARKETS.some((market) => /sexual wellness|adult toys|intimate devices/i.test(market.category))).toBe(false);
+    expect(Object.values(DISCOVERY_SUBCATEGORIES).flat().some((subcategory => /adult toys|sexual wellness|intimate devices/i.test(subcategory.title)))).toBe(false);
   });
 });
