@@ -6,7 +6,7 @@ export default function ServicesPage() {
   return (
     <>
       <Header sticky={false} />
-      <main className="flex-1 bg-[var(--sf-background)] text-[var(--sf-text)]">
+      <main className="flex-1 bg-[var(--sf-inverse-background)] text-[var(--sf-inverse-text)]">
       <Services />
     <Footer />
     </main>
