@@ -118,7 +118,7 @@ export const DISCOVERY_SUBCATEGORIES: Record<string, DiscoverySubcategory[]> = {
   ],
   services: [
     tile('home-services', 'Home Services', 'photo-1758273238715-2b6c250167c4', 'Household maintenance, cleaning and repairs', ['home','clean','repair']),
-    tile('personal-beauty-services', 'Beauty Treatments', 'photo-1746723378067-83a345ff3160', 'Beauty appointments, lashes, brows and treatments', ['beauty','hair','nail']),
+    tile('personal-beauty-services', 'Salon & Grooming Services', 'photo-1746723378067-83a345ff3160', 'Beauty appointments, lashes, brows and treatments', ['beauty','hair','nail']),
     tile('professional', 'Professional Services', 'photo-1793690374446-6c498f03e52d', 'Independent professional expertise and consultation', ['professional','consult','business']),
     tile('photography', 'Photography & Video', 'photo-1553166272-e69910ab5ae1', 'Photography, videography and content capture', ['photo','video']),
     tile('education-services', 'Lessons & Education', 'photo-1623287073837-5b07d79739a3', 'Tutoring, lessons and private instruction', ['tutor','education','coach']),
