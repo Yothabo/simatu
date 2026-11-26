@@ -4,25 +4,25 @@
  * Store themes provide every palette, font family and semantic color value.
  */
 :root {
-  --storefront-radius-sm: var(--sf-radius-sm, 2px);
-  --storefront-radius-md: var(--sf-radius-md, 6px);
-  --storefront-radius-lg: var(--sf-radius-lg, 12px);
-  --storefront-content-width: 1180px;
+  --storefront-radius-sm: var(--sf-radius-sm);
+  --storefront-radius-md: var(--sf-radius-md);
+  --storefront-radius-lg: var(--sf-radius-lg);
+  --storefront-content-width: var(--sf-content-max-width);
 }
 
 .storefront-page {
   min-height: 100vh;
-  background: var(--storefront-page);
-  color: var(--storefront-text);
-  font-family: var(--storefront-font-body);
+  background: var(--sf-background);
+  color: var(--sf-text);
+  font-family: var(--sf-font-body);
 }
 .storefront-container {
-  width: min(var(--storefront-content-width), calc(100% - 48px));
+  width: min(var(--sf-content-max-width), calc(100% - (var(--sf-container-gutter) * 2)));
   margin-inline: auto;
 }
 .storefront-eyebrow {
-  color: var(--storefront-muted);
-  font-family: var(--storefront-font-body);
+  color: var(--sf-text-muted);
+  font-family: var(--sf-font-body);
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -30,8 +30,8 @@
   text-transform: uppercase;
 }
 .storefront-section-title {
-  color: var(--storefront-text);
-  font-family: var(--storefront-font-heading);
+  color: var(--sf-text);
+  font-family: var(--sf-font-heading);
   font-size: clamp(2rem, 4vw, 3.25rem);
   font-weight: 500;
   line-height: 1.05;
@@ -42,12 +42,12 @@
   align-items: center;
   justify-content: center;
   gap: 0.65rem;
-  border: 1px solid var(--storefront-text);
+  border: 1px solid var(--sf-text);
   border-radius: var(--storefront-radius-sm);
-  background: var(--storefront-text);
-  color: var(--storefront-accent-contrast);
+  background: var(--sf-text);
+  color: var(--sf-accent-contrast);
   padding: 0.75rem 1.15rem;
-  font-family: var(--storefront-font-body);
+  font-family: var(--sf-font-body);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -56,13 +56,13 @@
   transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
 }
 .storefront-button:hover {
-  border-color: var(--storefront-accent);
-  background: var(--storefront-accent);
-  color: var(--storefront-accent-contrast);
+  border-color: var(--sf-accent);
+  background: var(--sf-accent);
+  color: var(--sf-accent-contrast);
 }
-.storefront-product-card { min-width: 0; color: var(--storefront-text); }
-.storefront-product-card__media { overflow: hidden; background: var(--storefront-surface-soft); }
+.storefront-product-card { min-width: 0; color: var(--sf-text); }
+.storefront-product-card__media { overflow: hidden; background: var(--sf-surface-soft); }
 
 @media (max-width: 639px) {
-  .storefront-container { width: min(100% - 32px, var(--storefront-content-width)); }
+  .storefront-container { width: min(100% - 32px, var(--sf-content-max-width)); }
 }

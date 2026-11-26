@@ -8,15 +8,7 @@
  */
 :root[data-storefront='poshies'] {
   color-scheme: light;
-  --poshies-color-canvas: #FFFFFF;
-  --poshies-color-surface: #FFFFFF;
-  --poshies-color-surface-raised: #FFFFFF;
-  --poshies-color-accent: #FF1493;
-  --poshies-color-text: #292426;
-  --poshies-color-text-muted: rgba(41,36,38,.72);
-  --poshies-color-border: rgba(41,36,38,.16);
-  --poshies-color-focus: #FF1493;
-  --poshies-color-button-text: #FFFFFF;
+  --poshies-color-focus: var(--poshies-color-accent);
 
   /* Shared storefront token roles mapped to the Poshies brand. */
   --sf-background: var(--poshies-color-canvas);
@@ -25,10 +17,10 @@
   --sf-text-muted: var(--poshies-color-text-muted);
   --sf-accent: var(--poshies-color-accent);
   --sf-border: var(--poshies-color-border);
-  --sf-hover-surface: rgba(255, 20, 147, .08);
+  --sf-hover-surface: var(--poshies-color-hover);
   --sf-shadow-color: rgba(41, 36, 38, .08);
-  --sf-font-body: 'Montserrat', sans-serif;
-  --sf-font-heading: 'Anton', sans-serif;
+  --sf-font-body: var(--poshies-font-body);
+  --sf-font-heading: var(--poshies-font-heading);
 
   --storefront-page: var(--poshies-color-canvas);
   --storefront-surface: var(--poshies-color-surface);
@@ -41,7 +33,7 @@
   --storefront-radius-sm: 2px;
   --storefront-radius-md: 5px;
   --storefront-radius-lg: 10px;
-  --storefront-shadow-soft: 0 8px 28px rgba(41,36,38,.08);
+  --storefront-shadow-soft: 0 8px 28px var(--poshies-color-shadow);
 }
 
 /* Shared page canvas and typography. */
@@ -74,7 +66,7 @@
 :root[data-storefront='poshies'] .storefront-page *,
 :root[data-storefront='poshies'] .storefront-header *,
 :root[data-storefront='poshies'] .poshies-footer * {
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--poshies-font-body);
 }
 :root[data-storefront='poshies'] .storefront-page :is(h1,h2,h3,h4,p,a,label,span),
 :root[data-storefront='poshies'] .storefront-header :is(a,button),
@@ -155,7 +147,7 @@
   left: 4%;
   right: 4%;
   color: var(--poshies-color-accent);
-  font-family: 'Anton', sans-serif !important;
+  font-family: var(--poshies-font-heading) !important;
   font-size: clamp(76px, 17vw, 190px);
   font-weight: 400;
   letter-spacing: -.045em;
@@ -170,7 +162,7 @@
 :root[data-storefront='poshies'] .poshies-collection-section svg text {
   fill: var(--poshies-color-accent) !important;
   color: var(--poshies-color-accent) !important;
-  font-family: 'Anton', sans-serif !important;
+  font-family: var(--poshies-font-heading) !important;
 }
 
 /* Collection fields use white canvas and charcoal copy. */
@@ -290,14 +282,14 @@
 }
 @media (max-width: 639px) {
   :root[data-storefront='poshies'] .storefront-hero { padding-top: 2.5rem; }
-  :root[data-storefront='poshies'] .poshies-campaign__wordmark { font-size: clamp(68px, 19vw, 118px); }
+  :root[data-storefront='poshies'] .poshies-campaign__wordmark { font-size: var(--poshies-hero-wordmark-size-mobile); }
 }
 
 /* Keep contrast correct on every hot-pink primary action. */
 :root[data-storefront='poshies'] .storefront-header__cta,
 :root[data-storefront='poshies'] .storefront-page button[type='submit'],
 :root[data-storefront='poshies'] .storefront-page .button-primary,
-:root[data-storefront='poshies'] .storefront-page [class*='bg-[#FF1493]'],
+:root[data-storefront='poshies'] .storefront-page [class*='bg-[var(--poshies-color-accent)]'],
 :root[data-storefront='poshies'] .storefront-page [class*='bg-pink'] {
   background-color: var(--poshies-color-accent) !important;
   border-color: var(--poshies-color-accent) !important;
@@ -358,8 +350,8 @@
   width: 100%;
   padding: 0 5vw;
   color: var(--poshies-color-accent) !important;
-  font-family: 'Anton', sans-serif !important;
-  font-size: clamp(64px, 15vw, 190px);
+  font-family: var(--poshies-font-heading) !important;
+  font-size: var(--poshies-hero-wordmark-size);
   font-weight: 400;
   line-height: .9;
   letter-spacing: -.045em;
@@ -372,12 +364,12 @@
 /* Give the wordmark hero clearance for the floating search/cart/menu controls. */
 :root[data-storefront='poshies'] .poshies-campaign {
   box-sizing: border-box;
-  min-height: clamp(360px, 58svh, 640px);
-  padding-top: 78px;
+  min-height: var(--poshies-hero-min-height);
+  padding-top: var(--poshies-hero-top-clearance);
 }
 @media (max-width: 640px) {
   :root[data-storefront='poshies'] .poshies-campaign {
-    min-height: clamp(340px, 56svh, 560px);
-    padding-top: 70px;
+    min-height: var(--poshies-hero-min-height-mobile);
+    padding-top: var(--poshies-hero-top-clearance-mobile);
   }
 }

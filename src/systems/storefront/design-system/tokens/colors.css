@@ -1,5 +1,11 @@
 /*
- * Shared color-token vocabulary only.
- * Concrete palette values and semantic color mappings belong to store themes.
- * Shared components must consume --sf-* semantic roles, never brand literals.
+ * Canonical storefront semantic color contract. Values are supplied by the active store theme only.
+ * Canvas: --sf-background
+ * Surfaces: --sf-surface, --sf-surface-soft, --sf-surface-raised
+ * Text: --sf-text, --sf-text-muted, --sf-text-subtle
+ * Accent: --sf-accent, --sf-accent-secondary, --sf-accent-tertiary
+ * Contrast: --sf-accent-contrast, --sf-inverse-background, --sf-inverse-text,
+ *          --sf-inverse-text-muted
+ * Boundaries: --sf-border, --sf-border-subtle, --sf-border-strong, --sf-inverse-border
+ * Interaction: --sf-hover-surface, --sf-focus, --sf-shadow-color
  */

@@ -1,43 +1,63 @@
-/*
- * Yotaabo brand theme.
- * Yotaabo owns its palette and type choices; shared components consume roles.
- */
+/* Yotaabo owns its concrete palette and typography; shared components use semantic roles. */
 :root[data-storefront='yotaabo'] {
   color-scheme: light;
-
   --yotaabo-color-canvas: #ffffff;
   --yotaabo-color-surface: #ffffff;
   --yotaabo-color-surface-raised: #f7f7f5;
-  --yotaabo-color-accent: #8aa89b;
   --yotaabo-color-text: #4d4d4d;
   --yotaabo-color-text-muted: #777777;
   --yotaabo-color-border: rgba(77, 77, 77, .16);
+  --yotaabo-color-border-subtle: rgba(77, 77, 77, .10);
+  --yotaabo-color-accent: #8aa89b;
+  --yotaabo-color-accent-secondary: #ff1493;
+  --yotaabo-color-accent-tertiary: #c8ad8d;
   --yotaabo-color-button-text: #ffffff;
-
+  --yotaabo-color-inverse-background: #4d4d4d;
+  --yotaabo-color-inverse-text: #ffffff;
+  --yotaabo-color-hover: rgba(138, 168, 155, .10);
+  --yotaabo-color-shadow: rgba(30, 20, 20, .08);
+  --yotaabo-color-placeholder: rgba(77, 77, 77, .55);
+  --yotaabo-color-success: #536d5a;
+  --yotaabo-color-error: #a33b3b;
   --sf-background: var(--yotaabo-color-canvas);
   --sf-surface: var(--yotaabo-color-surface);
+  --sf-surface-soft: var(--yotaabo-color-surface-raised);
+  --sf-surface-raised: var(--yotaabo-color-surface-raised);
   --sf-text: var(--yotaabo-color-text);
   --sf-text-muted: var(--yotaabo-color-text-muted);
+  --sf-text-subtle: var(--yotaabo-color-placeholder);
   --sf-accent: var(--yotaabo-color-accent);
+  --sf-accent-secondary: var(--yotaabo-color-accent-secondary);
+  --sf-accent-tertiary: var(--yotaabo-color-accent-tertiary);
   --sf-accent-contrast: var(--yotaabo-color-button-text);
+  --sf-inverse-background: var(--yotaabo-color-inverse-background);
+  --sf-inverse-text: var(--yotaabo-color-inverse-text);
+  --sf-inverse-text-muted: rgba(255, 255, 255, .75);
+  --sf-inverse-border: rgba(255, 255, 255, .20);
   --sf-border: var(--yotaabo-color-border);
-  --sf-hover-surface: rgba(138, 168, 155, .10);
-  --sf-shadow-color: rgba(30, 20, 20, .08);
+  --sf-border-subtle: var(--yotaabo-color-border-subtle);
+  --sf-border-strong: var(--yotaabo-color-border);
+  --sf-hover-surface: var(--yotaabo-color-hover);
+  --sf-focus: var(--yotaabo-color-accent);
+  --sf-shadow-color: var(--yotaabo-color-shadow);
   --sf-font-body: var(--font-body, 'Manrope', sans-serif);
   --sf-font-heading: var(--font-heading, 'Cormorant Garamond', serif);
-
-  /* Compatibility aliases for existing storefront components. */
-  --storefront-page: var(--yotaabo-color-canvas);
-  --storefront-surface: var(--yotaabo-color-surface);
-  --storefront-surface-soft: var(--yotaabo-color-surface-raised);
-  --storefront-accent: var(--yotaabo-color-accent);
-  --storefront-accent-contrast: var(--yotaabo-color-button-text);
-  --storefront-text: var(--yotaabo-color-text);
-  --storefront-muted: var(--yotaabo-color-text-muted);
-  --storefront-border: var(--yotaabo-color-border);
-  --storefront-radius-sm: 2px;
-  --storefront-radius-md: 6px;
-  --storefront-radius-lg: 12px;
+  --sf-font-display: 'Anton', sans-serif;
+  --sf-radius-sm: 2px;
+  --sf-radius-md: 6px;
+  --sf-radius-lg: 12px;
+  /* Temporary compatibility aliases for legacy consumers. */
+  --storefront-page: var(--sf-background);
+  --storefront-surface: var(--sf-surface);
+  --storefront-surface-soft: var(--sf-surface-soft);
+  --storefront-accent: var(--sf-accent);
+  --storefront-accent-contrast: var(--sf-accent-contrast);
+  --storefront-text: var(--sf-text);
+  --storefront-muted: var(--sf-text-muted);
+  --storefront-border: var(--sf-border);
+  --storefront-radius-sm: var(--sf-radius-sm);
+  --storefront-radius-md: var(--sf-radius-md);
+  --storefront-radius-lg: var(--sf-radius-lg);
   --storefront-shadow-soft: 0 12px 36px var(--sf-shadow-color);
   --storefront-font-body: var(--sf-font-body);
   --storefront-font-heading: var(--sf-font-heading);

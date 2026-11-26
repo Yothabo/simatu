@@ -2,16 +2,16 @@
 
 /* Toast styling */
 .yotaabo-toast {
-  border: 1px solid rgba(0, 0, 0, 0.16) !important;
-  border-radius: 2px !important;
-  background: #ffffff !important;
-  color: #000000 !important;
-  font-family: var(--font-body) !important;
-  font-size: 12px !important;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid var(--sf-border) !important;
+  border-radius: var(--sf-radius-sm) !important;
+  background: var(--sf-surface) !important;
+  color: var(--sf-text) !important;
+  font-family: var(--sf-font-body) !important;
+  font-size: var(--sf-font-size-sm) !important;
+  box-shadow: 0 12px 36px var(--sf-shadow-color) !important;
 }
-.yotaabo-toast--success { border-left: 3px solid #536d5a !important; }
-.yotaabo-toast--error { border-left: 3px solid #a33b3b !important; }
+.yotaabo-toast--success { border-left: 3px solid var(--yotaabo-color-success) !important; }
+.yotaabo-toast--error { border-left: 3px solid var(--yotaabo-color-error) !important; }
 
 /* Yotaabo Swiper carousels */
 .yotaabo-product-swiper {
@@ -27,14 +27,14 @@
 .yotaabo-product-swiper .swiper-button-next,
 .yotaabo-product-swiper .swiper-button-prev {
   top: 42%;
-  width: 36px;
-  height: 36px;
+  width: var(--sf-carousel-arrow-size);
+  height: var(--sf-carousel-arrow-size);
   margin-top: 0;
-  border: 1px solid rgba(77, 77, 77, 0.16);
+  border: 1px solid var(--sf-border);
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.96);
+  background: var(--sf-surface);
   color: var(--swiper-theme-color);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 10px var(--sf-shadow-color);
 }
 
 .yotaabo-product-swiper .swiper-button-next {
@@ -47,7 +47,7 @@
 
 .yotaabo-product-swiper .swiper-button-next::after,
 .yotaabo-product-swiper .swiper-button-prev::after {
-  font-size: 12px;
+  font-size: var(--sf-font-size-sm);
   font-weight: 700;
 }
 
@@ -65,17 +65,17 @@
 }
 
 .yotaabo-product-swiper .swiper-pagination-bullet {
-  width: 6px;
-  height: 6px;
+  width: var(--sf-carousel-pagination-size);
+  height: var(--sf-carousel-pagination-size);
   margin: 0 !important;
-  border-radius: 999px;
-  background: rgba(77, 77, 77, 0.24);
+  border-radius: var(--sf-radius-pill);
+  background: var(--sf-border-strong);
   opacity: 1;
-  transition: width 180ms ease, background-color 180ms ease;
+  transition: width var(--sf-motion-fast) var(--sf-motion-ease), background-color var(--sf-motion-fast) var(--sf-motion-ease);
 }
 
 .yotaabo-product-swiper .swiper-pagination-bullet-active {
-  width: 20px;
+  width: var(--sf-carousel-pagination-active-width);
   background: var(--swiper-theme-color);
 }
 

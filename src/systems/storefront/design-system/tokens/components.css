@@ -14,4 +14,18 @@
   --sf-header-expanded-menu-item-height-mobile: 44px;
   --sf-header-menu-item-gap: 3px;
   --sf-header-menu-item-indent: 28px;
+  --sf-header-top-offset: 14px;
+  --sf-header-top-offset-mobile: 10px;
+  --sf-header-search-gap: 12px;
+  --sf-header-search-padding-x: 20px;
+  --sf-header-search-padding-x-mobile: 14px;
+  --sf-header-clear-size: 30px;
+  --sf-header-cart-badge-size: 19px;
+  --sf-header-cart-badge-offset: -4px;
+  --sf-header-menu-max-height: 260px;
+  --sf-header-menu-radius: 22px;
+  --sf-header-menu-padding: 10px;
+  --sf-carousel-arrow-size: 36px;
+  --sf-carousel-pagination-size: 6px;
+  --sf-carousel-pagination-active-width: 20px;
 }
