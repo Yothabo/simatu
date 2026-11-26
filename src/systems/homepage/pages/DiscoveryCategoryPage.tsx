@@ -298,7 +298,7 @@ export default function DiscoveryCategoryPage() {
       {selected && <div className="discovery-results">
         {productsLoading && <p>Loading discoveries…</p>}
         {productsError && <p role="alert">{productsError}</p>}
-        {marketplaceGroups.length > 0 && <div className="discovery-product-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,minmax(0,1fr))', gap: 10, marginTop: 20 }}>
+        {marketplaceGroups.length > 0 && <div className="discovery-product-grid" style={{ display: 'grid', gap: 12, marginTop: 20 }}>
           {marketplaceGroups.map((group, index) => {
             const lowestOffer = group.offers[0];
             return <article
@@ -373,8 +373,14 @@ export default function DiscoveryCategoryPage() {
                 <div style={{ minWidth: 0 }}>
                   <strong style={{ display: 'block', fontSize: 13, fontWeight: 550 }}>{offer.storeName}</strong>
                   <span style={{ display: 'block', marginTop: 3, fontSize: 11, opacity: .58 }}>{offer.subcategory || offer.category || 'Marketplace seller'}{offerIndex === 0 && selectedProductGroup.offers.length > 1 ? ' · Lowest price' : ''}</span>
-                  <a href={'/' + offer.storefront} style={{ display: 'inline-block', marginTop: 9, color: '#f4f1ec', fontSize: 12, fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 3 }}>Visit storefront <span aria-hidden="true">↗</span></a>
-                  <a href={'/' + offer.storefront} style={{ display: 'block', width: 'fit-content', marginTop: 5, color: 'rgba(244,241,236,.68)', fontSize: 11, textDecoration: 'underline', textUnderlineOffset: 3 }}>Learn more from seller</a>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px 14px', marginTop: 9, fontSize: 11, color: 'rgba(244,241,236,.72)' }}>
+                    <span>Quantity: <strong style={{ color: '#f4f1ec' }}>{Number.isFinite(Number((offer as any).quantity ?? (offer as any).stock_quantity)) ? Number((offer as any).quantity ?? (offer as any).stock_quantity) : '—'}</strong></span>
+                    <span>Size: <strong style={{ color: '#f4f1ec' }}>{offer.sizes?.length ? offer.sizes.join(', ') : 'Not specified'}</strong></span>
+                  </div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 10 }}>
+                    <a href={'/' + offer.storefront} style={{ color: '#f4f1ec', fontSize: 12, fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 3 }}>Visit storefront <span aria-hidden="true">↗</span></a>
+                    <a href={offer.href} style={{ color: 'rgba(244,241,236,.72)', fontSize: 11, textDecoration: 'underline', textUnderlineOffset: 3 }}>Learn more from seller <span aria-hidden="true">↗</span></a>
+                  </div>
                 </div>
                 <button type="button" onClick={() => addProductToCart(offer)} disabled={typeof offer.price !== 'number'} style={{ minHeight: 38, padding: '0 13px', border: '1px solid rgba(255,255,255,.55)', borderRadius: 999, background: '#f4f1ec', color: '#111', font: 'inherit', fontSize: 12, fontWeight: 650, cursor: 'pointer' }}>Add to cart</button>
               </div>)}
