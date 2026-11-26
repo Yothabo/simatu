@@ -1,0 +1,14 @@
+/* Poshies brand theme: visual identity only; component geometry is shared. */
+.storefront-controls--poshies,
+[data-storefront-theme="poshies"] {
+  --sf-background: #ffffff;
+  --sf-surface: #ffffff;
+  --sf-text: #292426;
+  --sf-text-muted: #777777;
+  --sf-accent: #ff1493;
+  --sf-border: rgba(41, 36, 38, .14);
+  --sf-hover-surface: rgba(255, 20, 147, .08);
+  --sf-shadow-color: rgba(41, 36, 38, .08);
+  --sf-font-body: var(--poshies-font-body, sans-serif);
+  --sf-font-heading: var(--poshies-font-heading, sans-serif);
+}
