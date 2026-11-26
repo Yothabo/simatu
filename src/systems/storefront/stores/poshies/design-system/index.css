@@ -18,6 +18,18 @@
   --poshies-color-focus: #FF1493;
   --poshies-color-button-text: #FFFFFF;
 
+  /* Shared storefront token roles mapped to the Poshies brand. */
+  --sf-background: var(--poshies-color-canvas);
+  --sf-surface: var(--poshies-color-surface);
+  --sf-text: var(--poshies-color-text);
+  --sf-text-muted: var(--poshies-color-text-muted);
+  --sf-accent: var(--poshies-color-accent);
+  --sf-border: var(--poshies-color-border);
+  --sf-hover-surface: rgba(255, 20, 147, .08);
+  --sf-shadow-color: rgba(41, 36, 38, .08);
+  --sf-font-body: 'Montserrat', sans-serif;
+  --sf-font-heading: 'Anton', sans-serif;
+
   --storefront-page: var(--poshies-color-canvas);
   --storefront-surface: var(--poshies-color-surface);
   --storefront-surface-soft: var(--poshies-color-surface-raised);
