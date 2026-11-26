@@ -16,7 +16,7 @@ describe('storefront design-system configuration', () => {
   it('preserves independent brand accents and store routes', () => {
     expect(STOREFRONTS.yotaabo.basePath).toBe('/yotaabo');
     expect(STOREFRONTS.poshies.basePath).toBe('/poshies');
-    expect(STOREFRONTS.yotaabo.designSystem.overrides['--storefront-accent']).toBe('#8aa89b');
+    expect(STOREFRONTS.yotaabo.designSystem.overrides['--sf-accent']).toBe('#8aa89b');
     expect(STOREFRONTS.poshies.designSystem.overrides['--storefront-accent']).toBe('#ff1493');
   });
 
