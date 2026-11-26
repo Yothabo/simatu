@@ -1,3 +1,7 @@
+@import '../../design-system/styles/storefront-base.css';
+@import '../../stores/poshies/theme.css';
+@import '../../stores/poshies/typography.css';
+
 /* Independent floating controls — no header, bar, or background container */
 .storefront-controls {
   position: fixed;
@@ -7,7 +11,7 @@
   z-index: 100;
   width: 100%;
   padding: 0 clamp(12px, 3vw, 36px);
-  color: #292426;
+  color: var(--sf-text);
   pointer-events: none;
 }
 .storefront-controls__row {
@@ -28,9 +32,9 @@
   padding: 0 20px;
   border: 1px solid #e5e5e5;
   border-radius: 999px;
-  background: #ffffff;
-  color: #292426;
-  box-shadow: 0 4px 14px rgba(30,20,20,.08);
+  background: var(--sf-surface);
+  color: var(--sf-text);
+  box-shadow: var(--sf-shadow-control);
 }
 .storefront-controls__search input {
   flex: 1;
@@ -55,10 +59,10 @@
   height: 54px;
   border: 1px solid #e5e5e5;
   border-radius: 50%;
-  background: #ffffff;
-  color: #292426;
+  background: var(--sf-surface);
+  color: var(--sf-text);
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(30,20,20,.08);
+  box-shadow: var(--sf-shadow-control);
   transition: background .2s ease, transform .2s ease;
 }
 .storefront-controls__icon svg { width: 20px; height: 20px; }
@@ -73,10 +77,10 @@
   min-width: 19px;
   height: 19px;
   padding: 0 5px;
-  border: 2px solid #ffffff;
+  border: 2px solid var(--sf-surface);
   border-radius: 999px;
-  background: #292426;
-  color: #ffffff;
+  background: var(--sf-text);
+  color: var(--sf-surface);
   font-size: 10px;
   font-weight: 700;
   line-height: 1;
@@ -119,7 +123,7 @@
   padding: 10px;
   border: 1px solid #e5e5e5;
   border-radius: 22px;
-  background: #ffffff;
+  background: var(--sf-surface);
   box-shadow: 0 6px 18px rgba(30,20,20,.08);
 }
 .storefront-controls__menu button {
@@ -131,7 +135,7 @@
   border: 0;
   border-radius: 12px;
   background: transparent;
-  color: #292426;
+  color: var(--sf-text);
   font: inherit;
   text-align: left;
   cursor: pointer;
@@ -157,70 +161,70 @@
 /* Poshies floating navigation: charcoal, hot pink and white only. */
 .storefront-controls--poshies { color: #FFFFFF; }
 .storefront-controls--poshies .storefront-controls__search input,
-.storefront-controls--poshies .storefront-controls__menu { background: #292426; border-color: rgba(255,255,255,.2); color: #FFFFFF; }
+.storefront-controls--poshies .storefront-controls__menu { background: var(--sf-text); border-color: rgba(255,255,255,.2); color: #FFFFFF; }
 .storefront-controls--poshies .storefront-controls__search input::placeholder { color: rgba(255,255,255,.65); }
-.storefront-controls--poshies .storefront-controls__icon { background: #292426; border-color: rgba(255,255,255,.25); color: #FFFFFF; }
+.storefront-controls--poshies .storefront-controls__icon { background: var(--sf-text); border-color: rgba(255,255,255,.25); color: #FFFFFF; }
 .storefront-controls--poshies .storefront-controls__icon:hover,
 .storefront-controls--poshies .storefront-controls__menu button:hover,
-.storefront-controls--poshies .storefront-controls__menu button:focus-visible { background: #FF1493; color: #FFFFFF; }
-.storefront-controls--poshies .storefront-controls__cart-count { background: #FF1493; color: #FFFFFF; }
+.storefront-controls--poshies .storefront-controls__menu button:focus-visible { background: var(--sf-accent); color: #FFFFFF; }
+.storefront-controls--poshies .storefront-controls__cart-count { background: var(--sf-accent); color: #FFFFFF; }
 
 /* Poshies floating controls: solid white surfaces, charcoal icons/text, pink interaction. */
 .storefront-controls--poshies {
-  color: #292426;
+  color: var(--sf-text);
 }
 .storefront-controls--poshies .storefront-controls__search {
-  background: #fff;
-  border: 1px solid rgba(41, 36, 38, .14);
-  color: #292426;
-  box-shadow: 0 5px 18px rgba(41, 36, 38, .08);
+  background: var(--sf-surface);
+  border: 1px solid var(--sf-border);
+  color: var(--sf-text);
+  box-shadow: 0 5px 18px var(--sf-shadow-color);
 }
 .storefront-controls--poshies .storefront-controls__search input {
   background: transparent;
   border: 0;
-  color: #292426;
+  color: var(--sf-text);
 }
 .storefront-controls--poshies .storefront-controls__search input::placeholder {
   color: rgba(41, 36, 38, .55);
 }
 .storefront-controls--poshies .storefront-controls__icon {
-  background: #fff;
-  border: 1px solid rgba(41, 36, 38, .14);
-  color: #292426;
-  box-shadow: 0 5px 18px rgba(41, 36, 38, .08);
+  background: var(--sf-surface);
+  border: 1px solid var(--sf-border);
+  color: var(--sf-text);
+  box-shadow: 0 5px 18px var(--sf-shadow-color);
 }
 .storefront-controls--poshies .storefront-controls__icon:hover,
 .storefront-controls--poshies .storefront-controls__icon:focus-visible {
-  background: #fff;
-  border-color: #FF1493;
-  color: #FF1493;
+  background: var(--sf-surface);
+  border-color: var(--sf-accent);
+  color: var(--sf-accent);
   outline: none;
 }
 .storefront-controls--poshies .storefront-controls__cart-count {
-  background: #FF1493;
-  color: #fff;
+  background: var(--sf-accent);
+  color: var(--sf-surface);
 }
 .storefront-controls--poshies .storefront-controls__menu nav {
-  background: #fff;
-  border: 1px solid rgba(41, 36, 38, .14);
-  box-shadow: 0 8px 24px rgba(41, 36, 38, .09);
+  background: var(--sf-surface);
+  border: 1px solid var(--sf-border);
+  box-shadow: var(--sf-shadow-panel);
 }
 .storefront-controls--poshies .storefront-controls__menu button {
   background: transparent;
-  color: #292426;
+  color: var(--sf-text);
 }
 .storefront-controls--poshies .storefront-controls__menu button:hover,
 .storefront-controls--poshies .storefront-controls__menu button:focus-visible {
-  background: rgba(255, 20, 147, .08);
-  color: #FF1493;
+  background: var(--sf-hover-surface);
+  color: var(--sf-accent);
   outline: none;
 }
 .storefront-controls--poshies .storefront-controls__clear {
-  color: #292426;
+  color: var(--sf-text);
 }
 .storefront-controls--poshies .storefront-controls__clear:hover,
 .storefront-controls--poshies .storefront-controls__clear:focus-visible {
-  color: #FF1493;
+  color: var(--sf-accent);
   background: transparent;
   outline: none;
 }
@@ -236,7 +240,7 @@
   background: transparent !important;
   padding: 0;
   margin: 0;
-  color: #292426;
+  color: var(--sf-text);
   font: inherit;
 }
 .storefront-controls--poshies .storefront-controls__search input[type='search']::-webkit-search-decoration,
@@ -247,8 +251,8 @@
   display: none;
 }
 .storefront-controls--poshies .storefront-controls__cart-count {
-  background: #292426 !important;
-  color: #fff !important;
+  background: var(--sf-text) !important;
+  color: var(--sf-surface) !important;
 }
 
 
@@ -316,7 +320,7 @@
   border: 0;
   border-radius: 0;
   background: transparent;
-  color: #292426;
+  color: var(--sf-text);
   font: inherit;
   text-align: left;
   cursor: pointer;
@@ -324,8 +328,8 @@
 }
 .storefront-controls--poshies .storefront-controls__inline-menu button:hover,
 .storefront-controls--poshies .storefront-controls__inline-menu button:focus-visible {
-  background: rgba(255, 20, 147, .08);
-  color: #FF1493;
+  background: var(--sf-hover-surface);
+  color: var(--sf-accent);
   outline: none;
 }
 
@@ -461,13 +465,13 @@
 .storefront-controls--poshies .storefront-controls__menu-item,
 .storefront-controls--poshies .storefront-controls__category-submenu button {
  display:flex; align-items:center; justify-content:flex-start; gap:12px; width:100%; min-height:44px; padding:0 12px;
- border:0; border-radius:12px; background:transparent; color:#292426; font:inherit; text-align:left; text-decoration:none; cursor:pointer;
+ border:0; border-radius:12px; background:transparent; color:var(--sf-text); font:inherit; text-align:left; text-decoration:none; cursor:pointer;
  transition:color .18s ease, background .18s ease;
 }
 .storefront-controls--poshies .storefront-controls__menu-item svg,
 .storefront-controls--poshies .storefront-controls__category-submenu button svg { flex:0 0 18px; width:18px; height:18px; }
 .storefront-controls--poshies .storefront-controls__menu-item:hover,
-.storefront-controls--poshies .storefront-controls__category-submenu button:hover { color:#FF1493; background:rgba(255,20,147,.08); }
+.storefront-controls--poshies .storefront-controls__category-submenu button:hover { color:var(--sf-accent); background:rgba(255,20,147,.08); }
 .storefront-controls--poshies .storefront-controls__categories-trigger svg:last-child { margin-left:auto; transition:transform .2s ease; }
 .storefront-controls--poshies .storefront-controls__categories-trigger svg.is-rotated { transform:rotate(180deg); }
 .storefront-controls--poshies .storefront-controls__category-submenu { display:flex; flex-direction:column; gap:2px; padding-left:28px; overflow:hidden; animation:poshies-category-expand .22s ease both; }
@@ -554,7 +558,7 @@
 }
 .storefront-controls--poshies .storefront-controls__search:focus-within {
   outline: none !important;
-  box-shadow: 0 5px 18px rgba(41, 36, 38, .08) !important;
+  box-shadow: 0 5px 18px var(--sf-shadow-color) !important;
 }
 
 
@@ -565,9 +569,9 @@
 .storefront-controls--poshies .storefront-controls__search:focus-within,
 .storefront-controls--poshies .storefront-controls__search:active {
   outline: none !important;
-  border-color: rgba(41, 36, 38, .14) !important;
-  box-shadow: 0 5px 18px rgba(41, 36, 38, .08) !important;
-  background: #fff !important;
+  border-color: var(--sf-border) !important;
+  box-shadow: 0 5px 18px var(--sf-shadow-color) !important;
+  background: var(--sf-surface) !important;
 }
 .storefront-controls--poshies .storefront-controls__search input,
 .storefront-controls--poshies .storefront-controls__search input:hover,
@@ -579,7 +583,7 @@
   border: 0 !important;
   box-shadow: none !important;
   background: transparent !important;
-  color: #292426 !important;
+  color: var(--sf-text) !important;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -604,6 +608,6 @@
 .storefront-controls--poshies .storefront-controls__search:focus-visible {
   outline: 0 !important;
   outline-offset: 0 !important;
-  border-color: rgba(41, 36, 38, .14) !important;
-  box-shadow: 0 5px 18px rgba(41, 36, 38, .08) !important;
+  border-color: var(--sf-border) !important;
+  box-shadow: 0 5px 18px var(--sf-shadow-color) !important;
 }
