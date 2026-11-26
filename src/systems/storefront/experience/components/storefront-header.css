@@ -316,3 +316,63 @@
   color: #FF1493;
   outline: none;
 }
+
+
+/* Poshies header redesign: the search surface expands downward while the cart and menu controls remain anchored. */
+.storefront-controls--poshies .storefront-controls__row--menu-open {
+  align-items: flex-start;
+}
+.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__search {
+  box-sizing: border-box;
+  height: 236px;
+  min-height: 236px;
+  align-self: flex-start;
+  align-items: stretch;
+  padding: 14px 16px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  overflow: hidden;
+  transition: height .36s cubic-bezier(.2,.65,.25,1), min-height .36s cubic-bezier(.2,.65,.25,1), padding .36s ease, border-radius .36s ease;
+}
+.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__inline-menu {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  gap: 3px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__inline-menu button {
+  flex: 0 0 auto;
+  min-height: 48px;
+  width: 100%;
+  margin: 0;
+  padding: 0 12px;
+  border-radius: 12px;
+}
+.storefront-controls--poshies .storefront-controls__row--menu-open > .storefront-controls__cart,
+.storefront-controls--poshies .storefront-controls__row--menu-open > button.storefront-controls__icon {
+  flex: 0 0 54px;
+  width: 54px;
+  height: 54px;
+  align-self: flex-start;
+  margin: 0;
+}
+@media (max-width: 640px) {
+  .storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__search {
+    height: 224px;
+    min-height: 224px;
+    padding: 12px;
+  }
+  .storefront-controls--poshies .storefront-controls__row--menu-open > .storefront-controls__cart,
+  .storefront-controls--poshies .storefront-controls__row--menu-open > button.storefront-controls__icon {
+    flex-basis: 50px;
+    width: 50px;
+    height: 50px;
+  }
+  .storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__inline-menu button {
+    min-height: 44px;
+  }
+}
