@@ -8,9 +8,9 @@ export default function ContactSection() {
   return (
     <section
       id="contact"
-      className={`relative z-10 -mb-px px-6 py-20 sm:px-10 sm:py-24 lg:px-12 lg:py-28 ${isYotaabo ? "bg-white" : "bg-[#292426] text-white"}`}
+      className={`relative z-10 -mb-px px-[var(--sf-space-6)] py-[var(--sf-space-20)] sm:px-[var(--sf-space-10)] sm:py-[var(--sf-space-24)] lg:px-[var(--sf-space-12)] lg:py-[var(--sf-space-28)] ${isYotaabo ? "bg-white" : "bg-[#292426] text-white"}`}
     >
-      <div className="mx-auto max-w-[1120px] p-7 sm:p-10 lg:p-14">
+      <div className="mx-auto max-w-[var(--sf-content-max-width)] p-[var(--sf-space-7)] sm:p-[var(--sf-space-10)] lg:p-[var(--sf-space-14)]">
 
         {/* 1. Heading stands alone */}
         <h2 className="max-w-2xl font-heading text-4xl font-medium leading-[1.02] tracking-[-0.035em] text-current sm:text-5xl lg:text-6xl">
@@ -18,7 +18,7 @@ export default function ContactSection() {
         </h2>
 
         {/* 2. Paragraph and Button are in a flex row together */}
-        <div className="mt-5 flex flex-col gap-6 md:flex-row md:items-start md:justify-between md:gap-12">
+        <div className="mt-[var(--sf-space-5)] flex flex-col gap-[var(--sf-space-6)] md:flex-row md:items-start md:justify-between md:gap-[var(--sf-space-12)]">
           <p className="max-w-xl text-sm leading-[1.9] text-white/75">
             {isYotaabo
               ? 'Explore the collection and discover a fragrance direction that fits your mood, your style, and your everyday.'
