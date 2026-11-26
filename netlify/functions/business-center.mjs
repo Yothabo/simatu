@@ -43,10 +43,10 @@ export default async (request) => {
     if (action === 'campaigns' && request.method === 'GET') {
       const result = await pool.query(
         `SELECT c.*, COUNT(DISTINCT cp.product_id)::int AS product_count,
-          COALESCE(SUM(e.event_type='impression')::int,0)::int AS impressions,
-          COALESCE(SUM(e.event_type='click')::int,0)::int AS clicks,
-          COALESCE(SUM(e.event_type='add_to_cart')::int,0)::int AS carts,
-          COALESCE(SUM(e.event_type='purchase')::int,0)::int AS purchases
+          (SELECT COUNT(*)::int FROM public.simatu_promotion_events e WHERE e.campaign_id=c.id AND e.event_type='impression') AS impressions,
+          (SELECT COUNT(*)::int FROM public.simatu_promotion_events e WHERE e.campaign_id=c.id AND e.event_type='click') AS clicks,
+          (SELECT COUNT(*)::int FROM public.simatu_promotion_events e WHERE e.campaign_id=c.id AND e.event_type='add_to_cart') AS carts,
+          (SELECT COUNT(*)::int FROM public.simatu_promotion_events e WHERE e.campaign_id=c.id AND e.event_type='purchase') AS purchases
          FROM public.simatu_campaigns c
          LEFT JOIN public.simatu_campaign_products cp ON cp.campaign_id=c.id
          LEFT JOIN public.simatu_promotion_events e ON e.campaign_id=c.id
