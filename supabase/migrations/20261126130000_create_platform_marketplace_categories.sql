@@ -8,6 +8,8 @@ CREATE TABLE public.marketplace_categories (
     slug TEXT NOT NULL UNIQUE,
     description TEXT,
     sort_order INTEGER NOT NULL DEFAULT 0,
+    audience_policy TEXT NOT NULL DEFAULT 'general',
+    minimum_age SMALLINT,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -21,7 +23,13 @@ CREATE TABLE public.marketplace_categories (
     CONSTRAINT marketplace_categories_slug_valid
         CHECK (slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),
     CONSTRAINT marketplace_categories_sort_order_valid
-        CHECK (sort_order >= 0)
+        CHECK (sort_order >= 0),
+    CONSTRAINT marketplace_categories_audience_policy_valid
+        CHECK (audience_policy IN ('general', 'restricted')),
+    CONSTRAINT marketplace_categories_minimum_age_valid
+        CHECK (minimum_age IS NULL OR minimum_age BETWEEN 0 AND 120),
+    CONSTRAINT marketplace_categories_restricted_age_valid
+        CHECK (audience_policy <> 'restricted' OR minimum_age >= 18)
 );
 
 CREATE INDEX marketplace_categories_active_order_idx
@@ -43,26 +51,26 @@ CREATE INDEX store_marketplace_categories_category_idx
 
 -- Seed the platform discovery categories. Store-specific catalogue categories
 -- are deliberately not copied or replaced.
-INSERT INTO public.marketplace_categories (name, slug, description, sort_order)
+INSERT INTO public.marketplace_categories (name, slug, description, sort_order, audience_policy, minimum_age)
 VALUES
-    ('Fashion', 'fashion', 'Clothing, footwear, accessories and style.', 10),
-    ('Home & Spaces', 'spaces', 'Furniture, interiors and home living.', 20),
-    ('Technology', 'technology', 'Electronics, technology and digital equipment.', 30),
-    ('African Culture & Heritage', 'culture', 'African culture, heritage and creative expression.', 40),
-    ('Everyday Living', 'living', 'Everyday essentials and practical living.', 50),
-    ('Beauty & Care', 'beauty', 'Beauty, grooming and personal care.', 60),
-    ('Sport & Fitness', 'sports', 'Sport, exercise and fitness.', 70),
-    ('Food & Drink', 'food', 'Food, beverages and culinary products.', 80),
-    ('Automotive', 'automotive', 'Vehicles, accessories and automotive services.', 90),
-    ('Pets & Animals', 'pets', 'Pet products, animal care and services.', 100),
-    ('Kids & Family', 'kids', 'Products and services for children and families.', 110),
-    ('Art & Creativity', 'creative', 'Art, craft and creative tools.', 120),
-    ('Events & Celebrations', 'events', 'Event products, services and celebrations.', 130),
-    ('Hobbies & Collecting', 'hobbies', 'Hobbies, collectibles and specialist interests.', 140),
-    ('Local & Personal Services', 'services', 'Local, personal and household services.', 150),
-    ('Travel & Experiences', 'travel', 'Travel, accommodation and experiences.', 160),
-    ('Business Services', 'business', 'Professional and operational business services.', 170),
-    ('Digital Products', 'digital', 'Software, digital resources and downloads.', 180)
+    ('Fashion', 'fashion', 'Clothing, footwear, accessories and style.', 10, 'general', NULL),
+    ('Home & Living', 'home-living', 'Furniture, interiors, household and everyday home essentials.', 20, 'general', NULL),
+    ('Technology', 'technology', 'Consumer electronics, computing, audio and connected technology.', 30, 'general', NULL),
+    ('African Culture & Heritage', 'culture', 'African culture, heritage and creative expression.', 40, 'general', NULL),
+    ('Beauty & Care', 'beauty', 'Beauty, grooming and personal care.', 60, 'general', NULL),
+    ('Sport & Fitness', 'sports', 'Sport, exercise and fitness.', 70, 'general', NULL),
+    ('Food & Drink', 'food', 'Food, beverages and culinary products.', 80, 'general', NULL),
+    ('Automotive', 'automotive', 'Vehicles, accessories and automotive services.', 90, 'general', NULL),
+    ('Pets & Animals', 'pets', 'Pet products, animal care and services.', 100, 'general', NULL),
+    ('Kids & Family', 'kids', 'Products and services for children and families.', 110, 'general', NULL),
+    ('Art & Creativity', 'creative', 'Art, craft, creative tools and artistic services.', 120, 'general', NULL),
+    ('Events & Celebrations', 'events', 'Event products, services and celebrations.', 130, 'general', NULL),
+    ('Hobbies & Collecting', 'hobbies', 'Hobbies, collectibles and specialist interests.', 140, 'general', NULL),
+    ('Local & Personal Services', 'services', 'Consumer-facing local, personal and household services.', 150, 'general', NULL),
+    ('Travel & Experiences', 'travel', 'Travel, accommodation and destination experiences.', 160, 'general', NULL),
+    ('Business Services', 'business', 'Professional and operational business services for organizations.', 170, 'general', NULL),
+    ('Digital Products', 'digital', 'Software, digital resources and downloadable products.', 180, 'general', NULL),
+    ('Sexual Wellness', 'sexual-wellness', 'Adult sexual wellness products, including intimate devices; access and visibility are restricted.', 190, 'restricted', 18)
 ON CONFLICT (slug) DO NOTHING;
 
 ALTER TABLE public.marketplace_categories ENABLE ROW LEVEL SECURITY;
