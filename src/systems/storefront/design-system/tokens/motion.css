@@ -1,0 +1,8 @@
+/* Shared storefront motion tokens. */
+:root {
+  --sf-motion-fast: 180ms;
+  --sf-motion-normal: 200ms;
+  --sf-motion-expand: 360ms;
+  --sf-motion-ease: ease;
+  --sf-motion-expand-ease: cubic-bezier(.2, .65, .25, 1);
+}
