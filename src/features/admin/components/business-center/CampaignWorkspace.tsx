@@ -19,7 +19,7 @@ export default function CampaignWorkspace({ tier }: { tier: SubscriptionTierId }
     const all = [...validation.errors];
     if (!name.trim()) all.unshift('Campaign name is required.');
     if (!canUseBusinessCenterModule(entitlements,'campaigns')) all.unshift('Campaigns are not included in this plan. Preview an eligible tier in Subscriptions.');
-    if (countLimitEligibleCampaigns(items.map(item=>item.status))>=entitlements.limits.activeCampaigns) all.unshift('Your plan has reached its active/scheduled campaign limit.');
+    if (countLimitEligibleCampaigns([...items.map(item=>item.status),status])>=entitlements.limits.activeCampaigns) all.unshift('Your plan has reached its active/scheduled campaign limit.');
     if (budget!=='' && (!Number.isFinite(Number(budget)) || Number(budget)<0)) all.push('Budget must be zero or more.');
     setErrors(all);
     if (all.length) return;
