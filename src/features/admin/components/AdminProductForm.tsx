@@ -57,7 +57,7 @@ export default function AdminProductForm({
     setForm,
   });
 
-  const { marketplaceCategoryOptions, marketplaceSubcategoryOptions, isLoadingMarketplaceTaxonomy, marketplaceTaxonomyError, selectedSubcategoryCategorySlug } = useMarketplaceTaxonomy(form.marketplace_subcategory_id ?? null);
+  const { marketplaceCategoryOptions, marketplaceSubcategoryOptions, isLoadingMarketplaceTaxonomy, marketplaceTaxonomyError, selectedSubcategoryCategorySlug } = useMarketplaceTaxonomy(form.marketplace_category_slug, form.marketplace_subcategory_id ?? null);
 
   useEffect(() => {
     if (form.marketplace_subcategory_id && !form.marketplace_category_slug && selectedSubcategoryCategorySlug) {
