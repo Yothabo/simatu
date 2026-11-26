@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import ConfirmModal from '../../../../shared/components/ConfirmModal';
 import ProductModal from '../components/ProductModal';
 import CheckoutModal from '../components/CheckoutModal';
+import MarketplaceCheckoutModal from '../components/MarketplaceCheckoutModal';
 import './MarketplaceCartPage.css';
 
 export default function MarketplaceCartPage() {
@@ -24,6 +25,8 @@ export default function MarketplaceCartPage() {
     items: cartItems.filter((candidate) => candidate.storefront === item.storefront),
   }] as const)).values());
   const selectedCartItems = cartItems.filter((item) => selectedStorefronts.includes(item.storefront));
+  const selectedStoreItems = selectedCartItems.filter((item) => item.storefront !== 'marketplace');
+  const selectedMarketplaceItems = selectedCartItems.filter((item) => item.storefront === 'marketplace');
   const selectedCartTotal = selectedCartItems.reduce((total, item) => total + Number(item.price.replace(/[^0-9.]/g, '')) * item.quantity, 0);
 
   useEffect(() => {
@@ -39,6 +42,7 @@ export default function MarketplaceCartPage() {
   const [removingId, setRemovingId] = useState<string | null>(null);
   const [itemToDelete, setItemToDelete] = useState<{ id: string; name: string } | null>(null);
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+  const [showMarketplaceCheckout, setShowMarketplaceCheckout] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<typeof cartItems[number] | null>(null);
 
   const handleRemoveClick = (id: string, name: string) => {
@@ -192,11 +196,11 @@ export default function MarketplaceCartPage() {
                     Continue Shopping
                   </Link>
                   <button
-                    onClick={() => setShowCheckoutModal(true)}
+                    onClick={() => selectedMarketplaceItems.length > 0 ? setShowMarketplaceCheckout(true) : setShowCheckoutModal(true)}
                     disabled={selectedCartItems.length === 0}
                     className="marketplace-cart__button marketplace-cart__button--primary"
                   >
-                    {isCheckoutView ? 'Continue to checkout' : 'Checkout selected stores'}
+                    {selectedMarketplaceItems.length > 0 ? 'Checkout marketplace items' : (isCheckoutView ? 'Continue to checkout' : 'Checkout selected stores')}
                   </button>
                 </div>
               </div>
@@ -249,10 +253,11 @@ export default function MarketplaceCartPage() {
       <CheckoutModal
         isOpen={showCheckoutModal}
         onClose={() => setShowCheckoutModal(false)}
-        cartItems={selectedCartItems}
-        cartTotal={selectedCartTotal}
-        onSuccess={() => selectedCartItems.forEach((item) => removeFromCart(item.id))}
+        cartItems={selectedStoreItems}
+        cartTotal={selectedStoreItems.reduce((total, item) => total + Number(item.price.replace(/[^0-9.]/g, '')) * item.quantity, 0)}
+        onSuccess={() => selectedStoreItems.forEach((item) => removeFromCart(item.id, item.storefront))}
       />
+      <MarketplaceCheckoutModal isOpen={showMarketplaceCheckout} onClose={() => setShowMarketplaceCheckout(false)} items={selectedMarketplaceItems} onSuccess={() => selectedMarketplaceItems.forEach((item) => removeFromCart(item.id, 'marketplace'))} />
     </>
   );
 }
