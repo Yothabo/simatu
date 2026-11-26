@@ -86,6 +86,12 @@ export function validateProduct(body) {
       ? body.subcategory_id.trim()
       : '__invalid__';
 
+  const marketplaceCategorySlug = body?.marketplace_category_slug == null || (typeof body.marketplace_category_slug === 'string' && body.marketplace_category_slug.trim() === '')
+    ? null
+    : typeof body.marketplace_category_slug === 'string' && /^[a-z0-9]+(-[a-z0-9]+)*$/.test(body.marketplace_category_slug.trim())
+      ? body.marketplace_category_slug.trim()
+      : '__invalid__';
+
   const marketplaceSubcategoryId = body?.marketplace_subcategory_id == null ||
     (typeof body.marketplace_subcategory_id === 'string' && body.marketplace_subcategory_id.trim() === '')
     ? null
@@ -198,6 +204,14 @@ export function validateProduct(body) {
     return { error: 'Please provide a valid marketplace subcategory.' };
   }
 
+  if (marketplaceCategorySlug === '__invalid__') {
+    return { error: 'Please provide a valid marketplace category.' };
+  }
+
+  if (marketplaceCategorySlug && !marketplaceSubcategoryId) {
+    return { error: 'Select a marketplace subcategory for the chosen category.' };
+  }
+
   if (category.length > 120 || subcategory.length > 120) {
     return {
       error: 'The selected category or subcategory is invalid.',
@@ -238,6 +252,7 @@ export function validateProduct(body) {
       category_id: categoryId,
       subcategory,
       subcategory_id: subcategoryId,
+      marketplace_category_slug: marketplaceCategorySlug === '__invalid__' ? null : marketplaceCategorySlug,
       marketplace_subcategory_id: marketplaceSubcategoryId,
       description,
       image_url: imageUrl,
