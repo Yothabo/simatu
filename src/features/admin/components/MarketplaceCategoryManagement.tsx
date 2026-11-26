@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import type { CSSProperties } from 'react';
 
 type MarketplaceCategory = { id: string; name: string; slug: string };
 type MarketplaceStore = {
@@ -11,7 +12,7 @@ type MarketplaceStore = {
 
 type Props = { accessToken: string };
 
-const surface: React.CSSProperties = {
+const surface: CSSProperties = {
   border: '1px solid var(--admin-border-subtle)',
   borderRadius: 'var(--ds-radius-lg)',
   background: 'var(--admin-surface)',
