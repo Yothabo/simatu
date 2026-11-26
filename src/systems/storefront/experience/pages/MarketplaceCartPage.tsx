@@ -40,24 +40,24 @@ export default function MarketplaceCartPage() {
   }, [cartItems]);
 
   const [removingId, setRemovingId] = useState<string | null>(null);
-  const [itemToDelete, setItemToDelete] = useState<{ id: string; name: string } | null>(null);
+  const [itemToDelete, setItemToDelete] = useState<{ id: string; name: string; storefront: string; variantId?: string | null } | null>(null);
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
   const [showMarketplaceCheckout, setShowMarketplaceCheckout] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<typeof cartItems[number] | null>(null);
 
-  const handleRemoveClick = (id: string, name: string) => {
-    setItemToDelete({ id, name });
+  const handleRemoveClick = (id: string, name: string, storefront: string, variantId?: string | null) => {
+    setItemToDelete({ id, name, storefront, variantId });
   };
 
   const confirmDelete = () => {
     if (!itemToDelete) return;
-    const { id, name } = itemToDelete;
+    const { id, name, storefront, variantId } = itemToDelete;
     setItemToDelete(null);
     setSelectedProduct(null);
     setRemovingId(id);
 
     setTimeout(() => {
-      removeFromCart(id);
+      removeFromCart(id, storefront, variantId);
       setRemovingId(null);
       toast.error(`${name} removed from cart`, {
         style: { background: '#4d4d4d', color: '#fff', borderRadius: 0 },
@@ -106,7 +106,7 @@ export default function MarketplaceCartPage() {
                   </label>
                   {group.items.map((item) => (
                 <div
-                  key={item.id}
+                  key={item.id + '-' + (item.variantId || item.size || '') + '-' + item.storefront}
                   className={`marketplace-cart__item transition-all duration-300 ease-in-out ${
                     removingId === item.id
                       ? 'opacity-0 scale-95 translate-x-4 pointer-events-none'
@@ -140,7 +140,7 @@ export default function MarketplaceCartPage() {
                         {item.name}
                       </button>
                       <button
-                        onClick={() => handleRemoveClick(item.id, item.name)}
+                        onClick={() => handleRemoveClick(item.id, item.name, item.storefront, item.variantId)}
                         aria-label="Remove item"
                         className="marketplace-cart__remove"
                       >
@@ -152,7 +152,7 @@ export default function MarketplaceCartPage() {
                       <div className="flex items-center">
                         <div className="marketplace-cart__quantity">
                           <RippleButton
-                            onClick={() => decreaseQuantity(item.id)}
+                            onClick={() => decreaseQuantity(item.id, item.storefront, item.variantId)}
                             className="marketplace-cart__quantity-button"
                             ariaLabel="Decrease quantity"
                             rippleColor="#c4471d"
@@ -163,7 +163,7 @@ export default function MarketplaceCartPage() {
                             {item.quantity}
                           </span>
                           <RippleButton
-                            onClick={() => increaseQuantity(item.id)}
+                            onClick={() => increaseQuantity(item.id, item.storefront, item.variantId)}
                             className="marketplace-cart__quantity-button"
                             ariaLabel="Increase quantity"
                             rippleColor="#c4471d"
@@ -219,14 +219,14 @@ export default function MarketplaceCartPage() {
         cartQuantity={selectedProduct?.quantity ?? 1}
         onQuantityChange={(nextQuantity) => {
           if (!selectedProduct) return;
-          const currentItem = cartItems.find((item) => item.id === selectedProduct.id);
+          const currentItem = cartItems.find((item) => item.id === selectedProduct.id && item.storefront === selectedProduct.storefront && (item.variantId || null) === (selectedProduct.variantId || null));
           if (!currentItem) return;
 
           const difference = nextQuantity - currentItem.quantity;
           if (difference > 0) {
-            for (let i = 0; i < difference; i++) increaseQuantity(selectedProduct.id);
+            for (let i = 0; i < difference; i++) increaseQuantity(selectedProduct.id, selectedProduct.storefront, selectedProduct.variantId);
           } else if (difference < 0) {
-            for (let i = 0; i < Math.abs(difference); i++) decreaseQuantity(selectedProduct.id);
+            for (let i = 0; i < Math.abs(difference); i++) decreaseQuantity(selectedProduct.id, selectedProduct.storefront, selectedProduct.variantId);
           }
         }}
         onRemoveFromCart={() => {
@@ -234,6 +234,8 @@ export default function MarketplaceCartPage() {
           setItemToDelete({
             id: selectedProduct.id,
             name: selectedProduct.name,
+            storefront: selectedProduct.storefront,
+            variantId: selectedProduct.variantId,
           });
         }}
         onClose={() => setSelectedProduct(null)}
@@ -255,7 +257,7 @@ export default function MarketplaceCartPage() {
         onClose={() => setShowCheckoutModal(false)}
         cartItems={selectedStoreItems}
         cartTotal={selectedStoreItems.reduce((total, item) => total + Number(item.price.replace(/[^0-9.]/g, '')) * item.quantity, 0)}
-        onSuccess={() => selectedStoreItems.forEach((item) => removeFromCart(item.id, item.storefront))}
+        onSuccess={() => selectedStoreItems.forEach((item) => removeFromCart(item.id, item.storefront, item.variantId))}
       />
       <MarketplaceCheckoutModal isOpen={showMarketplaceCheckout} onClose={() => setShowMarketplaceCheckout(false)} items={selectedMarketplaceItems} onSuccess={() => selectedMarketplaceItems.forEach((item) => removeFromCart(item.id, 'marketplace'))} />
     </>
