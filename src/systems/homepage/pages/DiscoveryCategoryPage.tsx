@@ -288,19 +288,19 @@ export default function DiscoveryCategoryPage() {
             {group.image_url && <img src={group.image_url} alt={group.name} loading="lazy" style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover', display: 'block' }} />}
             <div style={{ display: 'block', padding: 14 }}>
               <strong>{group.name}</strong>
-              <small style={{ display: 'block', opacity: .65, marginTop: 5 }}>Compare {group.offers.length} {group.offers.length === 1 ? 'seller offer' : 'seller offers'}</small>
+              <small style={{ display: 'block', opacity: .6, marginTop: 5 }}>{group.offers.length} {group.offers.length === 1 ? 'offer' : 'offers'} available</small>
               {group.offers[0]?.brand && <span style={{ display: 'block', marginTop: 8, fontSize: 12, opacity: .75 }}>Brand: {group.offers[0].brand}</span>}
               {group.offers[0]?.description && <p style={{ margin: '10px 0 0', fontSize: 13, lineHeight: 1.5, opacity: .78 }}>{group.offers[0].description}</p>}
               {((group.offers[0]?.sizes ?? []).length > 0) && <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 10 }}>{(group.offers[0]?.sizes ?? []).map((size) => <span key={size} style={{ border: '1px solid rgba(255,255,255,.2)', borderRadius: 999, padding: '4px 8px', fontSize: 11 }}>{size}</span>)}</div>}
               <div style={{ display: 'grid', gap: 10, marginTop: 14 }}>
                 {group.offers.map((offer, offerIndex) => <div key={`${offer.storefront}-${offer.id}`} style={{ display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 8, paddingTop: 10, borderTop: '1px solid rgba(255,255,255,.12)' }}>
                   <div>
-                    <span style={{ display: 'block', fontSize: 13, fontWeight: 550 }}>{offer.storeName}</span>
+                    <a href={'/' + offer.storefront} style={{ display: 'inline-block', fontSize: 13, fontWeight: 550, color: '#f4f1ec', textDecoration: 'underline', textUnderlineOffset: 3 }}>Visit {offer.storeName} ↗</a>
                     <span style={{ display: 'block', marginTop: 3, opacity: .6, fontSize: 11 }}>{offer.subcategory || offer.category || 'Marketplace offer'}{offerIndex === 0 && group.offers.length > 1 ? ' · Lowest listed price' : ''}</span>
                     <strong style={{ display: 'block', marginTop: 5 }}>R{Number(offer.price || 0).toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
                   </div>
                   <button type="button" onClick={() => addProductToCart(offer)} style={{ minHeight: 38, padding: '0 12px', border: '1px solid rgba(255,255,255,.55)', borderRadius: 999, background: '#f4f1ec', color: '#111', font: 'inherit', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
-                    Choose offer
+                    Add to cart
                   </button>
                 </div>)}
               </div>
