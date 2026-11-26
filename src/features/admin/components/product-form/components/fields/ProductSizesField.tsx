@@ -18,7 +18,7 @@ export default function ProductSizesField({
   onRemoveSize,
 }: Props) {
   return (
-    <AdminField label="Sizes" hint="Press Enter to add each size">
+    <AdminField label="Sizes" hint="Enter one size at a time, or paste a comma-separated list. Each size is saved separately.">
       <div style={{ display: 'flex', gap: 'var(--admin-space-xs)' }}>
         <AdminInput
           value={sizeInput}
@@ -29,7 +29,7 @@ export default function ProductSizesField({
               onAddSize();
             }
           }}
-          placeholder="e.g. S, M, L"
+          placeholder="e.g. Small"
         />
         <button
           type="button"
