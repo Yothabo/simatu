@@ -45,16 +45,16 @@
 :root[data-storefront='poshies'] main.storefront-page,
 :root[data-storefront='poshies'] .storefront-header,
 :root[data-storefront='poshies'] .storefront-hero,
-:root[data-storefront='poshies'] .poshies-home,
-:root[data-storefront='poshies'] .poshies-campaign,
+:root[data-storefront='poshies'] .storefront-hero--campaign,
+:root[data-storefront='poshies'] .storefront-campaign,
 :root[data-storefront='poshies'] .storefront-collections,
-:root[data-storefront='poshies'] .poshies-collections,
-:root[data-storefront='poshies'] .poshies-collection-section,
-:root[data-storefront='poshies'] .poshies-collection-panel,
-:root[data-storefront='poshies'] .poshies-collection-carousel,
+:root[data-storefront='poshies'] .storefront-collections--campaign,
+:root[data-storefront='poshies'] .storefront-collection-section,
+:root[data-storefront='poshies'] .storefront-collection-panel,
+:root[data-storefront='poshies'] .storefront-collection-carousel,
 :root[data-storefront='poshies'] .poshies-featured,
 :root[data-storefront='poshies'] .yotaabo-product-carousel,
-:root[data-storefront='poshies'] .poshies-footer,
+:root[data-storefront='poshies'] .storefront-footer--campaign,
 :root[data-storefront='poshies'] .storefront-footer,
 :root[data-storefront='poshies'] .storefront-footer__inner {
   background-color: var(--poshies-color-canvas) !important;
@@ -63,10 +63,10 @@
 }
 :root[data-storefront='poshies'] .storefront-page,
 :root[data-storefront='poshies'] .storefront-header,
-:root[data-storefront='poshies'] .poshies-footer,
+:root[data-storefront='poshies'] .storefront-footer--campaign,
 :root[data-storefront='poshies'] .storefront-page *,
 :root[data-storefront='poshies'] .storefront-header *,
-:root[data-storefront='poshies'] .poshies-footer * {
+:root[data-storefront='poshies'] .storefront-footer--campaign * {
   font-family: var(--poshies-font-body);
 }
 :root[data-storefront='poshies'] .storefront-page :is(h1,h2,h3,h4,p,a,label,span),
@@ -114,9 +114,9 @@
 }
 
 /* Campaign artwork keeps its original image and layout; no gradient overlays. */
-:root[data-storefront='poshies'] .poshies-home { padding: 0; }
-:root[data-storefront='poshies'] .poshies-campaign-wrap { width: 100%; margin: 0; }
-:root[data-storefront='poshies'] .poshies-campaign {
+:root[data-storefront='poshies'] .storefront-hero--campaign { padding: 0; }
+:root[data-storefront='poshies'] .storefront-campaign-wrap { width: 100%; margin: 0; }
+:root[data-storefront='poshies'] .storefront-campaign {
   position: relative;
   display: block;
   width: 100%;
@@ -128,8 +128,8 @@
   border: 0;
   box-shadow: none;
 }
-:root[data-storefront='poshies'] .poshies-campaign::after { content: none; }
-:root[data-storefront='poshies'] .poshies-campaign__image {
+:root[data-storefront='poshies'] .storefront-campaign::after { content: none; }
+:root[data-storefront='poshies'] .storefront-campaign__image {
   position: static;
   display: block;
   width: 100%;
@@ -141,7 +141,7 @@
   transform: none;
   transition: none;
 }
-:root[data-storefront='poshies'] .poshies-campaign__wordmark {
+:root[data-storefront='poshies'] .storefront-campaign__wordmark {
   position: absolute;
   z-index: 2;
   top: 50%;
@@ -159,27 +159,27 @@
   transform: translateY(-50%);
   pointer-events: none;
 }
-:root[data-storefront='poshies'] .poshies-collection-panel svg text,
-:root[data-storefront='poshies'] .poshies-collection-section svg text {
+:root[data-storefront='poshies'] .storefront-collection-panel svg text,
+:root[data-storefront='poshies'] .storefront-collection-section svg text {
   fill: var(--poshies-color-accent) !important;
   color: var(--poshies-color-accent) !important;
   font-family: var(--poshies-font-heading) !important;
 }
 
 /* Collection fields use white canvas and charcoal copy. */
-:root[data-storefront='poshies'] .poshies-collection-section,
-:root[data-storefront='poshies'] .poshies-collection-panel,
-:root[data-storefront='poshies'] .poshies-collection-carousel {
+:root[data-storefront='poshies'] .storefront-collection-section,
+:root[data-storefront='poshies'] .storefront-collection-panel,
+:root[data-storefront='poshies'] .storefront-collection-carousel {
   background: var(--poshies-color-canvas) !important;
   background-image: none !important;
   color: var(--poshies-color-text) !important;
 }
-:root[data-storefront='poshies'] .poshies-collection-section > .poshies-collection-panel,
-:root[data-storefront='poshies'] .poshies-collection-section > .poshies-collection-carousel {
+:root[data-storefront='poshies'] .storefront-collection-section > .storefront-collection-panel,
+:root[data-storefront='poshies'] .storefront-collection-section > .storefront-collection-carousel {
   background: transparent !important;
 }
-:root[data-storefront='poshies'] .poshies-collection-panel :is(h1,h2,h3,h4,p),
-:root[data-storefront='poshies'] .poshies-collection-carousel :is(h1,h2,h3,h4,p) {
+:root[data-storefront='poshies'] .storefront-collection-panel :is(h1,h2,h3,h4,p),
+:root[data-storefront='poshies'] .storefront-collection-carousel :is(h1,h2,h3,h4,p) {
   color: var(--poshies-color-text) !important;
 }
 
@@ -187,24 +187,24 @@
 :root[data-storefront='poshies'] .yotaabo-product-swiper,
 :root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-wrapper,
 :root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-slide,
-:root[data-storefront='poshies'] .poshies-product-swiper,
-:root[data-storefront='poshies'] .poshies-product-swiper .swiper-wrapper,
-:root[data-storefront='poshies'] .poshies-product-swiper .swiper-slide {
+:root[data-storefront='poshies'] .storefront-product-swiper--editorial,
+:root[data-storefront='poshies'] .storefront-product-swiper--editorial .swiper-wrapper,
+:root[data-storefront='poshies'] .storefront-product-swiper--editorial .swiper-slide {
   background: transparent !important;
   background-image: none !important;
 }
-:root[data-storefront='poshies'] .poshies-product-swiper .swiper-slide > button > div:first-child {
+:root[data-storefront='poshies'] .storefront-product-swiper--editorial .swiper-slide > button > div:first-child {
   background: var(--poshies-color-accent) !important;
   background-image: none !important;
 }
-:root[data-storefront='poshies'] .poshies-product-swiper .swiper-slide > button > div:last-child {
+:root[data-storefront='poshies'] .storefront-product-swiper--editorial .swiper-slide > button > div:last-child {
   background: var(--poshies-color-surface) !important;
   color: var(--poshies-color-text) !important;
 }
-:root[data-storefront='poshies'] .poshies-product-swiper .swiper-slide h4 { color: var(--poshies-color-text) !important; }
-:root[data-storefront='poshies'] .poshies-product-swiper .swiper-slide p { color: var(--poshies-color-accent) !important; }
-:root[data-storefront='poshies'] .poshies-product-swiper .swiper-button-next,
-:root[data-storefront='poshies'] .poshies-product-swiper .swiper-button-prev {
+:root[data-storefront='poshies'] .storefront-product-swiper--editorial .swiper-slide h4 { color: var(--poshies-color-text) !important; }
+:root[data-storefront='poshies'] .storefront-product-swiper--editorial .swiper-slide p { color: var(--poshies-color-accent) !important; }
+:root[data-storefront='poshies'] .storefront-product-swiper--editorial .swiper-button-next,
+:root[data-storefront='poshies'] .storefront-product-swiper--editorial .swiper-button-prev {
   background: var(--poshies-color-surface) !important;
   border-color: var(--poshies-color-border) !important;
   color: var(--poshies-color-text) !important;
@@ -283,7 +283,7 @@
 }
 @media (max-width: 639px) {
   :root[data-storefront='poshies'] .storefront-hero { padding-top: 2.5rem; }
-  :root[data-storefront='poshies'] .poshies-campaign__wordmark { font-size: var(--poshies-hero-wordmark-size-mobile); }
+  :root[data-storefront='poshies'] .storefront-campaign__wordmark { font-size: var(--poshies-hero-wordmark-size-mobile); }
 }
 
 /* Keep contrast correct on every hot-pink primary action. */
@@ -327,15 +327,15 @@
 }
 
 /* Wordmark-only Poshies hero: give the empty campaign container height and center the brand. */
-:root[data-storefront='poshies'] .poshies-home {
+:root[data-storefront='poshies'] .storefront-hero--campaign {
   padding: 0 !important;
   background: var(--poshies-color-canvas) !important;
 }
-:root[data-storefront='poshies'] .poshies-campaign-wrap {
+:root[data-storefront='poshies'] .storefront-campaign-wrap {
   width: 100%;
   margin: 0;
 }
-:root[data-storefront='poshies'] .poshies-campaign {
+:root[data-storefront='poshies'] .storefront-campaign {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -345,7 +345,7 @@
   background: var(--poshies-color-canvas) !important;
   overflow: visible;
 }
-:root[data-storefront='poshies'] .poshies-campaign__wordmark {
+:root[data-storefront='poshies'] .storefront-campaign__wordmark {
   position: static;
   display: block;
   width: 100%;
@@ -363,13 +363,13 @@
 
 
 /* Give the wordmark hero clearance for the floating search/cart/menu controls. */
-:root[data-storefront='poshies'] .poshies-campaign {
+:root[data-storefront='poshies'] .storefront-campaign {
   box-sizing: border-box;
   min-height: var(--poshies-hero-min-height);
   padding-top: var(--poshies-hero-top-clearance);
 }
 @media (max-width: 640px) {
-  :root[data-storefront='poshies'] .poshies-campaign {
+  :root[data-storefront='poshies'] .storefront-campaign {
     min-height: var(--poshies-hero-min-height-mobile);
     padding-top: var(--poshies-hero-top-clearance-mobile);
   }

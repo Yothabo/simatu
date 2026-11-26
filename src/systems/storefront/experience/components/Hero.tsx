@@ -9,7 +9,7 @@ export default function Hero() {
   const featuredProducts = getFeaturedProducts(products, 5).map((product) => ({ ...product, price: formatPrice(product.price) }));
 
   if (hero.variant === 'campaign') {
-    return <section id="home" aria-label={`${storeName} home`} className="storefront-hero poshies-home"><div className="poshies-campaign-wrap"><div className="poshies-campaign"><span className="poshies-campaign__wordmark" aria-label={hero.wordmark}>{hero.wordmark}</span></div></div></section>;
+    return <section id="home" aria-label={`${storeName} home`} className={`storefront-hero ${hero.className ?? ""}`}><div className="storefront-campaign-wrap"><div className="storefront-campaign"><span className="storefront-campaign__wordmark" aria-label={hero.wordmark}>{hero.wordmark}</span></div></div></section>;
   }
 
   return (

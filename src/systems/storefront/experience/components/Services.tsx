@@ -5,7 +5,7 @@ import { getMockPoshiesProducts } from '../../stores/poshies/mock-products.ts';
 
 export default function Services() {
   const { products, isLoading, error } = useProducts();
-  const { collections, categoryOrder, pathFor, name: storeName } = useStorefront();
+  const { collections, categoryOrder, pathFor, name: storeName, collectionsClassName } = useStorefront();
   const orderedCollections = [...collections].sort((a, b) => {
     const ai = a.productCategory ? categoryOrder.indexOf(a.productCategory) : Number.MAX_SAFE_INTEGER;
     const bi = b.productCategory ? categoryOrder.indexOf(b.productCategory) : Number.MAX_SAFE_INTEGER;
@@ -13,7 +13,7 @@ export default function Services() {
   });
 
   return (
-    <section id="services" className="storefront-collections w-full">
+    <section id="services" className={`storefront-collections w-full ${collectionsClassName ?? ""}`}>
       {orderedCollections.map((collection) => {
         const inverse = collection.textTone === 'inverse';
         const accentToken = collection.accentRole === 'secondary'
@@ -30,8 +30,8 @@ export default function Services() {
           : [];
 
         return (
-          <div key={collection.id} id={collection.id} className={`flex w-full flex-col ${collection.variantClassName ? `poshies-collection-section poshies-collection-section--${collection.variantClassName}` : ''}`}>
-            <div className={`relative grid min-h-[100svh] w-full grid-rows-[auto_1fr_auto] overflow-hidden bg-[var(--sf-background)] px-6 py-12 sm:px-12 lg:px-20 lg:py-16 ${inverse ? 'text-[var(--sf-inverse-text)]' : 'text-[var(--sf-text)]'} ${collection.variantClassName ? `poshies-collection-panel poshies-collection-panel--${collection.variantClassName}` : ''}`}>
+          <div key={collection.id} id={collection.id} className={`flex w-full flex-col ${collection.variantClassName ? `storefront-collection-section storefront-collection-section--${collection.variantClassName}` : ''}`}>
+            <div className={`relative grid min-h-[100svh] w-full grid-rows-[auto_1fr_auto] overflow-hidden bg-[var(--sf-background)] px-6 py-12 sm:px-12 lg:px-20 lg:py-16 ${inverse ? 'text-[var(--sf-inverse-text)]' : 'text-[var(--sf-text)]'} ${collection.variantClassName ? `storefront-collection-panel storefront-collection-panel--${collection.variantClassName}` : ''}`}>
               {collection.eyebrow && <div className="relative z-20 flex h-8 w-full items-center justify-center text-center sm:h-auto"><h2 className="whitespace-nowrap font-heading text-sm font-medium uppercase tracking-[0.2em] sm:text-2xl">{collection.eyebrow}</h2></div>}
               <div className="relative flex h-full w-full items-center justify-center">
                 {collection.hasWatermark && <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center" style={{ height: '45vh', margin: 'auto' }}>
@@ -40,11 +40,11 @@ export default function Services() {
                   </svg>
                 </div>}
                 {collection.decorativeWordmark && <div className="pointer-events-none absolute bottom-20 inset-x-0 z-20 w-full min-w-0 sm:bottom-32"><span className="whitespace-nowrap font-accent text-[clamp(80px,12vw,160px)] font-normal leading-[0.7] tracking-normal text-[var(--sf-text)]">{storeName.toLowerCase()}</span></div>}
-                {collection.imageSrc && <img src={collection.imageSrc} alt={`${collection.title} collection`} className="poshies-panel-image pointer-events-none absolute bottom-[15%] right-0 z-40 h-[35vh] w-auto object-contain object-right-bottom drop-shadow-2xl sm:bottom-[20%]" />}
+                {collection.imageSrc && <img src={collection.imageSrc} alt={`${collection.title} collection`} className="storefront-collection-image pointer-events-none absolute bottom-[15%] right-0 z-40 h-[35vh] w-auto object-contain object-right-bottom drop-shadow-2xl sm:bottom-[20%]" />}
               </div>
               <div className="relative z-20 flex w-full pt-4"><div className="max-w-[420px]"><p className="font-heading text-lg leading-[1.6]">{collection.description}</p></div></div>
             </div>
-            {collection.productCategory && collection.collectionTitle && <div className={`w-full bg-[var(--sf-background)] ${collection.variantClassName ? `poshies-collection-carousel poshies-collection-carousel--${collection.variantClassName}` : ''}`}>
+            {collection.productCategory && collection.collectionTitle && <div className={`w-full bg-[var(--sf-background)] ${collection.variantClassName ? `storefront-collection-carousel storefront-collection-carousel--${collection.variantClassName}` : ''}`}>
               <ProductCarousel
                 title={collection.collectionTitle}
                 sectionHeading={collection.collectionHeading}

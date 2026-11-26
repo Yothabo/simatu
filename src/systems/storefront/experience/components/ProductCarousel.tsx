@@ -47,7 +47,7 @@ export default function ProductCarousel({
       {description && <p className={`mt-[var(--sf-space-2)] px-6 font-heading text-base leading-relaxed sm:px-10 lg:px-12 ${editorial ? 'text-[var(--sf-inverse-text-muted)]' : 'text-[var(--sf-text-muted)]'}`}>{description}</p>}
       {error && !visibleProducts.length && !isLoading && <p role="status" className="sr-only">Product feed unavailable; showing placeholders.</p>}
       <Swiper modules={[A11y, FreeMode, Keyboard, Navigation, Pagination]}
-        className={`yotaabo-product-swiper mt-[var(--sf-space-6)] ${editorial ? 'poshies-product-swiper' : ''}`}
+        className={`yotaabo-product-swiper mt-[var(--sf-space-6)] ${editorial ? 'storefront-product-swiper--editorial' : ''}`}
         slidesPerView={editorial ? 1.25 : 2.15} slidesPerGroup={1} spaceBetween={editorial ? 12 : 16}
         breakpoints={{
           640: { slidesPerView: editorial ? 2.2 : 3.15, spaceBetween: editorial ? 16 : 20 },
