@@ -100,3 +100,13 @@ Assignments are limited to active general-audience marketplace categories. The r
 ## Discovery page integration
 
 Public category pages use the platform category slug to request businesses from the marketplace business discovery endpoint. The page then scopes its marketplace product results to the assigned business slugs before applying its existing subcategory term filtering. The category route ID `spaces` maps to the seeded platform category slug `home-living`. The existing category page presentation and subcategory carousel remain unchanged.
+
+
+## Structured product subcategory foundation
+
+- Added platform-owned `marketplace_subcategories`, linked to a marketplace category with stable UUIDs and unique slugs scoped to the parent category.
+- Added nullable `products.marketplace_subcategory_id`. Null means legacy/unclassified; existing products are deliberately not auto-classified.
+- The product API accepts and validates an optional platform subcategory UUID, checks it against active platform subcategories, and returns it on product reads/saves.
+- When existing products are edited before the product-admin classification UI is available, their current platform subcategory is preserved rather than cleared by older clients.
+- This foundation is not yet the complete workflow: subcategory seeds, admin selection UI, parent-category consistency checks, and ID-based discovery filtering are follow-up work.
+- Migration `20261126150000_create_marketplace_subcategories.sql` is committed but **not applied to the database**. Product API changes depend on that migration being applied before deployment.
