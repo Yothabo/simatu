@@ -155,20 +155,12 @@ export default function DiscoveryCategoryPage() {
     toast.success(selection.quantity + ' × ' + product.name + (selection.size ? ' (' + selection.size + ')' : '') + ' added to your shared cart');
   };
 
-  const marketplaceGroups = useMemo(() => {
-    const grouped = new Map<string, CategoryProduct[]>();
-    scopedProducts.forEach((product) => {
-      const normalizedName = product.name.trim().toLowerCase().replace(/\s+/g, ' ');
-      const identity = 'name:' + normalizedName;
-      grouped.set(identity, [...(grouped.get(identity) || []), product]);
-    });
-    return Array.from(grouped.entries()).map(([id, offers]) => ({
-      id,
-      name: offers[0].name,
-      image_url: offers.find((offer) => offer.image_url)?.image_url || null,
-      offers: offers.slice().sort((a, b) => Number(a.price || 0) - Number(b.price || 0)),
-    }));
-  }, [scopedProducts]);
+  const marketplaceGroups = useMemo(() => scopedProducts.map((product) => ({
+    id: product.storefront + ':' + product.id,
+    name: product.name,
+    image_url: product.image_url || null,
+    offers: [product],
+  })), [scopedProducts]);
 
   const normalizedQuery = searchQuery.trim().toLowerCase();
   const matchingProducts = useMemo(() => {
@@ -376,13 +368,13 @@ export default function DiscoveryCategoryPage() {
                 : <div style={{ minHeight: 260, display: 'grid', placeItems: 'center', color: 'rgba(244,241,236,.35)', fontSize: 12 }}>Product image unavailable</div>}
             </div>
             <div style={{ padding: 'clamp(20px,4vw,32px)' }}>
-              <p style={{ margin: 0, fontSize: 10, textTransform: 'uppercase', letterSpacing: '.16em', opacity: .58 }}>Marketplace product</p>
+              <p style={{ margin: 0, fontSize: 10, textTransform: 'uppercase', letterSpacing: '.16em', opacity: .58 }}>Product details</p>
               <h2 id="marketplace-product-modal-title" style={{ margin: '10px 42px 8px 0', fontSize: 'clamp(24px,4vw,34px)', lineHeight: 1.08, fontWeight: 550 }}>{selectedProductGroup.name}</h2>
               {selectedProductGroup.offers[0]?.brand && <p style={{ margin: '0 0 12px', fontSize: 13, opacity: .65 }}>{selectedProductGroup.offers[0].brand}</p>}
               {selectedProductGroup.offers[0]?.description && <p style={{ margin: '0 0 20px', fontSize: 13, lineHeight: 1.65, opacity: .76 }}>{selectedProductGroup.offers[0].description}</p>}
               <div style={{ borderTop: '1px solid rgba(255,255,255,.14)', paddingTop: 16 }}>
-                <h3 style={{ margin: '0 0 5px', fontSize: 15, fontWeight: 600 }}>Choose a seller</h3>
-                <p style={{ margin: '0 0 14px', fontSize: 11, lineHeight: 1.5, opacity: .58 }}>Compare seller prices, select your options and review your order before adding it to your cart.</p>
+                <h3 style={{ margin: '0 0 5px', fontSize: 15, fontWeight: 600 }}>Your order</h3>
+                <p style={{ margin: '0 0 14px', fontSize: 11, lineHeight: 1.5, opacity: .58 }}>Choose the available product options and quantity, then review your subtotal.</p>
               </div>
             </div>
           </div>
@@ -396,12 +388,12 @@ export default function DiscoveryCategoryPage() {
                 return <article key={`${offer.storefront}-${offer.id}`} style={{ padding: 18, border: '1px solid rgba(255,255,255,.16)', borderRadius: 10, background: 'rgba(255,255,255,.035)' }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, paddingBottom: 15, borderBottom: '1px solid rgba(255,255,255,.12)' }}>
                     <div>
-                      <p style={{ margin: 0, fontSize: 10, letterSpacing: '.12em', textTransform: 'uppercase', opacity: .52 }}>Seller</p>
-                      <h4 style={{ margin: '5px 0 3px', fontSize: 16, fontWeight: 600 }}>{offer.storeName}</h4>
-                      <p style={{ margin: 0, fontSize: 11, opacity: .58 }}>{offer.subcategory || offer.category || 'Marketplace seller'}{offerIndex === 0 && selectedProductGroup.offers.length > 1 ? ' · Lowest listed price' : ''}</p>
+                      <p style={{ margin: 0, fontSize: 10, letterSpacing: '.12em', textTransform: 'uppercase', opacity: .52 }}>Product price</p>
+                      <h4 style={{ margin: '5px 0 3px', fontSize: 16, fontWeight: 600 }}>{offer.name}</h4>
+                      {offer.brand && <p style={{ margin: 0, fontSize: 11, opacity: .58 }}>{offer.brand}</p>}
                     </div>
                     <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                      <p style={{ margin: 0, fontSize: 10, opacity: .55 }}>Unit price</p>
+                      <p style={{ margin: 0, fontSize: 10, opacity: .55 }}>Price per item</p>
                       <strong style={{ display: 'block', marginTop: 4, fontSize: 18, fontVariantNumeric: 'tabular-nums' }}>{typeof offer.price === 'number' ? 'R' + offer.price.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'Unavailable'}</strong>
                     </div>
                   </div>
@@ -432,13 +424,12 @@ export default function DiscoveryCategoryPage() {
                     <button type="button" onClick={() => { if (!validSelection) { if (hasSizes) toast.error('Select a size before adding this item.'); return; } addProductToCart(offer); setSelectedProductGroup(null); }} disabled={!validSelection} style={{ minHeight: 42, padding: '0 20px', border: 0, borderRadius: 999, background: validSelection ? '#f4f1ec' : 'rgba(244,241,236,.18)', color: validSelection ? '#111' : 'rgba(244,241,236,.42)', font: 'inherit', fontSize: 12, fontWeight: 700, cursor: validSelection ? 'pointer' : 'not-allowed' }}>Add selected order to cart</button>
                   </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, marginTop: 12 }}>
-                    <a href={'/' + offer.storefront} style={{ color: '#f4f1ec', fontSize: 11, textDecoration: 'underline', textUnderlineOffset: 3 }}>Visit storefront ↗</a>
-                    <a href={offer.href} style={{ color: 'rgba(244,241,236,.62)', fontSize: 11, textDecoration: 'underline', textUnderlineOffset: 3 }}>View seller catalogue ↗</a>
+                    <a href={offer.href} style={{ color: 'rgba(244,241,236,.72)', fontSize: 11, textDecoration: 'underline', textUnderlineOffset: 3 }}>Browse {offer.storeName} catalogue ↗</a>
                   </div>
                 </article>;
               })}
             </div>
-            <p style={{ margin: '16px 0 0', fontSize: 10, lineHeight: 1.5, opacity: .48 }}>Delivery fees and final availability are confirmed during checkout. Each seller offer is added as a separate cart line.</p>
+            <p style={{ margin: '16px 0 0', fontSize: 10, lineHeight: 1.5, opacity: .48 }}>Delivery fees and final availability are confirmed during checkout.</p>
           </div>
         </section>
       </div>}
