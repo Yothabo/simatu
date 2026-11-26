@@ -23,6 +23,7 @@ export default function DiscoveryCategoryPage() {
   const { categoryId = '' } = useParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [ageConfirmed, setAgeConfirmed] = useState(false);
+  const [ageContinueClicked, setAgeContinueClicked] = useState(false);
   const { addToCart } = useGlobalCart();
   const [savedDiscoveries, setSavedDiscoveries] = useState<MoodboardItem[]>(() => {
     try {
@@ -192,11 +193,11 @@ export default function DiscoveryCategoryPage() {
         <h1 style={{ fontSize: 'clamp(32px,6vw,56px)', lineHeight: 1.05, margin: '18px 0' }}>Age-Restricted</h1>
         <p style={{ fontSize: 16, lineHeight: 1.6, opacity: .78 }}>This destination is intended for adults aged 18 and over. Restricted listings will be kept separate from general marketplace categories and discovery.</p>
         <label style={{ display: 'flex', alignItems: 'flex-start', gap: 12, margin: '24px 0', fontSize: 14, lineHeight: 1.5 }}>
-          <input type="checkbox" checked={ageConfirmed} onChange={(event) => setAgeConfirmed(event.target.checked)} style={{ marginTop: 4 }} />
+          <input type="checkbox" checked={ageConfirmed} onChange={(event) => { setAgeConfirmed(event.target.checked); setAgeContinueClicked(false); }} style={{ marginTop: 4 }} />
           I confirm that I am 18 years of age or older.
         </label>
-        <button type="button" disabled={!ageConfirmed} onClick={() => setAgeConfirmed(true)} style={{ width: '100%', minHeight: 48, border: 0, borderRadius: 999, background: ageConfirmed ? '#f4f1ec' : '#555', color: '#111', fontWeight: 650, cursor: ageConfirmed ? 'pointer' : 'not-allowed' }}>Continue</button>
-        <p role="status" style={{ fontSize: 13, lineHeight: 1.5, opacity: .65, marginTop: 18 }}>{ageConfirmed ? 'Age confirmation noted for this screen. Restricted listings remain unavailable until secure age verification and backend access controls are implemented.' : 'Age confirmation is required to continue.'}</p>
+        <button type="button" disabled={!ageConfirmed} onClick={() => setAgeContinueClicked(true)} style={{ width: '100%', minHeight: 48, border: 0, borderRadius: 999, background: ageConfirmed ? '#f4f1ec' : '#555', color: '#111', fontWeight: 650, cursor: ageConfirmed ? 'pointer' : 'not-allowed' }}>Continue</button>
+        <p role="status" style={{ fontSize: 13, lineHeight: 1.5, opacity: .65, marginTop: 18 }}>{ageContinueClicked ? 'Age confirmation noted for this screen. Restricted listings remain unavailable until secure age verification and backend access controls are implemented.' : ageConfirmed ? 'Select Continue to proceed.' : 'Age confirmation is required to continue.'}</p>
         <button type="button" onClick={() => navigate('/discover')} style={{ marginTop: 8, background: 'transparent', color: '#f4f1ec', border: '1px solid rgba(255,255,255,.25)', borderRadius: 999, padding: '10px 16px', cursor: 'pointer' }}>Return to discovery</button>
       </section>
     </main>;
