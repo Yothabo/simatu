@@ -419,3 +419,39 @@
     border-bottom-right-radius: 12px;
   }
 }
+
+
+/* Poshies: keep the cart/menu controls anchored at the same top position during expansion. */
+.storefront-controls--poshies .storefront-controls__row {
+  align-items: flex-start;
+}
+.storefront-controls--poshies .storefront-controls__row--menu-open {
+  align-items: flex-start;
+}
+.storefront-controls--poshies .storefront-controls__row > .storefront-controls__cart,
+.storefront-controls--poshies .storefront-controls__row > button.storefront-controls__icon {
+  align-self: flex-start;
+  transform: none !important;
+  transition: background .2s ease, color .2s ease, border-color .2s ease !important;
+}
+
+/* Use a single height animation like Moodboard; avoid competing min-height transitions. */
+.storefront-controls--poshies .storefront-controls__search {
+  min-height: 0;
+  transition: height .36s cubic-bezier(.2,.65,.25,1), padding .36s cubic-bezier(.2,.65,.25,1), border-radius .36s cubic-bezier(.2,.65,.25,1);
+}
+.storefront-controls--poshies .storefront-controls__search--menu-open,
+.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__search {
+  min-height: 0;
+  height: 236px;
+  transition: height .36s cubic-bezier(.2,.65,.25,1), padding .36s cubic-bezier(.2,.65,.25,1), border-radius .36s cubic-bezier(.2,.65,.25,1);
+}
+.storefront-controls--poshies .storefront-controls__inline-menu {
+  justify-content: center;
+}
+@media (max-width: 640px) {
+  .storefront-controls--poshies .storefront-controls__search--menu-open,
+  .storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__search {
+    height: 224px;
+  }
+}
