@@ -1,0 +1,10 @@
+/* Shared storefront component dimensions. */
+:root {
+  --sf-control-height: 54px;
+  --sf-control-height-mobile: 50px;
+  --sf-icon-button-size: 54px;
+  --sf-icon-button-size-mobile: 50px;
+  --sf-icon-size: 20px;
+  --sf-header-max-width: 760px;
+  --sf-content-max-width: 1180px;
+}
