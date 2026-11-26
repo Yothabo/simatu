@@ -155,7 +155,24 @@ export default function DiscoveryCategoryPage() {
 
   const addProductToCart = (product: CategoryProduct) => {
     if (product.productSource === 'marketplace') {
-      toast('Marketplace checkout integration is coming next.');
+      const selection = purchaseSelections[offerSelectionKey(product)] || { quantity: 0, sizeQuantities: {} };
+      const variants = product.variants || [];
+      if (variants.length) {
+        const chosen = variants.filter((variant) => (selection.sizeQuantities[variant.id] || 0) > 0);
+        if (!chosen.length) { toast.error('Select a quantity for at least one variant'); return; }
+        chosen.forEach((variant) => addToCart({
+          id: product.id, variantId: variant.id, variantName: variant.name || Object.values(variant.options || {}).join(' · '),
+          variantOptions: variant.options || null, name: product.name + (variant.name ? ' · ' + variant.name : ''),
+          price: 'R ' + variant.price.toFixed(2), placeholderColor: 'bg-[var(--sf-surface-soft)]', image_url: product.image_url ?? null,
+          description: product.description ?? null, category: product.category || item.category, storefront: 'marketplace', storeName: 'Simatu Marketplace', size: null,
+          quantity: selection.sizeQuantities[variant.id],
+        }));
+        toast.success('Selected variants added to your cart');
+        return;
+      }
+      if (typeof product.price !== 'number' || selection.quantity < 1) { toast.error('Choose a quantity'); return; }
+      addToCart({ id:product.id,name:product.name,price:'R '+product.price.toFixed(2),placeholderColor:'bg-[var(--sf-surface-soft)]',image_url:product.image_url??null,description:product.description??null,category:product.category||item.category,storefront:'marketplace',storeName:'Simatu Marketplace',size:null,quantity:selection.quantity });
+      toast.success(selection.quantity+' × '+product.name+' added to cart');
       return;
     }
     if (!product.storefront || typeof product.price !== 'number') return;
