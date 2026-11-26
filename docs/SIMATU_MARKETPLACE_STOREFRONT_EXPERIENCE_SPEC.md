@@ -471,3 +471,17 @@ This is a version-controlled migration only. It has not been applied to any data
 - If the API fails or returns no categories, the static taxonomy remains the fallback.
 - The category API integration commit: `e677955df7b86d34112b858bd9b6687fccf7f462`.
 - This is a transitional integration: subcategory metadata and category matching still use the static taxonomy. The database migration has not been applied or runtime-tested in this increment.
+
+
+## Phase C — category-scoped business discovery API foundation
+
+- Added `netlify/functions/marketplace-businesses.mjs`, a read-only endpoint at `/api/marketplace-businesses?category=<slug>`.
+- The endpoint requires a valid category slug, returns businesses assigned through `store_marketplace_categories`, and only counts businesses with at least one active, marketplace-visible, non-age-restricted product.
+- Business participation is multi-category; one store can be assigned to several platform categories without duplicating its store identity.
+- Results are deduplicated by store/category grouping and include the store ID/slug, category ID/slug, and eligible listing count. No unverified business-name or approval fields are assumed.
+- Restricted categories and age-restricted products are excluded from this public endpoint.
+- Cache headers are short-lived; errors are non-cacheable. Only GET is supported.
+- Required database migrations must be applied before runtime use. Category assignments must be populated before businesses appear.
+- The endpoint is not yet connected to the category-page UI. Existing product-based discovery remains unchanged pending the next integration step.
+- No runtime database test or build was executed for this endpoint.
+- Commit: `68f7fea5545683596db59d432dd72dadfc4cdf60`.
