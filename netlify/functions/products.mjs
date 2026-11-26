@@ -159,13 +159,17 @@ async function saveProduct(body, isUpdate, admin, requestId) {
 
     const subcategory = subcategoryResult.rows[0];
 
-    // Preserve existing platform classification until the product admin UI supports edits.
+    // Preserve legacy classification when omitted; otherwise validate selected category scope.
     product.marketplace_subcategory_id = product.marketplace_subcategory_id ?? existingProduct?.marketplace_subcategory_id ?? null;
     if (product.marketplace_subcategory_id) {
       const platformSubcategory = await client.query(
-        `SELECT id FROM public.marketplace_subcategories
-         WHERE id = $1 AND (is_active IS TRUE OR id = $2)`,
-        [product.marketplace_subcategory_id, existingProduct?.marketplace_subcategory_id ?? null]
+        `SELECT msc.id
+         FROM public.marketplace_subcategories msc
+         JOIN public.marketplace_categories mc ON mc.id = msc.marketplace_category_id
+         WHERE msc.id = $1
+           AND (msc.is_active IS TRUE OR msc.id = $2)
+           AND ($3::text IS NULL OR mc.slug = $3)`,
+        [product.marketplace_subcategory_id, existingProduct?.marketplace_subcategory_id ?? null, product.marketplace_category_slug ?? null]
       );
       if (!platformSubcategory.rowCount) {
         await client.query('ROLLBACK');
