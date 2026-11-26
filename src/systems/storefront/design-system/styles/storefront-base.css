@@ -1,13 +1,13 @@
 /* Storefront shared design tokens and reset-free primitives. */
-@import './tokens/colors.css';
-@import './tokens/spacing.css';
-@import './tokens/sizing.css';
-@import './tokens/radius.css';
-@import './tokens/typography.css';
-@import './tokens/shadows.css';
-@import './tokens/motion.css';
-@import './tokens/layout.css';
-@import './tokens/components.css';
+@import '../tokens/colors.css';
+@import '../tokens/spacing.css';
+@import '../tokens/sizing.css';
+@import '../tokens/radius.css';
+@import '../tokens/typography.css';
+@import '../tokens/shadows.css';
+@import '../tokens/motion.css';
+@import '../tokens/layout.css';
+@import '../tokens/components.css';
 
 .storefront-system {
   font-family: var(--sf-font-body);
