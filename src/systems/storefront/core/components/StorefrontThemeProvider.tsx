@@ -33,7 +33,7 @@ export default function StorefrontThemeProvider({
     }));
 
     root.setAttribute('data-storefront', storeKey);
-    Object.entries(designSystem.overrides).forEach(([property, value]) => {
+    Object.entries(themeOverrides).forEach(([property, value]) => {
       root.style.setProperty(property, value);
     });
 
