@@ -320,3 +320,38 @@
   outline: 2px solid var(--poshies-color-focus);
   outline-offset: 3px;
 }
+
+/* Wordmark-only Poshies hero: give the empty campaign container height and center the brand. */
+:root[data-storefront='poshies'] .poshies-home {
+  padding: 0 !important;
+  background: #fff !important;
+}
+:root[data-storefront='poshies'] .poshies-campaign-wrap {
+  width: 100%;
+  margin: 0;
+}
+:root[data-storefront='poshies'] .poshies-campaign {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(280px, 48svh, 560px);
+  height: auto;
+  max-height: none;
+  background: #fff !important;
+  overflow: visible;
+}
+:root[data-storefront='poshies'] .poshies-campaign__wordmark {
+  position: static;
+  display: block;
+  width: 100%;
+  padding: 0 5vw;
+  color: var(--poshies-color-accent) !important;
+  font-family: 'Anton', sans-serif !important;
+  font-size: clamp(64px, 15vw, 190px);
+  font-weight: 400;
+  line-height: .9;
+  letter-spacing: -.045em;
+  text-align: center;
+  transform: none;
+  text-shadow: none;
+}
