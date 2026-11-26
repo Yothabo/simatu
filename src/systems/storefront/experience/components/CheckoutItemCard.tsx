@@ -23,7 +23,7 @@ export default function CheckoutItemCard({
         className={`m-0 p-0 leading-normal ${
           isAdmin
             ? 'admin-type-body admin-color-primary'
-            : 'font-heading text-base text-[#4d4d4d]'
+            : 'font-heading text-base text-[var(--sf-text)]'
         }`}
       >
         {name}
@@ -34,7 +34,7 @@ export default function CheckoutItemCard({
           className={`m-0 p-0 leading-normal ${
             isAdmin
               ? 'admin-type-body admin-color-primary'
-              : 'text-base text-[#4d4d4d]/60'
+              : 'text-base text-[var(--sf-text-muted)]'
           }`}
         >
           {leftContent}
@@ -44,7 +44,7 @@ export default function CheckoutItemCard({
           className={`m-0 shrink-0 whitespace-nowrap p-0 text-right leading-normal ${
             isAdmin
               ? 'admin-type-body admin-color-primary'
-              : 'font-heading text-base tabular-nums text-[#4d4d4d]/60'
+              : 'font-heading text-base tabular-nums text-[var(--sf-text-muted)]'
           }`}
         >
           {rightContent}
@@ -54,10 +54,10 @@ export default function CheckoutItemCard({
   );
 
   const className =
-    `m-0 flex w-full flex-col gap-1 border-b border-[#4d4d4d]/20 px-4 py-3 text-left leading-normal transition-colors ${
+    `m-0 flex w-full flex-col gap-1 border-b border-[var(--sf-border)] px-4 py-3 text-left leading-normal transition-colors ${
       isAdmin
         ? 'bg-[var(--admin-surface)] hover:bg-[var(--admin-surface-subtle)]'
-        : 'bg-[#fafaf9] hover:bg-[#f5f5f5]'
+        : 'bg-[var(--sf-surface-soft)] hover:bg-[var(--sf-hover-surface)]'
     }`;
 
   if (onClick) {
