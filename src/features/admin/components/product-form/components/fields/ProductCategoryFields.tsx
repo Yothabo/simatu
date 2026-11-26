@@ -1,6 +1,4 @@
-import {
-  AdminField,
-} from '../../../../../../design-system/components';
+import { AdminField } from '../../../../../../design-system/components';
 import CustomDropdown from '../../../AdminDropdown';
 import type { ProductFormFieldsProps } from '../ProductFormFields.types';
 
@@ -14,7 +12,9 @@ type Props = Pick<
   | 'onChange'
 >;
 
-const EXCLUDED_GENDER_CATEGORY = /\\b(his|her|hers|his\\s*and\\s*hers|for\\s*him|for\\s*her)\\b/i;\n\nexport default function ProductCategoryFields({
+const EXCLUDED_GENDER_CATEGORY = /\b(his|her|hers|his\s*and\s*hers|for\s*him|for\s*her)\b/i;
+
+export default function ProductCategoryFields({
   form,
   categoryOptions,
   subcategoryOptions,
@@ -22,9 +22,16 @@ const EXCLUDED_GENDER_CATEGORY = /\\b(his|her|hers|his\\s*and\\s*hers|for\\s*him
   categoryLoadError,
   onChange,
 }: Props) {
+  const visibleCategories = categoryOptions.filter(
+    (option) => !EXCLUDED_GENDER_CATEGORY.test(option.label),
+  );
+  const visibleSubcategories = subcategoryOptions.filter(
+    (option) => !EXCLUDED_GENDER_CATEGORY.test(option.label),
+  );
+
   return (
     <div style={GRID_STYLE}>
-      <AdminField label="Category" required>
+      <AdminField label="Store category" required>
         <CustomDropdown
           value={form.category_id ?? ''}
           onChange={(value) => onChange('category', value)}
@@ -39,7 +46,7 @@ const EXCLUDED_GENDER_CATEGORY = /\\b(his|her|hers|his\\s*and\\s*hers|for\\s*him
         />
       </AdminField>
 
-      <AdminField label="Subcategory" required>
+      <AdminField label="Store subcategory" required>
         <CustomDropdown
           value={form.subcategory_id ?? ''}
           onChange={(value) => onChange('subcategory', value)}
