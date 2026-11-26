@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   AdminFormModal,
 } from '../../../design-system/components';
@@ -57,7 +57,13 @@ export default function AdminProductForm({
     setForm,
   });
 
-  const { marketplaceCategoryOptions, marketplaceSubcategoryOptions, isLoadingMarketplaceTaxonomy, marketplaceTaxonomyError } = useMarketplaceTaxonomy(form.marketplace_category_slug);
+  const { marketplaceCategoryOptions, marketplaceSubcategoryOptions, isLoadingMarketplaceTaxonomy, marketplaceTaxonomyError, selectedSubcategoryCategorySlug } = useMarketplaceTaxonomy(form.marketplace_subcategory_id ?? null);
+
+  useEffect(() => {
+    if (form.marketplace_subcategory_id && !form.marketplace_category_slug && selectedSubcategoryCategorySlug) {
+      setForm((prev) => ({ ...prev, marketplace_category_slug: selectedSubcategoryCategorySlug }));
+    }
+  }, [form.marketplace_subcategory_id, form.marketplace_category_slug, selectedSubcategoryCategorySlug]);
 
 
   const { isUploading, handleImageUpload } = useProductImageUpload({
