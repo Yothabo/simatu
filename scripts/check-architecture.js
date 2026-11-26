@@ -133,7 +133,7 @@ const storefrontRoutesPath = path.join(sourceRoot, 'app', 'App.tsx');
 const storefrontRoutesSource = fs.existsSync(storefrontRoutesPath)
   ? fs.readFileSync(storefrontRoutesPath, 'utf8')
   : '';
-if (!/Object\\.entries\\(STOREFRONTS\\)/.test(storefrontRoutesSource)) {
+if (!/Object\.entries\(STOREFRONTS\)/.test(storefrontRoutesSource)) {
   errors.push('src/app/App.tsx must generate storefront routes from STOREFRONTS configuration');
 }
 
@@ -141,7 +141,7 @@ const storefrontCartPath = path.join(systemsRoot, 'storefront', 'core', 'context
 const storefrontCartSource = fs.existsSync(storefrontCartPath)
   ? fs.readFileSync(storefrontCartPath, 'utf8')
   : '';
-if (!/storefront:\\s*string/.test(storefrontCartSource)) {
+if (!/storefront:\s*string/.test(storefrontCartSource)) {
   errors.push('StorefrontCartProvider must accept any configured storefront key');
 }
 
