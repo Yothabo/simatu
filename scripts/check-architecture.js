@@ -127,6 +127,24 @@ for (const file of collectFiles(storefrontExperienceRoot)) {
   }
 }
 
+// Storefront routes and cart storage must be configuration-driven so a new
+// store does not require edits to shared route or cart implementations.
+const storefrontRoutesPath = path.join(sourceRoot, 'app', 'App.tsx');
+const storefrontRoutesSource = fs.existsSync(storefrontRoutesPath)
+  ? fs.readFileSync(storefrontRoutesPath, 'utf8')
+  : '';
+if (!/Object\\.entries\\(STOREFRONTS\\)/.test(storefrontRoutesSource)) {
+  errors.push('src/app/App.tsx must generate storefront routes from STOREFRONTS configuration');
+}
+
+const storefrontCartPath = path.join(systemsRoot, 'storefront', 'core', 'context', 'CartContext.tsx');
+const storefrontCartSource = fs.existsSync(storefrontCartPath)
+  ? fs.readFileSync(storefrontCartPath, 'utf8')
+  : '';
+if (!/storefront:\\s*string/.test(storefrontCartSource)) {
+  errors.push('StorefrontCartProvider must accept any configured storefront key');
+}
+
 if (errors.length > 0) {
   console.error('Architecture boundary violations:');
   for (const error of errors) console.error(' - ' + error);
