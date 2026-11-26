@@ -87,8 +87,6 @@ export default function AdminProductForm({
           category_id: null,
           subcategory: '',
           subcategory_id: null,
-          marketplace_category_slug: null,
-          marketplace_subcategory_id: null,
         }));
         return;
       }
