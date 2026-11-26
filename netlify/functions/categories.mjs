@@ -240,13 +240,11 @@ async function setStatus(body, admin) {
 async function listCategories(request) {
   const url = new URL(request.url);
   const isAdmin = url.searchParams.get('scope') === 'admin';
-  let storefront = (url.searchParams.get('storefront') || 'yotaabo')
-    .trim()
-    .toLowerCase();
-
-  if (!SLUG.test(storefront)) {
-    return json({ error: 'Invalid storefront.' }, 400, isAdmin);
+  const requestedStorefront = url.searchParams.get('storefront')?.trim().toLowerCase();
+  if (!requestedStorefront || !SLUG.test(requestedStorefront)) {
+    return json({ error: 'A valid storefront is required.' }, 400, isAdmin);
   }
+  let storefront = requestedStorefront;
 
   const storeResult = await pool.query(
     'SELECT id FROM public.stores WHERE slug = $1 AND is_active IS TRUE',
