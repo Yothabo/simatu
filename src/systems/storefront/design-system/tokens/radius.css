@@ -1,0 +1,9 @@
+/* Shared storefront shape tokens. */
+:root {
+  --sf-radius-none: 0;
+  --sf-radius-sm: 10px;
+  --sf-radius-md: 12px;
+  --sf-radius-lg: 16px;
+  --sf-radius-xl: 20px;
+  --sf-radius-pill: 999px;
+}
