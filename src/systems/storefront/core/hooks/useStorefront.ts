@@ -17,7 +17,8 @@ export default function useStorefront() {
   }, [activeStorefront]);
 
   const remembered = window.sessionStorage.getItem(STORAGE_KEY);
-  const storeKey = activeStorefront ?? (remembered && isStorefrontKey(remembered) ? remembered : 'yotaabo');
+  const defaultStorefront = Object.keys(STOREFRONTS)[0];
+  const storeKey = activeStorefront ?? (remembered && isStorefrontKey(remembered) ? remembered : defaultStorefront);
   const store = STOREFRONTS[storeKey];
 
   const pathFor = (path = '') => {
