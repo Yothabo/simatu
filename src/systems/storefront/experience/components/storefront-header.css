@@ -455,3 +455,22 @@
     height: 224px;
   }
 }
+
+/* Poshies navigation menu hierarchy */
+.storefront-controls--poshies .storefront-controls__inline-menu { display:flex; flex-direction:column; justify-content:center; gap:4px; }
+.storefront-controls--poshies .storefront-controls__menu-item,
+.storefront-controls--poshies .storefront-controls__category-submenu button {
+ display:flex; align-items:center; justify-content:flex-start; gap:12px; width:100%; min-height:44px; padding:0 12px;
+ border:0; border-radius:12px; background:transparent; color:#292426; font:inherit; text-align:left; text-decoration:none; cursor:pointer;
+ transition:color .18s ease, background .18s ease;
+}
+.storefront-controls--poshies .storefront-controls__menu-item svg,
+.storefront-controls--poshies .storefront-controls__category-submenu button svg { flex:0 0 18px; width:18px; height:18px; }
+.storefront-controls--poshies .storefront-controls__menu-item:hover,
+.storefront-controls--poshies .storefront-controls__category-submenu button:hover { color:#FF1493; background:rgba(255,20,147,.08); }
+.storefront-controls--poshies .storefront-controls__categories-trigger svg:last-child { margin-left:auto; transition:transform .2s ease; }
+.storefront-controls--poshies .storefront-controls__categories-trigger svg.is-rotated { transform:rotate(180deg); }
+.storefront-controls--poshies .storefront-controls__category-submenu { display:flex; flex-direction:column; gap:2px; padding-left:28px; overflow:hidden; animation:poshies-category-expand .22s ease both; }
+.storefront-controls--poshies .storefront-controls__category-submenu button { min-height:40px; border-radius:10px; }
+@keyframes poshies-category-expand { from {opacity:0; transform:translateY(-5px);} to {opacity:1; transform:translateY(0);} }
+@media (prefers-reduced-motion:reduce) { .storefront-controls--poshies .storefront-controls__category-submenu { animation:none; } .storefront-controls--poshies .storefront-controls__categories-trigger svg:last-child { transition:none; } }
