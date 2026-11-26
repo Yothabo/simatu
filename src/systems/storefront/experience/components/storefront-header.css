@@ -390,15 +390,32 @@
 }
 
 
-/* Center menu labels and sharply reduce the expanded menu's corner radius. */
-.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__inline-menu button {
+/* Match Moodboard expansion: left-aligned labels, vertically centered rows, retained subtle radius. */
+.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__inline-menu {
   justify-content: center;
-  text-align: center;
-  border-radius: 2px;
+}
+.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__inline-menu button {
+  justify-content: flex-start;
+  align-items: center;
+  text-align: left;
+  border-radius: 14px;
 }
 .storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__search {
-  border-radius: 2px;
+  border-radius: 16px 0 0 16px;
 }
-.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__inline-menu {
-  border-radius: 2px;
+.storefront-controls--poshies .storefront-controls__row--menu-open > button.storefront-controls__icon {
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+@media (max-width: 640px) {
+  .storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__inline-menu button {
+    border-radius: 12px;
+  }
+  .storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__search {
+    border-radius: 12px 0 0 12px;
+  }
+  .storefront-controls--poshies .storefront-controls__row--menu-open > button.storefront-controls__icon {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
 }
