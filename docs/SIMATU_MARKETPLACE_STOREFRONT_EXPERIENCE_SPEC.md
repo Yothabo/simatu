@@ -407,3 +407,16 @@ No feature is marked complete solely because it renders. Functional behavior, ba
 12. Detailed fund allocation, payouts, delivery, logistics, and fulfilment engines are deferred until the customer experiences and transaction boundaries are completed.
 
 These decisions should only be revisited if implementation or testing exposes a genuine architectural problem—not simply to re-litigate agreed requirements.
+
+
+## Implementation progress — Phase A (initial domain foundation)
+
+### Completed on `codex/simatu-work`
+
+- Added `src/domain/marketplace/types.ts` with typed contracts for Business, Offering, ProductOffering, ServiceOffering, product variants and inventory summaries, typed attributes and measurements, booking selections and lifecycle, platform marketplace categories and business-category assignments, and receiving/verification records.
+- Added `src/domain/marketplace/attribute-validation.ts` with runtime validation for text, dates, numeric bounds, booleans, single-select, multi-select, and measurements including units and range constraints.
+- Added `tests/unit/marketplace-attribute-validation.test.ts` to cover those validation paths and issue aggregation.
+
+### Not yet integrated
+
+These contracts intentionally do not alter existing product API responses, storefront rendering, checkout, database tables, inventory, or booking behaviour. Legacy data migration, database enforcement, category persistence, receiving workflow, and service booking implementation remain outstanding. No automated checks have been run remotely; run the local test suite and build after pulling these commits.
