@@ -20,6 +20,7 @@ export const DISCOVERY_MARKETS: MoodboardItem[] = [
   { id: 'travel', image: image('photo-1761400823907-d0454d0c5057'), alt: 'Travel and experiences', category: 'Travel & Experiences', title: 'Discover places, journeys and new experiences' },
   { id: 'business', image: image('photo-1786483462952-de7e869aa285'), alt: 'Business services', category: 'Business Services', title: 'Find solutions to help your business thrive' },
   { id: 'digital', image: image('photo-1528901166007-3784c7dd3653'), alt: 'Digital products', category: 'Digital Products', title: 'Discover useful digital resources for every need' },
+  { id: 'age-restricted', image: image('photo-1519681393784-d120267933ba'), alt: 'Age restricted category', category: 'Age-Restricted', title: 'Restricted products and services — 18+' },
 ];
 
 export type DiscoverySubcategory = { id: string; title: string; image: string; alt: string; description: string; terms: string[] };
