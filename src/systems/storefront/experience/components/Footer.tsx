@@ -5,7 +5,7 @@ import useStorefront from '../../core/hooks/useStorefront.ts';
 export default function Footer() {
   const { name: storeName, pathFor, footer } = useStorefront();
   return (
-    <footer className={`storefront-footer ${footer.className ?? ""} relative w-full overflow-hidden px-[var(--sf-space-6)] pb-[var(--sf-space-8)] pt-[var(--sf-space-24)] sm:px-[var(--sf-space-10)] sm:pt-[var(--sf-space-28)] lg:px-[var(--sf-space-16)]">
+    <footer className={`storefront-footer ${footer.className ?? ""} relative w-full overflow-hidden px-[var(--sf-space-6)] pb-[var(--sf-space-8)] pt-[var(--sf-space-24)] sm:px-[var(--sf-space-10)] sm:pt-[var(--sf-space-28)] lg:px-[var(--sf-space-16)]`}>
       <div className="storefront-footer__inner relative z-10 mx-auto w-full max-w-[var(--sf-content-max-width)]">
         <div className="grid grid-cols-2 gap-x-[var(--sf-space-8)] gap-y-[var(--sf-space-12)] border-b border-current/15 pb-[var(--sf-space-12)] md:grid-cols-4 lg:gap-[var(--sf-space-12)]">
           <div className="col-span-2 md:col-span-1">

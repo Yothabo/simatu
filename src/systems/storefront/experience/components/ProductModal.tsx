@@ -196,10 +196,10 @@ export default function ProductModal({
             className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-[58%] to-[var(--sf-surface)]"
           />
           <div className="absolute inset-x-0 bottom-0 grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-3 px-5 pb-5 pt-24">
-            <span className={`min-w-0 text-2xl leading-tight text-[var(--sf-text)] ${mode === "preview" ? "" : "font-heading"}`} style={mode === "preview" ? { fontFamily: "Antony, sans-serif" } : undefined}>
+            <span className={`min-w-0 text-2xl leading-tight text-[var(--sf-text)] ${mode === "preview" ? "" : "font-heading"}`} >
               {product.name}
             </span>
-            <span className={`whitespace-nowrap text-base leading-[1.25] ${accentColor} ${mode === "preview" ? "opacity-50" : "font-heading"}`} style={mode === "preview" ? { fontFamily: "Montserrat, sans-serif" } : undefined}>
+            <span className={`whitespace-nowrap text-base leading-[1.25] ${accentColor} ${mode === "preview" ? "opacity-50" : "font-heading"}`} >
               {product.price}
             </span>
           </div>
@@ -217,16 +217,16 @@ export default function ProductModal({
           <div className="flex h-12 items-stretch border border-[var(--sf-inverse-border)]">
             <RippleButton
               onClick={() => handleQuantityChange(quantity - 1)}
-              className="flex h-12 w-10 items-center justify-center bg-[var(--sf-inverse-background)] text-black/60 transition-colors hover:bg-[var(--sf-accent)] hover:text-[var(--sf-accent-contrast)] active:bg-[var(--sf-accent)]"
+              className="flex h-12 w-10 items-center justify-center bg-[var(--sf-inverse-background)] text-[var(--sf-text-muted)] transition-colors hover:bg-[var(--sf-accent)] hover:text-[var(--sf-accent-contrast)] active:bg-[var(--sf-accent)]"
               ariaLabel="Decrease quantity"
               rippleColor={primaryAccent}
             >
               <FiMinus size={14} />
             </RippleButton>
-            <span className="flex h-12 w-8 items-center justify-center text-center font-heading text-lg text-black">{quantity}</span>
+            <span className="flex h-12 w-8 items-center justify-center text-center font-heading text-lg text-[var(--sf-text)]">{quantity}</span>
             <RippleButton
               onClick={() => handleQuantityChange(quantity + 1)}
-              className="flex h-12 w-10 items-center justify-center bg-[#292426] text-black/60 transition-colors hover:bg-[#FF1493] hover:text-black active:bg-[#FF1493]"
+              className="flex h-12 w-10 items-center justify-center bg-[var(--sf-inverse-background)] text-black/60 transition-colors hover:bg-[var(--sf-accent)] hover:text-black active:bg-[var(--sf-accent)]"
               ariaLabel="Increase quantity"
               rippleColor={primaryAccent}
             >
