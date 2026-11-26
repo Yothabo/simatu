@@ -54,6 +54,7 @@ export default async (request) => {
         AND p.marketplace_visible IS TRUE
         AND COALESCE(p.is_age_restricted, FALSE) IS FALSE
        WHERE mc.slug = $1
+         AND s.is_active IS TRUE
          AND mc.is_active IS TRUE
          AND mc.audience_policy = 'general'
        GROUP BY s.id, s.slug, mc.id, mc.slug
