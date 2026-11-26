@@ -503,3 +503,25 @@
   text-align: center;
   color: currentColor;
 }
+
+/* Poshies navigation: eliminate staggered child motion and height-transition clipping. */
+.storefront-controls--poshies .storefront-controls__search,
+.storefront-controls--poshies .storefront-controls__search--menu-open,
+.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__search {
+  transition: border-radius .2s ease, padding .2s ease;
+}
+.storefront-controls--poshies .storefront-controls__category-submenu {
+  animation: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+.storefront-controls--poshies .storefront-controls__inline-menu,
+.storefront-controls--poshies .storefront-controls__menu-item,
+.storefront-controls--poshies .storefront-controls__category-submenu button {
+  animation: none !important;
+  transition-delay: 0ms !important;
+}
+.storefront-controls--poshies .storefront-controls__category-submenu button {
+  transform: none !important;
+  opacity: 1 !important;
+}
