@@ -128,7 +128,7 @@ export default function ViewCatalog() {
                 className="group flex w-full flex-col border-0 bg-transparent px-6 py-8 text-left outline-none sm:px-10 lg:px-12">
                 <div className="flex w-full items-center justify-between">
                   <h2 className="font-heading text-4xl italic text-[var(--sf-text)] sm:text-5xl">{categoryConfig.label}</h2>
-                  <span className={`text-2xl text-[var(--sf-text-muted)] transition-transform duration-300 group-hover:${accent.text}`}>
+                  <span className={`text-2xl text-[var(--sf-text-muted)] transition-transform duration-300 group-hover:text-[var(--sf-accent)]`}>
                     {isOpen ? <FiMinus size={28} /> : <FiPlus size={28} />}
                   </span>
                 </div>
