@@ -1,0 +1,1 @@
+export const STOREFRONT_DESIGN_SYSTEM_VERSION = '1';
