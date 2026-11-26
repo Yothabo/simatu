@@ -142,8 +142,8 @@ export function getCategoryProducts(
 }
 
 export function useProducts() {
-  const { name } = useStorefront();
-  const storefront = name.toLowerCase();
+  const { storeKey } = useStorefront();
+  const storefront = storeKey;
 
   const [productState, setProductState] = useState<{
     storefront: string;
