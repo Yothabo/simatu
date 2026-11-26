@@ -174,7 +174,7 @@ export default function AdminBusinessCenter() {
           ) : selected === 'campaigns' ? (
             <CampaignWorkspace tier={tier} />
           ) : selected === 'advertising' ? (
-            <AdvertisingWorkspace />
+            <AdvertisingWorkspace tier={tier} />
           ) : selected === 'commission' ? (
             <CommissionWorkspace />
           ) : selected === 'intelligence' ? (
