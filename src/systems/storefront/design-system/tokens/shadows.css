@@ -1,0 +1,7 @@
+/* Shared elevation structure; themes can override the shadow color. */
+:root {
+  --sf-shadow-color: rgba(30, 20, 20, .08);
+  --sf-shadow-control: 0 4px 14px var(--sf-shadow-color);
+  --sf-shadow-raised: 0 5px 18px var(--sf-shadow-color);
+  --sf-shadow-panel: 0 8px 24px var(--sf-shadow-color);
+}
