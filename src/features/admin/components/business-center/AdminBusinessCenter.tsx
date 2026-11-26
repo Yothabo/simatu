@@ -32,7 +32,7 @@ type PromotionPreview = {
   discount: PromotionDiscount;
   startsAt: string;
   endsAt: string;
-  status: 'draft' | 'scheduled' | 'active' | 'paused';
+  status: 'draft' | 'scheduled' | 'active' | 'paused' | 'expired';
 };
 
 const formatZar = (minor: number) =>
