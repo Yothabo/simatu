@@ -106,7 +106,8 @@ Public category pages use the platform category slug to request businesses from 
 
 - Added platform-owned `marketplace_subcategories`, linked to a marketplace category with stable UUIDs and unique slugs scoped to the parent category.
 - Added nullable `products.marketplace_subcategory_id`. Null means legacy/unclassified; existing products are deliberately not auto-classified.
+- Seeded the curated discovery subcategory set (87 current nodes) from the existing taxonomy, scoped to its parent marketplace category. The platform categories Technology and African Culture & Heritage currently have no curated subcategory tiles in the source taxonomy and are intentionally left empty.
 - The product API accepts and validates an optional platform subcategory UUID, checks it against active platform subcategories, and returns it on product reads/saves.
 - When existing products are edited before the product-admin classification UI is available, their current platform subcategory is preserved rather than cleared by older clients.
-- This foundation is not yet the complete workflow: subcategory seeds, admin selection UI, parent-category consistency checks, and ID-based discovery filtering are follow-up work.
-- Migration `20261126150000_create_marketplace_subcategories.sql` is committed but **not applied to the database**. Product API changes depend on that migration being applied before deployment.
+- This foundation is not yet the complete workflow: admin selection UI, parent-category consistency checks, and ID-based discovery filtering are follow-up work.
+- Migrations `20261126150000_create_marketplace_subcategories.sql` and `20261126160000_seed_marketplace_subcategories.sql` are committed but **not applied to the database**. Product API changes depend on that migration being applied before deployment.
