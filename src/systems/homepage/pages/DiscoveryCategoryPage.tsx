@@ -38,6 +38,7 @@ export default function DiscoveryCategoryPage() {
   const [productsError, setProductsError] = useState('');
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(() => getSubcategories(categoryId)[0]?.id ?? null);
   const [outgoingStoreTitle, setOutgoingStoreTitle] = useState<string | null>(null);
+  const [selectedProductGroup, setSelectedProductGroup] = useState<{ id: string; name: string; image_url: string | null; offers: CategoryProduct[] } | null>(null);
   const market = getMarketById(categoryId);
   const marketplaceCategorySlug = categoryId === 'spaces' ? 'home-living' : categoryId;
   const item = (location.state as { discovery?: MoodboardItem } | null)?.discovery || market || fallback;
@@ -154,6 +155,20 @@ export default function DiscoveryCategoryPage() {
     return scopedProducts.filter((product) => [product.name, product.category, product.subcategory, product.brand, product.storeName].filter(Boolean).join(' ').toLowerCase().includes(normalizedQuery))
       .sort((a, b) => a.name.localeCompare(b.name)).slice(0, 8);
   }, [normalizedQuery, scopedProducts]);
+
+  useEffect(() => {
+    if (!selectedProductGroup) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setSelectedProductGroup(null);
+    };
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedProductGroup]);
 
   const isSaved = savedDiscoveries.some((saved) => saved.id === item.id);
 
@@ -283,32 +298,80 @@ export default function DiscoveryCategoryPage() {
       {selected && <div className="discovery-results">
         {productsLoading && <p>Loading discoveries…</p>}
         {productsError && <p role="alert">{productsError}</p>}
-        {marketplaceGroups.length > 0 && <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(100%,260px),1fr))', gap: 16, marginTop: 20 }}>
-          {marketplaceGroups.map((group, index) => <article className="discovery-product-card" key={group.id} style={{ animationDelay: `${Math.min(index, 8) * 45}ms`, color: '#f4f1ec', border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, overflow: 'hidden' }}>
-            {group.image_url && <img src={group.image_url} alt={group.name} loading="lazy" style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover', display: 'block' }} />}
-            <div style={{ display: 'block', padding: 14 }}>
-              <strong>{group.name}</strong>
-              <small style={{ display: 'block', opacity: .6, marginTop: 5 }}>{group.offers.length} {group.offers.length === 1 ? 'offer' : 'offers'} available</small>
-              {group.offers[0]?.brand && <span style={{ display: 'block', marginTop: 8, fontSize: 12, opacity: .75 }}>Brand: {group.offers[0].brand}</span>}
-              {group.offers[0]?.description && <p style={{ margin: '10px 0 0', fontSize: 13, lineHeight: 1.5, opacity: .78 }}>{group.offers[0].description}</p>}
-              {((group.offers[0]?.sizes ?? []).length > 0) && <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 10 }}>{(group.offers[0]?.sizes ?? []).map((size) => <span key={size} style={{ border: '1px solid rgba(255,255,255,.2)', borderRadius: 999, padding: '4px 8px', fontSize: 11 }}>{size}</span>)}</div>}
-              <div style={{ display: 'grid', gap: 10, marginTop: 14 }}>
-                {group.offers.map((offer, offerIndex) => <div key={`${offer.storefront}-${offer.id}`} style={{ display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 8, paddingTop: 10, borderTop: '1px solid rgba(255,255,255,.12)' }}>
-                  <div>
-                    <a href={'/' + offer.storefront} style={{ display: 'inline-block', fontSize: 13, fontWeight: 550, color: '#f4f1ec', textDecoration: 'underline', textUnderlineOffset: 3 }}>Visit {offer.storeName} ↗</a>
-                    <span style={{ display: 'block', marginTop: 3, opacity: .6, fontSize: 11 }}>{offer.subcategory || offer.category || 'Marketplace offer'}{offerIndex === 0 && group.offers.length > 1 ? ' · Lowest listed price' : ''}</span>
-                    <strong style={{ display: 'block', marginTop: 5 }}>R{Number(offer.price || 0).toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
-                  </div>
-                  <button type="button" onClick={() => addProductToCart(offer)} style={{ minHeight: 38, padding: '0 12px', border: '1px solid rgba(255,255,255,.55)', borderRadius: 999, background: '#f4f1ec', color: '#111', font: 'inherit', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
-                    Add to cart
-                  </button>
-                </div>)}
+        {marketplaceGroups.length > 0 && <div className="discovery-product-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,minmax(0,1fr))', gap: 10, marginTop: 20 }}>
+          {marketplaceGroups.map((group, index) => {
+            const lowestOffer = group.offers[0];
+            return <article
+              className="discovery-product-card"
+              key={group.id}
+              role="button"
+              tabIndex={0}
+              aria-label={`View details for ${group.name}`}
+              onClick={() => setSelectedProductGroup(group)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  setSelectedProductGroup(group);
+                }
+              }}
+              style={{ animationDelay: `${Math.min(index, 8) * 45}ms`, minWidth: 0, color: '#f4f1ec', border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, overflow: 'hidden', cursor: 'pointer' }}
+            >
+              <div style={{ width: '100%', aspectRatio: '1 / 1', background: '#222', overflow: 'hidden' }}>
+                {group.image_url && <img src={group.image_url} alt={group.name} loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />}
               </div>
-            </div>
-          </article>)}
+              <div style={{ display: 'grid', gap: 5, padding: '10px 11px 11px' }}>
+                {lowestOffer?.brand && <span style={{ fontSize: 10, lineHeight: 1.2, opacity: .58, textTransform: 'uppercase', letterSpacing: '.06em' }}>{lowestOffer.brand}</span>}
+                <strong style={{ display: '-webkit-box', minHeight: '2.6em', overflow: 'hidden', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, fontSize: 13, lineHeight: 1.3, fontWeight: 550 }}>{group.name}</strong>
+                <a href={lowestOffer ? '/' + lowestOffer.storefront : '#'} onClick={(event) => event.stopPropagation()} style={{ width: 'fit-content', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: 11, opacity: .65, textDecoration: 'underline', textUnderlineOffset: 3 }}>{lowestOffer?.storeName || 'Marketplace seller'}</a>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, marginTop: 3 }}>
+                  <strong style={{ fontSize: 14, whiteSpace: 'nowrap' }}>{lowestOffer ? 'R' + Number(lowestOffer.price || 0).toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'Price unavailable'}</strong>
+                  {group.offers.length > 1 && <span style={{ fontSize: 10, opacity: .58, whiteSpace: 'nowrap' }}>+{group.offers.length - 1} sellers</span>}
+                </div>
+                <button type="button" onClick={(event) => { event.stopPropagation(); if (lowestOffer) addProductToCart(lowestOffer); }} disabled={!lowestOffer || typeof lowestOffer.price !== 'number'} style={{ minHeight: 34, marginTop: 4, padding: '0 10px', border: '1px solid rgba(255,255,255,.55)', borderRadius: 999, background: '#f4f1ec', color: '#111', font: 'inherit', fontSize: 11, fontWeight: 650, cursor: 'pointer' }}>
+                  Add to cart
+                </button>
+              </div>
+            </article>;
+          })}
         </div>}
         {!productsLoading && !productsError && marketplaceGroups.length === 0 && <p style={{ marginTop: 24, color: 'rgba(244,241,236,.62)' }}>No marketplace products are listed in this category yet.</p>}
       </div>}
     </section>
+      {selectedProductGroup && <div
+        role="presentation"
+        onClick={() => setSelectedProductGroup(null)}
+        style={{ position: 'fixed', inset: 0, zIndex: 120, display: 'grid', placeItems: 'center', padding: 16, background: 'rgba(0,0,0,.78)', backdropFilter: 'blur(8px)' }}
+      >
+        <section
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="marketplace-product-modal-title"
+          onClick={(event) => event.stopPropagation()}
+          style={{ position: 'relative', width: '100%', maxWidth: 680, maxHeight: 'min(88dvh,820px)', overflowY: 'auto', border: '1px solid rgba(255,255,255,.16)', borderRadius: 12, background: '#171717', color: '#f4f1ec' }}
+        >
+          <button type="button" onClick={() => setSelectedProductGroup(null)} aria-label="Close product details" style={{ position: 'absolute', zIndex: 2, top: 12, right: 12, width: 38, height: 38, border: '1px solid rgba(255,255,255,.35)', borderRadius: '50%', background: 'rgba(17,17,17,.8)', color: '#fff', fontSize: 22, cursor: 'pointer' }}>×</button>
+          {selectedProductGroup.image_url && <img src={selectedProductGroup.image_url} alt={selectedProductGroup.name} style={{ display: 'block', width: '100%', maxHeight: 340, objectFit: 'cover', background: '#222' }} />}
+          <div style={{ padding: '20px clamp(16px,4vw,28px) 24px' }}>
+            <p style={{ margin: 0, fontSize: 11, textTransform: 'uppercase', letterSpacing: '.12em', opacity: .58 }}>Marketplace product</p>
+            <h2 id="marketplace-product-modal-title" style={{ margin: '7px 44px 8px 0', fontSize: 'clamp(21px,4vw,30px)', lineHeight: 1.15, fontWeight: 550 }}>{selectedProductGroup.name}</h2>
+            {selectedProductGroup.offers[0]?.brand && <p style={{ margin: '0 0 10px', fontSize: 13, opacity: .68 }}>{selectedProductGroup.offers[0].brand}</p>}
+            {selectedProductGroup.offers[0]?.description && <p style={{ margin: '0 0 16px', fontSize: 14, lineHeight: 1.6, opacity: .78 }}>{selectedProductGroup.offers[0].description}</p>}
+            {(selectedProductGroup.offers[0]?.sizes ?? []).length > 0 && <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 18 }}>
+              {selectedProductGroup.offers[0].sizes?.map((size) => <span key={size} style={{ padding: '5px 9px', border: '1px solid rgba(255,255,255,.2)', borderRadius: 999, fontSize: 11 }}>{size}</span>)}
+            </div>}
+            <h3 style={{ margin: '18px 0 8px', fontSize: 14, fontWeight: 600 }}>Available sellers</h3>
+            <div style={{ display: 'grid', gap: 8 }}>
+              {selectedProductGroup.offers.map((offer, offerIndex) => <div key={`${offer.storefront}-${offer.id}`} style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) auto', alignItems: 'center', gap: 12, padding: '12px 0', borderTop: '1px solid rgba(255,255,255,.12)' }}>
+                <div style={{ minWidth: 0 }}>
+                  <a href={'/' + offer.storefront} style={{ display: 'inline-block', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#f4f1ec', fontSize: 13, textDecoration: 'underline', textUnderlineOffset: 3 }}>{offer.storeName} ↗</a>
+                  <span style={{ display: 'block', marginTop: 3, fontSize: 11, opacity: .58 }}>{offer.subcategory || offer.category || 'Marketplace offer'}{offerIndex === 0 && selectedProductGroup.offers.length > 1 ? ' · Lowest price' : ''}</span>
+                  <strong style={{ display: 'block', marginTop: 5, fontSize: 15 }}>R{Number(offer.price || 0).toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
+                </div>
+                <button type="button" onClick={() => addProductToCart(offer)} disabled={typeof offer.price !== 'number'} style={{ minHeight: 38, padding: '0 13px', border: '1px solid rgba(255,255,255,.55)', borderRadius: 999, background: '#f4f1ec', color: '#111', font: 'inherit', fontSize: 12, fontWeight: 650, cursor: 'pointer' }}>Add to cart</button>
+              </div>)}
+            </div>
+          </div>
+        </section>
+      </div>}
   </main>;
 }
