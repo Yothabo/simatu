@@ -14,7 +14,7 @@ import MoodboardPredictiveSearch from '../discover/MoodboardPredictiveSearch';
 import { DISCOVERY_MARKETS, getMarketById, getSubcategories } from '../discover/discovery-taxonomy';
 
 const fallback: MoodboardItem = DISCOVERY_MARKETS[0];
-type CategoryProduct = { id: string; name: string; storefront: string; marketplace_subcategory_id?: string | null; sku?: string | null; sizes?: string[]; category?: string; subcategory?: string; brand?: string; description?: string | null; storeName: string; href: string; price?: number; image_url?: string | null };
+type CategoryProduct = { id: string; name: string; storefront: string; productSource?: 'store' | 'marketplace'; marketplace_subcategory_id?: string | null; sku?: string | null; sizes?: string[]; category?: string; subcategory?: string; brand?: string; description?: string | null; storeName: string; href: string; price?: number; image_url?: string | null };
 const panel: React.CSSProperties = { padding: 'clamp(24px,5vw,72px)', background: '#111', color: '#f4f1ec', fontFamily: 'inherit' };
 
 export default function DiscoveryCategoryPage() {
@@ -77,23 +77,44 @@ export default function DiscoveryCategoryPage() {
   useEffect(() => {
     let cancelled = false;
     setProductsLoading(true);
-    fetch('/api/products?scope=marketplace', { headers: { Accept: 'application/json' } })
-      .then(async (response) => {
+    Promise.all([
+      fetch('/api/products?scope=marketplace', { headers: { Accept: 'application/json' } }).then(async (response) => {
         const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Unable to load marketplace products.');
+        if (!response.ok) throw new Error(data.error || 'Unable to load store marketplace products.');
         return Array.isArray(data.products) ? data.products : [];
-      })
-      .then((availableProducts) => {
+      }),
+      fetch('/api/marketplace-products', { headers: { Accept: 'application/json' } }).then(async (response) => {
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Unable to load Simatu catalogue products.');
+        return Array.isArray(data.products) ? data.products : [];
+      }),
+    ])
+      .then(([storeProducts, independentProducts]) => {
         if (cancelled) return;
-        const mapped = availableProducts
+        const mappedStoreProducts = storeProducts
           .filter((product: any) => product && product.is_active !== false && typeof product.storefront === 'string')
           .map((product: any) => ({
             ...product,
+            productSource: 'store',
             price: Number(product.price),
             storeName: product.storefront === 'poshies' ? 'Poshies' : product.storefront === 'yotaabo' ? 'Yotaabo' : product.storefront,
             href: '/' + product.storefront + '/catalog',
           } as CategoryProduct));
-        setProducts(mapped);
+        const mappedIndependentProducts = independentProducts
+          .filter((product: any) => product && product.is_active !== false && product.marketplace_visible === true && typeof product.id === 'string')
+          .map((product: any) => ({
+            ...product,
+            productSource: 'marketplace',
+            storefront: 'marketplace',
+            category: product.category_name,
+            subcategory: product.subcategory_name,
+            marketplace_subcategory_id: product.marketplace_subcategory_id,
+            price: Number(product.price),
+            storeName: 'Simatu Marketplace',
+            href: '/discover',
+            sizes: [],
+          } as CategoryProduct));
+        setProducts([...mappedStoreProducts, ...mappedIndependentProducts]);
         setProductsError('');
       })
       .catch((error) => { if (!cancelled) setProductsError(error instanceof Error ? error.message : 'Discovery is unavailable.'); })
@@ -133,6 +154,10 @@ export default function DiscoveryCategoryPage() {
   };
 
   const addProductToCart = (product: CategoryProduct) => {
+    if (product.productSource === 'marketplace') {
+      toast('Marketplace checkout integration is coming next.');
+      return;
+    }
     if (!product.storefront || typeof product.price !== 'number') return;
     const selection = purchaseSelections[offerSelectionKey(product)] || { quantity: 1, sizeQuantities: {} };
     const hasSizes = (product.sizes?.length || 0) > 0;
@@ -422,7 +447,7 @@ export default function DiscoveryCategoryPage() {
                         <span style={{ fontSize: 13, fontWeight: 550 }}>Quantity</span>
                         {quantityControl(selection.quantity, 'quantity', () => updateQuantity(null, selection.quantity - 1), () => updateQuantity(null, selection.quantity + 1))}
                       </div>}
-                  <button type="button" onClick={() => { if (!validSelection) { if (hasSizes) toast.error('Choose a quantity for at least one size'); return; } addProductToCart(offer); setSelectedProductGroup(null); }} disabled={!validSelection} style={{ minHeight: 46, padding: '0 20px', border: 0, borderRadius: 999, background: validSelection ? '#f4f1ec' : 'rgba(244,241,236,.18)', color: validSelection ? '#111' : 'rgba(244,241,236,.42)', font: 'inherit', fontSize: 12, fontWeight: 700, cursor: validSelection ? 'pointer' : 'not-allowed' }}>Add to cart</button>
+                  {offer.productSource === 'marketplace' ? <div style={{ padding: '12px 14px', border: '1px solid rgba(255,255,255,.18)', borderRadius: 8, fontSize: 12, lineHeight: 1.5, color: 'rgba(244,241,236,.68)' }}>Simatu Marketplace product · Checkout integration is being completed.</div> : <button type="button" onClick={() => { if (!validSelection) { if (hasSizes) toast.error('Choose a quantity for at least one size'); return; } addProductToCart(offer); setSelectedProductGroup(null); }} disabled={!validSelection} style={{ minHeight: 46, padding: '0 20px', border: 0, borderRadius: 999, background: validSelection ? '#f4f1ec' : 'rgba(244,241,236,.18)', color: validSelection ? '#111' : 'rgba(244,241,236,.42)', font: 'inherit', fontSize: 12, fontWeight: 700, cursor: validSelection ? 'pointer' : 'not-allowed' }}>Add to cart</button>}
                   <a href={offer.href} className="marketplace-store-collection-link" style={{ alignSelf: 'center', textAlign: 'center', display: 'inline-flex', alignItems: 'center', gap: 7, color: 'rgba(244,241,236,.72)', fontSize: 12, lineHeight: 1.4, textDecoration: 'none' }}>Discover more from the {offer.storeName} collection.<svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17 17 7M7 7h10v10" /></svg></a>
                 </div>;
               })}
