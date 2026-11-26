@@ -556,3 +556,29 @@
   outline: none !important;
   box-shadow: 0 5px 18px rgba(41, 36, 38, .08) !important;
 }
+
+
+/* Poshies search: completely neutralize visible focus/active states on the entire search surface. */
+.storefront-controls--poshies .storefront-controls__search,
+.storefront-controls--poshies .storefront-controls__search:focus,
+.storefront-controls--poshies .storefront-controls__search:focus-visible,
+.storefront-controls--poshies .storefront-controls__search:focus-within,
+.storefront-controls--poshies .storefront-controls__search:active {
+  outline: none !important;
+  border-color: rgba(41, 36, 38, .14) !important;
+  box-shadow: 0 5px 18px rgba(41, 36, 38, .08) !important;
+  background: #fff !important;
+}
+.storefront-controls--poshies .storefront-controls__search input,
+.storefront-controls--poshies .storefront-controls__search input:hover,
+.storefront-controls--poshies .storefront-controls__search input:focus,
+.storefront-controls--poshies .storefront-controls__search input:focus-visible,
+.storefront-controls--poshies .storefront-controls__search input:focus-within,
+.storefront-controls--poshies .storefront-controls__search input:active {
+  outline: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  color: #292426 !important;
+  -webkit-tap-highlight-color: transparent;
+}
