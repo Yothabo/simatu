@@ -142,7 +142,9 @@ export default function ViewCatalog() {
                       <div key={subcategory} className="mx-auto max-w-[1120px] px-6 pb-16 sm:px-10 lg:px-12">
                         <h3 className="mb-6 font-heading text-2xl italic text-[var(--sf-text-muted)]">{subcategory}</h3>
                         <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
-                          {subItems.map((product) => (
+                          {isLoading ? (
+                            Array.from({ length: 4 }).map((_, index) => <ProductCardSkeleton key={index} />)
+                          ) : subItems.map((product) => (
                             <button key={product.id} type="button" onClick={() => setSelectedProduct(product)}
                               className="flex cursor-pointer flex-col text-left" style={{ WebkitTapHighlightColor: 'transparent' }}>
                               <div className={`aspect-[4/5] w-full overflow-hidden ${accent.background}`}>
