@@ -538,3 +538,21 @@
 .storefront-controls--poshies .storefront-controls__category-submenu {
   overflow: hidden !important;
 }
+
+
+/* Poshies search: remove the input's separate focus layer so the outer bar is the only visible surface. */
+.storefront-controls--poshies .storefront-controls__search input,
+.storefront-controls--poshies .storefront-controls__search input[type='search'],
+.storefront-controls--poshies .storefront-controls__search input:focus,
+.storefront-controls--poshies .storefront-controls__search input:focus-visible,
+.storefront-controls--poshies .storefront-controls__search input:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+.storefront-controls--poshies .storefront-controls__search:focus-within {
+  outline: none !important;
+  box-shadow: 0 5px 18px rgba(41, 36, 38, .08) !important;
+}
