@@ -207,7 +207,7 @@ export default function ProductModal({
 
         {/* 3. Description */}
         <div className="px-5 pt-3">
-          <p className={`text-sm leading-relaxed text-[var(--sf-inverse-text-muted)] ${mode === "preview" ? "" : "font-heading"}`} style={mode === "preview" ? { fontFamily: 'var(--sf-font-body)' } : undefined}>
+          <p className={`text-sm leading-relaxed text-[var(--sf-text-muted)] ${mode === "preview" ? "" : "font-heading"}`} style={mode === "preview" ? { fontFamily: 'var(--sf-font-body)' } : undefined}>
             {product.description || productDescriptionFallback.replace('{productName}', product.name)}
           </p>
         </div>
@@ -217,7 +217,7 @@ export default function ProductModal({
           <div className="flex h-12 items-stretch border border-[var(--sf-inverse-border)]">
             <RippleButton
               onClick={() => handleQuantityChange(quantity - 1)}
-              className="flex h-12 w-10 items-center justify-center bg-[var(--sf-inverse-background)] text-[var(--sf-text-muted)] transition-colors hover:bg-[var(--sf-accent)] hover:text-[var(--sf-accent-contrast)] active:bg-[var(--sf-accent)]"
+              className="flex h-12 w-10 items-center justify-center bg-[var(--sf-inverse-background)] text-[var(--sf-inverse-text-muted)] transition-colors hover:bg-[var(--sf-accent)] hover:text-[var(--sf-accent-contrast)] active:bg-[var(--sf-accent)]"
               ariaLabel="Decrease quantity"
               rippleColor={primaryAccent}
             >
@@ -226,7 +226,7 @@ export default function ProductModal({
             <span className="flex h-12 w-8 items-center justify-center text-center font-heading text-lg text-[var(--sf-text)]">{quantity}</span>
             <RippleButton
               onClick={() => handleQuantityChange(quantity + 1)}
-              className="flex h-12 w-10 items-center justify-center bg-[var(--sf-inverse-background)] text-[var(--sf-text-muted)] transition-colors hover:bg-[var(--sf-accent)] hover:text-[var(--sf-accent-contrast)] active:bg-[var(--sf-accent)]"
+              className="flex h-12 w-10 items-center justify-center bg-[var(--sf-inverse-background)] text-[var(--sf-inverse-text-muted)] transition-colors hover:bg-[var(--sf-accent)] hover:text-[var(--sf-accent-contrast)] active:bg-[var(--sf-accent)]"
               ariaLabel="Increase quantity"
               rippleColor={primaryAccent}
             >
