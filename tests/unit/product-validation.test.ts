@@ -470,6 +470,20 @@ describe('validateProduct: platform subcategory validation', () => {
     expect(result.product?.marketplace_subcategory_id).toBe(validSubcategoryId);
   });
 
+  it('accepts marketplace category slug alongside classification ID', () => {
+    const result = validateProduct({ ...validProduct(), marketplace_category_slug: 'fashion', marketplace_subcategory_id: validSubcategoryId });
+    expect(result.product?.marketplace_category_slug).toBe('fashion');
+  });
+
+  it('requires a marketplace subcategory when a marketplace category is chosen', () => {
+    expect(validateProduct({ ...validProduct(), marketplace_category_slug: 'fashion' }).error).toBe('Select a marketplace subcategory for the chosen category.');
+  });
+
+  it('rejects invalid marketplace category slug', () => {
+    expect(validateProduct({ ...validProduct(), marketplace_category_slug: 'Fashion Category' }).error).toBe('Please provide a valid marketplace category.');
+  });
+
+
   it('defaults marketplace subcategory classification to null', () => {
     expect(validateProduct(validProduct()).product?.marketplace_subcategory_id).toBeNull();
   });
