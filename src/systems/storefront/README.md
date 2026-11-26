@@ -13,9 +13,9 @@ Storefront owns the multi-store commerce experience. Business logic is shared wh
 
 ## Design-system selection
 
-Each store selects a named shared design system or a local design system in `core/configuration/storefronts.ts`. The route-scoped `StorefrontThemeProvider` sets the active `data-storefront` identity. Store-scoped stylesheets supply the semantic token values.
+Each store selects a named shared design system or a local design system in `core/configuration/storefronts.ts`. The route-scoped `StorefrontThemeProvider` sets the active `data-storefront` identity and applies semantic token overrides from the store configuration. Store-scoped stylesheets may add distinctive visual rules.
 
-The shared foundation owns component primitives, layout geometry, spacing, sizing, breakpoints, radius and motion. Store themes own concrete colors, semantic color mappings, font families and brand-specific visual details. Runtime inline palette overrides are not used.
+The shared foundation owns component primitives, layout geometry, spacing, sizing, breakpoints, radius and motion. Store themes own concrete colors, semantic color mappings, font families and brand-specific visual details. Runtime token overrides are applied from configuration at the storefront boundary and restored when the storefront unmounts.
 
 ## Ownership rules
 
