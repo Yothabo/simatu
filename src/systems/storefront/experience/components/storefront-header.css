@@ -156,7 +156,7 @@
 }
 
 
-/* Poshies floating navigation: charcoal, hot pink and white only. */
+/* Expanded storefront floating navigation: charcoal, hot pink and white only. */
 .storefront-controls--expanded { color: var(--sf-inverse-text); }
 .storefront-controls--expanded .storefront-controls__search input,
 .storefront-controls--expanded .storefront-controls__menu { background: var(--sf-text); border-color: var(--sf-inverse-border); color: var(--sf-inverse-text); }
@@ -167,7 +167,7 @@
 .storefront-controls--expanded .storefront-controls__menu button:focus-visible { background: var(--sf-accent); color: var(--sf-inverse-text); }
 .storefront-controls--expanded .storefront-controls__cart-count { background: var(--sf-accent); color: var(--sf-inverse-text); }
 
-/* Poshies floating controls: solid white surfaces, charcoal icons/text, pink interaction. */
+/* Expanded storefront floating controls: solid white surfaces, charcoal icons/text, pink interaction. */
 .storefront-controls--expanded {
   color: var(--sf-text);
 }
@@ -227,7 +227,7 @@
   outline: none;
 }
 
-/* Remove native browser search-field styling inside Poshies controls. */
+/* Remove native browser search-field styling inside Expanded storefront controls. */
 .storefront-controls--expanded .storefront-controls__search input[type='search'] {
   appearance: none;
   -webkit-appearance: none;
@@ -254,7 +254,7 @@
 }
 
 
-/* Poshies control edge shaping: search right edge square, cart fully square, menu left edge square. */
+/* Expanded storefront control edge shaping: search right edge square, cart fully square, menu left edge square. */
 .storefront-controls--expanded .storefront-controls__search {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
@@ -278,7 +278,7 @@
 }
 
 
-/* Poshies search input stays vertically centered in the collapsed pill; the expanded menu aligns its contents to the top. */
+/* Expanded storefront search input stays vertically centered in the collapsed pill; the expanded menu aligns its contents to the top. */
 .storefront-controls--expanded .storefront-controls__search {
   align-items: center;
   transition: height .36s cubic-bezier(.2,.65,.25,1), min-height .36s cubic-bezier(.2,.65,.25,1), border-radius .36s cubic-bezier(.2,.65,.25,1), padding .36s ease;
@@ -332,7 +332,7 @@
 }
 
 
-/* Poshies header redesign: the search surface expands downward while the cart and menu controls remain anchored. */
+/* Expanded storefront header redesign: the search surface expands downward while the cart and menu controls remain anchored. */
 .storefront-controls--expanded .storefront-controls__row--menu-open {
   align-items: flex-start;
 }
@@ -423,7 +423,7 @@
 }
 
 
-/* Poshies: keep the cart/menu controls anchored at the same top position during expansion. */
+/* Expanded storefront: keep the cart/menu controls anchored at the same top position during expansion. */
 .storefront-controls--expanded .storefront-controls__row {
   align-items: flex-start;
 }
@@ -458,7 +458,7 @@
   }
 }
 
-/* Poshies navigation menu hierarchy */
+/* Expanded storefront navigation menu hierarchy */
 .storefront-controls--expanded .storefront-controls__inline-menu { display:flex; flex-direction:column; justify-content:center; gap:4px; }
 .storefront-controls--expanded .storefront-controls__menu-item,
 .storefront-controls--expanded .storefront-controls__category-submenu button {
@@ -472,12 +472,12 @@
 .storefront-controls--expanded .storefront-controls__category-submenu button:hover { color:var(--sf-accent); background:var(--sf-hover-surface); }
 .storefront-controls--expanded .storefront-controls__categories-trigger svg:last-child { margin-left:auto; transition:transform .2s ease; }
 .storefront-controls--expanded .storefront-controls__categories-trigger svg.is-rotated { transform:rotate(180deg); }
-.storefront-controls--expanded .storefront-controls__category-submenu { display:flex; flex-direction:column; gap:2px; padding-left:28px; overflow:hidden; animation:poshies-category-expand .22s ease both; }
+.storefront-controls--expanded .storefront-controls__category-submenu { display:flex; flex-direction:column; gap:2px; padding-left:28px; overflow:hidden; animation:storefront-category-expand .22s ease both; }
 .storefront-controls--expanded .storefront-controls__category-submenu button { min-height:40px; border-radius:10px; }
-@keyframes poshies-category-expand { from {opacity:0; transform:translateY(-5px);} to {opacity:1; transform:translateY(0);} }
+@keyframes storefront-category-expand { from {opacity:0; transform:translateY(-5px);} to {opacity:1; transform:translateY(0);} }
 @media (prefers-reduced-motion:reduce) { .storefront-controls--expanded .storefront-controls__category-submenu { animation:none; } .storefront-controls--expanded .storefront-controls__categories-trigger svg:last-child { transition:none; } }
 
-/* Poshies menu expands naturally to fit every navigation item. */
+/* Expanded storefront menu expands naturally to fit every navigation item. */
 .storefront-controls--expanded .storefront-controls__row--menu-open .storefront-controls__search {
   height: auto;
   min-height: 0;
@@ -506,7 +506,7 @@
   color: currentColor;
 }
 
-/* Poshies navigation: eliminate staggered child motion and height-transition clipping. */
+/* Expanded storefront navigation: eliminate staggered child motion and height-transition clipping. */
 .storefront-controls--expanded .storefront-controls__search,
 .storefront-controls--expanded .storefront-controls__search--menu-open,
 .storefront-controls--expanded .storefront-controls__row--menu-open .storefront-controls__search {
@@ -529,7 +529,7 @@
 }
 
 
-/* Keep Poshies navigation content inside the panel while its container animates. */
+/* Keep Expanded storefront navigation content inside the panel while its container animates. */
 .storefront-controls--expanded .storefront-controls__search,
 .storefront-controls--expanded .storefront-controls__search--menu-open,
 .storefront-controls--expanded .storefront-controls__row--menu-open .storefront-controls__search {
@@ -542,7 +542,7 @@
 }
 
 
-/* Poshies search: remove the input's separate focus layer so the outer bar is the only visible surface. */
+/* Expanded storefront search: remove the input's separate focus layer so the outer bar is the only visible surface. */
 .storefront-controls--expanded .storefront-controls__search input,
 .storefront-controls--expanded .storefront-controls__search input[type='search'],
 .storefront-controls--expanded .storefront-controls__search input:focus,
@@ -560,7 +560,7 @@
 }
 
 
-/* Poshies search: completely neutralize visible focus/active states on the entire search surface. */
+/* Expanded storefront search: completely neutralize visible focus/active states on the entire search surface. */
 .storefront-controls--expanded .storefront-controls__search,
 .storefront-controls--expanded .storefront-controls__search:focus,
 .storefront-controls--expanded .storefront-controls__search:focus-visible,
@@ -586,7 +586,7 @@
 }
 
 
-/* Definitive Poshies search focus reset: remove framework/browser focus rings on the field itself. */
+/* Definitive Expanded storefront search focus reset: remove framework/browser focus rings on the field itself. */
 .storefront-controls--expanded .storefront-controls__search input[type="search"]:focus,
 .storefront-controls--expanded .storefront-controls__search input[type="search"]:focus-visible,
 .storefront-controls--expanded .storefront-controls__search input[type="search"]:focus-within,
