@@ -119,11 +119,11 @@ export default function ProductCarousel({
           breakpoints={{
             640: {
               slidesPerView: isPoshiesMockCarousel ? 2.2 : 3.15,
-              spaceBetween: isPoshiesMockCarousel ? var(--sf-space-4) : var(--sf-space-5),
+              spaceBetween: isPoshiesMockCarousel ? 16 : 20,
             },
             1024: {
               slidesPerView: isPoshiesMockCarousel ? 3.2 : 4.15,
-              spaceBetween: isPoshiesMockCarousel ? var(--sf-space-5) : var(--sf-space-6),
+              spaceBetween: isPoshiesMockCarousel ? 20 : 24,
             },
           }}
           navigation={!isLoading && (visibleProducts.length > 2 || visibleProducts.length === 0)}
