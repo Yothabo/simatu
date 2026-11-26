@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiMenu, FiX, FiHome, FiGrid, FiChevronDown, FiShoppingBag } from 'react-icons/fi';
+import { FiMenu, FiX, FiHome, FiGrid, FiShoppingBag } from 'react-icons/fi';
 import { FaOpencart } from 'react-icons/fa';
 import useStorefront from '../../core/hooks/useStorefront.ts';
 import { useCart } from '../../core/context/CartContext';
@@ -42,7 +42,7 @@ export default function Header({ sticky = true }: HeaderProps) {
                 <FiHome aria-hidden="true" /><span>Home</span>
               </Link>
               <div className="storefront-controls__menu-item storefront-controls__categories-label">
-                <FiGrid aria-hidden="true" /><span>Categories</span><FiChevronDown aria-hidden="true" />
+                <FiGrid aria-hidden="true" /><span>Categories</span>
               </div>
               <div className="storefront-controls__category-submenu">
                 <button type="button" onClick={() => scrollToSection('hers')}><span>Hers</span></button>
