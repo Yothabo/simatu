@@ -12,6 +12,7 @@ import CheckoutModal from '../components/CheckoutModal';
 import useStorefront from '../../core/hooks/useStorefront';
 
 export default function CartPage() {
+  const { primaryAccent } = useStorefront();
   const location = useLocation();
   const isCheckoutView = location.pathname === '/checkout';
   const { cartItems, removeFromCart, increaseQuantity, decreaseQuantity } = useCart();
