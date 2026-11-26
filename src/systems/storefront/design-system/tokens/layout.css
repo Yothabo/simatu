@@ -1,0 +1,6 @@
+/* Shared responsive and container tokens. */
+:root {
+  --sf-breakpoint-mobile: 640px;
+  --sf-container-gutter: clamp(12px, 3vw, 36px);
+  --sf-container-gutter-mobile: 12px;
+}
