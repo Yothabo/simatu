@@ -20,4 +20,6 @@ export const EMPTY_PRODUCT: AdminProduct = {
   sort_order: 0,
   sizes: [],
   order_count: 0,
+  marketplace_category_slug: null,
+  marketplace_subcategory_id: null,
 };
