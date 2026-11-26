@@ -18,7 +18,7 @@ export type CartState = {
 
 const CartContext = createContext<CartState | undefined>(undefined);
 export const MARKETPLACE_CART_KEY = 'simatu-marketplace-cart';
-export const STOREFRONT_CART_KEYS: Record<'yotaabo' | 'poshies', string> = {
+export const STOREFRONT_CART_KEYS: Record<string, string> = {
   yotaabo: 'yotaabo-cart',
   poshies: 'poshies-cart',
 };
