@@ -5,7 +5,6 @@ import {
 import type { ProductFormFieldsProps } from '../ProductFormFields.types';
 
 type Props = Pick<ProductFormFieldsProps, 'form' | 'onChange'>;
-
 export default function ProductPricingFields({ form, onChange }: Props) {
   return (
     <div style={GRID_STYLE}>
@@ -18,7 +17,6 @@ export default function ProductPricingFields({ form, onChange }: Props) {
           numeric
         />
       </AdminField>
-
       <AdminField label="Supplier Cost (R)">
         <AdminInput
           type="number"
@@ -29,7 +27,6 @@ export default function ProductPricingFields({ form, onChange }: Props) {
               e.target.value === '' ? null : Number(e.target.value),
             )
           }
-          placeholder="Not recorded"
           min={0}
           step="0.01"
           numeric
@@ -38,7 +35,6 @@ export default function ProductPricingFields({ form, onChange }: Props) {
     </div>
   );
 }
-
 const GRID_STYLE = {
   display: 'grid',
   gridTemplateColumns: '1fr 1fr',
