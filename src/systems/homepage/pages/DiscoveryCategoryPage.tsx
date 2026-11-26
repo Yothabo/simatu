@@ -380,7 +380,7 @@ export default function DiscoveryCategoryPage() {
           </div>
           <div style={{ padding: '0 clamp(16px,4vw,32px) 28px' }}>
             <div style={{ display: 'grid', gap: 14 }}>
-              {selectedProductGroup.offers.map((offer, offerIndex) => {
+              {selectedProductGroup.offers.map((offer) => {
                 const selection = purchaseSelections[offerSelectionKey(offer)] || { size: '', quantity: 1 };
                 const hasSizes = (offer.sizes?.length || 0) > 0;
                 const validSelection = typeof offer.price === 'number' && (!hasSizes || Boolean(selection.size));
@@ -401,7 +401,7 @@ export default function DiscoveryCategoryPage() {
                     <div>
                       <p style={{ margin: '0 0 9px', fontSize: 11, fontWeight: 600 }}>Product options {hasSizes ? <span style={{ color: '#f0c987' }}>* Required</span> : <span style={{ opacity: .5 }}>· No variants</span>}</p>
                       {hasSizes
-                        ? <div role="group" aria-label={`Choose size from ${offer.storeName}`} style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
+                        ? <div role="group" aria-label={'Choose product size'} style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
                             {offer.sizes?.map((size) => <button key={size} type="button" aria-pressed={selection.size === size} onClick={() => setPurchaseSelections((current) => ({ ...current, [offerSelectionKey(offer)]: { size, quantity: current[offerSelectionKey(offer)]?.quantity || 1 } }))} style={{ minWidth: 44, minHeight: 38, padding: '0 12px', border: selection.size === size ? '1px solid #f4f1ec' : '1px solid rgba(255,255,255,.25)', borderRadius: 6, background: selection.size === size ? '#f4f1ec' : 'transparent', color: selection.size === size ? '#111' : '#f4f1ec', font: 'inherit', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>{size}</button>)}
                           </div>
                         : <span style={{ fontSize: 12, opacity: .6 }}>Standard option</span>}
@@ -410,9 +410,9 @@ export default function DiscoveryCategoryPage() {
                     <div>
                       <p style={{ margin: '0 0 9px', fontSize: 11, fontWeight: 600 }}>Quantity</p>
                       <div style={{ display: 'inline-flex', alignItems: 'center', border: '1px solid rgba(255,255,255,.25)', borderRadius: 7, overflow: 'hidden' }}>
-                        <button type="button" aria-label={`Decrease quantity for ${offer.storeName}`} disabled={selection.quantity <= 1} onClick={() => setPurchaseSelections((current) => ({ ...current, [offerSelectionKey(offer)]: { size: current[offerSelectionKey(offer)]?.size || '', quantity: Math.max(1, (current[offerSelectionKey(offer)]?.quantity || 1) - 1) } }))} style={{ width: 38, height: 38, border: 0, background: 'transparent', color: '#f4f1ec', fontSize: 18, cursor: 'pointer' }}>−</button>
+                        <button type="button" aria-label={'Decrease product quantity'} disabled={selection.quantity <= 1} onClick={() => setPurchaseSelections((current) => ({ ...current, [offerSelectionKey(offer)]: { size: current[offerSelectionKey(offer)]?.size || '', quantity: Math.max(1, (current[offerSelectionKey(offer)]?.quantity || 1) - 1) } }))} style={{ width: 38, height: 38, border: 0, background: 'transparent', color: '#f4f1ec', fontSize: 18, cursor: 'pointer' }}>−</button>
                         <output aria-live="polite" style={{ minWidth: 30, textAlign: 'center', fontSize: 13, fontVariantNumeric: 'tabular-nums' }}>{selection.quantity}</output>
-                        <button type="button" aria-label={`Increase quantity for ${offer.storeName}`} onClick={() => setPurchaseSelections((current) => ({ ...current, [offerSelectionKey(offer)]: { size: current[offerSelectionKey(offer)]?.size || '', quantity: (current[offerSelectionKey(offer)]?.quantity || 1) + 1 } }))} style={{ width: 38, height: 38, border: 0, background: 'transparent', color: '#f4f1ec', fontSize: 18, cursor: 'pointer' }}>+</button>
+                        <button type="button" aria-label={'Increase product quantity'} onClick={() => setPurchaseSelections((current) => ({ ...current, [offerSelectionKey(offer)]: { size: current[offerSelectionKey(offer)]?.size || '', quantity: (current[offerSelectionKey(offer)]?.quantity || 1) + 1 } }))} style={{ width: 38, height: 38, border: 0, background: 'transparent', color: '#f4f1ec', fontSize: 18, cursor: 'pointer' }}>+</button>
                       </div>
                     </div>
                   </div>
