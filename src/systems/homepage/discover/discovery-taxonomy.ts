@@ -42,13 +42,13 @@ export const DISCOVERY_SUBCATEGORIES: Record<string, DiscoverySubcategory[]> = {
     tile('rugs-textiles', 'Textiles', 'photo-1783933259328-7605b5ebb53e', 'Rugs, curtains and soft furnishings', ['rug','textile','curtain']),
     tile('interior-services', 'Interior Design', 'photo-1742541656775-5fc717774c02', 'Interior styling, design and furnishing', ['interior','design','styling']),
     tile('storage', 'Storage & Organisation', 'photo-1678108429557-546cf9a84c35', 'Storage solutions and organised spaces', ['storage','organ']),
-  ],
     tile('kitchen', 'Kitchen & Dining', 'photo-1654064756910-974764816931', 'Cookware, utensils and dining essentials', ['kitchen','cook','dining']),
     tile('bedding', 'Bedding & Bath', 'photo-1766727923864-730fd98dcce2', 'Bedding, towels and bathroom essentials', ['bedding','bath','towel']),
     tile('home-essentials', 'Household Essentials', 'photo-1716625300723-ac2f22574f73', 'Everyday household products and necessities', ['home','household','essential']),
     tile('plants', 'Plants & Gardening', 'photo-1776151243153-7c50dd432304', 'Plants, garden supplies and growing essentials', ['plant','garden']),
     tile('cleaning', 'Cleaning', 'photo-1740657254989-42fe9c3b8cce', 'Cleaning products, tools and supplies', ['clean']),
-    tile('home-organisation', 'Home Organisation', 'photo-1594481939376-2e0a86488a42', 'Everyday organisers and practical storage', ['organ','storage']),  beauty: [
+  ],
+  beauty: [
     tile('skincare', 'Skincare', 'photo-1739980155900-36562bcb7857', 'Skincare products and skin essentials', ['skin']),
     tile('makeup', 'Makeup', 'photo-1723150512429-bfa92988d845', 'Cosmetics, makeup and beauty looks', ['makeup','cosmetic']),
     tile('hair', 'Haircare', 'photo-1570464678671-953f859952c4', 'Hair products, wigs and hair essentials', ['hair']),
