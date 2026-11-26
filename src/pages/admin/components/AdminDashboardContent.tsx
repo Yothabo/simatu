@@ -3,6 +3,7 @@ import AdminProducts from '../../../features/admin/components/AdminProducts';
 import AdminInventory from '../../../features/admin/components/inventory/AdminInventory';
 import AdminOrders from '../../../features/admin/components/AdminOrders';
 import AdminActivities from '../../../features/admin/components/AdminActivities';
+import AdminBusinessCenter from '../../../features/admin/components/business-center/AdminBusinessCenter';
 import AdminSettingsTab from '../../../features/admin/components/AdminSettingsTab';
 import type { AdminDashboardContentProps } from './AdminDashboardContent.types';
 
@@ -149,6 +150,8 @@ export default function AdminDashboardContent({
           }}
         />
       )}
+
+      {activeTab === 'business' && <AdminBusinessCenter />}
 
       {activeTab === 'activities' && (
         <AdminActivities
