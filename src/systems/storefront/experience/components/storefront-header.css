@@ -250,3 +250,20 @@
   background: #292426 !important;
   color: #fff !important;
 }
+
+
+/* Poshies control edge shaping: search right edge square, cart fully square, menu left edge square. */
+.storefront-controls--poshies .storefront-controls__search {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.storefront-controls--poshies .storefront-controls__cart {
+  border-radius: 0;
+}
+.storefront-controls--poshies .storefront-controls__cart-count {
+  border-radius: 0 !important;
+}
+.storefront-controls--poshies .storefront-controls__menu nav {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
