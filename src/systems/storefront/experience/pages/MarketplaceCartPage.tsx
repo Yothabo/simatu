@@ -219,7 +219,7 @@ export default function MarketplaceCartPage() {
         cartQuantity={selectedProduct?.quantity ?? 1}
         onQuantityChange={(nextQuantity) => {
           if (!selectedProduct) return;
-          const currentItem = cartItems.find((item) => item.id === selectedProduct.id && item.storefront === selectedProduct.storefront && (item.variantId || null) === (selectedProduct.variantId || null));
+          const currentItem = cartItems.find((item) => item.id === selectedProduct.id && item.storefront === selectedProduct.storefront && (item.variantId || null) === (selectedProduct.variantId || null) && (item.size || null) === (selectedProduct.size || null));
           if (!currentItem) return;
 
           const difference = nextQuantity - currentItem.quantity;
@@ -235,7 +235,8 @@ export default function MarketplaceCartPage() {
             id: selectedProduct.id,
             name: selectedProduct.name,
             storefront: selectedProduct.storefront,
-            variantId: selectedProduct.variantId,
+            variantId: selectedProduct.variantId ?? null,
+            size: selectedProduct.size ?? null,
           });
         }}
         onClose={() => setSelectedProduct(null)}
