@@ -33,7 +33,7 @@ export default function ProductCarousel({
   const visibleProducts = carouselProducts.slice(0, 5);
 
   return (
-    <section className="yotaabo-product-carousel relative w-full select-none pt-[var(--sf-space-2)] pb-[var(--sf-space-12)]"
+    <section className="storefront-product-carousel relative w-full select-none pt-[var(--sf-space-2)] pb-[var(--sf-space-12)]"
       style={{ '--swiper-theme-color': themeColor, WebkitTapHighlightColor: 'transparent' } as CSSProperties}
       aria-label={`${title} product collection`}>
       <div className="px-[var(--sf-space-6)] sm:px-[var(--sf-space-10)] lg:px-[var(--sf-space-12)]">
@@ -47,7 +47,7 @@ export default function ProductCarousel({
       {description && <p className={`mt-[var(--sf-space-2)] px-6 font-heading text-base leading-relaxed sm:px-10 lg:px-12 ${editorial ? 'text-[var(--sf-inverse-text-muted)]' : 'text-[var(--sf-text-muted)]'}`}>{description}</p>}
       {error && !visibleProducts.length && !isLoading && <p role="status" className="sr-only">Product feed unavailable; showing placeholders.</p>}
       <Swiper modules={[A11y, FreeMode, Keyboard, Navigation, Pagination]}
-        className={`yotaabo-product-swiper mt-[var(--sf-space-6)] ${editorial ? 'storefront-product-swiper--editorial' : ''}`}
+        className={`storefront-product-swiper mt-[var(--sf-space-6)] ${editorial ? 'storefront-product-swiper--editorial' : ''}`}
         slidesPerView={editorial ? 1.25 : 2.15} slidesPerGroup={1} spaceBetween={editorial ? 12 : 16}
         breakpoints={{
           640: { slidesPerView: editorial ? 2.2 : 3.15, spaceBetween: editorial ? 16 : 20 },
