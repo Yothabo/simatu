@@ -298,3 +298,24 @@
     width: 100%;
   }
 }
+
+/* Editorial store collection link in the marketplace product modal. */
+.discovery-category-page .marketplace-store-collection-link {
+  width: fit-content;
+  transition: color 200ms ease, opacity 200ms ease;
+}
+.discovery-category-page .marketplace-store-collection-link svg {
+  flex: 0 0 auto;
+  transition: transform 200ms ease;
+}
+.discovery-category-page .marketplace-store-collection-link:hover {
+  color: #f4f1ec !important;
+}
+.discovery-category-page .marketplace-store-collection-link:hover svg {
+  transform: translate(2px,-2px);
+}
+.discovery-category-page .marketplace-store-collection-link:focus-visible {
+  outline: 2px solid #f4f1ec;
+  outline-offset: 4px;
+  border-radius: 2px;
+}
