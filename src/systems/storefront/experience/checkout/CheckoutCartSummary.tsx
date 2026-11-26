@@ -37,10 +37,10 @@ export default function CheckoutCartSummary({
       </div>
 
       <div className="flex items-center justify-between py-4">
-        <span className="font-heading text-base text-[#4d4d4d]">
+        <span className="font-heading text-base text-[var(--sf-text)]">
           Subtotal
         </span>
-        <span className="font-heading text-xl font-semibold text-[#4d4d4d] tabular-nums">
+        <span className="font-heading text-xl font-semibold text-[var(--sf-text)] tabular-nums">
           R {cartTotal.toFixed(2)}
         </span>
       </div>
