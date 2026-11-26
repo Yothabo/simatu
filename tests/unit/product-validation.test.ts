@@ -662,6 +662,41 @@ describe('validateProduct: sizes', () => {
     expect(result.product?.sizes).toEqual(['S', 'M', 'L']);
   });
 
+  it('splits comma-separated sizes into individual options', () => {
+    const result = validateProduct({
+      ...validProduct(),
+      sizes: ['Medium, Small, Large'],
+    });
+
+    expect(result.product?.sizes).toEqual(['Medium', 'Small', 'Large']);
+  });
+
+  it('splits semicolon and newline separated sizes', () => {
+    const result = validateProduct({
+      ...validProduct(),
+      sizes: ['Small; Medium\\nLarge'],
+    });
+
+    expect(result.product?.sizes).toEqual(['Small', 'Medium', 'Large']);
+  });
+
+  it('rejects duplicates after splitting, regardless of case', () => {
+    const result = validateProduct({
+      ...validProduct(),
+      sizes: ['Small, Medium', 'small', 'Large'],
+    });
+
+    expect(result.error).toBe('Product sizes cannot contain duplicates.');
+  });
+
+  it('rejects more than 50 sizes after splitting', () => {
+    const tooManySizes = Array.from({ length: 51 }, (_, index) => 'Size ' + index).join(', ');
+    expect(validateProduct({
+      ...validProduct(),
+      sizes: [tooManySizes],
+    }).error).toBe('Product sizes must be a list of up to 50 labels.');
+  });
+
   it('defaults omitted sizes to an empty list', () => {
     expect(validateProduct(validProduct()).product?.sizes).toEqual([]);
   });
