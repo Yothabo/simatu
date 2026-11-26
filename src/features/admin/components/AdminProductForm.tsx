@@ -10,6 +10,7 @@ import {
   useProductImageUpload,
   useProductFormSubmit,
 } from './product-form/hooks';
+import { useMarketplaceTaxonomy } from './product-form/hooks/useMarketplaceTaxonomy';
 import type {
   AdminProduct,
   AdminProductFormProps,
@@ -56,6 +57,9 @@ export default function AdminProductForm({
     setForm,
   });
 
+  const { marketplaceCategoryOptions, marketplaceSubcategoryOptions, isLoadingMarketplaceTaxonomy, marketplaceTaxonomyError } = useMarketplaceTaxonomy(form.marketplace_category_slug);
+
+
   const { isUploading, handleImageUpload } = useProductImageUpload({
     setForm,
   });
@@ -77,6 +81,8 @@ export default function AdminProductForm({
           category_id: null,
           subcategory: '',
           subcategory_id: null,
+          marketplace_category_slug: null,
+          marketplace_subcategory_id: null,
         }));
         return;
       }
@@ -94,6 +100,11 @@ export default function AdminProductForm({
           subcategory: '',
           subcategory_id: null,
         }));
+        return;
+      }
+
+      if (field === 'marketplace_category_slug') {
+        setForm((prev) => ({ ...prev, marketplace_category_slug: value as string | null, marketplace_subcategory_id: null }));
         return;
       }
 
@@ -165,6 +176,10 @@ export default function AdminProductForm({
         setSizeInput={setSizeInput}
         categoryOptions={categoryOptions}
         subcategoryOptions={subcategoryOptions}
+        marketplaceCategoryOptions={marketplaceCategoryOptions}
+        marketplaceSubcategoryOptions={marketplaceSubcategoryOptions}
+        isLoadingMarketplaceTaxonomy={isLoadingMarketplaceTaxonomy}
+        marketplaceTaxonomyError={marketplaceTaxonomyError}
         isLoadingCategories={isLoadingCategories}
         categoryLoadError={categoryLoadError}
         isUploading={isUploading}
