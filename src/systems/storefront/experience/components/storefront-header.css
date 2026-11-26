@@ -525,3 +525,16 @@
   transform: none !important;
   opacity: 1 !important;
 }
+
+
+/* Keep Poshies navigation content inside the panel while its container animates. */
+.storefront-controls--poshies .storefront-controls__search,
+.storefront-controls--poshies .storefront-controls__search--menu-open,
+.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__search {
+  overflow: hidden !important;
+  clip-path: inset(0 round inherit);
+}
+.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__inline-menu,
+.storefront-controls--poshies .storefront-controls__category-submenu {
+  overflow: hidden !important;
+}
