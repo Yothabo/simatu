@@ -11,7 +11,7 @@ export default function BrandStory() {
         <div className="flex flex-col justify-center">
           {story.paragraphs.map((paragraph, index) => <p key={index} className={`${index ? 'mt-[var(--sf-space-5)]' : ''} max-w-2xl text-sm leading-[1.95] ${inverse ? 'text-[var(--sf-inverse-text-muted)]' : 'text-[var(--sf-text-muted)]'} sm:text-base`}>{paragraph}</p>)}
           <Link to={pathFor('about')} className="group mt-[var(--sf-space-8)] inline-flex w-fit items-center gap-[var(--sf-space-5)] border-b border-current pb-2 text-xs font-semibold text-current transition-colors hover:border-[var(--sf-accent)] hover:text-[var(--sf-accent)]">
-            Discover our story <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-[3px] group-hover:-translate-y-[3px]">↗</span>
+            {story.actionLabel} <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-[3px] group-hover:-translate-y-[3px]">↗</span>
           </Link>
         </div>
       </div>
