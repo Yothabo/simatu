@@ -1,0 +1,17 @@
+/* Shared storefront type scale and role defaults; font families are supplied by each store theme. */
+:root {
+  --sf-font-body: sans-serif;
+  --sf-font-heading: sans-serif;
+  --sf-font-size-xs: 10px;
+  --sf-font-size-sm: 12px;
+  --sf-font-size-base: 14px;
+  --sf-font-size-md: 16px;
+  --sf-font-size-lg: 20px;
+  --sf-font-size-xl: 24px;
+  --sf-font-weight-normal: 400;
+  --sf-font-weight-medium: 500;
+  --sf-font-weight-semibold: 600;
+  --sf-font-weight-bold: 700;
+  --sf-line-height-tight: 1.15;
+  --sf-line-height-normal: 1.4;
+}
