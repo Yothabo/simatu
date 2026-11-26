@@ -115,10 +115,10 @@ export default function DiscoveryCategoryPage() {
     return () => { cancelled = true; };
   }, []);
 
-  const marketProducts = useMemo(() => {
-    const assignedStoreSlugs = new Set(categoryBusinesses.map((business) => business.store_slug));
-    return products.filter((product) => assignedStoreSlugs.has(product.storefront));
-  }, [products, categoryBusinesses]);
+  // Marketplace products are sourced from the public product API and classified by
+  // their marketplace subcategory. Store participation cards are supplementary and
+  // must not gate product visibility.
+  const marketProducts = useMemo(() => products, [products]);
 
   const selectedMarketplaceSubcategoryId = useMemo(() => {
     if (!selected) return null;
@@ -340,6 +340,9 @@ export default function DiscoveryCategoryPage() {
             <div style={{ display: 'block', padding: 14 }}>
               <strong>{group.name}</strong>
               <small style={{ display: 'block', opacity: .65, marginTop: 5 }}>Compare {group.offers.length} {group.offers.length === 1 ? 'seller offer' : 'seller offers'}</small>
+              {group.offers[0]?.brand && <span style={{ display: 'block', marginTop: 8, fontSize: 12, opacity: .75 }}>Brand: {group.offers[0].brand}</span>}
+              {group.offers[0]?.description && <p style={{ margin: '10px 0 0', fontSize: 13, lineHeight: 1.5, opacity: .78 }}>{group.offers[0].description}</p>}
+              {group.offers[0]?.sizes?.length > 0 && <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 10 }}>{group.offers[0].sizes.map((size) => <span key={size} style={{ border: '1px solid rgba(255,255,255,.2)', borderRadius: 999, padding: '4px 8px', fontSize: 11 }}>{size}</span>)}</div>}
               <div style={{ display: 'grid', gap: 10, marginTop: 14 }}>
                 {group.offers.map((offer, offerIndex) => <div key={`${offer.storefront}-${offer.id}`} style={{ display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 8, paddingTop: 10, borderTop: '1px solid rgba(255,255,255,.12)' }}>
                   <div>
