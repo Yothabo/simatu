@@ -474,3 +474,21 @@
 .storefront-controls--poshies .storefront-controls__category-submenu button { min-height:40px; border-radius:10px; }
 @keyframes poshies-category-expand { from {opacity:0; transform:translateY(-5px);} to {opacity:1; transform:translateY(0);} }
 @media (prefers-reduced-motion:reduce) { .storefront-controls--poshies .storefront-controls__category-submenu { animation:none; } .storefront-controls--poshies .storefront-controls__categories-trigger svg:last-child { transition:none; } }
+
+/* Ensure the full permanent Poshies navigation fits and remains scrollable on small screens. */
+.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__search {
+  height: 286px;
+}
+.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__inline-menu {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.storefront-controls--poshies .storefront-controls__row--menu-open .store storefront-controls__category-submenu {
+  flex: 0 0 auto;
+}
+@media (max-width: 640px) {
+  .storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__search {
+    height: 270px;
+  }
+}
