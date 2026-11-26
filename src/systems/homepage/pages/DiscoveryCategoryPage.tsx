@@ -372,6 +372,7 @@ export default function DiscoveryCategoryPage() {
               {selectedProductGroup.offers.map((offer, offerIndex) => <div key={`${offer.storefront}-${offer.id}`} style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) auto', alignItems: 'center', gap: 12, padding: '12px 0', borderTop: '1px solid rgba(255,255,255,.12)' }}>
                 <div style={{ minWidth: 0 }}>
                   <strong style={{ display: 'block', fontSize: 13, fontWeight: 550 }}>{offer.storeName}</strong>
+                  <strong style={{ display: 'block', marginTop: 4, fontSize: 13, fontWeight: 650 }}>{typeof offer.price === 'number' ? 'R' + offer.price.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'Price unavailable'}</strong>
                   <span style={{ display: 'block', marginTop: 3, fontSize: 11, opacity: .58 }}>{offer.subcategory || offer.category || 'Marketplace seller'}{offerIndex === 0 && selectedProductGroup.offers.length > 1 ? ' · Lowest price' : ''}</span>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px 14px', marginTop: 9, fontSize: 11, color: 'rgba(244,241,236,.72)' }}>
                     <span>Quantity: <strong style={{ color: '#f4f1ec' }}>{Number.isFinite(Number((offer as any).quantity ?? (offer as any).stock_quantity)) ? Number((offer as any).quantity ?? (offer as any).stock_quantity) : '—'}</strong></span>
