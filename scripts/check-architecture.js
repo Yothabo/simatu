@@ -119,6 +119,12 @@ for (const file of collectFiles(storefrontExperienceRoot)) {
   if (/\b(?:poshies|yotaabo)-[a-z0-9_-]+/i.test(source)) {
     errors.push(relativeFile + ' contains a brand-prefixed presentation selector; use a neutral storefront class');
   }
+  if (/#(?:ff1493|8aa89b|c8ad8d)\b/i.test(source)) {
+    errors.push(relativeFile + ' contains a store-owned palette literal; consume a semantic storefront token');
+  }
+  if (/\b(?:primaryAccent|accentColor)\s*===/.test(source)) {
+    errors.push(relativeFile + ' branches on a concrete accent value; use configured presentation roles or semantic tokens');
+  }
 }
 
 if (errors.length > 0) {
