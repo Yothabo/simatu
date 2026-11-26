@@ -54,7 +54,7 @@
 :root[data-storefront='poshies'] .storefront-collection-panel,
 :root[data-storefront='poshies'] .storefront-collection-carousel,
 :root[data-storefront='poshies'] .poshies-featured,
-:root[data-storefront='poshies'] .yotaabo-product-carousel,
+:root[data-storefront='poshies'] .storefront-product-carousel,
 :root[data-storefront='poshies'] .storefront-footer--campaign,
 :root[data-storefront='poshies'] .storefront-footer,
 :root[data-storefront='poshies'] .storefront-footer__inner {
@@ -185,9 +185,9 @@
 }
 
 /* Carousel rails are transparent; product preview image frame stays hot pink. */
-:root[data-storefront='poshies'] .yotaabo-product-swiper,
-:root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-wrapper,
-:root[data-storefront='poshies'] .yotaabo-product-swiper .swiper-slide,
+:root[data-storefront='poshies'] .storefront-product-swiper,
+:root[data-storefront='poshies'] .storefront-product-swiper .swiper-wrapper,
+:root[data-storefront='poshies'] .storefront-product-swiper .swiper-slide,
 :root[data-storefront='poshies'] .storefront-product-swiper--editorial,
 :root[data-storefront='poshies'] .storefront-product-swiper--editorial .swiper-wrapper,
 :root[data-storefront='poshies'] .storefront-product-swiper--editorial .swiper-slide {
