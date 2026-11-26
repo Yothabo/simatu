@@ -57,8 +57,8 @@ export default function CartPage() {
       removeFromCart(id);
       setRemovingId(null);
       toast.error(`${name} removed from cart`, {
-        style: { background: '#4d4d4d', color: '#fff', borderRadius: 0 },
-        iconTheme: { primary: '#fff', secondary: '#4d4d4d' },
+        style: { background: 'var(--sf-inverse-background)', color: 'var(--sf-inverse-text)', borderRadius: 0 },
+        iconTheme: { primary: 'var(--sf-inverse-text)', secondary: 'var(--sf-inverse-background)' },
       });
     }, 300);
   };
@@ -66,33 +66,33 @@ export default function CartPage() {
   return (
     <>
       <Header sticky={true} showBack={true} />
-      <main className="flex min-h-screen flex-col bg-[#292426] px-6 pt-0 pb-12 sm:px-10 lg:px-12 lg:pt-0 lg:pb-20">
+      <main className="flex min-h-screen flex-col bg-[var(--sf-inverse-background)] px-6 pt-0 pb-12 sm:px-10 lg:px-12 lg:pt-0 lg:pb-20">
         <div className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col">
 
           {cartItems.length > 0 && <header className="mb-8 mt-8">
-            <h1 className="font-heading text-3xl italic text-white">{isCheckoutView ? 'Choose stores to checkout' : 'Your shared cart'}</h1>
-            <p className="mt-2 max-w-xl font-heading text-sm leading-relaxed text-white/75">Your products stay together here, grouped by the stores selling them. Select the stores you want to purchase from now.</p>
+            <h1 className="font-heading text-3xl italic text-[var(--sf-inverse-text)]">{isCheckoutView ? 'Choose stores to checkout' : 'Your shared cart'}</h1>
+            <p className="mt-2 max-w-xl font-heading text-sm leading-relaxed text-[var(--sf-inverse-text-muted)]">Your products stay together here, grouped by the stores selling them. Select the stores you want to purchase from now.</p>
           </header>}
 
           {cartItems.length === 0 ? (
             <div className="mt-20 flex flex-col items-center justify-center text-center">
               {/* Cart Icon */}
-              <FaOpencart size={64} className={primaryAccent === "#ff1493" ? "text-[#ff1493]" : "text-[#8aa89b]"} />
+              <FaOpencart size={64} style={{ color: primaryAccent }} />
 
               {/* Heading */}
-              <h2 className="mt-8 font-heading text-3xl italic text-black">
+              <h2 className="mt-8 font-heading text-3xl italic text-[var(--sf-inverse-text)]">
                 Your cart is empty.
               </h2>
 
               {/* Paragraph */}
-              <p className="mt-3 max-w-sm font-heading text-base leading-relaxed text-white/75">
+              <p className="mt-3 max-w-sm font-heading text-base leading-relaxed text-[var(--sf-inverse-text-muted)]">
                 Explore the Simatu marketplace to discover products from multiple stores and add them to your shared cart.
               </p>
 
               {/* CTA */}
               <Link
                 to="/"
-                className={`mt-8 inline-flex min-h-12 items-center justify-center border border-solid px-8 text-xs font-semibold tracking-wide text-white transition-colors hover:bg-transparent ${primaryAccent === "#ff1493" ? "border-[#ff1493] bg-[#ff1493] hover:text-[#ff1493]" : "border-[#8aa89b] bg-[#8aa89b] hover:text-[#8aa89b]"}` }
+                className="mt-8 inline-flex min-h-12 items-center justify-center border border-[var(--sf-accent)] bg-[var(--sf-accent)] px-8 text-xs font-semibold tracking-wide text-[var(--sf-accent-contrast)] transition-colors hover:bg-transparent hover:text-[var(--sf-accent)]"
               >
                 Explore Marketplace
               </Link>
@@ -101,15 +101,15 @@ export default function CartPage() {
             <div className="flex flex-1 flex-col gap-2">
               {storeGroups.map((group) => (
                 <section key={group.storefront} className="mb-5">
-                  <label className="mb-3 flex items-center gap-3 border-b border-black/10 pb-3 text-sm text-white">
+                  <label className="mb-3 flex items-center gap-3 border-b border-[var(--sf-inverse-border)] pb-3 text-sm text-[var(--sf-inverse-text)]">
                     <input type="checkbox" checked={selectedStorefronts.includes(group.storefront)} onChange={(event) => setSelectedStorefronts((current) => event.target.checked ? [...current, group.storefront] : current.filter((store) => store !== group.storefront))} />
                     <strong>{group.storeName}</strong>
-                    <span className="text-xs text-white/55">{group.items.length} {group.items.length === 1 ? 'product' : 'products'}</span>
+                    <span className="text-xs text-[var(--sf-inverse-text-muted)]">{group.items.length} {group.items.length === 1 ? 'product' : 'products'}</span>
                   </label>
                   {group.items.map((item) => (
                 <div
                   key={item.id}
-                  className={`flex items-center gap-6 bg-[#292426] pr-3 transition-all duration-300 ease-in-out ${
+                  className={`flex items-center gap-6 bg-[var(--sf-inverse-background)] pr-3 transition-all duration-300 ease-in-out ${
                     removingId === item.id
                       ? 'opacity-0 scale-95 translate-x-4 pointer-events-none'
                       : 'opacity-100 scale-100 translate-x-0'
@@ -136,7 +136,7 @@ export default function CartPage() {
                       <button
                         type="button"
                         onClick={() => setSelectedProduct(item)}
-                        className="truncate text-left font-heading text-base text-white"
+                        className="truncate text-left font-heading text-base text-[var(--sf-inverse-text)]"
                         aria-label={`View ${item.name} details`}
                       >
                         {item.name}
@@ -144,7 +144,7 @@ export default function CartPage() {
                       <button
                         onClick={() => handleRemoveClick(item.id, item.name)}
                         aria-label="Remove item"
-                        className="shrink-0 flex h-8 w-8 items-center justify-center text-black/30 transition-colors hover:text-red-500"
+                        className="shrink-0 flex h-8 w-8 items-center justify-center text-[var(--sf-inverse-text-muted)] transition-colors hover:text-red-500"
                       >
                         <FiTrash2 size={18} />
                       </button>
@@ -152,21 +152,21 @@ export default function CartPage() {
 
                     <div className="mt-2 flex items-center justify-between gap-4">
                       <div className="flex items-center">
-                        <div className="flex items-center border border-black/10">
+                        <div className="flex items-center border border-[var(--sf-inverse-border)]">
                           <RippleButton
                             onClick={() => decreaseQuantity(item.id)}
-                            className="flex h-8 w-8 items-center justify-center bg-[#292426] text-black/60 transition-colors hover:bg-[#FF1493] hover:text-black active:bg-[#FF1493]"
+                            className="flex h-8 w-8 items-center justify-center bg-[var(--sf-inverse-background)] text-[var(--sf-inverse-text-muted)] transition-colors hover:bg-[var(--sf-accent)] hover:text-[var(--sf-inverse-text)] active:bg-[var(--sf-accent)]"
                             ariaLabel="Decrease quantity"
                             rippleColor={primaryAccent}
                           >
                             <FiMinus size={16} />
                           </RippleButton>
-                          <span className="min-w-[1.75rem] text-center font-heading text-base text-white">
+                          <span className="min-w-[1.75rem] text-center font-heading text-base text-[var(--sf-inverse-text)]">
                             {item.quantity}
                           </span>
                           <RippleButton
                             onClick={() => increaseQuantity(item.id)}
-                            className="flex h-8 w-8 items-center justify-center bg-[#292426] text-black/60 transition-colors hover:bg-[#FF1493] hover:text-black active:bg-[#FF1493]"
+                            className="flex h-8 w-8 items-center justify-center bg-[var(--sf-inverse-background)] text-[var(--sf-inverse-text-muted)] transition-colors hover:bg-[var(--sf-accent)] hover:text-[var(--sf-inverse-text)] active:bg-[var(--sf-accent)]"
                             ariaLabel="Increase quantity"
                             rippleColor={primaryAccent}
                           >
@@ -175,7 +175,7 @@ export default function CartPage() {
                         </div>
                       </div>
 
-                      <span className="shrink-0 text-right font-heading text-base text-white/60 tabular-nums">
+                      <span className="shrink-0 text-right font-heading text-base text-[var(--sf-inverse-text-muted)] tabular-nums">
                         {item.price}
                       </span>
                     </div>
@@ -185,22 +185,22 @@ export default function CartPage() {
                 </section>
               ))}
 
-              <div className="sticky bottom-0 mt-6 flex flex-col items-end gap-4 border-t border-black/10 bg-[#292426] pt-4 pb-6">
-                <div className="font-heading text-xl text-black">
+              <div className="sticky bottom-0 mt-6 flex flex-col items-end gap-4 border-t border-[var(--sf-inverse-border)] bg-[var(--sf-inverse-background)] pt-4 pb-6">
+                <div className="font-heading text-xl text-[var(--sf-inverse-text)]">
                   Selected checkout subtotal: <span className="font-medium">R {selectedCartTotal.toFixed(2)}</span>
                 </div>
 
                 <div className="flex gap-4">
                   <Link
                     to="/"
-                    className="inline-flex min-h-12 items-center justify-center bg-[#292426] px-8 text-xs font-semibold tracking-wide text-black/60 transition-colors hover:bg-[#FF1493] hover:text-black active:bg-[#FF1493]"
+                    className="inline-flex min-h-12 items-center justify-center bg-[var(--sf-inverse-background)] px-8 text-xs font-semibold tracking-wide text-[var(--sf-inverse-text-muted)] transition-colors hover:bg-[var(--sf-accent)] hover:text-[var(--sf-inverse-text)] active:bg-[var(--sf-accent)]"
                   >
                     Continue Shopping
                   </Link>
                   <button
                     onClick={() => setShowCheckoutModal(true)}
                     disabled={selectedCartItems.length === 0}
-                    className={`inline-flex disabled:cursor-not-allowed disabled:opacity-40 min-h-12 items-center justify-center border border-solid px-8 text-xs font-semibold tracking-wide text-white transition-colors hover:bg-transparent ${primaryAccent === "#ff1493" ? "border-[#ff1493] bg-[#ff1493] hover:text-[#ff1493]" : "border-[#8aa89b] bg-[#8aa89b] hover:text-[#8aa89b]"}` }
+                    className="inline-flex min-h-12 items-center justify-center border border-[var(--sf-accent)] bg-[var(--sf-accent)] px-8 text-xs font-semibold tracking-wide text-[var(--sf-accent-contrast)] transition-colors hover:bg-transparent hover:text-[var(--sf-accent)] disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     {isCheckoutView ? 'Continue to checkout' : 'Checkout selected stores'}
                   </button>
@@ -215,7 +215,7 @@ export default function CartPage() {
         product={selectedProduct}
         bgColor="bg-white"
         placeholderColor={selectedProduct?.placeholderColor ?? ''}
-        accentColor={primaryAccent === "#ff1493" ? "text-[#ff1493]" : "text-[#8aa89b]"}
+        accentColor="text-[var(--sf-accent)]"
         isDark={false}
         mode="cart"
         cartQuantity={selectedProduct?.quantity ?? 1}
