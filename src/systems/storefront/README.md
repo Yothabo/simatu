@@ -25,3 +25,22 @@ The shared foundation owns component primitives, layout geometry, spacing, sizin
 - Keep cart and product data isolated by store.
 - Customer name and phone are checkout/order-processing fields only; they are not a customer analytics or profiling data source.
 - Preserve current routes, interactions, responsive behaviour and store identities during structural changes.
+
+
+## Adding a storefront
+
+A new storefront should be introduced by adding a configuration entry in
+`core/configuration/storefronts.ts` that satisfies `StorefrontConfiguration`.
+The configuration owns its route, category taxonomy and labels, navigation,
+hero and collection variants, About-page copy, policy documents, footer links,
+product fallback copy and presentation roles.
+
+Add the storefront's semantic token stylesheet under `stores/<key>/` and
+register that stylesheet in `experience/index.ts`. Do not add storefront
+identity checks, palette literals, brand-prefixed selectors or store-owned
+imports to shared experience pages and components. New category names are
+configuration data; shared catalogue and product hooks accept category strings.
+
+Before accepting the new storefront, run `npx tsc --noEmit && npm run build`,
+verify its routes and commerce flows, and confirm the existing storefronts
+retain their visual identities.
