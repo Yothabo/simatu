@@ -29,7 +29,7 @@ CREATE TABLE public.marketplace_categories (
     CONSTRAINT marketplace_categories_minimum_age_valid
         CHECK (minimum_age IS NULL OR minimum_age BETWEEN 0 AND 120),
     CONSTRAINT marketplace_categories_restricted_age_valid
-        CHECK (audience_policy <> 'restricted' OR minimum_age >= 18)
+        CHECK (audience_policy <> 'restricted' OR minimum_age BETWEEN 18 AND 120)
 );
 
 CREATE INDEX marketplace_categories_active_order_idx
