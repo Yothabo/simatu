@@ -70,7 +70,7 @@ VALUES
     ('Travel & Experiences', 'travel', 'Travel, accommodation and destination experiences.', 160, 'general', NULL),
     ('Business Services', 'business', 'Professional and operational business services for organizations.', 170, 'general', NULL),
     ('Digital Products', 'digital', 'Software, digital resources and downloadable products.', 180, 'general', NULL),
-    ('Sexual Wellness', 'sexual-wellness', 'Adult sexual wellness products, including intimate devices; access and visibility are restricted.', 190, 'restricted', 18)
+    ('Age-Restricted', 'age-restricted', 'Restricted marketplace destination for approved age-gated products and services. Backend age verification and access enforcement are required.', 190, 'restricted', 18)
 ON CONFLICT (slug) DO NOTHING;
 
 ALTER TABLE public.marketplace_categories ENABLE ROW LEVEL SECURITY;
