@@ -95,3 +95,8 @@ Marketplace classification is managed separately from each storefront's private 
 
 
 Assignments are limited to active general-audience marketplace categories. The restricted category is excluded from the public taxonomy and from this assignment interface. Public business discovery only returns active stores that have an explicit category assignment and at least one active, marketplace-visible, non-age-restricted listing. Storefront-specific product categories remain unchanged and are not substitutes for platform marketplace categories.
+
+
+## Discovery page integration
+
+Public category pages use the platform category slug to request businesses from the marketplace business discovery endpoint. The page then scopes its marketplace product results to the assigned business slugs before applying its existing subcategory term filtering. The category route ID `spaces` maps to the seeded platform category slug `home-living`. The existing category page presentation and subcategory carousel remain unchanged.
