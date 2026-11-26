@@ -63,7 +63,7 @@ export default function Services() {
                 textColor={inverse ? 'text-[var(--sf-inverse-text)]' : 'text-[var(--sf-text)]'}
                 accentColor={accentClass}
                 themeColor={accentToken}
-                isDark={inverse}
+                isDark={collection.isDark ?? false}
                 isLoading={isLoading}
                 error={error}
                 viewAllHref={pathFor(`catalog?category=${collection.productCategory}`)}

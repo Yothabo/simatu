@@ -38,7 +38,7 @@ export default function ProductCarousel({
       aria-label={`${title} product collection`}>
       <div className="px-[var(--sf-space-6)] sm:px-[var(--sf-space-10)] lg:px-[var(--sf-space-12)]">
         <div className="flex items-baseline justify-between">
-          <h3 className={`font-heading text-3xl italic ${editorial ? 'text-[var(--sf-inverse-text)]' : title === 'Trending' ? 'text-[var(--sf-text)]' : accentColor}`}
+          <h3 className={`font-heading text-3xl italic ${editorial ? 'text-[var(--sf-inverse-text)]' : accentColor}`}
             style={{ lineHeight: 0.9, margin: 0 }}>
             {sectionHeading ? <>{sectionHeading}{' '}<span className="inline-block">Collection</span></> : title}
           </h3>

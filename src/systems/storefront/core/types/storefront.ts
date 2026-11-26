@@ -20,6 +20,7 @@ export interface StorefrontCollectionConfiguration {
   imageSrc?: string;
   variantClassName?: string;
   carouselVariant?: 'standard' | 'editorial';
+  isDark?: boolean;
   mockProductCategory?: StorefrontCategory;
 }
 
