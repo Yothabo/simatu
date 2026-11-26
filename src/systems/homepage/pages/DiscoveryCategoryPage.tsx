@@ -14,7 +14,6 @@ import MoodboardPredictiveSearch from '../discover/MoodboardPredictiveSearch';
 import { DISCOVERY_MARKETS, getMarketById, getSubcategories } from '../discover/discovery-taxonomy';
 
 const fallback: MoodboardItem = DISCOVERY_MARKETS[0];
-type CategoryBusiness = { store_id: string; store_name: string; store_slug: string; category_id: string; category_slug: string; eligible_listing_count: number };
 type CategoryProduct = { id: string; name: string; storefront: string; marketplace_subcategory_id?: string | null; sku?: string | null; sizes?: string[]; category?: string; subcategory?: string; brand?: string; description?: string | null; storeName: string; href: string; price?: number; image_url?: string | null };
 const panel: React.CSSProperties = { padding: 'clamp(24px,5vw,72px)', background: '#111', color: '#f4f1ec', fontFamily: 'inherit' };
 
@@ -35,9 +34,6 @@ export default function DiscoveryCategoryPage() {
   });
   const [products, setProducts] = useState<CategoryProduct[]>([]);
   const [marketplaceSubcategories, setMarketplaceSubcategories] = useState<Array<{ id: string; slug: string; category_slug: string }>>([]);
-  const [categoryBusinesses, setCategoryBusinesses] = useState<CategoryBusiness[]>([]);
-  const [businessesLoading, setBusinessesLoading] = useState(false);
-  const [businessesError, setBusinessesError] = useState('');
   const [productsLoading, setProductsLoading] = useState(false);
   const [productsError, setProductsError] = useState('');
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(() => getSubcategories(categoryId)[0]?.id ?? null);
@@ -73,18 +69,6 @@ export default function DiscoveryCategoryPage() {
       .then(async (response) => { const data = await response.json(); if (!response.ok) throw new Error(data.error || 'Taxonomy unavailable'); return Array.isArray(data.subcategories) ? data.subcategories : []; })
       .then((data) => { if (!cancelled) setMarketplaceSubcategories(data); })
       .catch((error) => { if (!cancelled) console.warn('[Discovery] Platform taxonomy lookup unavailable', error); });
-    setBusinessesLoading(true);
-    setBusinessesError('');
-    setCategoryBusinesses([]);
-    fetch('/api/marketplace-businesses?category=' + encodeURIComponent(marketplaceCategorySlug), { headers: { Accept: 'application/json' }, cache: 'no-store' })
-      .then(async (response) => {
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Unable to load category businesses.');
-        return Array.isArray(data.businesses) ? data.businesses as CategoryBusiness[] : [];
-      })
-      .then((businesses) => { if (!cancelled) setCategoryBusinesses(businesses); })
-      .catch((error) => { if (!cancelled) setBusinessesError(error instanceof Error ? error.message : 'Businesses are unavailable.'); })
-      .finally(() => { if (!cancelled) setBusinessesLoading(false); });
     return () => { cancelled = true; };
   }, [categoryId]);
 
@@ -131,14 +115,6 @@ export default function DiscoveryCategoryPage() {
     if (!selectedMarketplaceSubcategoryId) return [];
     return marketProducts.filter((product) => product.marketplace_subcategory_id === selectedMarketplaceSubcategoryId);
   }, [marketProducts, selected, selectedMarketplaceSubcategoryId]);
-
-  const participatingStores = useMemo(() => Array.from(new Map(
-    scopedProducts.map((product) => [product.storefront, {
-      key: product.storefront,
-      name: categoryBusinesses.find((business) => business.store_slug === product.storefront)?.store_name || product.storeName,
-      href: product.href + '?marketplaceTerms=' + encodeURIComponent((selected?.terms || subcategories.flatMap((subcategory) => subcategory.terms)).join(',')),
-    }] as const),
-  ).values()), [scopedProducts, selected, subcategories, categoryBusinesses]);
 
   const addProductToCart = (product: CategoryProduct) => {
     if (!product.storefront || typeof product.price !== 'number') return;
@@ -304,34 +280,7 @@ export default function DiscoveryCategoryPage() {
         ))}
       </Swiper>
 
-      {(businessesLoading || businessesError) && <div role="status" style={{ margin: '0 0 18px', color: '#f4f1ec', fontSize: 13, opacity: .75 }}>
-        {businessesLoading ? 'Loading classified businesses…' : businessesError}
-      </div>}
-      {selected && !businessesLoading && !businessesError && participatingStores.length === 0 && <p style={{ margin: '0 0 18px', color: '#f4f1ec', opacity: .65, fontSize: 13 }}>No businesses are currently assigned to this category with matching listings.</p>}
       {selected && <div className="discovery-results">
-        <div className="discovery-store-stage" style={{ position: 'relative', marginTop: 12 }}>
-          {outgoingStoreTitle && <div
-            className="discovery-store-exit"
-            aria-hidden="true"
-            onAnimationEnd={() => setOutgoingStoreTitle(null)}
-            style={{ position: 'absolute', inset: 0, display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,260px),1fr))', gap: 16, pointerEvents: 'none' }}
-          >
-            {participatingStores.map((store) => <div className={`discovery-store-card discovery-store-card--${store.key}`} key={store.key} style={{ color: '#f4f1ec', border: '1px solid rgba(255,255,255,.14)', borderRadius: 8, padding: '14px 15px', background: 'rgba(255,255,255,.035)' }}>
-              <strong style={{ fontSize: 15, fontWeight: 550, letterSpacing: '.015em' }}>{store.name}</strong>
-              <span style={{ display: 'block', opacity: .62, fontSize: 12, marginTop: 5 }}>Explore {outgoingStoreTitle} listings</span>
-            </div>)}
-          </div>}
-          <div key={selectedSubcategory} className="discovery-store-enter" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,260px),1fr))', gap: 16 }}>
-            {participatingStores.map((store, index) => <a className={`discovery-store-card discovery-store-card--${store.key}`} key={store.key} href={store.href} style={{ animationDelay: `${index * 70}ms`, color: '#f4f1ec', border: '1px solid rgba(255,255,255,.14)', borderRadius: 8, padding: '14px 15px', textDecoration: 'none', background: 'rgba(255,255,255,.035)' }}>
-              <span className="discovery-store-card-top">
-                <strong style={{ fontSize: 15, fontWeight: 550, letterSpacing: '.015em' }}>{store.name}</strong>
-                <span className="discovery-store-arrow" aria-hidden="true">↗</span>
-              </span>
-              <span style={{ display: 'block', opacity: .62, fontSize: 12, marginTop: 5 }}>Explore {selected.title} listings</span>
-            </a>)}
-          </div>
-        </div>
-
         {productsLoading && <p>Loading discoveries…</p>}
         {productsError && <p role="alert">{productsError}</p>}
         {marketplaceGroups.length > 0 && <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(100%,260px),1fr))', gap: 16, marginTop: 20 }}>
