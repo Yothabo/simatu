@@ -29,6 +29,7 @@ export const STOREFRONTS = {
       description: 'Explore the collection and discover a fragrance direction that fits your mood, your style, and your everyday.',
       actionLabel: 'Explore fragrances',
     },
+    productDescriptionFallback: 'Experience the essence of {productName}. A carefully crafted fragrance designed to leave a lasting impression, blending premium notes for a sophisticated and memorable profile.',
     footer: { policyLinks: [], className: 'bg-white' },
     navigation: {
       variant: 'sections',
@@ -69,6 +70,7 @@ export const STOREFRONTS = {
       description: 'Explore intimate essentials, everyday underwear, and comfortable pieces for relaxing and unwinding.',
       actionLabel: 'Explore collections',
     },
+    productDescriptionFallback: 'A thoughtfully selected piece chosen for comfort, quality, and everyday confidence.',
     collectionsClassName: 'storefront-collections--campaign',
     footer: {
       className: 'storefront-footer--campaign',

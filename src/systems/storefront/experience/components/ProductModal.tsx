@@ -49,8 +49,7 @@ export default function ProductModal({
   const [showDuplicateConfirm, setShowDuplicateConfirm] = useState(false);
 
   const { cartItems, addToCart } = useCart();
-  const { name: storeName, storeKey, primaryAccent } = useStorefront();
-  const isYotaabo = storeName === 'Yotaabo';
+  const { name: storeName, storeKey, primaryAccent, productDescriptionFallback } = useStorefront();
 
   useEffect(() => {
     if (product) {
@@ -148,14 +147,14 @@ export default function ProductModal({
     >
       {/* Backdrop */}
       <div
-        className={`absolute inset-0 bg-[#292426]/90 backdrop-blur-sm transition-opacity duration-400 ease-out ${
+        className={`absolute inset-0 bg-[var(--sf-inverse-background)]/90 backdrop-blur-sm transition-opacity duration-400 ease-out ${
           isOpen ? 'opacity-100' : 'opacity-0'
         }`}
       />
 
       {/* Modal Content */}
       <div
-        className={`relative w-full max-w-sm overflow-hidden rounded-none bg-white shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+        className={`relative w-full max-w-sm overflow-hidden rounded-none bg-[var(--sf-surface)] shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
           isOpen
             ? 'translate-y-0 scale-100 opacity-100'
             : 'translate-y-12 scale-90 opacity-0'
@@ -168,7 +167,7 @@ export default function ProductModal({
           type="button"
           onClick={onClose}
           aria-label="Close product details"
-          className="absolute z-20 flex h-9 w-9 items-center justify-center rounded-full border-0 bg-[#292426] p-0 text-white/70 shadow-[0_2px_12px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.8)] backdrop-blur-md outline-none transition-all duration-200 hover:bg-[#FF1493] hover:text-white active:scale-95"
+          className="absolute z-20 flex h-9 w-9 items-center justify-center rounded-full border-0 bg-[var(--sf-inverse-background)] p-0 text-[var(--sf-inverse-text-muted)] shadow-[0_2px_12px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.8)] backdrop-blur-md outline-none transition-all duration-200 hover:bg-[var(--sf-accent)] hover:text-[var(--sf-accent-contrast)] active:scale-95"
           style={{
             WebkitAppearance: 'none',
             appearance: 'none',
@@ -182,7 +181,7 @@ export default function ProductModal({
         {/* 1. Full-bleed image with integrated gradient, title and price */}
         <div className={`relative aspect-[4/5] w-full overflow-hidden ${placeholderColor}`}>
           {mode === 'preview' ? (
-            <div className="absolute inset-0 bg-[#FF1493]" />
+            <div className="absolute inset-0 bg-[var(--sf-accent)]" />
           ) : product.image_url ? (
             <SharedImage
               src={product.image_url}
@@ -194,10 +193,10 @@ export default function ProductModal({
           ) : null}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-[58%] to-white"
+            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-[58%] to-[var(--sf-surface)]"
           />
           <div className="absolute inset-x-0 bottom-0 grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-3 px-5 pb-5 pt-24">
-            <span className={`min-w-0 text-2xl leading-tight text-black ${mode === "preview" ? "" : "font-heading"}`} style={mode === "preview" ? { fontFamily: "Antony, sans-serif" } : undefined}>
+            <span className={`min-w-0 text-2xl leading-tight text-[var(--sf-text)] ${mode === "preview" ? "" : "font-heading"}`} style={mode === "preview" ? { fontFamily: "Antony, sans-serif" } : undefined}>
               {product.name}
             </span>
             <span className={`whitespace-nowrap text-base leading-[1.25] ${accentColor} ${mode === "preview" ? "opacity-50" : "font-heading"}`} style={mode === "preview" ? { fontFamily: "Montserrat, sans-serif" } : undefined}>
@@ -208,19 +207,17 @@ export default function ProductModal({
 
         {/* 3. Description */}
         <div className="px-5 pt-3">
-          <p className={`text-sm leading-relaxed text-white/70 ${mode === "preview" ? "" : "font-heading"}`} style={mode === "preview" ? { fontFamily: "Montserrat, sans-serif" } : undefined}>
-            {product.description || (isYotaabo
-              ? `Experience the essence of ${product.name}. A carefully crafted fragrance designed to leave a lasting impression, blending premium notes for a sophisticated and memorable profile.`
-              : 'A thoughtfully selected piece chosen for comfort, quality, and everyday confidence.')}
+          <p className={`text-sm leading-relaxed text-[var(--sf-inverse-text-muted)] ${mode === "preview" ? "" : "font-heading"}`} style={mode === "preview" ? { fontFamily: "Montserrat, sans-serif" } : undefined}>
+            {product.description || productDescriptionFallback.replace('{productName}', product.name)}
           </p>
         </div>
 
         {/* 4. Quantity & Actions */}
         <div className={`grid grid-cols-[auto_minmax(0,1fr)] items-stretch gap-3 px-5 py-5 ${mode === 'preview' ? 'opacity-45' : ''}`}>
-          <div className="flex h-12 items-stretch border border-white/20">
+          <div className="flex h-12 items-stretch border border-[var(--sf-inverse-border)]">
             <RippleButton
               onClick={() => handleQuantityChange(quantity - 1)}
-              className="flex h-12 w-10 items-center justify-center bg-[#292426] text-black/60 transition-colors hover:bg-[#FF1493] hover:text-black active:bg-[#FF1493]"
+              className="flex h-12 w-10 items-center justify-center bg-[var(--sf-inverse-background)] text-black/60 transition-colors hover:bg-[var(--sf-accent)] hover:text-[var(--sf-accent-contrast)] active:bg-[var(--sf-accent)]"
               ariaLabel="Decrease quantity"
               rippleColor={primaryAccent}
             >
@@ -239,7 +236,7 @@ export default function ProductModal({
 
           <button
             onClick={handleAddToCart}
-            className="group flex h-12 flex-1 items-center justify-between border border-solid border-white bg-[#FF1493] px-5 text-xs font-semibold tracking-wide text-white transition-colors duration-300 hover:bg-[#292426] hover:text-[#FF1493]"
+            className="group flex h-12 flex-1 items-center justify-between border border-solid border-[var(--sf-accent-contrast)] bg-[var(--sf-accent)] px-5 text-xs font-semibold tracking-wide text-[var(--sf-accent-contrast)] transition-colors duration-300 hover:bg-[var(--sf-inverse-background)] hover:text-[var(--sf-accent)]"
           >
             <span>
               {mode === 'cart'

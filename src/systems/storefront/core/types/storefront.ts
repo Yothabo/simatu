@@ -34,6 +34,7 @@ export interface StorefrontConfiguration {
   collectionsClassName?: string;
   story: { heading: string; paragraphs: readonly string[]; tone: 'canvas' | 'inverse' };
   contact: { heading: string; description: string; actionLabel: string };
+  productDescriptionFallback: string;
   footer: { policyLinks: readonly { label: string; path: string }[]; className?: string };
   navigation: {
     variant: 'expanded' | 'sections';
