@@ -4,7 +4,7 @@ import type { StorefrontConfiguration } from '../types/storefront';
  * Store-owned content and presentation configuration.
  * Experience components render these values; they do not identify individual brands.
  */
-export const STOREFRONTS: Record<'yotaabo' | 'poshies', StorefrontConfiguration> = {
+export const STOREFRONTS: Record<string, StorefrontConfiguration> = {
   yotaabo: {
     name: 'Yotaabo',
     basePath: '/yotaabo',
@@ -30,6 +30,30 @@ export const STOREFRONTS: Record<'yotaabo' | 'poshies', StorefrontConfiguration>
       actionLabel: 'Explore fragrances',
     },
     productDescriptionFallback: 'Experience the essence of {productName}. A carefully crafted fragrance designed to leave a lasting impression, blending premium notes for a sophisticated and memorable profile.',
+    catalog: {
+      newlyAddedTitle: 'Newly Added',
+      newlyAddedDescription: 'The latest additions to the {storeName} collection.',
+      categories: [
+        { category: 'His', label: 'His', description: 'Distinctive scents for the modern man.', accentRole: 'primary' },
+        { category: 'Hers', label: 'Hers', description: 'Fragrances that celebrate elegance and individuality.', accentRole: 'secondary' },
+        { category: 'Spaces', label: 'Spaces & Home', description: 'Bring your signature scent into every room and ride.', accentRole: 'tertiary' },
+      ],
+    },
+    aboutPage: {
+      eyebrow: 'Our point of view',
+      headline: 'Fragrance is personal. Make it yours.',
+      lead: 'We believe fragrance is more than a scent. It is an expression of personality, a reflection of mood, and a detail that can make a lasting impression.',
+      description: 'Yotaabo is about discovering fragrances that feel like you. Whether you gravitate towards warm and captivating notes, soft florals, or fresh citrus, the right fragrance should feel personal rather than prescribed.',
+      closing: 'Find your signature. Wear it your way.',
+      actionLabel: 'Explore fragrances',
+      principlesHeading: 'What guides us',
+      principles: [
+        { number: '01', title: 'Personal', description: 'Choose what resonates with you, not just what is trending.' },
+        { number: '02', title: 'Considered', description: 'Make fragrance part of the details that define your style.' },
+        { number: '03', title: 'Memorable', description: 'Let your scent become part of the impression you leave.' },
+      ],
+    },
+    documents: {},
     footer: { policyLinks: [], className: 'bg-white' },
     navigation: {
       variant: 'sections',
@@ -71,6 +95,35 @@ export const STOREFRONTS: Record<'yotaabo' | 'poshies', StorefrontConfiguration>
       actionLabel: 'Explore collections',
     },
     productDescriptionFallback: 'A thoughtfully selected piece chosen for comfort, quality, and everyday confidence.',
+    catalog: {
+      newlyAddedTitle: 'Newly Added',
+      newlyAddedDescription: 'The latest additions to the {storeName} collection.',
+      categories: [
+        { category: 'His', label: 'Him', description: 'Everyday comfort. Underwear made for him.', accentRole: 'primary' },
+        { category: 'Hers', label: 'Her', description: 'Intimate essentials chosen for comfort and confidence.', accentRole: 'secondary' },
+        { category: 'Lounge', label: 'Lounge', description: 'Sleepwear and relaxed essentials for winding down.', accentRole: 'tertiary', aliases: ['Spaces'] },
+      ],
+    },
+    aboutPage: {
+      eyebrow: 'Our point of view',
+      headline: 'Comfort is personal. Make it yours.',
+      lead: 'We believe what you wear close to you should feel comfortable, considered, and true to your personal style.',
+      description: 'Poshies brings together intimate essentials, everyday underwear, and comfortable sleepwear. From pieces for him and her to relaxed styles for winding down, find what feels right for you.',
+      closing: 'Feel comfortable. Feel confident. Be yourself.',
+      actionLabel: 'Explore collections',
+      principlesHeading: 'What guides us',
+      principles: [
+        { number: '01', title: 'Comfort', description: 'Everyday essentials should feel as good as they look.' },
+        { number: '02', title: 'Confidence', description: 'Find pieces that make you feel comfortable in your own skin.' },
+        { number: '03', title: 'Your way', description: 'Choose the styles that feel right for you and your everyday.' },
+      ],
+    },
+    documents: {
+      privacy: { title: 'Privacy information', intro: 'Your privacy matters.', copy: 'This document will explain what personal information is collected, why it is needed, how it is used and stored, and how customers can make requests about their information.' },
+      terms: { title: 'Terms of use', intro: 'Clear expectations, from browsing to checkout.', copy: 'This document will set out the terms that apply when using this storefront, including ordering, payment, product availability, pricing and customer responsibilities.' },
+      delivery: { title: 'Delivery policy', intro: 'The details you need before placing an order.', copy: 'This document will explain delivery areas and timelines, shipping charges and order tracking. Final operational details will be published here once confirmed.' },
+      refund: { title: 'Refund & returns policy', intro: 'Information about returns, exchanges and refunds.', copy: 'This document will explain return eligibility, exchange conditions, refund timelines and the process for requesting a return. Final operational details will be published here once confirmed.' },
+    },
     collectionsClassName: 'storefront-collections--campaign',
     footer: {
       className: 'storefront-footer--campaign',
