@@ -74,3 +74,8 @@ The existing discovery route identifier `living` remains an alias for the consol
 ## Implementation status and caution
 
 The marketplace discovery display taxonomy currently contains 17 general top-level tiles, with Home & Living consolidated. The database taxonomy migration includes a separate restricted Sexual Wellness classification with minimum age 18. This restricted database entry is intentionally not exposed in the general discovery tile list. The migration has not been applied; the restricted listing/access controls are not implemented or verified, so the category is not ready for public use.
+
+
+## Automated taxonomy guardrails
+
+`tests/unit/discovery-taxonomy.test.ts` now checks top-level ID/name uniqueness, subcategory ID/title uniqueness across the full taxonomy, Home & Living consolidation and legacy `living` alias behavior, and that restricted Sexual Wellness is not exposed as a general discovery tile. These tests are committed but have not yet been run in a local environment.
