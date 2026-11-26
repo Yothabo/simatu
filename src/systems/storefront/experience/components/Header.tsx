@@ -33,7 +33,8 @@ export default function Header({ sticky = true }: HeaderProps) {
 
   return (
     <div className={`storefront-controls ${isPoshies ? 'storefront-controls--poshies' : ''} ${sticky ? 'storefront-controls--fixed' : ''}`} aria-label={`${storeName} storefront controls`}>
-      <div className="storefront-controls__row">
+      <div className={`storefront-controls__row ${isPoshies && menuOpen ? "storefront-controls__row--menu-open" : ""}`}>
+
         <div className={`storefront-controls__search ${isPoshies && menuOpen ? 'storefront-controls__search--menu-open' : ''}`}>
           {isPoshies && menuOpen ? (
             <nav className="storefront-controls__inline-menu" aria-label={`${storeName} page sections`}>
