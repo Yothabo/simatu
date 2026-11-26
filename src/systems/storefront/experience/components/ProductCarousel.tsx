@@ -38,7 +38,7 @@ export default function ProductCarousel({
       aria-label={`${title} product collection`}>
       <div className="px-[var(--sf-space-6)] sm:px-[var(--sf-space-10)] lg:px-[var(--sf-space-12)]">
         <div className="flex items-baseline justify-between">
-          <h3 className={`font-heading text-3xl italic ${editorial ? 'text-[var(--sf-inverse-text)]' : accentColor}`}
+          <h3 className={`font-heading text-3xl italic ${textColor}`}
             style={{ lineHeight: 0.9, margin: 0 }}>
             {sectionHeading ? <>{sectionHeading}{' '}<span className="inline-block">Collection</span></> : title}
           </h3>
@@ -83,7 +83,7 @@ export default function ProductCarousel({
                             className="h-full w-full object-contain" />
                         : null}
                     </div>
-                    <div className={`relative mt-0 grid min-w-0 grid-rows-[20px_20px] gap-y-3 pt-3 pl-3 ${editorial ? 'bg-[var(--sf-inverse-background)]' : ''}`}>
+                    <div className={`relative mt-0 grid min-w-0 grid-rows-[20px_20px] gap-y-3 pt-3 pl-3 ${bgColor}`}>
                       <h4 className={`min-w-0 truncate font-heading text-base ${textColor}`} style={{ lineHeight: '20px', margin: 0, padding: 0 }}>{product.name}</h4>
                       <p className={`font-heading text-base tracking-normal uppercase ${editorial ? 'text-[var(--sf-accent)]' : accentColor}`} style={{ lineHeight: '20px', margin: 0, padding: 0 }}>{product.price}</p>
                     </div>
