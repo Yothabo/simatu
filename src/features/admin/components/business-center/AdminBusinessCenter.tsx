@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { BUSINESS_CENTER_MODULES } from '../../business-center/catalog';
 import { resolveEntitlements } from '../../business-center/entitlements';
 import { validatePromotionRule } from '../../business-center/promotion-rules';
-import type { BusinessCenterModuleId, SubscriptionTierId } from '../../business-center/types';
+import type { BusinessCenterModuleId, SubscriptionTierId, PromotionStatus } from '../../business-center/types';
 import type { PromotionDiscount } from '../../business-center/promotion-rules';
 import { canUseBusinessCenterModule, countLimitEligiblePromotions, transitionPromotion } from '../../business-center/lifecycle';
 import CampaignWorkspace from './CampaignWorkspace';
@@ -32,7 +32,7 @@ type PromotionPreview = {
   discount: PromotionDiscount;
   startsAt: string;
   endsAt: string;
-  status: 'draft' | 'scheduled' | 'active' | 'paused' | 'expired';
+  status: PromotionStatus;
 };
 
 const formatZar = (minor: number) =>
@@ -71,7 +71,7 @@ export default function AdminBusinessCenter() {
     const errors = [...validation.errors];
     if (!promotionName.trim()) errors.unshift('Promotion name is required.');
     if (tier === 'free') errors.unshift('Promotions are not included in the Free plan. Preview a paid plan in Subscriptions.');
-    if (promotions.filter((p) => p.status === 'active').length >= entitlements.limits.activePromotions) {
+    if (countLimitEligiblePromotions([...promotions.map((p) => p.status), promotionStatus]) >= entitlements.limits.activePromotions) {
       errors.unshift('Your plan has reached its active promotion limit.');
     }
     setPromotionErrors(errors);
