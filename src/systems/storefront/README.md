@@ -38,11 +38,19 @@ The configuration owns its route, category taxonomy and labels, navigation,
 hero and collection variants, About-page copy, policy documents, footer links,
 product fallback copy and presentation roles.
 
-Add the storefront's semantic token stylesheet under `stores/<key>/` and
-register that stylesheet in `experience/index.ts`. Do not add storefront
-identity checks, palette literals, brand-prefixed selectors or store-owned
-imports to shared experience pages and components. New category names are
-configuration data; shared catalogue and product hooks accept category strings.
+Supply the storefront's semantic token values through
+`designSystem.overrides` (for example `--sf-background`, `--sf-text`,
+`--sf-accent`, `--sf-accent-contrast`, `--sf-inverse-background`,
+`--sf-inverse-text`, `--sf-surface`, `--sf-surface-soft`,
+`--sf-text-muted`, `--sf-border`, and the `--sf-font-*` roles). The theme
+provider applies and restores those values at the storefront boundary. A
+store-owned stylesheet is optional and should only be added for genuinely
+distinctive visual rules; it must be scoped to `:root[data-storefront='<key>']`
+and does not require changes to shared experience components. Do not add
+storefront identity checks, palette literals, brand-prefixed selectors or
+store-owned imports to shared experience pages and components. New category
+names are configuration data; shared catalogue and product hooks accept
+category strings.
 
 Before accepting the new storefront, run `npx tsc --noEmit && npm run build`,
 verify its routes and commerce flows, and confirm the existing storefronts
