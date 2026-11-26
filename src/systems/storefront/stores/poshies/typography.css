@@ -1,0 +1,6 @@
+/* Poshies font roles. Actual font loading remains owned by storefront assets. */
+.storefront-controls--poshies,
+[data-storefront-theme="poshies"] {
+  --poshies-font-body: var(--poshies-font-body, sans-serif);
+  --poshies-font-heading: var(--poshies-font-heading, sans-serif);
+}
