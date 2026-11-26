@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { STOREFRONTS } from '../configuration/storefronts';
-import type { StorefrontCategory, StorefrontKey } from '../types/storefront';
+import { STOREFRONTS, isStorefrontKey } from '../configuration/storefronts';
 
 export type { StorefrontCategory } from '../types/storefront';
 
@@ -9,36 +8,16 @@ const STORAGE_KEY = 'simatu:last-storefront';
 
 export default function useStorefront() {
   const { pathname } = useLocation();
-
-  const isYotaabo =
-    pathname === '/yotaabo' || pathname.startsWith('/yotaabo/');
-
-  const isPoshies =
-    pathname === '/poshies' || pathname.startsWith('/poshies/');
-
-  const activeStorefront: StorefrontKey | null = isYotaabo
-    ? 'yotaabo'
-    : isPoshies
-      ? 'poshies'
-      : null;
+  const activeStorefront = Object.entries(STOREFRONTS).find(([, store]) =>
+    pathname === store.basePath || pathname.startsWith(`${store.basePath}/`)
+  )?.[0] ?? null;
 
   useEffect(() => {
-    if (activeStorefront) {
-      window.sessionStorage.setItem(STORAGE_KEY, activeStorefront);
-    }
+    if (activeStorefront) window.sessionStorage.setItem(STORAGE_KEY, activeStorefront);
   }, [activeStorefront]);
 
-  const rememberedStorefront = window.sessionStorage.getItem(STORAGE_KEY);
-
-  const hasStorefrontContext =
-    activeStorefront !== null ||
-    rememberedStorefront === 'yotaabo' ||
-    rememberedStorefront === 'poshies';
-
-  const storeKey: StorefrontKey =
-    activeStorefront ??
-    (rememberedStorefront === 'poshies' ? 'poshies' : 'yotaabo');
-
+  const remembered = window.sessionStorage.getItem(STORAGE_KEY);
+  const storeKey = activeStorefront ?? (remembered && isStorefrontKey(remembered) ? remembered : 'yotaabo');
   const store = STOREFRONTS[storeKey];
 
   const pathFor = (path = '') => {
@@ -46,5 +25,5 @@ export default function useStorefront() {
     return cleanPath ? `${store.basePath}/${cleanPath}` : store.basePath;
   };
 
-  return { ...store, storeKey, pathFor, hasStorefrontContext };
+  return { ...store, storeKey, pathFor, hasStorefrontContext: activeStorefront !== null || Boolean(remembered && isStorefrontKey(remembered)) };
 }
