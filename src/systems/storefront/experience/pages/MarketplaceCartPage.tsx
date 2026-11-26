@@ -195,13 +195,18 @@ export default function MarketplaceCartPage() {
                   >
                     Continue Shopping
                   </Link>
-                  <button
-                    onClick={() => selectedMarketplaceItems.length > 0 ? setShowMarketplaceCheckout(true) : setShowCheckoutModal(true)}
-                    disabled={selectedCartItems.length === 0}
+                  {selectedStoreItems.length > 0 && <button
+                    onClick={() => setShowCheckoutModal(true)}
                     className="marketplace-cart__button marketplace-cart__button--primary"
                   >
-                    {selectedMarketplaceItems.length > 0 ? 'Checkout marketplace items' : (isCheckoutView ? 'Continue to checkout' : 'Checkout selected stores')}
-                  </button>
+                    {isCheckoutView ? 'Continue to store checkout' : 'Checkout selected stores'}
+                  </button>}
+                  {selectedMarketplaceItems.length > 0 && <button
+                    onClick={() => setShowMarketplaceCheckout(true)}
+                    className="marketplace-cart__button marketplace-cart__button--primary"
+                  >
+                    Checkout marketplace items
+                  </button>}
                 </div>
               </div>
             </div>
