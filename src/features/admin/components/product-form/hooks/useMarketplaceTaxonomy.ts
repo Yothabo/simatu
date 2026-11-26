@@ -31,5 +31,6 @@ export function useMarketplaceTaxonomy(selectedCategorySlug: string | null) {
   const marketplaceCategoryOptions: CategoryOption[] = useMemo(() => Array.from(new Map(items.map((item) => [item.category_slug, { value: item.category_slug, label: item.category_name }])).values()), [items]);
   const marketplaceSubcategoryOptions: CategoryOption[] = useMemo(() => items.filter((item) => !selectedCategorySlug || item.category_slug === selectedCategorySlug).map((item) => ({ value: item.id, label: item.name })), [items, selectedCategorySlug]);
 
-  return { marketplaceCategoryOptions, marketplaceSubcategoryOptions, isLoadingMarketplaceTaxonomy, marketplaceTaxonomyError };
+  const selectedSubcategoryCategorySlug = items.find((item) => item.id === selectedCategorySlug)?.category_slug ?? null;
+  return { marketplaceCategoryOptions, marketplaceSubcategoryOptions, isLoadingMarketplaceTaxonomy, marketplaceTaxonomyError, selectedSubcategoryCategorySlug };
 }
