@@ -23,7 +23,6 @@ export default function ViewCatalog() {
   const categoryConfigs = [...catalog.categories].sort(
     (a, b) => categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category)
   );
-  const categories = categoryConfigs.map((item) => item.category);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const { products: allProducts, isLoading } = useProducts();
   const categoryRefs = useRef<Record<string, HTMLDivElement | null>>({});
