@@ -319,10 +319,23 @@ export default function DiscoveryCategoryPage() {
               <div style={{ width: '100%', aspectRatio: '1 / 1', background: '#222', overflow: 'hidden' }}>
                 {group.image_url && <img src={group.image_url} alt={group.name} loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />}
               </div>
-              <div style={{ display: 'grid', gap: 5, padding: '10px 11px 11px' }}>
+              <div style={{ display: 'grid', gridTemplateRows: 'auto 1fr auto', gap: 8, minHeight: 164, padding: '10px 11px 11px' }}>
                 <strong style={{ display: '-webkit-box', minHeight: '2.6em', overflow: 'hidden', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, fontSize: 13, lineHeight: 1.3, fontWeight: 550 }}>{group.name}</strong>
-                <p style={{ display: '-webkit-box', minHeight: '2.8em', margin: 0, overflow: 'hidden', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, fontSize: 11, lineHeight: 1.4, opacity: .66 }}>{lowestOffer?.description?.trim() || 'Explore this product and learn more from its seller.'}</p>
-                <button type="button" onClick={(event) => { event.stopPropagation(); if (lowestOffer) addProductToCart(lowestOffer); }} disabled={!lowestOffer || typeof lowestOffer.price !== 'number'} style={{ minHeight: 34, marginTop: 4, padding: '0 10px', border: '1px solid rgba(255,255,255,.55)', borderRadius: 999, background: '#f4f1ec', color: '#111', font: 'inherit', fontSize: 11, fontWeight: 650, cursor: 'pointer' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: 'auto auto', alignContent: 'end', alignItems: 'end', columnGap: 8, rowGap: 7, fontSize: 11 }}>
+                  <div style={{ display: 'grid', gap: 3 }}>
+                    <span style={{ opacity: .58 }}>Quantity</span>
+                    <strong style={{ fontSize: 12 }}>{lowestOffer && Number.isFinite(Number((lowestOffer as any).quantity ?? (lowestOffer as any).stock_quantity)) ? Number((lowestOffer as any).quantity ?? (lowestOffer as any).stock_quantity) : '—'}</strong>
+                  </div>
+                  <div style={{ display: 'grid', gap: 3, textAlign: 'right' }}>
+                    <span style={{ opacity: .58 }}>Price</span>
+                    <strong style={{ fontSize: 12, whiteSpace: 'nowrap' }}>{lowestOffer && typeof lowestOffer.price === 'number' ? 'R' + lowestOffer.price.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—'}</strong>
+                  </div>
+                  <div style={{ gridColumn: '1 / -1', display: 'grid', gap: 3 }}>
+                    <span style={{ opacity: .58 }}>Size</span>
+                    <strong style={{ fontSize: 12, fontWeight: 500 }}>{lowestOffer?.sizes?.length ? lowestOffer.sizes.join(', ') : 'Not specified'}</strong>
+                  </div>
+                </div>
+                <button type="button" onClick={(event) => { event.stopPropagation(); if (lowestOffer) addProductToCart(lowestOffer); }} disabled={!lowestOffer || typeof lowestOffer.price !== 'number'} style={{ minHeight: 34, width: '100%', marginTop: 'auto', padding: '0 10px', border: '1px solid rgba(255,255,255,.55)', borderRadius: 999, background: '#f4f1ec', color: '#111', font: 'inherit', fontSize: 11, fontWeight: 650, cursor: 'pointer' }}>
                   Add to cart
                 </button>
               </div>
