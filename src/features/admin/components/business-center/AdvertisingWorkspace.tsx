@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import { evaluateAdvertisingPlacement, remainingAdvertisingBudget } from '../../business-center/advertising-rules';
 import type { AdvertisingPlacement } from '../../business-center/advertising-rules';
+import { resolveEntitlements } from '../../business-center/entitlements';
+import { canUseBusinessCenterModule } from '../../business-center/lifecycle';
+import type { SubscriptionTierId } from '../../business-center/types';
 
-export default function AdvertisingWorkspace() {
+export default function AdvertisingWorkspace({ tier }: { tier: SubscriptionTierId }) {
+  const entitlements=resolveEntitlements(tier);
   const [budget, setBudget] = useState('250');
   const [spent, setSpent] = useState('0');
   const [start, setStart] = useState('');
@@ -12,6 +16,10 @@ export default function AdvertisingWorkspace() {
   const check = () => {
     const placement: AdvertisingPlacement = {storeId:'preview-store',status:state,startsAt:start,endsAt:end,budgetMinor:Math.round(Number(budget)*100),spentMinor:Math.round(Number(spent)*100),sponsoredLabelRequired:true};
     const evaluation=evaluateAdvertisingPlacement(placement);
+    if (!canUseBusinessCenterModule(entitlements,'advertising')) {
+      setResult({eligible:false,reasons:['Advertising is not included in this plan. Preview Pro in Subscriptions to inspect this feature.'],remaining:remainingAdvertisingBudget(placement)});
+      return;
+    }
     setResult({...evaluation,remaining:remainingAdvertisingBudget(placement)});
   };
   const cls='mt-1 w-full rounded-xl border px-3 py-2 text-sm';
