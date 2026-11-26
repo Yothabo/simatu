@@ -42,6 +42,7 @@ export default function DiscoveryCategoryPage() {
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(() => getSubcategories(categoryId)[0]?.id ?? null);
   const [outgoingStoreTitle, setOutgoingStoreTitle] = useState<string | null>(null);
   const market = getMarketById(categoryId);
+  const marketplaceCategorySlug = categoryId === 'spaces' ? 'home-living' : categoryId;
   const item = (location.state as { discovery?: MoodboardItem } | null)?.discovery || market || fallback;
   const subcategories = getSubcategories(market?.id || categoryId);
   const selected = subcategories.find((sub) => sub.id === selectedSubcategory);
@@ -70,7 +71,7 @@ export default function DiscoveryCategoryPage() {
     setBusinessesLoading(true);
     setBusinessesError('');
     setCategoryBusinesses([]);
-    fetch('/api/marketplace-businesses?category=' + encodeURIComponent(categoryId), { headers: { Accept: 'application/json' }, cache: 'no-store' })
+    fetch('/api/marketplace-businesses?category=' + encodeURIComponent(marketplaceCategorySlug), { headers: { Accept: 'application/json' }, cache: 'no-store' })
       .then(async (response) => {
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || 'Unable to load category businesses.');
