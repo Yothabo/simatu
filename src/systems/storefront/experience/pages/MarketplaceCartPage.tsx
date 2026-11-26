@@ -259,7 +259,7 @@ export default function MarketplaceCartPage() {
         cartTotal={selectedStoreItems.reduce((total, item) => total + Number(item.price.replace(/[^0-9.]/g, '')) * item.quantity, 0)}
         onSuccess={() => selectedStoreItems.forEach((item) => removeFromCart(item.id, item.storefront, item.variantId))}
       />
-      <MarketplaceCheckoutModal isOpen={showMarketplaceCheckout} onClose={() => setShowMarketplaceCheckout(false)} items={selectedMarketplaceItems} onSuccess={() => selectedMarketplaceItems.forEach((item) => removeFromCart(item.id, 'marketplace'))} />
+      <MarketplaceCheckoutModal isOpen={showMarketplaceCheckout} onClose={() => setShowMarketplaceCheckout(false)} items={selectedMarketplaceItems} onSuccess={() => selectedMarketplaceItems.forEach((item) => removeFromCart(item.id, 'marketplace', item.variantId))} />
     </>
   );
 }
