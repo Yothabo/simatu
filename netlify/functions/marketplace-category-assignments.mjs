@@ -20,9 +20,9 @@ const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}
  * POST body: { action: 'assign'|'unassign', storeId, categoryId }
  */
 export default async (request) => {
-  if (request.method !== 'POST') {
+  if (!['GET', 'POST'].includes(request.method)) {
     return json({ error: 'Method not allowed.' }, 405, {
-      Allow: 'POST',
+      Allow: 'GET, POST',
       'Cache-Control': 'no-store',
     });
   }
@@ -37,6 +37,43 @@ export default async (request) => {
     return json({ error: 'Only platform administrators may manage marketplace category assignments.' }, 403, {
       'Cache-Control': 'no-store',
     });
+  }
+
+  if (request.method === 'GET') {
+    try {
+      const result = await pool.query(
+        `SELECT
+           s.id AS store_id,
+           s.name AS store_name,
+           s.slug AS store_slug,
+           s.is_active,
+           COALESCE(
+             json_agg(json_build_object(
+               'id', mc.id,
+               'name', mc.name,
+               'slug', mc.slug
+             ) ORDER BY mc.sort_order, mc.name)
+             FILTER (WHERE mc.id IS NOT NULL),
+             '[]'::json
+           ) AS categories
+         FROM public.stores s
+         LEFT JOIN public.store_marketplace_categories smc
+           ON smc.store_id = s.id
+         LEFT JOIN public.marketplace_categories mc
+           ON mc.id = smc.marketplace_category_id
+          AND mc.is_active IS TRUE
+          AND mc.audience_policy = 'general'
+         GROUP BY s.id, s.name, s.slug, s.is_active
+         ORDER BY s.name ASC`
+      );
+      return json({ stores: result.rows }, 200, { 'Cache-Control': 'no-store' });
+    } catch (error) {
+      console.error('[marketplace-category-assignments] listing failed', {
+        errorCode: error?.code || null,
+        errorMessage: error?.message || 'Unknown database error',
+      });
+      return json({ error: 'Unable to load marketplace assignments.' }, 500, { 'Cache-Control': 'no-store' });
+    }
   }
 
   let body;
