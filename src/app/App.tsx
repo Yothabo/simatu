@@ -6,7 +6,7 @@ import './MarketplaceCartOverlay.css';
 import ScrollToHash from './components/ScrollToHash';
 import { useTouchSelection } from '../shared/hooks/useTouchSelection';
 
-import { StorefrontCartProvider, StorefrontThemeProvider } from '../systems/storefront/core';
+import { STOREFRONTS, StorefrontCartProvider, StorefrontThemeProvider } from '../systems/storefront/core';
 import { GlobalCartProvider } from '../shared/cart/CartContext';
 
 const DiscoveryPage = React.lazy(
@@ -93,8 +93,13 @@ function RouteLoadingFallback() {
 
 function MarketplaceCartOverlayRoute() { return (<> <DiscoveryPage /> <section className="marketplace-cart-overlay" aria-label="Marketplace cart"><Link to="/" className="marketplace-cart-overlay__close" aria-label="Close cart and return to discovery">×</Link><div className="marketplace-cart-overlay__content"><MarketplaceCartPage /></div></section></>); }
 function MarketplaceLayout() { return <GlobalCartProvider><Outlet /></GlobalCartProvider>; }
-function YotaaboLayout() { return <StorefrontCartProvider storefront="yotaabo"><StorefrontThemeProvider><Outlet /></StorefrontThemeProvider></StorefrontCartProvider>; }
-function PoshiesLayout() { return <StorefrontCartProvider storefront="poshies"><StorefrontThemeProvider><Outlet /></StorefrontThemeProvider></StorefrontCartProvider>; }
+function StorefrontLayout({ storefront }: { storefront: string }) {
+  return (
+    <StorefrontCartProvider storefront={storefront}>
+      <StorefrontThemeProvider><Outlet /></StorefrontThemeProvider>
+    </StorefrontCartProvider>
+  );
+}
 
 function App() {
   useTouchSelection();
@@ -114,27 +119,23 @@ function App() {
           </Route>
           <Route path="/join-network" element={<NetworkApplicationPage />} />
 
-          <Route element={<YotaaboLayout />}>
-            <Route path="/yotaabo" element={<Home />} />
-            <Route path="/yotaabo/services" element={<ServicesPage />} />
-            <Route path="/yotaabo/catalog" element={<ViewCatalog />} />
-            <Route path="/yotaabo/about" element={<About />} />
-            <Route path="/yotaabo/cart" element={<CartPage />} />
-            <Route path="/yotaabo/*" element={<NotFound />} />
-          </Route>
-
-          <Route element={<PoshiesLayout />}>
-            <Route path="/poshies" element={<Home />} />
-            <Route path="/poshies/services" element={<ServicesPage />} />
-            <Route path="/poshies/catalog" element={<ViewCatalog />} />
-            <Route path="/poshies/about" element={<About />} />
-            <Route path="/poshies/cart" element={<CartPage />} />
-            <Route path="/poshies/privacy" element={<StorefrontDocumentPage />} />
-            <Route path="/poshies/terms" element={<StorefrontDocumentPage />} />
-            <Route path="/poshies/delivery" element={<StorefrontDocumentPage />} />
-            <Route path="/poshies/refund" element={<StorefrontDocumentPage />} />
-            <Route path="/poshies/*" element={<NotFound />} />
-          </Route>
+          {Object.entries(STOREFRONTS).map(([storefront, configuration]) => (
+            <Route key={storefront} element={<StorefrontLayout storefront={storefront} />}>
+              <Route path={configuration.basePath} element={<Home />} />
+              <Route path={`${configuration.basePath}/services`} element={<ServicesPage />} />
+              <Route path={`${configuration.basePath}/catalog`} element={<ViewCatalog />} />
+              <Route path={`${configuration.basePath}/about`} element={<About />} />
+              <Route path={`${configuration.basePath}/cart`} element={<CartPage />} />
+              {Object.keys(configuration.documents).map((documentSlug) => (
+                <Route
+                  key={documentSlug}
+                  path={`${configuration.basePath}/${documentSlug}`}
+                  element={<StorefrontDocumentPage />}
+                />
+              ))}
+              <Route path={`${configuration.basePath}/*`} element={<NotFound />} />
+            </Route>
+          ))}
 
           <Route path="/update-password" element={<UpdatePassword />} />
           <Route path="/admin" element={<AdminErrorBoundary><Suspense fallback={<div style={{ color: 'white', padding: 30 }}>Loading admin module...</div>}><AdminPage /></Suspense></AdminErrorBoundary>} />
