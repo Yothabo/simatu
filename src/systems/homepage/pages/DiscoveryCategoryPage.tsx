@@ -15,7 +15,7 @@ import { DISCOVERY_MARKETS, getMarketById, getSubcategories } from '../discover/
 
 const fallback: MoodboardItem = DISCOVERY_MARKETS[0];
 type CategoryBusiness = { store_id: string; store_name: string; store_slug: string; category_id: string; category_slug: string; eligible_listing_count: number };
-type CategoryProduct = { id: string; name: string; storefront: string; sku?: string | null; sizes?: string[]; category?: string; subcategory?: string; brand?: string; description?: string | null; storeName: string; href: string; price?: number; image_url?: string | null };
+type CategoryProduct = { id: string; name: string; storefront: string; marketplace_subcategory_id?: string | null; sku?: string | null; sizes?: string[]; category?: string; subcategory?: string; brand?: string; description?: string | null; storeName: string; href: string; price?: number; image_url?: string | null };
 const panel: React.CSSProperties = { padding: 'clamp(24px,5vw,72px)', background: '#111', color: '#f4f1ec', fontFamily: 'inherit' };
 
 export default function DiscoveryCategoryPage() {
@@ -34,6 +34,7 @@ export default function DiscoveryCategoryPage() {
     } catch { return []; }
   });
   const [products, setProducts] = useState<CategoryProduct[]>([]);
+  const [marketplaceSubcategories, setMarketplaceSubcategories] = useState<Array<{ id: string; slug: string; category_slug: string }>>([]);
   const [categoryBusinesses, setCategoryBusinesses] = useState<CategoryBusiness[]>([]);
   const [businessesLoading, setBusinessesLoading] = useState(false);
   const [businessesError, setBusinessesError] = useState('');
@@ -68,6 +69,10 @@ export default function DiscoveryCategoryPage() {
 
   useEffect(() => {
     let cancelled = false;
+    fetch('/api/marketplace-subcategories', { headers: { Accept: 'application/json' } })
+      .then(async (response) => { const data = await response.json(); if (!response.ok) throw new Error(data.error || 'Taxonomy unavailable'); return Array.isArray(data.subcategories) ? data.subcategories : []; })
+      .then((data) => { if (!cancelled) setMarketplaceSubcategories(data); })
+      .catch((error) => { if (!cancelled) console.warn('[Discovery] Platform taxonomy lookup unavailable', error); });
     setBusinessesLoading(true);
     setBusinessesError('');
     setCategoryBusinesses([]);
@@ -115,13 +120,17 @@ export default function DiscoveryCategoryPage() {
     return products.filter((product) => assignedStoreSlugs.has(product.storefront));
   }, [products, categoryBusinesses]);
 
+  const selectedMarketplaceSubcategoryId = useMemo(() => {
+    if (!selected) return null;
+    return marketplaceSubcategories.find((subcategory) => subcategory.category_slug === marketplaceCategorySlug && subcategory.slug === selected.id)?.id ?? null;
+  }, [selected, marketplaceSubcategories, marketplaceCategorySlug]);
+
+
   const scopedProducts = useMemo(() => {
     if (!selected) return marketProducts;
-    return marketProducts.filter((product) => {
-      const searchable = [product.name, product.category, product.subcategory, product.brand].filter(Boolean).join(' ').toLowerCase();
-      return selected.terms.some((term) => searchable.includes(term.toLowerCase()));
-    });
-  }, [marketProducts, selected]);
+    if (!selectedMarketplaceSubcategoryId) return [];
+    return marketProducts.filter((product) => product.marketplace_subcategory_id === selectedMarketplaceSubcategoryId);
+  }, [marketProducts, selected, selectedMarketplaceSubcategoryId]);
 
   const participatingStores = useMemo(() => Array.from(new Map(
     scopedProducts.map((product) => [product.storefront, {
