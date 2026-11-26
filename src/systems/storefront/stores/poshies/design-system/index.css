@@ -291,3 +291,32 @@
   border-color: var(--poshies-color-accent) !important;
   color: var(--poshies-color-button-text) !important;
 }
+
+/* Footer social controls: larger icons with comfortable padding and touch targets. */
+:root[data-storefront='poshies'] .storefront-footer .footer-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  min-height: 52px;
+  padding: 14px;
+  border: 1px solid var(--poshies-color-border);
+  border-radius: 50%;
+  color: var(--poshies-color-text);
+  background: var(--poshies-color-canvas);
+  transition: color 180ms ease, border-color 180ms ease, background-color 180ms ease, transform 180ms ease;
+}
+:root[data-storefront='poshies'] .storefront-footer .footer-social-link svg {
+  width: 24px;
+  height: 24px;
+}
+:root[data-storefront='poshies'] .storefront-footer .footer-social-link:hover {
+  color: var(--poshies-color-accent);
+  border-color: var(--poshies-color-accent);
+  background: var(--poshies-color-canvas);
+  transform: translateY(-2px) scale(1.04);
+}
+:root[data-storefront='poshies'] .storefront-footer .footer-social-link:focus-visible {
+  outline: 2px solid var(--poshies-color-focus);
+  outline-offset: 3px;
+}
