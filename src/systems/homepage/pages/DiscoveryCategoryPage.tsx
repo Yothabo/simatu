@@ -351,85 +351,50 @@ export default function DiscoveryCategoryPage() {
       {selectedProductGroup && <div
         role="presentation"
         onClick={() => setSelectedProductGroup(null)}
-        style={{ position: 'fixed', inset: 0, zIndex: 120, display: 'grid', placeItems: 'center', padding: 16, background: 'rgba(0,0,0,.82)', backdropFilter: 'blur(10px)' }}
+        style={{ position: 'fixed', inset: 0, zIndex: 2147483000, display: 'grid', placeItems: 'center', padding: 16, background: 'rgba(0,0,0,.76)', backdropFilter: 'blur(12px)' }}
       >
         <section
           role="dialog"
           aria-modal="true"
           aria-labelledby="marketplace-product-modal-title"
           onClick={(event) => event.stopPropagation()}
-          style={{ position: 'relative', width: '100%', maxWidth: 760, maxHeight: 'min(90dvh,860px)', overflowY: 'auto', border: '1px solid rgba(255,255,255,.16)', borderRadius: 14, background: '#171717', color: '#f4f1ec', boxShadow: '0 24px 80px rgba(0,0,0,.5)' }}
+          style={{ position: 'relative', isolation: 'isolate', width: '100%', maxWidth: 720, maxHeight: 'min(92dvh,820px)', overflowY: 'auto', border: '1px solid rgba(255,255,255,.12)', borderRadius: 12, background: '#111', color: '#f4f1ec', boxShadow: '0 32px 120px rgba(0,0,0,.8)' }}
         >
-          <button type="button" onClick={() => setSelectedProductGroup(null)} aria-label="Close product details" style={{ position: 'absolute', zIndex: 2, top: 14, right: 14, width: 38, height: 38, border: '1px solid rgba(255,255,255,.35)', borderRadius: '50%', background: 'rgba(17,17,17,.88)', color: '#fff', fontSize: 22, cursor: 'pointer' }}>×</button>
+          <button type="button" onClick={() => setSelectedProductGroup(null)} aria-label="Close product details" style={{ position: 'absolute', zIndex: 5, top: 14, right: 14, width: 38, height: 38, border: '1px solid rgba(255,255,255,.35)', borderRadius: '50%', background: 'rgba(17,17,17,.88)', color: '#fff', fontSize: 22, cursor: 'pointer' }}>×</button>
           <div className="marketplace-product-modal-layout" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, .9fr) minmax(0, 1.1fr)' }}>
-            <div style={{ minHeight: 260, background: '#222' }}>
+            <div className="marketplace-product-modal-image" style={{ position: 'relative', minHeight: 320, background: '#222', overflow: 'hidden' }}>
               {selectedProductGroup.image_url
-                ? <img src={selectedProductGroup.image_url} alt={selectedProductGroup.name} style={{ display: 'block', width: '100%', height: '100%', minHeight: 260, maxHeight: 440, objectFit: 'cover' }} />
-                : <div style={{ minHeight: 260, display: 'grid', placeItems: 'center', color: 'rgba(244,241,236,.35)', fontSize: 12 }}>Product image unavailable</div>}
+                ? <img src={selectedProductGroup.image_url} alt={selectedProductGroup.name} style={{ display: 'block', width: '100%', height: '100%', minHeight: 320, maxHeight: 520, objectFit: 'cover' }} />
+                : <div style={{ minHeight: 320, display: 'grid', placeItems: 'center', color: 'rgba(244,241,236,.35)', fontSize: 12 }}>Image unavailable</div>}
+              <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(0,0,0,.88) 0%,rgba(0,0,0,.28) 34%,transparent 72%)' }} />
+              <h2 id="marketplace-product-modal-title" style={{ position: 'absolute', left: 22, right: 22, bottom: 22, zIndex: 1, margin: 0, fontSize: 'clamp(24px,4vw,36px)', lineHeight: 1.08, fontWeight: 550 }}>{selectedProductGroup.name}</h2>
             </div>
-            <div style={{ padding: 'clamp(20px,4vw,32px)' }}>
-              <p style={{ margin: 0, fontSize: 10, textTransform: 'uppercase', letterSpacing: '.16em', opacity: .58 }}>Product details</p>
-              <h2 id="marketplace-product-modal-title" style={{ margin: '10px 42px 8px 0', fontSize: 'clamp(24px,4vw,34px)', lineHeight: 1.08, fontWeight: 550 }}>{selectedProductGroup.name}</h2>
-              {selectedProductGroup.offers[0]?.brand && <p style={{ margin: '0 0 12px', fontSize: 13, opacity: .65 }}>{selectedProductGroup.offers[0].brand}</p>}
-              {selectedProductGroup.offers[0]?.description && <p style={{ margin: '0 0 20px', fontSize: 13, lineHeight: 1.65, opacity: .76 }}>{selectedProductGroup.offers[0].description}</p>}
-              <div style={{ borderTop: '1px solid rgba(255,255,255,.14)', paddingTop: 16 }}>
-                <h3 style={{ margin: '0 0 5px', fontSize: 15, fontWeight: 600 }}>Your order</h3>
-                <p style={{ margin: '0 0 14px', fontSize: 11, lineHeight: 1.5, opacity: .58 }}>Choose the available product options and quantity, then review your subtotal.</p>
-              </div>
-            </div>
-          </div>
-          <div style={{ padding: '0 clamp(16px,4vw,32px) 28px' }}>
-            <div style={{ display: 'grid', gap: 14 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', padding: 'clamp(20px,4vw,30px)' }}>
+              {selectedProductGroup.offers[0]?.description && <p style={{ margin: '0 0 18px', fontSize: 13, lineHeight: 1.65, opacity: .76 }}>{selectedProductGroup.offers[0].description}</p>}
+              {selectedProductGroup.offers[0]?.brand && <p style={{ margin: '0 0 18px', fontSize: 12, opacity: .62 }}>{selectedProductGroup.offers[0].brand}</p>}
               {selectedProductGroup.offers.map((offer) => {
                 const selection = purchaseSelections[offerSelectionKey(offer)] || { size: '', quantity: 1 };
                 const hasSizes = (offer.sizes?.length || 0) > 0;
                 const validSelection = typeof offer.price === 'number' && (!hasSizes || Boolean(selection.size));
                 const lineTotal = (typeof offer.price === 'number' ? offer.price : 0) * selection.quantity;
-                return <article key={`${offer.storefront}-${offer.id}`} style={{ padding: 18, border: '1px solid rgba(255,255,255,.16)', borderRadius: 10, background: 'rgba(255,255,255,.035)' }}>
-                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, paddingBottom: 15, borderBottom: '1px solid rgba(255,255,255,.12)' }}>
-                    <div>
-                      <p style={{ margin: 0, fontSize: 10, letterSpacing: '.12em', textTransform: 'uppercase', opacity: .52 }}>Product price</p>
-                      <h4 style={{ margin: '5px 0 3px', fontSize: 16, fontWeight: 600 }}>{offer.name}</h4>
-                      {offer.brand && <p style={{ margin: 0, fontSize: 11, opacity: .58 }}>{offer.brand}</p>}
+                return <div key={offer.storefront + '-' + offer.id} style={{ display: 'flex', flex: 1, flexDirection: 'column', gap: 20 }}>
+                  <strong style={{ fontSize: 22, fontWeight: 550, fontVariantNumeric: 'tabular-nums' }}>{typeof offer.price === 'number' ? 'R' + offer.price.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'Price unavailable'}</strong>
+                  {hasSizes && <div role="group" aria-label="Available sizes" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                    {offer.sizes?.map((size) => <button key={size} type="button" aria-pressed={selection.size === size} onClick={() => setPurchaseSelections((current) => ({ ...current, [offerSelectionKey(offer)]: { size, quantity: current[offerSelectionKey(offer)]?.quantity || 1 } }))} style={{ minWidth: 44, minHeight: 38, padding: '0 12px', border: selection.size === size ? '1px solid #f4f1ec' : '1px solid rgba(255,255,255,.28)', borderRadius: 6, background: selection.size === size ? '#f4f1ec' : 'transparent', color: selection.size === size ? '#111' : '#f4f1ec', font: 'inherit', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>{size}</button>)}
+                  </div>}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', border: '1px solid rgba(255,255,255,.25)', borderRadius: 7, overflow: 'hidden' }}>
+                      <button type="button" aria-label="Decrease quantity" disabled={selection.quantity <= 1} onClick={() => setPurchaseSelections((current) => ({ ...current, [offerSelectionKey(offer)]: { size: current[offerSelectionKey(offer)]?.size || '', quantity: Math.max(1, (current[offerSelectionKey(offer)]?.quantity || 1) - 1) } }))} style={{ width: 38, height: 38, border: 0, background: 'transparent', color: '#f4f1ec', fontSize: 18, cursor: 'pointer' }}>−</button>
+                      <output aria-live="polite" style={{ minWidth: 30, textAlign: 'center', fontSize: 13, fontVariantNumeric: 'tabular-nums' }}>{selection.quantity}</output>
+                      <button type="button" aria-label="Increase quantity" onClick={() => setPurchaseSelections((current) => ({ ...current, [offerSelectionKey(offer)]: { size: current[offerSelectionKey(offer)]?.size || '', quantity: (current[offerSelectionKey(offer)]?.quantity || 1) + 1 } }))} style={{ width: 38, height: 38, border: 0, background: 'transparent', color: '#f4f1ec', fontSize: 18, cursor: 'pointer' }}>+</button>
                     </div>
-                    <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                      <p style={{ margin: 0, fontSize: 10, opacity: .55 }}>Price per item</p>
-                      <strong style={{ display: 'block', marginTop: 4, fontSize: 18, fontVariantNumeric: 'tabular-nums' }}>{typeof offer.price === 'number' ? 'R' + offer.price.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'Unavailable'}</strong>
-                    </div>
+                    <strong style={{ fontSize: 17, fontVariantNumeric: 'tabular-nums' }}>R{lineTotal.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(120px,.55fr)', gap: 18, padding: '16px 0', alignItems: 'start' }}>
-                    <div>
-                      <p style={{ margin: '0 0 9px', fontSize: 11, fontWeight: 600 }}>Product options {hasSizes ? <span style={{ color: '#f0c987' }}>* Required</span> : <span style={{ opacity: .5 }}>· No variants</span>}</p>
-                      {hasSizes
-                        ? <div role="group" aria-label={'Choose product size'} style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
-                            {offer.sizes?.map((size) => <button key={size} type="button" aria-pressed={selection.size === size} onClick={() => setPurchaseSelections((current) => ({ ...current, [offerSelectionKey(offer)]: { size, quantity: current[offerSelectionKey(offer)]?.quantity || 1 } }))} style={{ minWidth: 44, minHeight: 38, padding: '0 12px', border: selection.size === size ? '1px solid #f4f1ec' : '1px solid rgba(255,255,255,.25)', borderRadius: 6, background: selection.size === size ? '#f4f1ec' : 'transparent', color: selection.size === size ? '#111' : '#f4f1ec', font: 'inherit', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>{size}</button>)}
-                          </div>
-                        : <span style={{ fontSize: 12, opacity: .6 }}>Standard option</span>}
-                      {hasSizes && !selection.size && <p role="status" style={{ margin: '8px 0 0', color: '#f0c987', fontSize: 10 }}>Select a size to continue.</p>}
-                    </div>
-                    <div>
-                      <p style={{ margin: '0 0 9px', fontSize: 11, fontWeight: 600 }}>Quantity</p>
-                      <div style={{ display: 'inline-flex', alignItems: 'center', border: '1px solid rgba(255,255,255,.25)', borderRadius: 7, overflow: 'hidden' }}>
-                        <button type="button" aria-label={'Decrease product quantity'} disabled={selection.quantity <= 1} onClick={() => setPurchaseSelections((current) => ({ ...current, [offerSelectionKey(offer)]: { size: current[offerSelectionKey(offer)]?.size || '', quantity: Math.max(1, (current[offerSelectionKey(offer)]?.quantity || 1) - 1) } }))} style={{ width: 38, height: 38, border: 0, background: 'transparent', color: '#f4f1ec', fontSize: 18, cursor: 'pointer' }}>−</button>
-                        <output aria-live="polite" style={{ minWidth: 30, textAlign: 'center', fontSize: 13, fontVariantNumeric: 'tabular-nums' }}>{selection.quantity}</output>
-                        <button type="button" aria-label={'Increase product quantity'} onClick={() => setPurchaseSelections((current) => ({ ...current, [offerSelectionKey(offer)]: { size: current[offerSelectionKey(offer)]?.size || '', quantity: (current[offerSelectionKey(offer)]?.quantity || 1) + 1 } }))} style={{ width: 38, height: 38, border: 0, background: 'transparent', color: '#f4f1ec', fontSize: 18, cursor: 'pointer' }}>+</button>
-                      </div>
-                    </div>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, paddingTop: 13, borderTop: '1px solid rgba(255,255,255,.12)' }}>
-                    <div>
-                      <p style={{ margin: 0, fontSize: 10, opacity: .55 }}>Order subtotal</p>
-                      <strong style={{ display: 'block', marginTop: 3, fontSize: 16, fontVariantNumeric: 'tabular-nums' }}>R{lineTotal.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
-                    </div>
-                    <button type="button" onClick={() => { if (!validSelection) { if (hasSizes) toast.error('Select a size before adding this item.'); return; } addProductToCart(offer); setSelectedProductGroup(null); }} disabled={!validSelection} style={{ minHeight: 42, padding: '0 20px', border: 0, borderRadius: 999, background: validSelection ? '#f4f1ec' : 'rgba(244,241,236,.18)', color: validSelection ? '#111' : 'rgba(244,241,236,.42)', font: 'inherit', fontSize: 12, fontWeight: 700, cursor: validSelection ? 'pointer' : 'not-allowed' }}>Add selected order to cart</button>
-                  </div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, marginTop: 12 }}>
-                    <a href={offer.href} style={{ color: 'rgba(244,241,236,.72)', fontSize: 11, textDecoration: 'underline', textUnderlineOffset: 3 }}>Browse {offer.storeName} catalogue ↗</a>
-                  </div>
-                </article>;
+                  <button type="button" onClick={() => { if (!validSelection) { if (hasSizes) toast.error('Select a size first.'); return; } addProductToCart(offer); setSelectedProductGroup(null); }} disabled={!validSelection} style={{ minHeight: 46, padding: '0 20px', border: 0, borderRadius: 999, background: validSelection ? '#f4f1ec' : 'rgba(244,241,236,.18)', color: validSelection ? '#111' : 'rgba(244,241,236,.42)', font: 'inherit', fontSize: 12, fontWeight: 700, cursor: validSelection ? 'pointer' : 'not-allowed' }}>Add to cart</button>
+                  <a href={offer.href} style={{ alignSelf: 'flex-start', color: 'rgba(244,241,236,.66)', fontSize: 11, textDecoration: 'underline', textUnderlineOffset: 3 }}>Browse {offer.storeName} catalogue</a>
+                </div>;
               })}
             </div>
-            <p style={{ margin: '16px 0 0', fontSize: 10, lineHeight: 1.5, opacity: .48 }}>Delivery fees and final availability are confirmed during checkout.</p>
           </div>
         </section>
       </div>}
