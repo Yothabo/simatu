@@ -20,9 +20,12 @@ function accentClasses(role: 'primary' | 'secondary' | 'tertiary') {
 
 export default function ViewCatalog() {
   const { categoryOrder, catalog, name: storeName } = useStorefront();
-  const categoryConfigs = [...catalog.categories].sort(
-    (a, b) => categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category)
-  );
+  const categoryConfigs = [...catalog.categories].sort((a, b) => {
+    const aIndex = categoryOrder.indexOf(a.category);
+    const bIndex = categoryOrder.indexOf(b.category);
+    return (aIndex < 0 ? Number.MAX_SAFE_INTEGER : aIndex) -
+      (bIndex < 0 ? Number.MAX_SAFE_INTEGER : bIndex);
+  });
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const { products: allProducts, isLoading } = useProducts();
   const categoryRefs = useRef<Record<string, HTMLDivElement | null>>({});
