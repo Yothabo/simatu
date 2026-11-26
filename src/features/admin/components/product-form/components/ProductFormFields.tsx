@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import type { ProductFormFieldsProps } from './ProductFormFields.types';
 import ProductCategoryFields from './fields/ProductCategoryFields';
 import ProductDescriptionField from './fields/ProductDescriptionField';
@@ -6,7 +7,7 @@ import ProductImageField from './fields/ProductImageField';
 import ProductPricingFields from './fields/ProductPricingFields';
 import ProductSizesField from './fields/ProductSizesField';
 
-const SELECT_STYLE: React.CSSProperties = { width: '100%', minHeight: 42, border: '1px solid var(--admin-border)', borderRadius: 'var(--ds-radius-md)', background: 'var(--admin-surface)', color: 'var(--admin-text-primary)', padding: '8px 12px', font: 'inherit' };
+const SELECT_STYLE: CSSProperties = { width: '100%', minHeight: 42, border: '1px solid var(--admin-border)', borderRadius: 'var(--ds-radius-md)', background: 'var(--admin-surface)', color: 'var(--admin-text-primary)', padding: '8px 12px', font: 'inherit' };
 
 export default function ProductFormFields(props: ProductFormFieldsProps) {
   return (
