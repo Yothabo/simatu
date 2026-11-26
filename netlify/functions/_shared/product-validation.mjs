@@ -140,7 +140,7 @@ export function validateProduct(body) {
     }
 
     // Split pasted or legacy delimited entries into independent options.
-    for (const entry of value.split(/[,;\\n\\r]+/)) {
+    for (const entry of value.split(/[,;\n\r]+/)) {
       const size = entry.trim();
       const normalizedSize = size.toLocaleLowerCase();
 
