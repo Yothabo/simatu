@@ -5,11 +5,11 @@ export function StorefrontCartProvider({
   storefront,
   children,
 }: {
-  storefront: 'yotaabo' | 'poshies';
+  storefront: string;
   children: ReactNode;
 }) {
   return (
-    <CartProvider storageKey={STOREFRONT_CART_KEYS[storefront]} defaultStorefront={storefront}>
+    <CartProvider storageKey={STOREFRONT_CART_KEYS[storefront] ?? `${storefront}-cart`} defaultStorefront={storefront}>
       {children}
     </CartProvider>
   );
