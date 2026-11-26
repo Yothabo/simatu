@@ -147,6 +147,31 @@ if (!/storefront:\s*string/.test(storefrontCartSource)) {
   errors.push('StorefrontCartProvider must accept any configured storefront key');
 }
 
+const storefrontConfigurationPath = path.join(systemsRoot, 'storefront', 'core', 'configuration', 'storefronts.ts');
+const storefrontConfigurationSource = fs.existsSync(storefrontConfigurationPath)
+  ? fs.readFileSync(storefrontConfigurationPath, 'utf8')
+  : '';
+if (!/STOREFRONTS:\s*Record<string,\s*StorefrontConfiguration>/.test(storefrontConfigurationSource)) {
+  errors.push('Storefront configuration must accept arbitrary storefront keys');
+}
+
+const storefrontThemeProviderPath = path.join(systemsRoot, 'storefront', 'core', 'components', 'StorefrontThemeProvider.tsx');
+const storefrontThemeProviderSource = fs.existsSync(storefrontThemeProviderPath)
+  ? fs.readFileSync(storefrontThemeProviderPath, 'utf8')
+  : '';
+if (!/designSystem\.overrides/.test(storefrontThemeProviderSource)) {
+  errors.push('StorefrontThemeProvider must apply semantic theme overrides from configuration');
+}
+
+const storefrontCategoriesApiPath = path.resolve('netlify/functions/categories.mjs');
+const storefrontCategoriesApiSource = fs.existsSync(storefrontCategoriesApiPath)
+  ? fs.readFileSync(storefrontCategoriesApiPath, 'utf8')
+  : '';
+if (/new Set\(\[['"]yotaabo['"],\s*['"]poshies['"]\]\)/.test(storefrontCategoriesApiSource) ||
+    !/FROM public\.stores\s+WHERE slug = \$1 AND is_active IS TRUE/.test(storefrontCategoriesApiSource)) {
+  errors.push('Storefront category API must resolve any active storefront from the stores table, not a fixed brand allowlist');
+}
+
 if (errors.length > 0) {
   console.error('Architecture boundary violations:');
   for (const error of errors) console.error(' - ' + error);
