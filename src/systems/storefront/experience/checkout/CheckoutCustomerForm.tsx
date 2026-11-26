@@ -9,10 +9,10 @@ export default function CheckoutCustomerForm({
   onPhoneNumberChange,
 }: CheckoutCustomerFormProps) {
   const inputClass =
-    'w-full border-0 bg-[#f5f5f5] px-4 py-3 font-heading text-base text-[#4d4d4d] outline-none placeholder:text-[#4d4d4d]/40 focus:outline-none focus:ring-0';
+    'w-full border-0 bg-[var(--sf-surface-soft)] px-4 py-3 font-heading text-base text-[var(--sf-text)] outline-none placeholder:text-[var(--sf-text-subtle)] focus:outline-none focus:ring-0';
 
   const labelClass =
-    'mb-1.5 block text-[10px] font-semibold uppercase tracking-widest text-[#4d4d4d]/40';
+    'mb-1.5 block text-[10px] font-semibold uppercase tracking-widest text-[var(--sf-text-subtle)]';
 
   return (
     <div className="mt-3 flex flex-col gap-4">
@@ -52,9 +52,9 @@ export default function CheckoutCustomerForm({
             'aria-invalid': Boolean(errors.phoneNumber),
             placeholder: '71 234 5678',
             className:
-              'h-full min-w-0 flex-1 border-0 bg-transparent p-0 font-heading text-base text-[#4d4d4d] outline-none placeholder:text-[#4d4d4d]/40 focus:outline-none focus:ring-0',
+              'h-full min-w-0 flex-1 border-0 bg-transparent p-0 font-heading text-base text-[var(--sf-text)] outline-none placeholder:text-[var(--sf-text-subtle)] focus:outline-none focus:ring-0',
           }}
-          className="flex h-12 w-full items-center gap-3 bg-[#f5f5f5] px-4"
+          className="flex h-12 w-full items-center gap-3 bg-[var(--sf-surface-soft)] px-4"
         />
 
         {errors.phoneNumber && (
