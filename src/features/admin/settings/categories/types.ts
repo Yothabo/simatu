@@ -1,4 +1,4 @@
-export type Storefront = 'yotaabo' | 'poshies';
+export type Storefront = string;
 
 export type Subcategory = {
   id: string;
