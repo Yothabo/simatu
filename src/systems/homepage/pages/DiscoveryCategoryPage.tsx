@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+<button type="button" onClick={() => { if (!validSelection) { toast.error(marketplaceVariants.length || hasSizes ? 'Choose a quantity for at least one option' : 'Choose a quantity'); return; } addProductToCart(offer); setSelectedProductGroup(null); }} disabled={!validSelection} style={{ minHeight: 46, padding: '0 20px', border: 0, borderRadius: 999, background: validSelection ? '#f4f1ec' : 'rgba(244,241,236,.18)', color: validSelection ? '#111' : 'rgba(244,241,ec,.42)', font: 'inherit', fontSize: 12, fontWeight: 700, cursor: validSelection ? 'pointer' : 'not-allowed' }}>Add to cart</button>import React, { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useGlobalCart } from '../../../shared/cart/CartContext';
 import { Swiper, SwiperSlide } from 'swiper/react';
