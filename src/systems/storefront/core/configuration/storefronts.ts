@@ -5,8 +5,7 @@ import type {
 
 /**
  * Store-level configuration is deliberately separate from visual components.
- * Stores may share a design foundation while retaining brand-specific tokens,
- * or select a fully local design system when their identity diverges.
+ * Shared components consume semantic tokens; each store theme owns their values.
  */
 export const STOREFRONTS = {
   yotaabo: {
@@ -17,9 +16,7 @@ export const STOREFRONTS = {
     designSystem: {
       source: 'shared',
       name: 'storefront-foundation',
-      overrides: {
-        '--storefront-accent': '#8aa89b',
-      },
+      overrides: {},
     },
   },
   poshies: {
@@ -30,16 +27,7 @@ export const STOREFRONTS = {
     designSystem: {
       source: 'shared',
       name: 'storefront-foundation',
-      overrides: {
-        '--storefront-accent': '#ff1493',
-        '--storefront-accent-contrast': '#ffffff',
-        '--storefront-page': '#292426',
-        '--storefront-surface': '#292426',
-        '--storefront-surface-soft': '#292426',
-        '--storefront-text': '#ffffff',
-        '--storefront-muted': '#ffffff',
-        '--storefront-border': 'rgba(255,255,255,.18)',
-      },
+      overrides: {},
     },
   },
 } as const satisfies Record<StorefrontKey, StorefrontConfiguration>;

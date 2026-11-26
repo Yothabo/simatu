@@ -1,7 +1,5 @@
-/* Shared storefront type scale and role defaults; font families are supplied by each store theme. */
+/* Shared type scale and typography geometry; font families belong to stores. */
 :root {
-  --sf-font-body: sans-serif;
-  --sf-font-heading: sans-serif;
   --sf-font-size-xs: 10px;
   --sf-font-size-sm: 12px;
   --sf-font-size-base: 14px;

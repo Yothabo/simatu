@@ -1,6 +1,7 @@
-/* Poshies font roles. Actual font loading remains owned by storefront assets. */
-.storefront-controls--poshies,
-[data-storefront-theme="poshies"] {
-  --poshies-font-body: var(--poshies-font-body, sans-serif);
-  --poshies-font-heading: var(--poshies-font-heading, sans-serif);
+/* Poshies typography roles; font files are loaded by its design-system entry. */
+:root[data-storefront="poshies"] {
+  --poshies-font-body: 'Montserrat', sans-serif;
+  --poshies-font-heading: 'Anton', sans-serif;
+  --sf-font-body: var(--poshies-font-body);
+  --sf-font-heading: var(--poshies-font-heading);
 }

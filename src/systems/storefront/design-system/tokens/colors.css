@@ -1,11 +1,5 @@
-/* Storefront color roles. Brand themes override semantic values. */
-:root {
-  --sf-color-white: #ffffff;
-  --sf-color-charcoal: #292426;
-  --sf-color-black: #000000;
-  --sf-color-neutral-50: #f5f5f5;
-  --sf-color-neutral-100: #e5e5e5;
-  --sf-color-neutral-500: #777777;
-  --sf-color-neutral-700: #4d4d4d;
-  --sf-color-transparent: transparent;
-}
+/*
+ * Shared color-token vocabulary only.
+ * Concrete palette values and semantic color mappings belong to store themes.
+ * Shared components must consume --sf-* semantic roles, never brand literals.
+ */

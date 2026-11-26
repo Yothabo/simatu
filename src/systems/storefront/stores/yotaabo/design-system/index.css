@@ -1,6 +1,44 @@
-/* Yotaabo identity overrides. Shared storefront foundations remain intact. */
+/*
+ * Yotaabo brand theme.
+ * Yotaabo owns its palette and type choices; shared components consume roles.
+ */
 :root[data-storefront='yotaabo'] {
-  --storefront-accent: #8aa89b;
-  --storefront-surface: #ffffff;
-  --storefront-text: #4d4d4d;
+  color-scheme: light;
+
+  --yotaabo-color-canvas: #ffffff;
+  --yotaabo-color-surface: #ffffff;
+  --yotaabo-color-surface-raised: #f7f7f5;
+  --yotaabo-color-accent: #8aa89b;
+  --yotaabo-color-text: #4d4d4d;
+  --yotaabo-color-text-muted: #777777;
+  --yotaabo-color-border: rgba(77, 77, 77, .16);
+  --yotaabo-color-button-text: #ffffff;
+
+  --sf-background: var(--yotaabo-color-canvas);
+  --sf-surface: var(--yotaabo-color-surface);
+  --sf-text: var(--yotaabo-color-text);
+  --sf-text-muted: var(--yotaabo-color-text-muted);
+  --sf-accent: var(--yotaabo-color-accent);
+  --sf-accent-contrast: var(--yotaabo-color-button-text);
+  --sf-border: var(--yotaabo-color-border);
+  --sf-hover-surface: rgba(138, 168, 155, .10);
+  --sf-shadow-color: rgba(30, 20, 20, .08);
+  --sf-font-body: var(--font-body, 'Manrope', sans-serif);
+  --sf-font-heading: var(--font-heading, 'Cormorant Garamond', serif);
+
+  /* Compatibility aliases for existing storefront components. */
+  --storefront-page: var(--yotaabo-color-canvas);
+  --storefront-surface: var(--yotaabo-color-surface);
+  --storefront-surface-soft: var(--yotaabo-color-surface-raised);
+  --storefront-accent: var(--yotaabo-color-accent);
+  --storefront-accent-contrast: var(--yotaabo-color-button-text);
+  --storefront-text: var(--yotaabo-color-text);
+  --storefront-muted: var(--yotaabo-color-text-muted);
+  --storefront-border: var(--yotaabo-color-border);
+  --storefront-radius-sm: 2px;
+  --storefront-radius-md: 6px;
+  --storefront-radius-lg: 12px;
+  --storefront-shadow-soft: 0 12px 36px var(--sf-shadow-color);
+  --storefront-font-body: var(--sf-font-body);
+  --storefront-font-heading: var(--sf-font-heading);
 }

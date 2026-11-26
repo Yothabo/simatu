@@ -6,26 +6,20 @@ type StorefrontThemeProviderProps = {
 };
 
 /**
- * Applies the active store's selected design-system identity at the document
- * boundary. Store-specific tokens are CSS-scoped by data-storefront, while
- * configuration overrides provide runtime token customisation.
+ * Selects the active storefront theme at the document boundary.
+ * Brand values are supplied by each store's scoped stylesheet, not inline
+ * runtime overrides, so shared components have one predictable token source.
  */
 export default function StorefrontThemeProvider({
   children,
 }: StorefrontThemeProviderProps) {
-  const { storeKey, designSystem } = useStorefront();
+  const { storeKey } = useStorefront();
 
   useEffect(() => {
     const root = document.documentElement;
     const previousStorefront = root.getAttribute('data-storefront');
-    const previousValues = new Map<string, string>();
 
     root.setAttribute('data-storefront', storeKey);
-
-    Object.entries(designSystem.overrides ?? {}).forEach(([token, value]) => {
-      previousValues.set(token, root.style.getPropertyValue(token));
-      root.style.setProperty(token, value);
-    });
 
     return () => {
       if (previousStorefront === null) {
@@ -33,16 +27,8 @@ export default function StorefrontThemeProvider({
       } else {
         root.setAttribute('data-storefront', previousStorefront);
       }
-
-      previousValues.forEach((value, token) => {
-        if (value) {
-          root.style.setProperty(token, value);
-        } else {
-          root.style.removeProperty(token);
-        }
-      });
     };
-  }, [storeKey, designSystem]);
+  }, [storeKey]);
 
   return <>{children}</>;
 }

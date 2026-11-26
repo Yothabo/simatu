@@ -1,21 +1,13 @@
-/* Shared storefront theme foundation.
-   Brand-specific stores override tokens without replacing shared commerce UI. */
+/*
+ * Shared storefront foundation.
+ * This layer owns reusable geometry and component behavior only.
+ * Store themes provide every palette, font family and semantic color value.
+ */
 :root {
-  --storefront-accent: #8aa89b;
-  --storefront-accent-contrast: #ffffff;
-  --storefront-surface: #ffffff;
-  --storefront-surface-soft: #f7f7f5;
-  --storefront-page: #ffffff;
-  --storefront-text: #252525;
-  --storefront-muted: #777777;
-  --storefront-border: rgba(37, 37, 37, 0.12);
-  --storefront-radius-sm: 2px;
-  --storefront-radius-md: 6px;
-  --storefront-radius-lg: 12px;
-  --storefront-shadow-soft: 0 12px 36px rgba(0, 0, 0, 0.06);
+  --storefront-radius-sm: var(--sf-radius-sm, 2px);
+  --storefront-radius-md: var(--sf-radius-md, 6px);
+  --storefront-radius-lg: var(--sf-radius-lg, 12px);
   --storefront-content-width: 1180px;
-  --storefront-font-body: var(--font-body, 'Manrope', sans-serif);
-  --storefront-font-heading: var(--font-heading, 'Cormorant Garamond', serif);
 }
 
 .storefront-page {
@@ -53,7 +45,7 @@
   border: 1px solid var(--storefront-text);
   border-radius: var(--storefront-radius-sm);
   background: var(--storefront-text);
-  color: #ffffff;
+  color: var(--storefront-accent-contrast);
   padding: 0.75rem 1.15rem;
   font-family: var(--storefront-font-body);
   font-size: 0.72rem;
