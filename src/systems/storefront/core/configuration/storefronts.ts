@@ -15,6 +15,7 @@ export const STOREFRONTS: Record<string, StorefrontConfiguration> = {
       variant: 'wordmark',
       wordmark: 'Yotaabo',
       description: 'The scents our community loves most.',
+      featuredProductsTitle: 'Trending',
     },
     story: {
       heading: 'A scent should feel like you.',
@@ -23,6 +24,7 @@ export const STOREFRONTS: Record<string, StorefrontConfiguration> = {
         'Yotaabo is built around that personal connection: finding scents that feel considered, distinctive, and right for the moment.',
       ],
       tone: 'canvas',
+      actionLabel: 'Discover our story',
     },
     contact: {
       heading: 'Find the scent that feels like you.',
@@ -80,7 +82,7 @@ export const STOREFRONTS: Record<string, StorefrontConfiguration> = {
     primaryAccent: '#ff1493',
     categoryOrder: ['Hers', 'His', 'Lounge'],
     designSystem: { source: 'shared', name: 'storefront-foundation', overrides: {} },
-    hero: { variant: 'campaign', wordmark: 'Poshies', description: 'Comfort, confidence and everyday essentials.', className: 'storefront-hero--campaign' },
+    hero: { variant: 'campaign', wordmark: 'Poshies', description: 'Comfort, confidence and everyday essentials.', featuredProductsTitle: 'Trending', className: 'storefront-hero--campaign' },
     story: {
       heading: 'Comfort should feel like you.',
       paragraphs: [
@@ -88,6 +90,7 @@ export const STOREFRONTS: Record<string, StorefrontConfiguration> = {
         'Poshies is built around everyday comfort, thoughtful details, and intimate pieces that let you feel good in your own skin.',
       ],
       tone: 'inverse',
+      actionLabel: 'Discover our story',
     },
     contact: {
       heading: 'Find the pieces that feel like you.',
