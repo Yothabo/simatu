@@ -159,78 +159,78 @@
 
 
 /* Poshies floating navigation: charcoal, hot pink and white only. */
-.storefront-controls--poshies { color: var(--sf-inverse-text); }
-.storefront-controls--poshies .storefront-controls__search input,
-.storefront-controls--poshies .storefront-controls__menu { background: var(--sf-text); border-color: var(--sf-inverse-border); color: var(--sf-inverse-text); }
-.storefront-controls--poshies .storefront-controls__search input::placeholder { color: var(--sf-inverse-text-muted); }
-.storefront-controls--poshies .storefront-controls__icon { background: var(--sf-text); border-color: var(--sf-inverse-border); color: var(--sf-inverse-text); }
-.storefront-controls--poshies .storefront-controls__icon:hover,
-.storefront-controls--poshies .storefront-controls__menu button:hover,
-.storefront-controls--poshies .storefront-controls__menu button:focus-visible { background: var(--sf-accent); color: var(--sf-inverse-text); }
-.storefront-controls--poshies .storefront-controls__cart-count { background: var(--sf-accent); color: var(--sf-inverse-text); }
+.storefront-controls--expanded { color: var(--sf-inverse-text); }
+.storefront-controls--expanded .storefront-controls__search input,
+.storefront-controls--expanded .storefront-controls__menu { background: var(--sf-text); border-color: var(--sf-inverse-border); color: var(--sf-inverse-text); }
+.storefront-controls--expanded .storefront-controls__search input::placeholder { color: var(--sf-inverse-text-muted); }
+.storefront-controls--expanded .storefront-controls__icon { background: var(--sf-text); border-color: var(--sf-inverse-border); color: var(--sf-inverse-text); }
+.storefront-controls--expanded .storefront-controls__icon:hover,
+.storefront-controls--expanded .storefront-controls__menu button:hover,
+.storefront-controls--expanded .storefront-controls__menu button:focus-visible { background: var(--sf-accent); color: var(--sf-inverse-text); }
+.storefront-controls--expanded .storefront-controls__cart-count { background: var(--sf-accent); color: var(--sf-inverse-text); }
 
 /* Poshies floating controls: solid white surfaces, charcoal icons/text, pink interaction. */
-.storefront-controls--poshies {
+.storefront-controls--expanded {
   color: var(--sf-text);
 }
-.storefront-controls--poshies .storefront-controls__search {
+.storefront-controls--expanded .storefront-controls__search {
   background: var(--sf-surface);
   border: 1px solid var(--sf-border);
   color: var(--sf-text);
   box-shadow: 0 5px 18px var(--sf-shadow-color);
 }
-.storefront-controls--poshies .storefront-controls__search input {
+.storefront-controls--expanded .storefront-controls__search input {
   background: transparent;
   border: 0;
   color: var(--sf-text);
 }
-.storefront-controls--poshies .storefront-controls__search input::placeholder {
+.storefront-controls--expanded .storefront-controls__search input::placeholder {
   color: var(--sf-text-subtle);
 }
-.storefront-controls--poshies .storefront-controls__icon {
+.storefront-controls--expanded .storefront-controls__icon {
   background: var(--sf-surface);
   border: 1px solid var(--sf-border);
   color: var(--sf-text);
   box-shadow: 0 5px 18px var(--sf-shadow-color);
 }
-.storefront-controls--poshies .storefront-controls__icon:hover,
-.storefront-controls--poshies .storefront-controls__icon:focus-visible {
+.storefront-controls--expanded .storefront-controls__icon:hover,
+.storefront-controls--expanded .storefront-controls__icon:focus-visible {
   background: var(--sf-surface);
   border-color: var(--sf-accent);
   color: var(--sf-accent);
   outline: none;
 }
-.storefront-controls--poshies .storefront-controls__cart-count {
+.storefront-controls--expanded .storefront-controls__cart-count {
   background: var(--sf-accent);
   color: var(--sf-surface);
 }
-.storefront-controls--poshies .storefront-controls__menu nav {
+.storefront-controls--expanded .storefront-controls__menu nav {
   background: var(--sf-surface);
   border: 1px solid var(--sf-border);
   box-shadow: var(--sf-shadow-panel);
 }
-.storefront-controls--poshies .storefront-controls__menu button {
+.storefront-controls--expanded .storefront-controls__menu button {
   background: transparent;
   color: var(--sf-text);
 }
-.storefront-controls--poshies .storefront-controls__menu button:hover,
-.storefront-controls--poshies .storefront-controls__menu button:focus-visible {
+.storefront-controls--expanded .storefront-controls__menu button:hover,
+.storefront-controls--expanded .storefront-controls__menu button:focus-visible {
   background: var(--sf-hover-surface);
   color: var(--sf-accent);
   outline: none;
 }
-.storefront-controls--poshies .storefront-controls__clear {
+.storefront-controls--expanded .storefront-controls__clear {
   color: var(--sf-text);
 }
-.storefront-controls--poshies .storefront-controls__clear:hover,
-.storefront-controls--poshies .storefront-controls__clear:focus-visible {
+.storefront-controls--expanded .storefront-controls__clear:hover,
+.storefront-controls--expanded .storefront-controls__clear:focus-visible {
   color: var(--sf-accent);
   background: transparent;
   outline: none;
 }
 
 /* Remove native browser search-field styling inside Poshies controls. */
-.storefront-controls--poshies .storefront-controls__search input[type='search'] {
+.storefront-controls--expanded .storefront-controls__search input[type='search'] {
   appearance: none;
   -webkit-appearance: none;
   border: 0 !important;
@@ -243,49 +243,49 @@
   color: var(--sf-text);
   font: inherit;
 }
-.storefront-controls--poshies .storefront-controls__search input[type='search']::-webkit-search-decoration,
-.storefront-controls--poshies .storefront-controls__search input[type='search']::-webkit-search-cancel-button,
-.storefront-controls--poshies .storefront-controls__search input[type='search']::-webkit-search-results-button,
-.storefront-controls--poshies .storefront-controls__search input[type='search']::-webkit-search-results-decoration {
+.storefront-controls--expanded .storefront-controls__search input[type='search']::-webkit-search-decoration,
+.storefront-controls--expanded .storefront-controls__search input[type='search']::-webkit-search-cancel-button,
+.storefront-controls--expanded .storefront-controls__search input[type='search']::-webkit-search-results-button,
+.storefront-controls--expanded .storefront-controls__search input[type='search']::-webkit-search-results-decoration {
   -webkit-appearance: none;
   display: none;
 }
-.storefront-controls--poshies .storefront-controls__cart-count {
+.storefront-controls--expanded .storefront-controls__cart-count {
   background: var(--sf-text) !important;
   color: var(--sf-surface) !important;
 }
 
 
 /* Poshies control edge shaping: search right edge square, cart fully square, menu left edge square. */
-.storefront-controls--poshies .storefront-controls__search {
+.storefront-controls--expanded .storefront-controls__search {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
-.storefront-controls--poshies .storefront-controls__cart {
+.storefront-controls--expanded .storefront-controls__cart {
   border-radius: 0;
 }
-.storefront-controls--poshies .storefront-controls__cart-count {
+.storefront-controls--expanded .storefront-controls__cart-count {
   border-radius: 0 !important;
 }
-.storefront-controls--poshies .storefront-controls__menu nav {
+.storefront-controls--expanded .storefront-controls__menu nav {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
 
 
 /* Square the left edge of the hamburger/close menu control (not the dropdown panel). */
-.storefront-controls--poshies .storefront-controls__row > button.storefront-controls__icon {
+.storefront-controls--expanded .storefront-controls__row > button.storefront-controls__icon {
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
 
 
 /* Poshies search input stays vertically centered in the collapsed pill; the expanded menu aligns its contents to the top. */
-.storefront-controls--poshies .storefront-controls__search {
+.storefront-controls--expanded .storefront-controls__search {
   align-items: center;
   transition: height .36s cubic-bezier(.2,.65,.25,1), min-height .36s cubic-bezier(.2,.65,.25,1), border-radius .36s cubic-bezier(.2,.65,.25,1), padding .36s ease;
 }
-.storefront-controls--poshies .storefront-controls__search input[type='search'] {
+.storefront-controls--expanded .storefront-controls__search input[type='search'] {
   display: block;
   align-self: center;
   height: auto;
@@ -294,7 +294,7 @@
   font-size: 14px;
   text-align: left;
 }
-.storefront-controls--poshies .storefront-controls__search--menu-open {
+.storefront-controls--expanded .storefront-controls__search--menu-open {
   height: var(--sf-header-menu-height);
   min-height: var(--sf-header-menu-height);
   box-sizing: border-box;
@@ -304,14 +304,14 @@
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
-.storefront-controls--poshies .storefront-controls__inline-menu {
+.storefront-controls--expanded .storefront-controls__inline-menu {
   display: flex;
   flex: 1;
   flex-direction: column;
   gap: 2px;
   width: 100%;
 }
-.storefront-controls--poshies .storefront-controls__inline-menu button {
+.storefront-controls--expanded .storefront-controls__inline-menu button {
   display: flex;
   align-items: center;
   width: 100%;
@@ -326,8 +326,8 @@
   cursor: pointer;
   transition: background .18s ease, color .18s ease;
 }
-.storefront-controls--poshies .storefront-controls__inline-menu button:hover,
-.storefront-controls--poshies .storefront-controls__inline-menu button:focus-visible {
+.storefront-controls--expanded .storefront-controls__inline-menu button:hover,
+.storefront-controls--expanded .storefront-controls__inline-menu button:focus-visible {
   background: var(--sf-hover-surface);
   color: var(--sf-accent);
   outline: none;
@@ -335,10 +335,10 @@
 
 
 /* Poshies header redesign: the search surface expands downward while the cart and menu controls remain anchored. */
-.storefront-controls--poshies .storefront-controls__row--menu-open {
+.storefront-controls--expanded .storefront-controls__row--menu-open {
   align-items: flex-start;
 }
-.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__search {
+.storefront-controls--expanded .storefront-controls__row--menu-open .storefront-controls__search {
   box-sizing: border-box;
   height: var(--sf-header-menu-height);
   min-height: var(--sf-header-menu-height);
@@ -350,7 +350,7 @@
   overflow: hidden;
   transition: height .36s cubic-bezier(.2,.65,.25,1), min-height .36s cubic-bezier(.2,.65,.25,1), padding .36s ease, border-radius .36s ease;
 }
-.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__inline-menu {
+.storefront-controls--expanded .storefront-controls__row--menu-open .storefront-controls__inline-menu {
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -360,7 +360,7 @@
   overflow-y: auto;
   overscroll-behavior: contain;
 }
-.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__inline-menu button {
+.storefront-controls--expanded .storefront-controls__row--menu-open .storefront-controls__inline-menu button {
   flex: 0 0 auto;
   min-height: 48px;
   width: 100%;
@@ -368,8 +368,8 @@
   padding: 0 12px;
   border-radius: 12px;
 }
-.storefront-controls--poshies .storefront-controls__row--menu-open > .storefront-controls__cart,
-.storefront-controls--poshies .storefront-controls__row--menu-open > button.storefront-controls__icon {
+.storefront-controls--expanded .storefront-controls__row--menu-open > .storefront-controls__cart,
+.storefront-controls--expanded .storefront-controls__row--menu-open > button.storefront-controls__icon {
   flex: 0 0 var(--sf-header-control-height);
   width: var(--sf-header-control-height);
   height: var(--sf-header-control-height);
@@ -377,48 +377,48 @@
   margin: 0;
 }
 @media (max-width: 640px) {
-  .storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__search {
+  .storefront-controls--expanded .storefront-controls__row--menu-open .storefront-controls__search {
     height: var(--sf-header-menu-height-mobile);
     min-height: var(--sf-header-menu-height-mobile);
     padding: 12px;
   }
-  .storefront-controls--poshies .storefront-controls__row--menu-open > .storefront-controls__cart,
-  .storefront-controls--poshies .storefront-controls__row--menu-open > button.storefront-controls__icon {
+  .storefront-controls--expanded .storefront-controls__row--menu-open > .storefront-controls__cart,
+  .storefront-controls--expanded .storefront-controls__row--menu-open > button.storefront-controls__icon {
     flex-basis: var(--sf-header-control-height-mobile);
     width: var(--sf-header-control-height-mobile);
     height: var(--sf-header-control-height-mobile);
   }
-  .storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__inline-menu button {
+  .storefront-controls--expanded .storefront-controls__row--menu-open .storefront-controls__inline-menu button {
     min-height: 44px;
   }
 }
 
 
 /* Match Moodboard expansion: left-aligned labels, vertically centered rows, retained subtle radius. */
-.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__inline-menu {
+.storefront-controls--expanded .storefront-controls__row--menu-open .storefront-controls__inline-menu {
   justify-content: center;
 }
-.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__inline-menu button {
+.storefront-controls--expanded .storefront-controls__row--menu-open .storefront-controls__inline-menu button {
   justify-content: flex-start;
   align-items: center;
   text-align: left;
   border-radius: 14px;
 }
-.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__search {
+.storefront-controls--expanded .storefront-controls__row--menu-open .storefront-controls__search {
   border-radius: 16px 0 0 16px;
 }
-.storefront-controls--poshies .storefront-controls__row--menu-open > button.storefront-controls__icon {
+.storefront-controls--expanded .storefront-controls__row--menu-open > button.storefront-controls__icon {
   border-top-right-radius: 16px;
   border-bottom-right-radius: 16px;
 }
 @media (max-width: 640px) {
-  .storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__inline-menu button {
+  .storefront-controls--expanded .storefront-controls__row--menu-open .storefront-controls__inline-menu button {
     border-radius: 12px;
   }
-  .storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__search {
+  .storefront-controls--expanded .storefront-controls__row--menu-open .storefront-controls__search {
     border-radius: 12px 0 0 12px;
   }
-  .storefront-controls--poshies .storefront-controls__row--menu-open > button.storefront-controls__icon {
+  .storefront-controls--expanded .storefront-controls__row--menu-open > button.storefront-controls__icon {
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
   }
@@ -426,80 +426,80 @@
 
 
 /* Poshies: keep the cart/menu controls anchored at the same top position during expansion. */
-.storefront-controls--poshies .storefront-controls__row {
+.storefront-controls--expanded .storefront-controls__row {
   align-items: flex-start;
 }
-.storefront-controls--poshies .storefront-controls__row--menu-open {
+.storefront-controls--expanded .storefront-controls__row--menu-open {
   align-items: flex-start;
 }
-.storefront-controls--poshies .storefront-controls__row > .storefront-controls__cart,
-.storefront-controls--poshies .storefront-controls__row > button.storefront-controls__icon {
+.storefront-controls--expanded .storefront-controls__row > .storefront-controls__cart,
+.storefront-controls--expanded .storefront-controls__row > button.storefront-controls__icon {
   align-self: flex-start;
   transform: none !important;
   transition: background .2s ease, color .2s ease, border-color .2s ease !important;
 }
 
 /* Use a single height animation like Moodboard; avoid competing min-height transitions. */
-.storefront-controls--poshies .storefront-controls__search {
+.storefront-controls--expanded .storefront-controls__search {
   min-height: 0;
   transition: height .36s cubic-bezier(.2,.65,.25,1), padding .36s cubic-bezier(.2,.65,.25,1), border-radius .36s cubic-bezier(.2,.65,.25,1);
 }
-.storefront-controls--poshies .storefront-controls__search--menu-open,
-.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__search {
+.storefront-controls--expanded .storefront-controls__search--menu-open,
+.storefront-controls--expanded .storefront-controls__row--menu-open .storefront-controls__search {
   min-height: 0;
   height: var(--sf-header-menu-height);
   transition: height .36s cubic-bezier(.2,.65,.25,1), padding .36s cubic-bezier(.2,.65,.25,1), border-radius .36s cubic-bezier(.2,.65,.25,1);
 }
-.storefront-controls--poshies .storefront-controls__inline-menu {
+.storefront-controls--expanded .storefront-controls__inline-menu {
   justify-content: center;
 }
 @media (max-width: 640px) {
-  .storefront-controls--poshies .storefront-controls__search--menu-open,
-  .storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__search {
+  .storefront-controls--expanded .storefront-controls__search--menu-open,
+  .storefront-controls--expanded .storefront-controls__row--menu-open .storefront-controls__search {
     height: var(--sf-header-menu-height-mobile);
   }
 }
 
 /* Poshies navigation menu hierarchy */
-.storefront-controls--poshies .storefront-controls__inline-menu { display:flex; flex-direction:column; justify-content:center; gap:4px; }
-.storefront-controls--poshies .storefront-controls__menu-item,
-.storefront-controls--poshies .storefront-controls__category-submenu button {
+.storefront-controls--expanded .storefront-controls__inline-menu { display:flex; flex-direction:column; justify-content:center; gap:4px; }
+.storefront-controls--expanded .storefront-controls__menu-item,
+.storefront-controls--expanded .storefront-controls__category-submenu button {
  display:flex; align-items:center; justify-content:flex-start; gap:12px; width:100%; min-height:44px; padding:0 12px;
  border:0; border-radius:12px; background:transparent; color:var(--sf-text); font:inherit; text-align:left; text-decoration:none; cursor:pointer;
  transition:color .18s ease, background .18s ease;
 }
-.storefront-controls--poshies .storefront-controls__menu-item svg,
-.storefront-controls--poshies .storefront-controls__category-submenu button svg { flex:0 0 18px; width:18px; height:18px; }
-.storefront-controls--poshies .storefront-controls__menu-item:hover,
-.storefront-controls--poshies .storefront-controls__category-submenu button:hover { color:var(--sf-accent); background:var(--sf-hover-surface); }
-.storefront-controls--poshies .storefront-controls__categories-trigger svg:last-child { margin-left:auto; transition:transform .2s ease; }
-.storefront-controls--poshies .storefront-controls__categories-trigger svg.is-rotated { transform:rotate(180deg); }
-.storefront-controls--poshies .storefront-controls__category-submenu { display:flex; flex-direction:column; gap:2px; padding-left:28px; overflow:hidden; animation:poshies-category-expand .22s ease both; }
-.storefront-controls--poshies .storefront-controls__category-submenu button { min-height:40px; border-radius:10px; }
+.storefront-controls--expanded .storefront-controls__menu-item svg,
+.storefront-controls--expanded .storefront-controls__category-submenu button svg { flex:0 0 18px; width:18px; height:18px; }
+.storefront-controls--expanded .storefront-controls__menu-item:hover,
+.storefront-controls--expanded .storefront-controls__category-submenu button:hover { color:var(--sf-accent); background:var(--sf-hover-surface); }
+.storefront-controls--expanded .storefront-controls__categories-trigger svg:last-child { margin-left:auto; transition:transform .2s ease; }
+.storefront-controls--expanded .storefront-controls__categories-trigger svg.is-rotated { transform:rotate(180deg); }
+.storefront-controls--expanded .storefront-controls__category-submenu { display:flex; flex-direction:column; gap:2px; padding-left:28px; overflow:hidden; animation:poshies-category-expand .22s ease both; }
+.storefront-controls--expanded .storefront-controls__category-submenu button { min-height:40px; border-radius:10px; }
 @keyframes poshies-category-expand { from {opacity:0; transform:translateY(-5px);} to {opacity:1; transform:translateY(0);} }
-@media (prefers-reduced-motion:reduce) { .storefront-controls--poshies .storefront-controls__category-submenu { animation:none; } .storefront-controls--poshies .storefront-controls__categories-trigger svg:last-child { transition:none; } }
+@media (prefers-reduced-motion:reduce) { .storefront-controls--expanded .storefront-controls__category-submenu { animation:none; } .storefront-controls--expanded .storefront-controls__categories-trigger svg:last-child { transition:none; } }
 
 /* Poshies menu expands naturally to fit every navigation item. */
-.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__search {
+.storefront-controls--expanded .storefront-controls__row--menu-open .storefront-controls__search {
   height: auto;
   min-height: 0;
   overflow: visible;
   align-items: stretch;
 }
-.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__inline-menu {
+.storefront-controls--expanded .storefront-controls__row--menu-open .storefront-controls__inline-menu {
   flex: 0 0 auto;
   min-height: 0;
   overflow: visible;
 }
-.storefront-controls--poshies .storefront-controls__category-submenu {
+.storefront-controls--expanded .storefront-controls__category-submenu {
   flex: 0 0 auto;
   overflow: visible;
 }
-.storefront-controls--poshies .storefront-controls__category-submenu button {
+.storefront-controls--expanded .storefront-controls__category-submenu button {
   gap: var(--sf-header-gap);
   padding-left: 12px;
 }
-.storefront-controls--poshies .storefront-controls__category-submenu button::before {
+.storefront-controls--expanded .storefront-controls__category-submenu button::before {
   content: "•";
   display: inline-block;
   flex: 0 0 12px;
@@ -509,76 +509,76 @@
 }
 
 /* Poshies navigation: eliminate staggered child motion and height-transition clipping. */
-.storefront-controls--poshies .storefront-controls__search,
-.storefront-controls--poshies .storefront-controls__search--menu-open,
-.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__search {
+.storefront-controls--expanded .storefront-controls__search,
+.storefront-controls--expanded .storefront-controls__search--menu-open,
+.storefront-controls--expanded .storefront-controls__row--menu-open .storefront-controls__search {
   transition: border-radius .2s ease, padding .2s ease;
 }
-.storefront-controls--poshies .storefront-controls__category-submenu {
+.storefront-controls--expanded .storefront-controls__category-submenu {
   animation: none !important;
   transform: none !important;
   opacity: 1 !important;
 }
-.storefront-controls--poshies .storefront-controls__inline-menu,
-.storefront-controls--poshies .storefront-controls__menu-item,
-.storefront-controls--poshies .storefront-controls__category-submenu button {
+.storefront-controls--expanded .storefront-controls__inline-menu,
+.storefront-controls--expanded .storefront-controls__menu-item,
+.storefront-controls--expanded .storefront-controls__category-submenu button {
   animation: none !important;
   transition-delay: 0ms !important;
 }
-.storefront-controls--poshies .storefront-controls__category-submenu button {
+.storefront-controls--expanded .storefront-controls__category-submenu button {
   transform: none !important;
   opacity: 1 !important;
 }
 
 
 /* Keep Poshies navigation content inside the panel while its container animates. */
-.storefront-controls--poshies .storefront-controls__search,
-.storefront-controls--poshies .storefront-controls__search--menu-open,
-.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__search {
+.storefront-controls--expanded .storefront-controls__search,
+.storefront-controls--expanded .storefront-controls__search--menu-open,
+.storefront-controls--expanded .storefront-controls__row--menu-open .storefront-controls__search {
   overflow: hidden !important;
   clip-path: inset(0 round inherit);
 }
-.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__inline-menu,
-.storefront-controls--poshies .storefront-controls__category-submenu {
+.storefront-controls--expanded .storefront-controls__row--menu-open .storefront-controls__inline-menu,
+.storefront-controls--expanded .storefront-controls__category-submenu {
   overflow: hidden !important;
 }
 
 
 /* Poshies search: remove the input's separate focus layer so the outer bar is the only visible surface. */
-.storefront-controls--poshies .storefront-controls__search input,
-.storefront-controls--poshies .storefront-controls__search input[type='search'],
-.storefront-controls--poshies .storefront-controls__search input:focus,
-.storefront-controls--poshies .storefront-controls__search input:focus-visible,
-.storefront-controls--poshies .storefront-controls__search input:active {
+.storefront-controls--expanded .storefront-controls__search input,
+.storefront-controls--expanded .storefront-controls__search input[type='search'],
+.storefront-controls--expanded .storefront-controls__search input:focus,
+.storefront-controls--expanded .storefront-controls__search input:focus-visible,
+.storefront-controls--expanded .storefront-controls__search input:active {
   outline: none !important;
   box-shadow: none !important;
   border: 0 !important;
   background: transparent !important;
   border-radius: 0 !important;
 }
-.storefront-controls--poshies .storefront-controls__search:focus-within {
+.storefront-controls--expanded .storefront-controls__search:focus-within {
   outline: none !important;
   box-shadow: 0 5px 18px var(--sf-shadow-color) !important;
 }
 
 
 /* Poshies search: completely neutralize visible focus/active states on the entire search surface. */
-.storefront-controls--poshies .storefront-controls__search,
-.storefront-controls--poshies .storefront-controls__search:focus,
-.storefront-controls--poshies .storefront-controls__search:focus-visible,
-.storefront-controls--poshies .storefront-controls__search:focus-within,
-.storefront-controls--poshies .storefront-controls__search:active {
+.storefront-controls--expanded .storefront-controls__search,
+.storefront-controls--expanded .storefront-controls__search:focus,
+.storefront-controls--expanded .storefront-controls__search:focus-visible,
+.storefront-controls--expanded .storefront-controls__search:focus-within,
+.storefront-controls--expanded .storefront-controls__search:active {
   outline: none !important;
   border-color: var(--sf-border) !important;
   box-shadow: 0 5px 18px var(--sf-shadow-color) !important;
   background: var(--sf-surface) !important;
 }
-.storefront-controls--poshies .storefront-controls__search input,
-.storefront-controls--poshies .storefront-controls__search input:hover,
-.storefront-controls--poshies .storefront-controls__search input:focus,
-.storefront-controls--poshies .storefront-controls__search input:focus-visible,
-.storefront-controls--poshies .storefront-controls__search input:focus-within,
-.storefront-controls--poshies .storefront-controls__search input:active {
+.storefront-controls--expanded .storefront-controls__search input,
+.storefront-controls--expanded .storefront-controls__search input:hover,
+.storefront-controls--expanded .storefront-controls__search input:focus,
+.storefront-controls--expanded .storefront-controls__search input:focus-visible,
+.storefront-controls--expanded .storefront-controls__search input:focus-within,
+.storefront-controls--expanded .storefront-controls__search input:active {
   outline: none !important;
   border: 0 !important;
   box-shadow: none !important;
@@ -589,10 +589,10 @@
 
 
 /* Definitive Poshies search focus reset: remove framework/browser focus rings on the field itself. */
-.storefront-controls--poshies .storefront-controls__search input[type="search"]:focus,
-.storefront-controls--poshies .storefront-controls__search input[type="search"]:focus-visible,
-.storefront-controls--poshies .storefront-controls__search input[type="search"]:focus-within,
-.storefront-controls--poshies .storefront-controls__search input[type="search"]:active {
+.storefront-controls--expanded .storefront-controls__search input[type="search"]:focus,
+.storefront-controls--expanded .storefront-controls__search input[type="search"]:focus-visible,
+.storefront-controls--expanded .storefront-controls__search input[type="search"]:focus-within,
+.storefront-controls--expanded .storefront-controls__search input[type="search"]:active {
   outline: 0 !important;
   outline-offset: 0 !important;
   border: 0 !important;
@@ -603,9 +603,9 @@
   filter: none !important;
   background-image: none !important;
 }
-.storefront-controls--poshies .storefront-controls__search:focus-within,
-.storefront-controls--poshies .storefront-controls__search:focus,
-.storefront-controls--poshies .storefront-controls__search:focus-visible {
+.storefront-controls--expanded .storefront-controls__search:focus-within,
+.storefront-controls--expanded .storefront-controls__search:focus,
+.storefront-controls--expanded .storefront-controls__search:focus-visible {
   outline: 0 !important;
   outline-offset: 0 !important;
   border-color: var(--sf-border) !important;

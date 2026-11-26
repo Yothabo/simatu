@@ -12,7 +12,7 @@ export type MockStorefrontProduct = {
 
 const mockPoshiesProducts: MockStorefrontProduct[] = [
   {
-    id: 'mock-poshies-his-01',
+    id: 'mock-his-01',
     name: 'Product',
     price: 'R 0.00',
     category: 'His',
@@ -21,7 +21,7 @@ const mockPoshiesProducts: MockStorefrontProduct[] = [
     image_url: '',
   },
   {
-    id: 'mock-poshies-his-02',
+    id: 'mock-his-02',
     name: 'Product',
     price: 'R 0.00',
     category: 'His',
@@ -30,7 +30,7 @@ const mockPoshiesProducts: MockStorefrontProduct[] = [
     image_url: '',
   },
   {
-    id: 'mock-poshies-his-03',
+    id: 'mock-his-03',
     name: 'Product',
     price: 'R 0.00',
     category: 'His',
@@ -39,7 +39,7 @@ const mockPoshiesProducts: MockStorefrontProduct[] = [
     image_url: '',
   },
   {
-    id: 'mock-poshies-hers-01',
+    id: 'mock-hers-01',
     name: 'Product',
     price: 'R 0.00',
     category: 'Hers',
@@ -48,7 +48,7 @@ const mockPoshiesProducts: MockStorefrontProduct[] = [
     image_url: '',
   },
   {
-    id: 'mock-poshies-hers-02',
+    id: 'mock-hers-02',
     name: 'Product',
     price: 'R 0.00',
     category: 'Hers',
@@ -57,7 +57,7 @@ const mockPoshiesProducts: MockStorefrontProduct[] = [
     image_url: '',
   },
   {
-    id: 'mock-poshies-hers-03',
+    id: 'mock-hers-03',
     name: 'Product',
     price: 'R 0.00',
     category: 'Hers',
@@ -66,7 +66,7 @@ const mockPoshiesProducts: MockStorefrontProduct[] = [
     image_url: '',
   },
   {
-    id: 'mock-poshies-lounge-01',
+    id: 'mock-lounge-01',
     name: 'Product',
     price: 'R 0.00',
     category: 'Lounge',
@@ -75,7 +75,7 @@ const mockPoshiesProducts: MockStorefrontProduct[] = [
     image_url: '',
   },
   {
-    id: 'mock-poshies-lounge-02',
+    id: 'mock-lounge-02',
     name: 'Product',
     price: 'R 0.00',
     category: 'Lounge',
@@ -84,7 +84,7 @@ const mockPoshiesProducts: MockStorefrontProduct[] = [
     image_url: '',
   },
   {
-    id: 'mock-poshies-lounge-03',
+    id: 'mock-lounge-03',
     name: 'Product',
     price: 'R 0.00',
     category: 'Lounge',
