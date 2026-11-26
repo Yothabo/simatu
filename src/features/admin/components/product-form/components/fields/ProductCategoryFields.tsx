@@ -14,7 +14,7 @@ type Props = Pick<
   | 'onChange'
 >;
 
-export default function ProductCategoryFields({
+const EXCLUDED_GENDER_CATEGORY = /\\b(his|her|hers|his\\s*and\\s*hers|for\\s*him|for\\s*her)\\b/i;\n\nexport default function ProductCategoryFields({
   form,
   categoryOptions,
   subcategoryOptions,
@@ -28,7 +28,7 @@ export default function ProductCategoryFields({
         <CustomDropdown
           value={form.category_id ?? ''}
           onChange={(value) => onChange('category', value)}
-          options={categoryOptions}
+          options={visibleCategories}
           placeholder={
             isLoadingCategories
               ? 'Loading categories...'
@@ -43,7 +43,7 @@ export default function ProductCategoryFields({
         <CustomDropdown
           value={form.subcategory_id ?? ''}
           onChange={(value) => onChange('subcategory', value)}
-          options={subcategoryOptions}
+          options={visibleSubcategories}
           placeholder={
             !form.category_id
               ? 'Select category first'
