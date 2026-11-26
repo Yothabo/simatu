@@ -224,3 +224,29 @@
   background: transparent;
   outline: none;
 }
+
+/* Remove native browser search-field styling inside Poshies controls. */
+.storefront-controls--poshies .storefront-controls__search input[type='search'] {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0 !important;
+  border-radius: 0;
+  outline: none;
+  box-shadow: none;
+  background: transparent !important;
+  padding: 0;
+  margin: 0;
+  color: #292426;
+  font: inherit;
+}
+.storefront-controls--poshies .storefront-controls__search input[type='search']::-webkit-search-decoration,
+.storefront-controls--poshies .storefront-controls__search input[type='search']::-webkit-search-cancel-button,
+.storefront-controls--poshies .storefront-controls__search input[type='search']::-webkit-search-results-button,
+.storefront-controls--poshies .storefront-controls__search input[type='search']::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  display: none;
+}
+.storefront-controls--poshies .storefront-controls__cart-count {
+  background: #292426 !important;
+  color: #fff !important;
+}
