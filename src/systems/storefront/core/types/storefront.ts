@@ -50,9 +50,9 @@ export interface StorefrontConfiguration {
   primaryAccent: string;
   categoryOrder: readonly StorefrontCategory[];
   designSystem: StorefrontDesignSystem;
-  hero: { variant: 'campaign' | 'wordmark'; wordmark: string; description: string; className?: string };
+  hero: { variant: 'campaign' | 'wordmark'; wordmark: string; description: string; featuredProductsTitle: string; className?: string };
   collectionsClassName?: string;
-  story: { heading: string; paragraphs: readonly string[]; tone: 'canvas' | 'inverse' };
+  story: { heading: string; paragraphs: readonly string[]; tone: 'canvas' | 'inverse'; actionLabel: string };
   contact: { heading: string; description: string; actionLabel: string };
   productDescriptionFallback: string;
   catalog: {
