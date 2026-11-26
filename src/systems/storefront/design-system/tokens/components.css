@@ -1,0 +1,17 @@
+/* Component geometry shared across storefront themes. */
+:root {
+  --sf-header-control-height: 54px;
+  --sf-header-control-height-mobile: 50px;
+  --sf-header-menu-height: 236px;
+  --sf-header-menu-height-mobile: 224px;
+  --sf-header-gap: 8px;
+  --sf-header-gap-mobile: 6px;
+  --sf-header-padding-x: 20px;
+  --sf-header-padding-x-mobile: 14px;
+  --sf-header-expanded-padding: 16px;
+  --sf-header-expanded-padding-mobile: 12px;
+  --sf-header-expanded-menu-item-height: 48px;
+  --sf-header-expanded-menu-item-height-mobile: 44px;
+  --sf-header-menu-item-gap: 3px;
+  --sf-header-menu-item-indent: 28px;
+}
