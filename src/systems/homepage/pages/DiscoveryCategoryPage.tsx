@@ -14,7 +14,7 @@ import MoodboardPredictiveSearch from '../discover/MoodboardPredictiveSearch';
 import { DISCOVERY_MARKETS, getMarketById, getSubcategories } from '../discover/discovery-taxonomy';
 
 const fallback: MoodboardItem = DISCOVERY_MARKETS[0];
-type CategoryProduct = { id: string; name: string; storefront: string; productSource?: 'store' | 'marketplace'; marketplace_subcategory_id?: string | null; sku?: string | null; sizes?: string[]; category?: string; subcategory?: string; brand?: string; description?: string | null; storeName: string; href: string; price?: number; image_url?: string | null };
+type CategoryProduct = { id: string; name: string; storefront: string; productSource?: 'store' | 'marketplace'; variants?: Array<{ id: string; sku: string; name?: string; price: number; options?: Record<string, unknown> }>; attributes?: Array<{ label: string; data_type: string; unit?: string | null; value: unknown }>; marketplace_subcategory_id?: string | null; sku?: string | null; sizes?: string[]; category?: string; subcategory?: string; brand?: string; description?: string | null; storeName: string; href: string; price?: number; image_url?: string | null };
 const panel: React.CSSProperties = { padding: 'clamp(24px,5vw,72px)', background: '#111', color: '#f4f1ec', fontFamily: 'inherit' };
 
 export default function DiscoveryCategoryPage() {
@@ -407,6 +407,10 @@ export default function DiscoveryCategoryPage() {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', padding: 'clamp(20px,4vw,30px)' }}>
               {selectedProductGroup.offers[0]?.description && <p style={{ margin: '0 0 18px', fontSize: 13, lineHeight: 1.65, opacity: .76 }}>{selectedProductGroup.offers[0].description}</p>}
+              {selectedProductGroup.offers[0]?.productSource === 'marketplace' && (selectedProductGroup.offers[0]?.attributes?.length || selectedProductGroup.offers[0]?.variants?.length) > 0 && <div style={{ display: 'grid', gap: 14, marginBottom: 18 }}>
+                {selectedProductGroup.offers[0]?.attributes?.length ? <div><h3 style={{ margin: '0 0 8px', fontSize: 12, opacity: .65, textTransform: 'uppercase', letterSpacing: '.08em' }}>Product details</h3><dl style={{ display: 'grid', gap: 7, margin: 0 }}>{selectedProductGroup.offers[0].attributes.map((attribute, index) => <div key={index} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, fontSize: 12 }}><dt style={{ opacity: .7 }}>{attribute.label}</dt><dd style={{ margin: 0, textAlign: 'right' }}>{String(attribute.value)}{attribute.unit ? ' ' + attribute.unit : ''}</dd></div>)}</dl></div> : null}
+                {selectedProductGroup.offers[0]?.variants?.length ? <div><h3 style={{ margin: '0 0 8px', fontSize: 12, opacity: .65, textTransform: 'uppercase', letterSpacing: '.08em' }}>Available variants</h3><div style={{ display: 'grid', gap: 6 }}>{selectedProductGroup.offers[0].variants.map((variant) => <div key={variant.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, fontSize: 12 }}><span>{variant.name || Object.values(variant.options || {}).join(' · ') || variant.sku}</span><span>R{Number(variant.price).toFixed(2)}</span></div>)}</div></div> : null}
+              </div>}
               {selectedProductGroup.offers[0]?.brand && <p style={{ margin: '0 0 18px', fontSize: 12, opacity: .62 }}>{selectedProductGroup.offers[0].brand}</p>}
               {selectedProductGroup.offers.map((offer) => {
                 const selection = purchaseSelections[offerSelectionKey(offer)] || { quantity: 1, sizeQuantities: {} };
