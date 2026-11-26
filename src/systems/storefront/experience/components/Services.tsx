@@ -16,6 +16,7 @@ export default function Services() {
     <section id="services" className={`storefront-collections w-full ${collectionsClassName ?? ""}`}>
       {orderedCollections.map((collection) => {
         const inverse = collection.textTone === 'inverse';
+        const collectionBackground = inverse ? 'bg-[var(--sf-inverse-background)]' : 'bg-[var(--sf-background)]';
         const accentClass = collection.accentRole === 'secondary'
           ? 'text-[var(--sf-accent-secondary)]'
           : collection.accentRole === 'tertiary' ? 'text-[var(--sf-accent-tertiary)]' : 'text-[var(--sf-accent)]';
@@ -37,7 +38,7 @@ export default function Services() {
 
         return (
           <div key={collection.id} id={collection.id} className={`flex w-full flex-col ${collection.variantClassName ? `storefront-collection-section storefront-collection-section--${collection.variantClassName}` : ''}`}>
-            <div className={`relative grid min-h-[100svh] w-full grid-rows-[auto_1fr_auto] overflow-hidden bg-[var(--sf-background)] px-6 py-12 sm:px-12 lg:px-20 lg:py-16 ${inverse ? 'text-[var(--sf-inverse-text)]' : 'text-[var(--sf-text)]'} ${collection.variantClassName ? `storefront-collection-panel storefront-collection-panel--${collection.variantClassName}` : ''}`}>
+            <div className={`relative grid min-h-[100svh] w-full grid-rows-[auto_1fr_auto] overflow-hidden ${collectionBackground} px-6 py-12 sm:px-12 lg:px-20 lg:py-16 ${inverse ? 'text-[var(--sf-inverse-text)]' : 'text-[var(--sf-text)]'} ${collection.variantClassName ? `storefront-collection-panel storefront-collection-panel--${collection.variantClassName}` : ''}`}>
               {collection.eyebrow && <div className="relative z-20 flex h-8 w-full items-center justify-center text-center sm:h-auto"><h2 className="whitespace-nowrap font-heading text-sm font-medium uppercase tracking-[0.2em] sm:text-2xl">{collection.eyebrow}</h2></div>}
               <div className="relative flex h-full w-full items-center justify-center">
                 {collection.hasWatermark && <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center" style={{ height: '45vh', margin: 'auto' }}>
@@ -50,7 +51,7 @@ export default function Services() {
               </div>
               <div className="relative z-20 flex w-full pt-4"><div className="max-w-[420px]"><p className="font-heading text-lg leading-[1.6]">{collection.description}</p></div></div>
             </div>
-            {collection.productCategory && collection.collectionTitle && <div className={`w-full bg-[var(--sf-background)] ${collection.variantClassName ? `storefront-collection-carousel storefront-collection-carousel--${collection.variantClassName}` : ''}`}>
+            {collection.productCategory && collection.collectionTitle && <div className={`w-full ${collectionBackground} ${collection.variantClassName ? `storefront-collection-carousel storefront-collection-carousel--${collection.variantClassName}` : ''}`}>
               <ProductCarousel
                 title={collection.collectionTitle}
                 sectionHeading={collection.collectionHeading}
@@ -59,7 +60,7 @@ export default function Services() {
                 presentation={collection.carouselVariant ?? 'standard'}
                 emptyStateLabel={storeName}
                 placeholderColor={accentBackgroundClass}
-                bgColor="bg-[var(--sf-surface)]"
+                bgColor={collectionBackground}
                 textColor={inverse ? 'text-[var(--sf-inverse-text)]' : 'text-[var(--sf-text)]'}
                 accentColor={accentClass}
                 themeColor={accentToken}
