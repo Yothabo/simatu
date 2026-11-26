@@ -127,7 +127,7 @@ export function validateProduct(body) {
   const sortOrder = parseInteger(body?.sort_order ?? 0);
   const rawSizes = body?.sizes ?? [];
 
-  if (!Array.isArray(rawSizes) || rawSizes.length > 50) {
+  if (!Array.isArray(rawSizes)) {
     return { error: 'Product sizes must be a list of up to 50 labels.' };
   }
 
@@ -139,19 +139,26 @@ export function validateProduct(body) {
       return { error: 'Each product size must be a text label.' };
     }
 
-    const size = value.trim();
-    const normalizedSize = size.toLocaleLowerCase();
+    // Split pasted or legacy delimited entries into independent options.
+    for (const entry of value.split(/[,;\\n\\r]+/)) {
+      const size = entry.trim();
+      const normalizedSize = size.toLocaleLowerCase();
 
-    if (!size || size.length > 80) {
-      return { error: 'Product size labels must contain 1 to 80 characters.' };
+      if (!size || size.length > 80) {
+        return { error: 'Product size labels must contain 1 to 80 characters.' };
+      }
+
+      if (seenSizes.has(normalizedSize)) {
+        return { error: 'Product sizes cannot contain duplicates.' };
+      }
+
+      if (sizes.length >= 50) {
+        return { error: 'Product sizes must be a list of up to 50 labels.' };
+      }
+
+      seenSizes.add(normalizedSize);
+      sizes.push(size);
     }
-
-    if (seenSizes.has(normalizedSize)) {
-      return { error: 'Product sizes cannot contain duplicates.' };
-    }
-
-    seenSizes.add(normalizedSize);
-    sizes.push(size);
   }
 
   if (name.length < 1 || name.length > 160) {
