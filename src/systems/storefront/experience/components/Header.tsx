@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiMenu, FiX } from 'react-icons/fi';
+import { FiMenu, FiX, FiHome, FiGrid, FiChevronDown, FiShoppingBag, FiHeart, FiUser, FiCoffee } from 'react-icons/fi';
 import { FaOpencart } from 'react-icons/fa';
 import useStorefront from '../../core/hooks/useStorefront.ts';
 import { useCart } from '../../core/context/CartContext';
@@ -20,6 +20,7 @@ const scrollTargets = [
 export default function Header({ sticky = true }: HeaderProps) {
   const [query, setQuery] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
   const { name: storeName, pathFor } = useStorefront();
   const isPoshies = storeName === "Poshies";
   const { cartItems } = useCart();
@@ -37,12 +38,23 @@ export default function Header({ sticky = true }: HeaderProps) {
 
         <div className={`storefront-controls__search ${isPoshies && menuOpen ? 'storefront-controls__search--menu-open' : ''}`}>
           {isPoshies && menuOpen ? (
-            <nav className="storefront-controls__inline-menu" aria-label={`${storeName} page sections`}>
-              {scrollTargets.map((target) => (
-                <button key={target.id} type="button" onClick={() => scrollToSection(target.id)}>
-                  {target.label}
-                </button>
-              ))}
+            <nav className="storefront-controls__inline-menu" aria-label="Poshies navigation">
+              <Link to={pathFor()} className="storefront-controls__menu-item" onClick={() => setMenuOpen(false)}>
+                <FiHome aria-hidden="true" /><span>Home</span>
+              </Link>
+              <button type="button" className="storefront-controls__menu-item storefront-controls__categories-trigger" aria-expanded={categoriesOpen} onClick={() => setCategoriesOpen((open) => !open)}>
+                <FiGrid aria-hidden="true" /><span>Categories</span><FiChevronDown className={categoriesOpen ? 'is-rotated' : ''} aria-hidden="true" />
+              </button>
+              {categoriesOpen && (
+                <div className="storefront-controls__category-submenu">
+                  <button type="button" onClick={() => scrollToSection('hers')}><FiHeart aria-hidden="true" /><span>Hers</span></button>
+                  <button type="button" onClick={() => scrollToSection('his')}><FiUser aria-hidden="true" /><span>His</span></button>
+                  <button type="button" onClick={() => scrollToSection('lounge')}><FiCoffee aria-hidden="true" /><span>Lounge</span></button>
+                </div>
+              )}
+              <Link to={pathFor('catalog')} className="storefront-controls__menu-item" onClick={() => setMenuOpen(false)}>
+                <FiShoppingBag aria-hidden="true" /><span>Catalogue</span>
+              </Link>
             </nav>
           ) : (
             <>
