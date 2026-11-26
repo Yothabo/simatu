@@ -582,3 +582,28 @@
   color: #292426 !important;
   -webkit-tap-highlight-color: transparent;
 }
+
+
+/* Definitive Poshies search focus reset: remove framework/browser focus rings on the field itself. */
+.storefront-controls--poshies .storefront-controls__search input[type="search"]:focus,
+.storefront-controls--poshies .storefront-controls__search input[type="search"]:focus-visible,
+.storefront-controls--poshies .storefront-controls__search input[type="search"]:focus-within,
+.storefront-controls--poshies .storefront-controls__search input[type="search"]:active {
+  outline: 0 !important;
+  outline-offset: 0 !important;
+  border: 0 !important;
+  border-color: transparent !important;
+  border-width: 0 !important;
+  box-shadow: none !important;
+  ring: 0 !important;
+  filter: none !important;
+  background-image: none !important;
+}
+.storefront-controls--poshies .storefront-controls__search:focus-within,
+.storefront-controls--poshies .storefront-controls__search:focus,
+.storefront-controls--poshies .storefront-controls__search:focus-visible {
+  outline: 0 !important;
+  outline-offset: 0 !important;
+  border-color: rgba(41, 36, 38, .14) !important;
+  box-shadow: 0 5px 18px rgba(41, 36, 38, .08) !important;
+}
