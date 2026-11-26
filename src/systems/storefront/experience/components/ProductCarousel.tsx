@@ -78,14 +78,14 @@ export default function ProductCarousel({
 
   return (
     <section
-      className="yotaabo-product-carousel relative w-full select-none pt-2 pb-12"
+      className="yotaabo-product-carousel relative w-full select-none pt-[var(--sf-space-2)] pb-[var(--sf-space-12)]"
       style={{
         '--swiper-theme-color': themeColor,
         WebkitTapHighlightColor: 'transparent',
       } as CSSProperties}
       aria-label={`${title} product collection`}
     >
-      <div className="px-6 sm:px-10 lg:px-12">
+      <div className="px-[var(--sf-space-6)] sm:px-[var(--sf-space-10)] lg:px-[var(--sf-space-12)]">
         <div className="flex items-baseline justify-between">
           <h3
             className={`font-heading text-3xl italic ${isPoshiesMockCarousel ? "text-white" : title === "Trending" ? "text-[#292426]" : accentColor}`}
@@ -101,7 +101,7 @@ export default function ProductCarousel({
         </div>
       </div>
       {description && (
-        <p className={`mt-2 px-6 font-heading text-base leading-relaxed sm:px-10 lg:px-12 ${isPoshiesMockCarousel ? "text-white/75" : "text-black/60"}`}>
+        <p className={`mt-[var(--sf-space-2)] px-6 font-heading text-base leading-relaxed sm:px-10 lg:px-12 ${isPoshiesMockCarousel ? "text-white/75" : "text-black/60"}`}>
           {description}
         </p>
       )}
@@ -112,18 +112,18 @@ export default function ProductCarousel({
       <Swiper
 
           modules={[A11y, FreeMode, Keyboard, Navigation, Pagination]}
-          className={`yotaabo-product-swiper mt-6 ${isPoshiesMockCarousel ? "poshies-product-swiper" : ""}`}
+          className={`yotaabo-product-swiper mt-[var(--sf-space-6)] ${isPoshiesMockCarousel ? "poshies-product-swiper" : ""}`}
           slidesPerView={isPoshiesMockCarousel ? 1.25 : 2.15}
           slidesPerGroup={1}
           spaceBetween={isPoshiesMockCarousel ? 12 : 16}
           breakpoints={{
             640: {
               slidesPerView: isPoshiesMockCarousel ? 2.2 : 3.15,
-              spaceBetween: isPoshiesMockCarousel ? 16 : 20,
+              spaceBetween: isPoshiesMockCarousel ? var(--sf-space-4) : var(--sf-space-5),
             },
             1024: {
               slidesPerView: isPoshiesMockCarousel ? 3.2 : 4.15,
-              spaceBetween: isPoshiesMockCarousel ? 20 : 24,
+              spaceBetween: isPoshiesMockCarousel ? var(--sf-space-5) : var(--sf-space-6),
             },
           }}
           navigation={!isLoading && (visibleProducts.length > 2 || visibleProducts.length === 0)}
@@ -158,7 +158,7 @@ export default function ProductCarousel({
                     <div aria-hidden="true" className="flex aspect-[4/5] w-full flex-col items-center justify-center overflow-hidden bg-[#FF1493] px-4 text-center">
                       <div className={"mb-5 h-1 w-10 " + "bg-white/50"} />
                       <span className="font-heading text-base italic text-white">Coming soon</span>
-                      <span className="mt-2 font-heading text-xs tracking-[0.16em] text-white/75">POSHIES</span>
+                      <span className="mt-[var(--sf-space-2)] font-heading text-xs tracking-[0.16em] text-white/75">POSHIES</span>
                     </div>
                   </SwiperSlide>
                 ))
