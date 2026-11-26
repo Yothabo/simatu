@@ -5,6 +5,7 @@ import NewRequestForm from './NewRequestForm';
 import { useStoreRequests } from '../hooks/useStoreRequests';
 import AdminCategories from './AdminCategories';
 import AdminManagement from './AdminManagement';
+import MarketplaceCategoryManagement from './MarketplaceCategoryManagement';
 import type { AdminTheme } from '../hooks/useAdminTheme';
 import type { Storefront } from '../types/admin.types';
 
@@ -124,6 +125,11 @@ export default function AdminSettingsTab({
             </section>
           ))}
         </>
+      )}
+
+      {/* Platform-wide marketplace taxonomy and business assignment tools */}
+      {isSuperAdmin && accessToken && (
+        <MarketplaceCategoryManagement accessToken={accessToken} />
       )}
 
       {/* Admin Management — only for super admin */}
