@@ -433,3 +433,13 @@ These contracts intentionally do not alter existing product API responses, store
 ### Deployment note
 
 This is a version-controlled migration only. It has not been applied to any database. The business-to-marketplace-category assignment table is empty until a future controlled backfill/admin workflow populates it. The existing store registry is used as the business identity foundation for this increment.
+
+
+## Taxonomy consolidation and classification governance
+
+- Consolidated public discovery tiles from 18 to 17 by merging `Everyday Living` into canonical `Home & Living` (`spaces` ID retained for route compatibility).
+- Merged household subcategories into Home & Living and removed duplicate Home Organisation; legacy `living` route ID resolves to the consolidated destination.
+- Updated platform category seed to Home & Living and removed redundant Everyday Living entry.
+- Added a restricted `Sexual Wellness` category with minimum age 18 as a taxonomy classification separate from Technology. It is not a public discovery tile and has no client access; age/visibility enforcement must be implemented and tested before use.
+- Created `docs/MARKETPLACE_TAXONOMY_GOVERNANCE.md` with classification layers, category boundaries, overlap rules, and category review gate.
+- Remaining audit: review all subcategory terms for overlap across parent categories, then implement structured classification/search synonyms and restricted-audience enforcement.
