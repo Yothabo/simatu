@@ -1,7 +1,7 @@
 import ProductCarousel from './ProductCarousel';
 import useStorefront from '../../core/hooks/useStorefront.ts';
 import { useProducts, getCategoryProducts } from '../../core/hooks/useProducts.ts';
-import { getMockPoshiesProducts } from '../../stores/poshies/mock-products.ts';
+import { getMockProducts } from '../utils/mock-products.ts';
 
 export default function Services() {
   const { products, isLoading, error } = useProducts();

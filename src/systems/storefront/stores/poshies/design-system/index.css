@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 @import '../theme.css';
+@import '../typography.css';
 
 /*
  * POSHIES STOREFRONT DESIGN SYSTEM
@@ -105,9 +106,9 @@
   border: 1px solid var(--poshies-color-accent) !important;
   color: var(--poshies-color-button-text) !important;
 }
-:root[data-storefront='poshies'] .storefront-controls--poshies .storefront-controls__icon,
-:root[data-storefront='poshies'] .storefront-controls--poshies .storefront-controls__menu,
-:root[data-storefront='poshies'] .storefront-controls--poshies .storefront-controls__search input {
+:root[data-storefront='poshies'] .storefront-controls--expanded .storefront-controls__icon,
+:root[data-storefront='poshies'] .storefront-controls--expanded .storefront-controls__menu,
+:root[data-storefront='poshies'] .storefront-controls--expanded .storefront-controls__search input {
   background: var(--poshies-color-surface) !important;
   border-color: var(--poshies-color-border) !important;
   color: var(--poshies-color-text) !important;

@@ -8,7 +8,8 @@ const STORAGE_KEY = 'simatu:last-storefront';
 
 export default function useStorefront() {
   const { pathname } = useLocation();
-  const activeStorefront = Object.entries(STOREFRONTS).find(([, store]) =>
+  const activeStorefront = (Object.keys(STOREFRONTS) as Array<keyof typeof STOREFRONTS>).find((key) => {
+    const store = STOREFRONTS[key];
     pathname === store.basePath || pathname.startsWith(`${store.basePath}/`)
   )?.[0] ?? null;
 

@@ -1,6 +1,4 @@
 @import '../../design-system/styles/storefront-base.css';
-@import '../../stores/poshies/theme.css';
-@import '../../stores/poshies/typography.css';
 
 /* Independent floating controls — no header, bar, or background container */
 .storefront-controls {

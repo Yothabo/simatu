@@ -99,6 +99,20 @@ for (const file of collectFiles(path.join(sourceRoot, 'app'))) {
   }
 }
 
+
+// Storefront experience components are brand-agnostic. Brand content and
+// presentation choices belong in core configuration and store-owned modules.
+const storefrontExperienceRoot = path.join(systemsRoot, 'storefront', 'experience', 'components');
+for (const file of collectFiles(storefrontExperienceRoot).filter((entry) => /\.(ts|tsx|js|jsx)$/.test(entry))) {
+  const source = fs.readFileSync(file, 'utf8');
+  if (/\b(?:isPoshies|isYotaabo)\b|\bstoreName\s*===\s*['"](?:Poshies|Yotaabo)['"]/.test(source)) {
+    errors.push(path.relative(process.cwd(), file) + ' contains store-identity branching; move the decision into storefront configuration');
+  }
+  if (/from\s*['"][^'"]*\/stores\/(?:poshies|yotaabo)\//.test(source)) {
+    errors.push(path.relative(process.cwd(), file) + ' imports a store-owned implementation; pass store data through configuration');
+  }
+}
+
 if (errors.length > 0) {
   console.error('Architecture boundary violations:');
   for (const error of errors) console.error(' - ' + error);
