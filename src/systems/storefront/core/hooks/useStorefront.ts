@@ -18,6 +18,7 @@ export default function useStorefront() {
 
   const remembered = window.sessionStorage.getItem(STORAGE_KEY);
   const defaultStorefront = Object.keys(STOREFRONTS)[0];
+  if (!defaultStorefront) throw new Error('At least one storefront must be configured.');
   const storeKey = activeStorefront ?? (remembered && isStorefrontKey(remembered) ? remembered : defaultStorefront);
   const store = STOREFRONTS[storeKey];
 
