@@ -18,7 +18,7 @@
   --sf-accent: var(--poshies-color-accent);
   --sf-border: var(--poshies-color-border);
   --sf-hover-surface: var(--poshies-color-hover);
-  --sf-shadow-color: rgba(41, 36, 38, .08);
+  --sf-shadow-color: var(--poshies-color-shadow);
   --sf-font-body: var(--poshies-font-body);
   --sf-font-heading: var(--poshies-font-heading);
 
