@@ -108,6 +108,35 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
     navigate(getDiscoveryPath(item), { state: { discovery: item, position: positionRef.current } });
   };
   useEffect(() => { if (colorReveal) setSearchDismissed(false); }, [colorReveal]);
+  const [marketItems, setMarketItems] = useState<MoodboardItem[]>(DISCOVERY_MARKETS);
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/marketplace-categories', { headers: { Accept: 'application/json' } })
+      .then(async (response) => {
+        const data = await response.json();
+        if (!response.ok || !Array.isArray(data.categories)) throw new Error('Marketplace categories unavailable');
+        const mapped = data.categories.map((category: { slug?: string; name?: string; description?: string }) => {
+          const slug = String(category.slug || '');
+          const legacyId = slug === 'home-living' ? 'spaces' : slug;
+          const existing = DISCOVERY_MARKETS.find((market) => market.id === legacyId || market.category.toLowerCase() === String(category.name || '').toLowerCase());
+          return existing || {
+            id: legacyId,
+            image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=900&q=85',
+            alt: String(category.name || 'Marketplace category'),
+            category: String(category.name || slug),
+            title: String(category.description || ('Discover ' + (category.name || slug))),
+          };
+        }).filter((item: MoodboardItem) => item.id !== 'age-restricted');
+        // Keep the restricted destination locally; the public API intentionally excludes it.
+        const restricted = DISCOVERY_MARKETS.find((item) => item.id === 'age-restricted');
+        if (restricted) mapped.push(restricted);
+        if (!cancelled && mapped.length) setMarketItems(mapped);
+      })
+      .catch(() => {
+        // Static taxonomy remains available when the API or database is not ready.
+      });
+    return () => { cancelled = true; };
+  }, []);
   const [networkProducts, setNetworkProducts] = useState<NetworkProduct[]>([]);
   const [networkLoading, setNetworkLoading] = useState(false);
   const [networkError, setNetworkError] = useState('');
@@ -128,7 +157,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
 
   const sourceItems = items.length ? items : DEFAULT_ITEMS;
   const boardTilePool = useMemo(() => {
-    const subcategoryTiles = DISCOVERY_MARKETS.flatMap((market) =>
+    const subcategoryTiles = marketItems.flatMap((market) =>
       (DISCOVERY_SUBCATEGORIES[market.id] || []).map((subcategory) => ({
         id: `${market.id}-${subcategory.id}`,
         image: subcategory.image,
@@ -138,7 +167,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       } as MoodboardItem))
     );
     return [...sourceItems, ...subcategoryTiles];
-  }, [sourceItems]);
+  }, [sourceItems, marketItems]);
   const allTiles = useMemo(() => {
     const random = seededRandom(29);
     const uniquePool = Array.from(new Map(boardTilePool.map((item) => [item.id, item])).values());
@@ -156,7 +185,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   );
   const recentCategories = useMemo(
     () => recentCategoryNames
-      .map((name) => DISCOVERY_MARKETS.find((market) => market.category === name))
+      .map((name) => marketItems.find((market) => market.category === name))
       .filter((market): market is typeof DISCOVERY_MARKETS[number] => Boolean(market))
       .slice(0, 5),
     [recentCategoryNames]
@@ -382,12 +411,12 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         showMenu
         savedDiscoveries={savedDiscoveries}
         onSavedDiscoverySelect={openDiscovery}
-        categories={DISCOVERY_MARKETS}
+        categories={marketItems}
         recentCategories={recentCategories}
         activeCategory={selectedCategory}
         onCategorySelect={(category) => { recordVisitedCategory(category); setSelectedCategory(category); setSearchQuery(""); }}
         onRecentCategorySelect={(category) => {
-          const market = DISCOVERY_MARKETS.find((entry) => entry.category === category);
+          const market = marketItems.find((entry) => entry.category === category);
           if (!market) return;
           try { sessionStorage.setItem('simatu-discover-return', JSON.stringify({ position: positionRef.current })); } catch {}
           navigate('/discover/' + market.id, { state: { discovery: market, position: positionRef.current } });
