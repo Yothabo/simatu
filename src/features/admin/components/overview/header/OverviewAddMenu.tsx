@@ -18,7 +18,11 @@ const ADD_ACTIONS: {
   { key: 'receipt', label: 'Create a receipt', icon: FiFileText },
 ];
 
-export default function OverviewAddMenu() {
+type Props = {
+  onAddProduct: () => void;
+};
+
+export default function OverviewAddMenu({ onAddProduct }: Props) {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const addRef = useRef<HTMLDivElement>(null);
 
@@ -44,7 +48,10 @@ export default function OverviewAddMenu() {
     };
   }, [isAddOpen]);
 
-  const closeMenu = () => setIsAddOpen(false);
+  const handleAction = (action: AddAction) => {
+    setIsAddOpen(false);
+    if (action === 'new-product') onAddProduct();
+  };
 
   return (
     <div className="relative" ref={addRef}>
@@ -79,12 +86,15 @@ export default function OverviewAddMenu() {
         >
           {ADD_ACTIONS.map((action) => {
             const Icon = action.icon;
+            const isImplemented = action.key === 'new-product';
             return (
               <button
                 key={action.key}
                 type="button"
                 role="menuitem"
-                onClick={closeMenu}
+                onClick={() => handleAction(action.key)}
+                disabled={!isImplemented}
+                title={!isImplemented ? 'This action is not available yet.' : undefined}
                 style={{
                   width: '100%',
                   display: 'flex',
@@ -93,15 +103,15 @@ export default function OverviewAddMenu() {
                   padding: '10px 16px',
                   border: 'none',
                   background: 'transparent',
-                  color: 'var(--admin-text-primary)',
+                  color: isImplemented ? 'var(--admin-text-primary)' : 'var(--admin-text-tertiary)',
                   fontSize: 'var(--admin-size-body)',
                   textAlign: 'left',
-                  cursor: 'pointer',
+                  cursor: isImplemented ? 'pointer' : 'not-allowed',
+                  opacity: isImplemented ? 1 : 0.55,
                   transition: 'background-color 150ms ease',
                 }}
                 onMouseEnter={(event) => {
-                  event.currentTarget.style.backgroundColor =
-                    'var(--admin-surface-subtle)';
+                  if (isImplemented) event.currentTarget.style.backgroundColor = 'var(--admin-surface-subtle)';
                 }}
                 onMouseLeave={(event) => {
                   event.currentTarget.style.backgroundColor = 'transparent';
