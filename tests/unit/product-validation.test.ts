@@ -674,7 +674,7 @@ describe('validateProduct: sizes', () => {
   it('splits semicolon and newline separated sizes', () => {
     const result = validateProduct({
       ...validProduct(),
-      sizes: ['Small; Medium\\nLarge'],
+      sizes: ['Small; Medium\nLarge'],
     });
 
     expect(result.product?.sizes).toEqual(['Small', 'Medium', 'Large']);
