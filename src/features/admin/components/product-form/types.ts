@@ -19,8 +19,8 @@ export type AdminProduct = {
   sort_order: number;
   sizes: string[];
   order_count: number;
-  marketplace_category_slug: string | null;
-  marketplace_subcategory_id: string | null;
+  marketplace_category_slug?: string | null;
+  marketplace_subcategory_id?: string | null;
 };
 
 export type AdminProductFormProps = {
