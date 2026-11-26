@@ -100,16 +100,24 @@ for (const file of collectFiles(path.join(sourceRoot, 'app'))) {
 }
 
 
-// Storefront experience components are brand-agnostic. Brand content and
-// presentation choices belong in core configuration and store-owned modules.
-const storefrontExperienceRoot = path.join(systemsRoot, 'storefront', 'experience', 'components');
-for (const file of collectFiles(storefrontExperienceRoot).filter((entry) => /\.(ts|tsx|js|jsx)$/.test(entry))) {
+// The entire storefront experience (pages, components, checkout and styles)
+// must be store-agnostic. Store-specific copy and presentation live in core
+// configuration or store-owned theme modules.
+const storefrontExperienceRoot = path.join(systemsRoot, 'storefront', 'experience');
+for (const file of collectFiles(storefrontExperienceRoot)) {
   const source = fs.readFileSync(file, 'utf8');
-  if (/\b(?:isPoshies|isYotaabo)\b|\bstoreName\s*===\s*['"](?:Poshies|Yotaabo)['"]/.test(source)) {
-    errors.push(path.relative(process.cwd(), file) + ' contains store-identity branching; move the decision into storefront configuration');
+  const relativeFile = path.relative(process.cwd(), file);
+  if (/\b(?:isPoshies|isYotaabo)\b|\b(?:storeName|name|storeKey)\s*!?==?\s*['"](?:Poshies|Yotaabo|poshies|yotaabo)['"]/.test(source)) {
+    errors.push(relativeFile + ' contains store-identity branching; move the decision into storefront configuration');
+  }
+  if (/['"](?:Poshies|Yotaabo)['"]/.test(source)) {
+    errors.push(relativeFile + ' contains a hard-coded store identity; read the active store name or copy from configuration');
   }
   if (/from\s*['"][^'"]*\/stores\/(?:poshies|yotaabo)\//.test(source)) {
-    errors.push(path.relative(process.cwd(), file) + ' imports a store-owned implementation; pass store data through configuration');
+    errors.push(relativeFile + ' imports a store-owned implementation; pass store data through configuration');
+  }
+  if (/\b(?:poshies|yotaabo)-[a-z0-9_-]+/i.test(source)) {
+    errors.push(relativeFile + ' contains a brand-prefixed presentation selector; use a neutral storefront class');
   }
 }
 
