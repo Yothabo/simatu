@@ -110,7 +110,7 @@ export default function OverviewHeader({
           triggerIcon={<FiFilter size={18} aria-hidden="true" />}
         />
 
-        <OverviewAddMenu />
+        <OverviewAddMenu onAddProduct={onAdd} />
       </OverviewToolbar>
 
       {canSwitchStore && (
