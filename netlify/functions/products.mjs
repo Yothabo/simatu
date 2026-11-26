@@ -302,7 +302,11 @@ async function listProducts(request, requestId) {
   const filters = [];
   const queryValues = [];
 
-  if (!isAdminRequest) filters.push('is_active = TRUE');
+  if (!isAdminRequest) {
+    filters.push('is_active = TRUE');
+    // Restricted listings are never exposed to public marketplace/storefront APIs.
+    filters.push('COALESCE(is_age_restricted, FALSE) = FALSE');
+  }
   if (isMarketplaceRequest) filters.push('marketplace_visible = TRUE');
   else if (!isAdminRequest) filters.push('storefront_visible = TRUE');
 
