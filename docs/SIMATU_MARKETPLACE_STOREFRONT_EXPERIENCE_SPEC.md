@@ -420,3 +420,16 @@ These decisions should only be revisited if implementation or testing exposes a 
 ### Not yet integrated
 
 These contracts intentionally do not alter existing product API responses, storefront rendering, checkout, database tables, inventory, or booking behaviour. Legacy data migration, database enforcement, category persistence, receiving workflow, and service booking implementation remain outstanding. No automated checks have been run remotely; run the local test suite and build after pulling these commits.
+
+
+## Implementation progress — Phase A (platform category persistence)
+
+### Added on `codex/simatu-work`
+
+- Added `supabase/migrations/20261126130000_create_platform_marketplace_categories.sql` to introduce platform-owned `marketplace_categories` and many-to-many `store_marketplace_categories` tables.
+- Seeded the 18 platform discovery categories represented by the current marketplace discovery taxonomy.
+- Added indexes, integrity constraints, RLS enablement, and revoked direct access from `PUBLIC`, `anon`, and `authenticated` roles. Existing store-specific `categories` and `subcategories` remain unchanged.
+
+### Deployment note
+
+This is a version-controlled migration only. It has not been applied to any database. The business-to-marketplace-category assignment table is empty until a future controlled backfill/admin workflow populates it. The existing store registry is used as the business identity foundation for this increment.
