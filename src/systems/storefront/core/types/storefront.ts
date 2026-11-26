@@ -24,6 +24,26 @@ export interface StorefrontCollectionConfiguration {
   mockProductCategory?: StorefrontCategory;
 }
 
+export interface StorefrontCatalogCategoryConfiguration {
+  category: StorefrontCategory;
+  label: string;
+  description: string;
+  accentRole: 'primary' | 'secondary' | 'tertiary';
+  aliases?: readonly string[];
+}
+
+export interface StorefrontAboutPrinciple {
+  number: string;
+  title: string;
+  description: string;
+}
+
+export interface StorefrontDocumentConfiguration {
+  title: string;
+  intro: string;
+  copy: string;
+}
+
 export interface StorefrontConfiguration {
   name: string;
   basePath: `/${string}`;
@@ -35,6 +55,22 @@ export interface StorefrontConfiguration {
   story: { heading: string; paragraphs: readonly string[]; tone: 'canvas' | 'inverse' };
   contact: { heading: string; description: string; actionLabel: string };
   productDescriptionFallback: string;
+  catalog: {
+    newlyAddedTitle: string;
+    newlyAddedDescription: string;
+    categories: readonly StorefrontCatalogCategoryConfiguration[];
+  };
+  aboutPage: {
+    eyebrow: string;
+    headline: string;
+    lead: string;
+    description: string;
+    closing: string;
+    actionLabel: string;
+    principlesHeading: string;
+    principles: readonly StorefrontAboutPrinciple[];
+  };
+  documents: Readonly<Record<string, StorefrontDocumentConfiguration>>;
   footer: { policyLinks: readonly { label: string; path: string }[]; className?: string };
   navigation: {
     variant: 'expanded' | 'sections';
