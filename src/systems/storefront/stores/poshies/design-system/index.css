@@ -328,7 +328,7 @@
 /* Wordmark-only Poshies hero: give the empty campaign container height and center the brand. */
 :root[data-storefront='poshies'] .poshies-home {
   padding: 0 !important;
-  background: #fff !important;
+  background: var(--poshies-color-canvas) !important;
 }
 :root[data-storefront='poshies'] .poshies-campaign-wrap {
   width: 100%;
@@ -341,7 +341,7 @@
   min-height: clamp(280px, 48svh, 560px);
   height: auto;
   max-height: none;
-  background: #fff !important;
+  background: var(--poshies-color-canvas) !important;
   overflow: visible;
 }
 :root[data-storefront='poshies'] .poshies-campaign__wordmark {

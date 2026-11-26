@@ -117,7 +117,7 @@ export default function Services() {
   ];
 
   return (
-    <section id="services" className={`storefront-collections w-full ${isPoshies ? 'bg-white text-[#292426] poshies-collections' : 'bg-[var(--sf-background)]'}`}>
+    <section id="services" className={`storefront-collections w-full ${isPoshies ? 'bg-[var(--sf-background)] text-[var(--sf-text)] poshies-collections' : 'bg-[var(--sf-background)]'}`}>
       {orderedCategories.map((category) => (
         <div key={category.id} id={category.id} className={`flex flex-col w-full ${isPoshies ? `poshies-collection-section poshies-collection-section--${category.id}` : ""}`}>
           <div

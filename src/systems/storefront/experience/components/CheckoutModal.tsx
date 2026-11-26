@@ -272,7 +272,7 @@ export default function CheckoutModal({
             />
           ) : (
             <>
-              <h2 className="text-2xl font-bold text-white">Checkout</h2>
+              <h2 className="text-2xl font-bold text-[var(--sf-accent-contrast)]">Checkout</h2>
               <CheckoutCartSummary
                 cartItems={cartItems}
                 cartTotal={cartTotal}
@@ -289,14 +289,14 @@ export default function CheckoutModal({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="flex h-12 flex-1 items-center justify-center bg-[#292426] font-heading text-base text-white transition-colors hover:bg-[#FF1493]"
+                  className="flex h-12 flex-1 items-center justify-center bg-[var(--sf-inverse-background)] font-heading text-base text-[var(--sf-accent-contrast)] transition-colors hover:bg-[var(--sf-accent)]"
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
                   onClick={handleContinue}
-                  className="flex h-12 flex-1 items-center justify-center border border-[#FF1493] bg-[#FF1493] font-heading text-base text-white transition-colors hover:bg-[#292426]"
+                  className="flex h-12 flex-1 items-center justify-center border border-[var(--sf-accent)] bg-[var(--sf-accent)] font-heading text-base text-[var(--sf-accent-contrast)] transition-colors hover:bg-[var(--sf-inverse-background)]"
                 >
                   Continue
                 </button>
@@ -323,7 +323,7 @@ export default function CheckoutModal({
         product={selectedProduct}
         bgColor="bg-white"
         placeholderColor={selectedProduct?.placeholderColor ?? ''}
-        accentColor={primaryAccent === '#ff1493' ? 'text-[#ff1493]' : 'text-[#8aa89b]'}
+        accentColor="text-[var(--sf-accent)]"
         isDark={false}
         mode="preview"
         onClose={() => setSelectedProduct(null)}

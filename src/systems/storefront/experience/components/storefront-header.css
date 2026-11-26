@@ -471,7 +471,7 @@
 .storefront-controls--poshies .storefront-controls__menu-item svg,
 .storefront-controls--poshies .storefront-controls__category-submenu button svg { flex:0 0 18px; width:18px; height:18px; }
 .storefront-controls--poshies .storefront-controls__menu-item:hover,
-.storefront-controls--poshies .storefront-controls__category-submenu button:hover { color:var(--sf-accent); background:rgba(255,20,147,.08); }
+.storefront-controls--poshies .storefront-controls__category-submenu button:hover { color:var(--sf-accent); background:var(--sf-hover-surface); }
 .storefront-controls--poshies .storefront-controls__categories-trigger svg:last-child { margin-left:auto; transition:transform .2s ease; }
 .storefront-controls--poshies .storefront-controls__categories-trigger svg.is-rotated { transform:rotate(180deg); }
 .storefront-controls--poshies .storefront-controls__category-submenu { display:flex; flex-direction:column; gap:2px; padding-left:28px; overflow:hidden; animation:poshies-category-expand .22s ease both; }

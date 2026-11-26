@@ -164,7 +164,7 @@ export default function ProductCarousel({
                 ))
               : visibleProducts.map((product, index) => {
                 const cardPlaceholder = isPoshiesMockCarousel ? "bg-[var(--sf-accent)]" : placeholderColor;
-                const cardAccent = isPoshiesMockCarousel ? "text-[#FF1493]" : accentColor;
+                const cardAccent = isPoshiesMockCarousel ? "text-[var(--sf-accent)]" : accentColor;
 
                 return (
                   <SwiperSlide key={product.id}>
