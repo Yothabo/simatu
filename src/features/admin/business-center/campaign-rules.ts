@@ -30,7 +30,7 @@ export function validateCampaign(input: CampaignDefinition): CampaignValidation 
 }
 
 export function isCampaignJoinable(status: CampaignStatus, now = Date.now()): boolean {
-  return status === 'active' || status === 'scheduled' || status === 'draft';
+  return status === 'active' || status === 'scheduled';
 }
 
 export function getCampaignParticipationCount(storeIds: readonly string[]): number {
