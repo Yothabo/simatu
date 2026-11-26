@@ -4,6 +4,10 @@ import { resolveEntitlements } from '../../business-center/entitlements';
 import { validatePromotionRule } from '../../business-center/promotion-rules';
 import type { BusinessCenterModuleId, SubscriptionTierId } from '../../business-center/types';
 import type { PromotionDiscount } from '../../business-center/promotion-rules';
+import CampaignWorkspace from './CampaignWorkspace';
+import AdvertisingWorkspace from './AdvertisingWorkspace';
+import CommissionWorkspace from './CommissionWorkspace';
+import IntelligenceWorkspace from './IntelligenceWorkspace';
 
 const ICONS: Record<BusinessCenterModuleId, string> = {
   subscriptions: '◇',
@@ -157,10 +161,18 @@ export default function AdminBusinessCenter() {
                 {promotions.length === 0 ? <p className="mt-3 text-sm opacity-60">No promotions configured in this session.</p> : <ul className="mt-3 space-y-2">{promotions.map((promo) => <li key={promo.id} className="rounded-lg border p-3" style={{ borderColor: 'var(--admin-border-subtle)' }}><div className="flex flex-wrap items-center justify-between gap-2"><strong>{promo.name}</strong><span className="rounded-full border px-2 py-1 text-xs capitalize">{promo.status}</span></div><p className="mt-1 text-sm opacity-70">{promo.discount.kind === 'percentage' ? `${promo.discount.value}% off` : `${formatZar(promo.discount.valueMinor)} off`}</p><p className="text-xs opacity-60">{new Date(promo.startsAt).toLocaleString()} – {new Date(promo.endsAt).toLocaleString()}</p></li>)}</ul>}
               </div>
             </div>
+          ) : selected === 'campaigns' ? (
+            <CampaignWorkspace />
+          ) : selected === 'advertising' ? (
+            <AdvertisingWorkspace />
+          ) : selected === 'commission' ? (
+            <CommissionWorkspace />
+          ) : selected === 'intelligence' ? (
+            <IntelligenceWorkspace />
           ) : (
             <div className="mt-5 rounded-xl border border-dashed p-4" style={{ borderColor: 'var(--admin-border-subtle)' }}>
               <p className="font-medium">Workspace roadmap</p>
-              <p className="mt-1 text-sm opacity-70">This module shell is ready for its operational controls. Subscription entitlements and shared Business Center rules are being wired in; no product or store activity is required to build the workspace.</p>
+              <p className="mt-1 text-sm opacity-70">Workspace controls are being prepared for this module.</p>
             </div>
           )}
         </div>
