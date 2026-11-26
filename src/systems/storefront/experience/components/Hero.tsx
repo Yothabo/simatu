@@ -25,11 +25,11 @@ export default function Hero() {
   }
 
   return (
-    <section id="home" aria-label="Hero" className="storefront-hero relative flex w-full select-none flex-col bg-white pt-16 pb-12">
+    <section id="home" aria-label="Hero" className="storefront-hero relative flex w-full select-none flex-col bg-[var(--sf-background)] pt-16 pb-12">
       <div className="relative isolate mb-12 flex min-h-[45vh] w-full items-center justify-center overflow-hidden px-6">
         <div className="storefront-wordmark storefront-hero__wordmark relative z-10 w-full max-w-none">
           <svg aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none" style={{ display: 'block', width: '100%', height: '25vh', background: 'transparent' }}>
-            <text x="50" y="50%" dominantBaseline="middle" textAnchor="middle" textLength="100" lengthAdjust="spacingAndGlyphs" style={{ fontFamily: '"Anton", sans-serif', fontWeight: 400, fill: primaryAccent }} fontSize="100">
+            <text x="50" y="50%" dominantBaseline="middle" textAnchor="middle" textLength="100" lengthAdjust="spacingAndGlyphs" style={{ fontFamily: 'var(--sf-font-display)', fontWeight: 400, fill: primaryAccent }} fontSize="100">
               {storeName.toLowerCase()}
             </text>
           </svg>
@@ -40,10 +40,10 @@ export default function Hero() {
           title="Trending"
           description="The scents our community loves most."
           products={featuredProducts}
-          placeholderColor="bg-[#f5f5f5]"
-          bgColor="bg-white"
-          textColor="text-black"
-          accentColor="text-[#8aa89b]"
+          placeholderColor="bg-[var(--sf-surface-soft)]"
+          bgColor="bg-[var(--sf-surface)]"
+          textColor="text-[var(--sf-text)]"
+          accentColor="text-[var(--sf-accent)]"
           themeColor={primaryAccent}
           isDark={false}
           isLoading={isLoading}

@@ -8,7 +8,7 @@ export default function ContactSection() {
   return (
     <section
       id="contact"
-      className={`relative z-10 -mb-px px-[var(--sf-space-6)] py-[var(--sf-space-20)] sm:px-[var(--sf-space-10)] sm:py-[var(--sf-space-24)] lg:px-[var(--sf-space-12)] lg:py-[var(--sf-space-28)] ${isYotaabo ? "bg-white" : "bg-[#292426] text-white"}`}
+      className={`relative z-10 -mb-px px-[var(--sf-space-6)] py-[var(--sf-space-20)] sm:px-[var(--sf-space-10)] sm:py-[var(--sf-space-24)] lg:px-[var(--sf-space-12)] lg:py-[var(--sf-space-28)] ${isYotaabo ? "bg-[var(--sf-background)]" : "bg-[var(--sf-inverse-background)] text-[var(--sf-inverse-text)]"}`}
     >
       <div className="mx-auto max-w-[var(--sf-content-max-width)] p-[var(--sf-space-7)] sm:p-[var(--sf-space-10)] lg:p-[var(--sf-space-14)]">
 
@@ -19,7 +19,7 @@ export default function ContactSection() {
 
         {/* 2. Paragraph and Button are in a flex row together */}
         <div className="mt-[var(--sf-space-5)] flex flex-col gap-[var(--sf-space-6)] md:flex-row md:items-start md:justify-between md:gap-[var(--sf-space-12)]">
-          <p className="max-w-xl text-sm leading-[1.9] text-white/75">
+          <p className="max-w-xl text-sm leading-[1.9] text-[var(--sf-inverse-text-muted)]">
             {isYotaabo
               ? 'Explore the collection and discover a fragrance direction that fits your mood, your style, and your everyday.'
               : 'Explore intimate essentials, everyday underwear, and comfortable pieces for relaxing and unwinding.'}
@@ -27,7 +27,7 @@ export default function ContactSection() {
 
           <Link
             to={pathFor('services')}
-            className="inline-flex shrink-0 min-h-12 items-center justify-between gap-8 border border-[#FF1493] bg-[#FF1493] px-5 text-xs font-semibold text-white transition-colors hover:bg-[#292426] hover:text-[#FF1493] md:mt-1 md:min-w-[200px]"
+            className="inline-flex shrink-0 min-h-12 items-center justify-between gap-8 border border-[var(--sf-accent)] bg-[var(--sf-accent)] px-5 text-xs font-semibold text-[var(--sf-accent-contrast)] transition-colors hover:bg-[var(--sf-inverse-background)] hover:text-[var(--sf-accent)] md:mt-1 md:min-w-[200px]"
           >
             {isYotaabo ? 'Explore fragrances' : 'Explore collections'}
             <FiArrowUpRight size={17} aria-hidden="true" />

@@ -88,7 +88,7 @@ export default function ProductCarousel({
       <div className="px-[var(--sf-space-6)] sm:px-[var(--sf-space-10)] lg:px-[var(--sf-space-12)]">
         <div className="flex items-baseline justify-between">
           <h3
-            className={`font-heading text-3xl italic ${isPoshiesMockCarousel ? "text-white" : title === "Trending" ? "text-[#292426]" : accentColor}`}
+            className={`font-heading text-3xl italic ${isPoshiesMockCarousel ? "text-[var(--sf-inverse-text)]" : title === "Trending" ? "text-[var(--sf-text)]" : accentColor}`}
             style={{ lineHeight: 0.9, margin: 0 }}
           >
             {sectionHeading ? (
@@ -101,7 +101,7 @@ export default function ProductCarousel({
         </div>
       </div>
       {description && (
-        <p className={`mt-[var(--sf-space-2)] px-6 font-heading text-base leading-relaxed sm:px-10 lg:px-12 ${isPoshiesMockCarousel ? "text-white/75" : "text-black/60"}`}>
+        <p className={`mt-[var(--sf-space-2)] px-6 font-heading text-base leading-relaxed sm:px-10 lg:px-12 ${isPoshiesMockCarousel ? "text-[var(--sf-inverse-text-muted)]" : "text-[var(--sf-text-muted)]"}`}>
           {description}
         </p>
       )}
@@ -155,15 +155,15 @@ export default function ProductCarousel({
             : visibleProducts.length === 0
               ? Array.from({ length: 5 }).map((_, index) => (
                   <SwiperSlide key={"placeholder-" + index}>
-                    <div aria-hidden="true" className="flex aspect-[4/5] w-full flex-col items-center justify-center overflow-hidden bg-[#FF1493] px-4 text-center">
-                      <div className={"mb-5 h-1 w-10 " + "bg-white/50"} />
-                      <span className="font-heading text-base italic text-white">Coming soon</span>
-                      <span className="mt-[var(--sf-space-2)] font-heading text-xs tracking-[0.16em] text-white/75">POSHIES</span>
+                    <div aria-hidden="true" className="flex aspect-[4/5] w-full flex-col items-center justify-center overflow-hidden bg-[var(--sf-accent)] px-4 text-center">
+                      <div className={"mb-5 h-1 w-10 " + "bg-[var(--sf-accent-contrast)]/50"} />
+                      <span className="font-heading text-base italic text-[var(--sf-accent-contrast)]">Coming soon</span>
+                      <span className="mt-[var(--sf-space-2)] font-heading text-xs tracking-[0.16em] text-[var(--sf-accent-contrast)]/75">POSHIES</span>
                     </div>
                   </SwiperSlide>
                 ))
               : visibleProducts.map((product, index) => {
-                const cardPlaceholder = isPoshiesMockCarousel ? "bg-[#FF1493]" : placeholderColor;
+                const cardPlaceholder = isPoshiesMockCarousel ? "bg-[var(--sf-accent)]" : placeholderColor;
                 const cardAccent = isPoshiesMockCarousel ? "text-[#FF1493]" : accentColor;
 
                 return (
@@ -179,7 +179,7 @@ export default function ProductCarousel({
                       }}
                     >
                       <div
-                        className={`relative aspect-[4/5] w-full overflow-hidden ${isPoshiesMockCarousel ? "bg-[#FF1493]" : cardPlaceholder}`}
+                        className={`relative aspect-[4/5] w-full overflow-hidden ${isPoshiesMockCarousel ? "bg-[var(--sf-accent)]" : cardPlaceholder}`}
                       >
                         {product.id.startsWith('mock-poshies-') ? (
                           <div className="h-full w-full bg-transparent" aria-label="Preview placeholder" />
@@ -199,7 +199,7 @@ export default function ProductCarousel({
                       </div>
 
                       <div
-                        className={`relative mt-0 grid min-w-0 grid-rows-[20px_20px] gap-y-3 pt-3 pl-3 ${isPoshiesMockCarousel ? "bg-[#292426]" : ""}`}
+                        className={`relative mt-0 grid min-w-0 grid-rows-[20px_20px] gap-y-3 pt-3 pl-3 ${isPoshiesMockCarousel ? "bg-[var(--sf-inverse-background)]" : ""}`}
                       >
                         <h4
                           className={`min-w-0 truncate font-heading text-base ${textColor}`}
@@ -224,7 +224,7 @@ export default function ProductCarousel({
               <Link
                 to={viewAllHref}
                 aria-label={`View more ${title} products`}
-                className="flex aspect-[4/5] w-full items-center justify-center font-heading text-lg italic text-[#FFFFFF] outline-none transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4"
+                className="flex aspect-[4/5] w-full items-center justify-center font-heading text-lg italic text-[var(--sf-accent-contrast)] outline-none transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4"
               >
                 View more
               </Link>

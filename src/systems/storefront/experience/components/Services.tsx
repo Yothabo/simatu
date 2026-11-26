@@ -41,12 +41,12 @@ export default function Services() {
       topText: isYotaabo ? 'REFINED. GROUNDED. REMEMBERED.' : 'COMFORT THAT FEELS LIKE YOURS.',
       description:
         isYotaabo ? 'Crafted for presence. Distinctive scents for the modern man, refined in character, grounded in confidence, and made to be remembered.' : 'Everyday briefs, boxers and trunks with a comfortable fit and a little more confidence in every layer.',
-      bgColor: 'bg-white',
-      textColor: 'text-[#292426]',
-      textFill: isPoshies ? 'fill-[#FF1493]' : 'fill-[#8aa89b]',
-      accentColor: 'text-[#292426]',
-      placeholderColor: isPoshies ? 'bg-[#FF1493]' : 'bg-[#8aa89b]',
-      overlayColor: '#FFFFFF',
+      bgColor: 'bg-[var(--sf-background)]',
+      textColor: 'text-[var(--sf-text)]',
+      textFill: isPoshies ? 'fill-[var(--sf-accent)]' : 'fill-[var(--sf-accent)]',
+      accentColor: 'text-[var(--sf-text)]',
+      placeholderColor: isPoshies ? 'bg-[var(--sf-accent)]' : 'bg-[var(--sf-accent)]',
+      overlayColor: 'var(--sf-background)',
       hasImage: isYotaabo,
       imageSrc: isYotaabo ? '/systems/storefront/shared/images/hisimage.webp' : undefined,
       isDark: false,
@@ -60,12 +60,12 @@ export default function Services() {
       topText: isYotaabo ? 'ELEGANCE IN EVERY NOTE' : 'MADE TO FEEL GOOD ON YOUR SKIN.',
       description:
         isYotaabo ? 'Fragrances crafted to complement elegance and individuality, whether soft and floral or bold and warm.' : 'Discover bras, panties, matching sets and lingerie chosen for the way they feel, fit and let you express yourself.',
-      bgColor: 'bg-white',
-      textColor: isPoshies ? 'text-[#292426]' : 'text-white',
-      textFill: isPoshies ? 'fill-[#FF1493]' : 'fill-[#ff1493]',
-      accentColor: isPoshies ? 'text-[#292426]' : 'text-white',
-      placeholderColor: isPoshies ? 'bg-[#FF1493]' : 'bg-[#ff1493]',
-      overlayColor: '#FFFFFF',
+      bgColor: 'bg-[var(--sf-background)]',
+      textColor: isPoshies ? 'text-[var(--sf-text)]' : 'text-[var(--sf-inverse-text)]',
+      textFill: isPoshies ? 'fill-[var(--sf-accent)]' : 'fill-[var(--sf-accent-secondary)]',
+      accentColor: isPoshies ? 'text-[var(--sf-text)]' : 'text-[var(--sf-inverse-text)]',
+      placeholderColor: isPoshies ? 'bg-[var(--sf-accent)]' : 'bg-[var(--sf-accent-secondary)]',
+      overlayColor: 'var(--sf-background)',
       hasImage: isYotaabo,
       imageSrc: isYotaabo ? '/systems/storefront/shared/images/herimage.webp' : undefined,
       isDark: false,
@@ -79,12 +79,12 @@ export default function Services() {
       topText: isYotaabo ? 'SCENTS FOR EVERY ROOM' : 'SOFT MOMENTS. YOUR OWN SPACE.',
       description:
         isYotaabo ? 'Extend your signature into every space. Ambient scents for the home and car, quietly shaping the atmosphere wherever you go.' : 'Slip into soft sleepwear, robes and relaxed sets made for slow mornings, quiet evenings and time that belongs to you.',
-      bgColor: 'bg-white',
-      textColor: isPoshies ? 'text-[#292426]' : 'text-white',
-      textFill: isPoshies ? 'fill-[#FF1493]' : 'fill-[#c8ad8d]',
-      accentColor: isPoshies ? 'text-[#292426]' : 'text-white',
-      placeholderColor: isPoshies ? 'bg-[#FF1493]' : 'bg-[#c8ad8d]',
-      overlayColor: '#FFFFFF',
+      bgColor: 'bg-[var(--sf-background)]',
+      textColor: isPoshies ? 'text-[var(--sf-text)]' : 'text-[var(--sf-inverse-text)]',
+      textFill: isPoshies ? 'fill-[var(--sf-accent)]' : 'fill-[var(--sf-accent-tertiary)]',
+      accentColor: isPoshies ? 'text-[var(--sf-text)]' : 'text-[var(--sf-inverse-text)]',
+      placeholderColor: isPoshies ? 'bg-[var(--sf-accent)]' : 'bg-[var(--sf-accent-tertiary)]',
+      overlayColor: 'var(--sf-background)',
       hasImage: false,
       isDark: false,
       collectionTitle: isYotaabo ? 'Collections' : 'Collection',
@@ -97,10 +97,10 @@ export default function Services() {
       topText: isYotaabo ? 'THE STORY BEHIND THE SCENT' : 'INTIMACY, ON YOUR OWN TERMS.',
       description:
         isYotaabo ? 'Born from a simple, enduring belief: fragrance is not merely something you wear, but a reflection of who you are. We curate distinctive scents that speak quietly yet linger long, carefully designed to become an unforgettable part of how you are remembered.' : 'Poshies is a space for intimate essentials, everyday comfort and personal expression. Find pieces that feel right against your skin and let confidence begin with you.',
-      bgColor: 'bg-white',
-      textColor: isPoshies ? 'text-[#292426]' : 'text-white',
-      textFill: isYotaabo ? 'fill-[#8aa89b]' : 'fill-[#FF1493]',
-      accentColor: isPoshies ? 'text-[#292426]' : 'text-white',
+      bgColor: 'bg-[var(--sf-background)]',
+      textColor: isPoshies ? 'text-[var(--sf-text)]' : 'text-[var(--sf-inverse-text)]',
+      textFill: isYotaabo ? 'fill-[var(--sf-accent)]' : 'fill-[var(--sf-accent)]',
+      accentColor: isPoshies ? 'text-[var(--sf-text)]' : 'text-[var(--sf-inverse-text)]',
       hasImage: false,
     },
   ];
@@ -117,7 +117,7 @@ export default function Services() {
   ];
 
   return (
-    <section id="services" className={`storefront-collections w-full ${isPoshies ? 'bg-white text-[#292426] poshies-collections' : 'bg-white'}`}>
+    <section id="services" className={`storefront-collections w-full ${isPoshies ? 'bg-white text-[#292426] poshies-collections' : 'bg-[var(--sf-background)]'}`}>
       {orderedCategories.map((category) => (
         <div key={category.id} id={category.id} className={`flex flex-col w-full ${isPoshies ? `poshies-collection-section poshies-collection-section--${category.id}` : ""}`}>
           <div
@@ -218,7 +218,7 @@ export default function Services() {
                 bgColor={category.bgColor}
                 textColor={category.textColor}
                 accentColor={category.accentColor}
-                themeColor={isPoshies ? '#FF1493' : category.id === 'his' ? '#8aa89b' : category.id === 'hers' ? '#ff1493' : '#c8ad8d'}
+                themeColor={isPoshies ? 'var(--sf-accent)' : category.id === 'his' ? 'var(--sf-accent)' : category.id === 'hers' ? 'var(--sf-accent-secondary)' : 'var(--sf-accent-tertiary)'}
                 isDark={category.isDark}
                 isLoading={isLoading}
                 error={error}
