@@ -355,3 +355,17 @@
   transform: none;
   text-shadow: none;
 }
+
+
+/* Give the wordmark hero clearance for the floating search/cart/menu controls. */
+:root[data-storefront='poshies'] .poshies-campaign {
+  box-sizing: border-box;
+  min-height: clamp(360px, 58svh, 640px);
+  padding-top: 78px;
+}
+@media (max-width: 640px) {
+  :root[data-storefront='poshies'] .poshies-campaign {
+    min-height: clamp(340px, 56svh, 560px);
+    padding-top: 70px;
+  }
+}
