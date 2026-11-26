@@ -11,6 +11,10 @@ export type ProductFormFieldsProps = {
   subcategoryOptions: CategoryOption[];
   isLoadingCategories: boolean;
   categoryLoadError: string | null;
+  marketplaceCategoryOptions: CategoryOption[];
+  marketplaceSubcategoryOptions: CategoryOption[];
+  isLoadingMarketplaceTaxonomy: boolean;
+  marketplaceTaxonomyError: string | null;
   isUploading: boolean;
   onChange: (field: keyof AdminProduct, value: unknown) => void;
   onImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
