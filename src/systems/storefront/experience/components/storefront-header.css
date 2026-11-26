@@ -274,3 +274,45 @@
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
+
+
+/* Poshies menu transforms the search pill into an expanding inline menu. */
+.storefront-controls--poshies .storefront-controls__search {
+  align-items: flex-start;
+  transition: height .28s ease, border-radius .28s ease, padding .28s ease;
+}
+.storefront-controls--poshies .storefront-controls__search--menu-open {
+  height: auto;
+  min-height: 54px;
+  padding: 10px 18px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.storefront-controls--poshies .storefront-controls__inline-menu {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+}
+.storefront-controls--poshies .storefront-controls__inline-menu button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #292426;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background .18s ease, color .18s ease;
+}
+.storefront-controls--poshies .storefront-controls__inline-menu button:hover,
+.storefront-controls--poshies .storefront-controls__inline-menu button:focus-visible {
+  background: rgba(255, 20, 147, .08);
+  color: #FF1493;
+  outline: none;
+}
