@@ -60,7 +60,7 @@ async function saveProduct(body, isUpdate, admin, requestId) {
 
     if (isUpdate) {
       const existing = await client.query(
-        `SELECT storefront, category_id, subcategory_id
+        `SELECT storefront, category_id, subcategory_id, marketplace_subcategory_id
          FROM public.products
          WHERE id = $1
            AND ($2::text IS NULL OR storefront = $2)
@@ -159,6 +159,21 @@ async function saveProduct(body, isUpdate, admin, requestId) {
 
     const subcategory = subcategoryResult.rows[0];
 
+    // Preserve existing platform classification until the product admin UI supports edits.
+    product.marketplace_subcategory_id = product.marketplace_subcategory_id ?? existingProduct?.marketplace_subcategory_id ?? null;
+    if (product.marketplace_subcategory_id) {
+      const platformSubcategory = await client.query(
+        `SELECT id FROM public.marketplace_subcategories
+         WHERE id = $1 AND (is_active IS TRUE OR id = $2)`,
+        [product.marketplace_subcategory_id, existingProduct?.marketplace_subcategory_id ?? null]
+      );
+      if (!platformSubcategory.rowCount) {
+        await client.query('ROLLBACK');
+        return json({ error: 'The selected marketplace subcategory is unavailable.' }, 400);
+      }
+    }
+
+
     const values = [
       product.name,
       product.price,
@@ -177,6 +192,7 @@ async function saveProduct(body, isUpdate, admin, requestId) {
       product.sizes,
       product.marketplace_visible,
       product.storefront_visible,
+      product.marketplace_subcategory_id,
     ];
 
     if (isUpdate) {
@@ -198,14 +214,15 @@ async function saveProduct(body, isUpdate, admin, requestId) {
              sku = $14,
              sizes = $15,
              marketplace_visible = $16,
-             storefront_visible = $17
-         WHERE id = $18
-           AND ($19::text IS NULL OR storefront = $19)
+             storefront_visible = $17,
+             marketplace_subcategory_id = $18
+         WHERE id = $19
+           AND ($20::text IS NULL OR storefront = $20)
          RETURNING id, name, price, supplier_cost, sku, sizes,
                    category, subcategory, description, image_url,
                    is_active, marketplace_visible, storefront_visible,
                    sort_order, storefront, store_id,
-                   category_id, subcategory_id, created_at`,
+                   category_id, subcategory_id, marketplace_subcategory_id, created_at`,
         [
           ...values,
           body.id,
@@ -218,8 +235,8 @@ async function saveProduct(body, isUpdate, admin, requestId) {
            (name, price, category, subcategory, description, image_url,
             is_active, sort_order, storefront, store_id, category_id,
             subcategory_id, supplier_cost, sku, sizes,
-            marketplace_visible, storefront_visible)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
+            marketplace_visible, storefront_visible, marketplace_subcategory_id)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
          RETURNING id, name, price, supplier_cost, sku, sizes,
                    category, subcategory, description, image_url,
                    is_active, marketplace_visible, storefront_visible,
@@ -334,6 +351,7 @@ async function listProducts(request, requestId) {
         is_active,
         sort_order,
         order_count,
+        marketplace_subcategory_id,
         created_at
       `;
 
