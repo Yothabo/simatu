@@ -6,9 +6,18 @@ export default function CommissionWorkspace() {
   const [amount, setAmount] = useState('1000');
   const [enabled, setEnabled] = useState(true);
   const [result, setResult] = useState<{commission:number; net:number}|null>(null);
+  const [error, setError] = useState('');
   const calculate=()=>{
-    const base={amountMinor:Math.round(Number(amount)*100),currency:'ZAR' as const};
-    const value=calculateCommission(base,{rateBps:Number(rate),enabled});
+    const rateBps=Number(rate);
+    const amountNumber=Number(amount);
+    if (!Number.isFinite(rateBps) || rateBps<0 || rateBps>10000 || !Number.isFinite(amountNumber) || amountNumber<0) {
+      setError('Enter a valid commission percentage (0–100) and non-negative order subtotal.');
+      setResult(null);
+      return;
+    }
+    const base={amountMinor:Math.round(amountNumber*100),currency:'ZAR' as const};
+    const value=calculateCommission(base,{rateBps,enabled});
+    setError('');
     setResult({commission:value.commission.amountMinor,net:base.amountMinor-value.commission.amountMinor});
   };
   const cls='mt-1 w-full rounded-xl border px-3 py-2 text-sm';
@@ -20,6 +29,7 @@ export default function CommissionWorkspace() {
       <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={enabled} onChange={e=>setEnabled(e.target.checked)}/> Commission enabled</label>
     </div>
     <button type="button" onClick={calculate} className="rounded-xl border px-4 py-2 text-sm font-semibold">Calculate</button>
+    {error&&<p role="alert" className="text-sm">{error}</p>}
     {result&&<div className="grid gap-3 sm:grid-cols-2"><div className="rounded-xl border p-3"><p className="text-xs opacity-60">Commission</p><strong>R{(result.commission/100).toFixed(2)}</strong></div><div className="rounded-xl border p-3"><p className="text-xs opacity-60">After commission</p><strong>R{(result.net/100).toFixed(2)}</strong></div></div>}
     <p className="text-sm opacity-70">This is a calculator preview. Store/order attribution and ledger persistence are not connected yet.</p>
   </div>;
