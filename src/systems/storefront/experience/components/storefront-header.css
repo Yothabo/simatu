@@ -267,3 +267,10 @@
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
+
+
+/* Square the left edge of the hamburger/close menu control (not the dropdown panel). */
+.storefront-controls--poshies .storefront-controls__row > button.storefront-controls__icon {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
