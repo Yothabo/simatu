@@ -63,6 +63,7 @@ describe('validateProduct: valid input', () => {
         category_id: null,
         subcategory: 'Eau de Parfum',
         subcategory_id: null,
+        marketplace_subcategory_id: null,
         description: null,
         image_url: null,
         is_active: true,
@@ -457,6 +458,27 @@ describe('validateProduct: category validation', () => {
       ...validProduct(),
       category: 'A'.repeat(120),
     }).product?.category).toHaveLength(120);
+  });
+});
+
+describe('validateProduct: platform subcategory validation', () => {
+  it('accepts an optional marketplace subcategory UUID', () => {
+    const result = validateProduct({
+      ...validProduct(),
+      marketplace_subcategory_id: validSubcategoryId,
+    });
+    expect(result.product?.marketplace_subcategory_id).toBe(validSubcategoryId);
+  });
+
+  it('defaults marketplace subcategory classification to null', () => {
+    expect(validateProduct(validProduct()).product?.marketplace_subcategory_id).toBeNull();
+  });
+
+  it('rejects malformed marketplace subcategory IDs', () => {
+    expect(validateProduct({
+      ...validProduct(),
+      marketplace_subcategory_id: 'not-a-uuid',
+    }).error).toBe('Please provide a valid marketplace subcategory.');
   });
 });
 
