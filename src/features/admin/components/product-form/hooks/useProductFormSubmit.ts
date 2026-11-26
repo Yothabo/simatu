@@ -40,6 +40,7 @@ export function useProductFormSubmit({
     if (categoryLoadError) return toast.error('Categories could not be loaded');
     if (!form.category_id) return toast.error('Select a valid category');
     if (!form.subcategory_id) return toast.error('Select a valid subcategory');
+    if (form.marketplace_category_slug && !form.marketplace_subcategory_id) return toast.error('Select a marketplace subcategory');
 
     setIsSaving(true);
 
