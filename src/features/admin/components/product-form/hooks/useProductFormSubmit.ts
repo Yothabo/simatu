@@ -61,6 +61,8 @@ export function useProductFormSubmit({
       sort_order: form.sort_order,
       sizes: form.sizes,
       order_count: form.order_count,
+      marketplace_category_slug: form.marketplace_category_slug,
+      marketplace_subcategory_id: form.marketplace_subcategory_id,
     };
 
     try {
