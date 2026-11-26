@@ -9,9 +9,9 @@ export type NewCartItem = Omit<CartItem, 'quantity' | 'storeName'> & { storeName
 export type CartState = {
   cartItems: CartItem[];
   addToCart: (item: NewCartItem) => void;
-  removeFromCart: (id: string, storefront?: string, variantId?: string | null) => void;
-  increaseQuantity: (id: string, storefront?: string, variantId?: string | null) => void;
-  decreaseQuantity: (id: string, storefront?: string, variantId?: string | null) => void;
+  removeFromCart: (id: string, storefront?: string, variantId?: string | null, size?: string | null) => void;
+  increaseQuantity: (id: string, storefront?: string, variantId?: string | null, size?: string | null) => void;
+  decreaseQuantity: (id: string, storefront?: string, variantId?: string | null, size?: string | null) => void;
   clearCart: () => void;
   cartTotal: number;
 };
@@ -91,11 +91,11 @@ export function CartProvider({
     }];
   });
 
-  const matches = (item: CartItem, id: string, storefront?: string, variantId?: string | null) =>
-    item.id === id && (storefront === undefined || item.storefront === storefront) && (variantId === undefined || (item.variantId || null) === variantId);
-  const removeFromCart = (id: string, storefront?: string, variantId?: string | null) => setCartItems(prev => prev.filter(item => !matches(item, id, storefront, variantId)));
-  const increaseQuantity = (id: string, storefront?: string, variantId?: string | null) => setCartItems(prev => prev.map(item => matches(item, id, storefront, variantId) ? { ...item, quantity: item.quantity + 1 } : item));
-  const decreaseQuantity = (id: string, storefront?: string, variantId?: string | null) => setCartItems(prev => prev.map(item => matches(item, id, storefront, variantId) ? { ...item, quantity: Math.max(1, item.quantity - 1) } : item));
+  const matches = (item: CartItem, id: string, storefront?: string, variantId?: string | null, size?: string | null) =>
+    item.id === id && (storefront === undefined || item.storefront === storefront) && (variantId === undefined || (item.variantId || null) === variantId) && (size === undefined || (item.size || null) === size);
+  const removeFromCart = (id: string, storefront?: string, variantId?: string | null, size?: string | null) => setCartItems(prev => prev.filter(item => !matches(item, id, storefront, variantId, size)));
+  const increaseQuantity = (id: string, storefront?: string, variantId?: string | null, size?: string | null) => setCartItems(prev => prev.map(item => matches(item, id, storefront, variantId, size) ? { ...item, quantity: item.quantity + 1 } : item));
+  const decreaseQuantity = (id: string, storefront?: string, variantId?: string | null, size?: string | null) => setCartItems(prev => prev.map(item => matches(item, id, storefront, variantId, size) ? { ...item, quantity: Math.max(1, item.quantity - 1) } : item));
   const clearCart = () => setCartItems([]);
   const cartTotal = cartItems.reduce((total, item) => total + parsePrice(item.price) * item.quantity, 0);
 
