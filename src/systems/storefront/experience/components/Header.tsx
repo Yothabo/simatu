@@ -20,7 +20,6 @@ const scrollTargets = [
 export default function Header({ sticky = true }: HeaderProps) {
   const [query, setQuery] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
-  const [categoriesOpen, setCategoriesOpen] = useState(false);
   const { name: storeName, pathFor } = useStorefront();
   const isPoshies = storeName === "Poshies";
   const { cartItems } = useCart();
@@ -42,16 +41,14 @@ export default function Header({ sticky = true }: HeaderProps) {
               <Link to={pathFor()} className="storefront-controls__menu-item" onClick={() => setMenuOpen(false)}>
                 <FiHome aria-hidden="true" /><span>Home</span>
               </Link>
-              <button type="button" className="storefront-controls__menu-item storefront-controls__categories-trigger" aria-expanded={categoriesOpen} onClick={() => setCategoriesOpen((open) => !open)}>
-                <FiGrid aria-hidden="true" /><span>Categories</span><FiChevronDown className={categoriesOpen ? 'is-rotated' : ''} aria-hidden="true" />
-              </button>
-              {categoriesOpen && (
-                <div className="storefront-controls__category-submenu">
-                  <button type="button" onClick={() => scrollToSection('hers')}><FiHeart aria-hidden="true" /><span>Hers</span></button>
-                  <button type="button" onClick={() => scrollToSection('his')}><FiUser aria-hidden="true" /><span>His</span></button>
-                  <button type="button" onClick={() => scrollToSection('lounge')}><FiCoffee aria-hidden="true" /><span>Lounge</span></button>
-                </div>
-              )}
+              <div className="storefront-controls__menu-item storefront-controls__categories-label">
+                <FiGrid aria-hidden="true" /><span>Categories</span><FiChevronDown aria-hidden="true" />
+              </div>
+              <div className="storefront-controls__category-submenu">
+                <button type="button" onClick={() => scrollToSection('hers')}><FiHeart aria-hidden="true" /><span>Hers</span></button>
+                <button type="button" onClick={() => scrollToSection('his')}><FiUser aria-hidden="true" /><span>His</span></button>
+                <button type="button" onClick={() => scrollToSection('lounge')}><FiCoffee aria-hidden="true" /><span>Lounge</span></button>
+              </div>
               <Link to={pathFor('catalog')} className="storefront-controls__menu-item" onClick={() => setMenuOpen(false)}>
                 <FiShoppingBag aria-hidden="true" /><span>Catalogue</span>
               </Link>
