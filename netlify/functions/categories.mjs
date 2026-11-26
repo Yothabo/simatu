@@ -9,7 +9,6 @@ const pool = new Pool({
   connectionTimeoutMillis: 10000,
 });
 
-const STOREFRONTS = new Set(['yotaabo', 'poshies']);
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -72,7 +71,7 @@ async function withWrite(admin, callback) {
 async function resolveStore(client, admin, value) {
   const storefront = String(value || '').trim().toLowerCase();
 
-  if (!STOREFRONTS.has(storefront)) {
+  if (!SLUG.test(storefront)) {
     throw Object.assign(new Error('A valid storefront is required.'), {
       status: 400,
     });
@@ -245,8 +244,16 @@ async function listCategories(request) {
     .trim()
     .toLowerCase();
 
-  if (!STOREFRONTS.has(storefront)) {
+  if (!SLUG.test(storefront)) {
     return json({ error: 'Invalid storefront.' }, 400, isAdmin);
+  }
+
+  const storeResult = await pool.query(
+    'SELECT id FROM public.stores WHERE slug = $1 AND is_active IS TRUE',
+    [storefront]
+  );
+  if (!storeResult.rowCount) {
+    return json({ error: 'Storefront not found.' }, 404, isAdmin);
   }
 
   if (isAdmin) {
