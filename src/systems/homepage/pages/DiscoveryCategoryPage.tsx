@@ -39,6 +39,7 @@ export default function DiscoveryCategoryPage() {
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(() => getSubcategories(categoryId)[0]?.id ?? null);
   const [outgoingStoreTitle, setOutgoingStoreTitle] = useState<string | null>(null);
   const [selectedProductGroup, setSelectedProductGroup] = useState<{ id: string; name: string; image_url: string | null; offers: CategoryProduct[] } | null>(null);
+  const [purchaseSelections, setPurchaseSelections] = useState<Record<string, { size: string; quantity: number }>>({});
   const market = getMarketById(categoryId);
   const marketplaceCategorySlug = categoryId === 'spaces' ? 'home-living' : categoryId;
   const item = (location.state as { discovery?: MoodboardItem } | null)?.discovery || market || fallback;
@@ -117,8 +118,27 @@ export default function DiscoveryCategoryPage() {
     return marketProducts.filter((product) => product.marketplace_subcategory_id === selectedMarketplaceSubcategoryId);
   }, [marketProducts, selected, selectedMarketplaceSubcategoryId]);
 
+  const offerSelectionKey = (product: CategoryProduct) => product.storefront + ':' + product.id;
+
+  const openProductGroup = (group: { id: string; name: string; image_url: string | null; offers: CategoryProduct[] }) => {
+    setPurchaseSelections((current) => {
+      const next = { ...current };
+      group.offers.forEach((offer) => {
+        const key = offerSelectionKey(offer);
+        if (!next[key]) next[key] = { size: offer.sizes?.[0] || '', quantity: 1 };
+      });
+      return next;
+    });
+    setSelectedProductGroup(group);
+  };
+
   const addProductToCart = (product: CategoryProduct) => {
     if (!product.storefront || typeof product.price !== 'number') return;
+    const selection = purchaseSelections[offerSelectionKey(product)] || { size: product.sizes?.[0] || '', quantity: 1 };
+    if ((product.sizes?.length || 0) > 0 && !selection.size) {
+      toast.error('Please select a size');
+      return;
+    }
     addToCart({
       id: product.id,
       name: product.name,
@@ -129,16 +149,17 @@ export default function DiscoveryCategoryPage() {
       category: product.category || item.category,
       storefront: product.storefront,
       storeName: product.storeName,
+      size: selection.size || null,
+      quantity: selection.quantity,
     });
-    toast.success(product.name + ' added to your shared cart');
+    toast.success(selection.quantity + ' × ' + product.name + (selection.size ? ' (' + selection.size + ')' : '') + ' added to your shared cart');
   };
 
   const marketplaceGroups = useMemo(() => {
     const grouped = new Map<string, CategoryProduct[]>();
     scopedProducts.forEach((product) => {
       const normalizedName = product.name.trim().toLowerCase().replace(/\s+/g, ' ');
-      const normalizedSizes = (product.sizes || []).map((size) => size.toLowerCase()).sort().join(',');
-      const identity = 'name:' + normalizedName + '|sizes:' + normalizedSizes;
+      const identity = 'name:' + normalizedName;
       grouped.set(identity, [...(grouped.get(identity) || []), product]);
     });
     return Array.from(grouped.entries()).map(([id, offers]) => ({
@@ -307,11 +328,11 @@ export default function DiscoveryCategoryPage() {
               role="button"
               tabIndex={0}
               aria-label={`View details for ${group.name}`}
-              onClick={() => setSelectedProductGroup(group)}
+              onClick={() => openProductGroup(group)}
               onKeyDown={(event) => {
                 if (event.key === 'Enter' || event.key === ' ') {
                   event.preventDefault();
-                  setSelectedProductGroup(group);
+                  openProductGroup(group);
                 }
               }}
               style={{ animationDelay: `${Math.min(index, 8) * 45}ms`, minWidth: 0, color: '#f4f1ec', border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, overflow: 'hidden', cursor: 'pointer' }}
@@ -321,22 +342,12 @@ export default function DiscoveryCategoryPage() {
               </div>
               <div style={{ display: 'grid', gridTemplateRows: 'auto 1fr auto', gap: 8, minHeight: 164, padding: '10px 11px 11px' }}>
                 <strong style={{ display: '-webkit-box', minHeight: '2.6em', overflow: 'hidden', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, fontSize: 13, lineHeight: 1.3, fontWeight: 550 }}>{group.name}</strong>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: 'auto auto', alignContent: 'end', alignItems: 'end', columnGap: 8, rowGap: 7, fontSize: 11 }}>
-                  <div style={{ display: 'grid', gap: 3 }}>
-                    <span style={{ opacity: .58 }}>Quantity</span>
-                    <strong style={{ fontSize: 12 }}>{lowestOffer && Number.isFinite(Number((lowestOffer as any).quantity ?? (lowestOffer as any).stock_quantity)) ? Number((lowestOffer as any).quantity ?? (lowestOffer as any).stock_quantity) : '—'}</strong>
-                  </div>
-                  <div style={{ display: 'grid', gap: 3, textAlign: 'right' }}>
-                    <span style={{ opacity: .58 }}>Price</span>
-                    <strong style={{ fontSize: 12, whiteSpace: 'nowrap' }}>{lowestOffer && typeof lowestOffer.price === 'number' ? 'R' + lowestOffer.price.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—'}</strong>
-                  </div>
-                  <div style={{ gridColumn: '1 / -1', display: 'grid', gap: 3 }}>
-                    <span style={{ opacity: .58 }}>Size</span>
-                    <strong style={{ fontSize: 12, fontWeight: 500 }}>{lowestOffer?.sizes?.length ? lowestOffer.sizes.join(', ') : 'Not specified'}</strong>
-                  </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 7, alignContent: 'end', fontSize: 11 }}>
+                  <span style={{ opacity: .58 }}>From</span>
+                  <strong style={{ fontSize: 14, whiteSpace: 'nowrap' }}>{lowestOffer && typeof lowestOffer.price === 'number' ? 'R' + lowestOffer.price.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'Price unavailable'}</strong>
                 </div>
-                <button type="button" onClick={(event) => { event.stopPropagation(); if (lowestOffer) addProductToCart(lowestOffer); }} disabled={!lowestOffer || typeof lowestOffer.price !== 'number'} style={{ minHeight: 34, width: '100%', marginTop: 'auto', padding: '0 10px', border: '1px solid rgba(255,255,255,.55)', borderRadius: 999, background: '#f4f1ec', color: '#111', font: 'inherit', fontSize: 11, fontWeight: 650, cursor: 'pointer' }}>
-                  Add to cart
+                <button type="button" onClick={(event) => { event.stopPropagation(); openProductGroup(group); }} disabled={!lowestOffer} style={{ minHeight: 36, width: '100%', marginTop: 'auto', padding: '0 10px', border: '1px solid rgba(255,255,255,.55)', borderRadius: 999, background: '#f4f1ec', color: '#111', font: 'inherit', fontSize: 11, fontWeight: 650, cursor: 'pointer' }}>
+                  Choose options
                 </button>
               </div>
             </article>;
@@ -374,9 +385,21 @@ export default function DiscoveryCategoryPage() {
                   <strong style={{ display: 'block', fontSize: 13, fontWeight: 550 }}>{offer.storeName}</strong>
                   <strong style={{ display: 'block', marginTop: 4, fontSize: 13, fontWeight: 650 }}>{typeof offer.price === 'number' ? 'R' + offer.price.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'Price unavailable'}</strong>
                   <span style={{ display: 'block', marginTop: 3, fontSize: 11, opacity: .58 }}>{offer.subcategory || offer.category || 'Marketplace seller'}{offerIndex === 0 && selectedProductGroup.offers.length > 1 ? ' · Lowest price' : ''}</span>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px 14px', marginTop: 9, fontSize: 11, color: 'rgba(244,241,236,.72)' }}>
-                    <span>Quantity: <strong style={{ color: '#f4f1ec' }}>{Number.isFinite(Number((offer as any).quantity ?? (offer as any).stock_quantity)) ? Number((offer as any).quantity ?? (offer as any).stock_quantity) : '—'}</strong></span>
-                    <span>Size: <strong style={{ color: '#f4f1ec' }}>{offer.sizes?.length ? offer.sizes.join(', ') : 'Not specified'}</strong></span>
+                  <div style={{ display: 'grid', gap: 12, marginTop: 12 }}>
+                    {offer.sizes?.length ? <fieldset style={{ border: 0, padding: 0, margin: 0 }}>
+                      <legend style={{ marginBottom: 7, fontSize: 11, opacity: .7 }}>Choose size</legend>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
+                        {offer.sizes.map((size) => <button key={size} type="button" aria-pressed={(purchaseSelections[offerSelectionKey(offer)]?.size || offer.sizes?.[0]) === size} onClick={() => setPurchaseSelections((current) => ({ ...current, [offerSelectionKey(offer)]: { size, quantity: current[offerSelectionKey(offer)]?.quantity || 1 } }))} style={{ minWidth: 42, minHeight: 34, padding: '0 11px', border: (purchaseSelections[offerSelectionKey(offer)]?.size || offer.sizes?.[0]) === size ? '1px solid #f4f1ec' : '1px solid rgba(255,255,255,.25)', borderRadius: 6, background: (purchaseSelections[offerSelectionKey(offer)]?.size || offer.sizes?.[0]) === size ? '#f4f1ec' : 'transparent', color: (purchaseSelections[offerSelectionKey(offer)]?.size || offer.sizes?.[0]) === size ? '#111' : '#f4f1ec', cursor: 'pointer' }}>{size}</button>)}
+                      </div>
+                    </fieldset> : <span style={{ fontSize: 11, opacity: .62 }}>No size selection required</span>}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+                      <span style={{ fontSize: 11, opacity: .7 }}>Quantity</span>
+                      <div style={{ display: 'inline-flex', alignItems: 'center', border: '1px solid rgba(255,255,255,.25)', borderRadius: 999, overflow: 'hidden' }}>
+                        <button type="button" aria-label="Decrease quantity" disabled={(purchaseSelections[offerSelectionKey(offer)]?.quantity || 1) <= 1} onClick={() => setPurchaseSelections((current) => ({ ...current, [offerSelectionKey(offer)]: { size: current[offerSelectionKey(offer)]?.size || offer.sizes?.[0] || '', quantity: Math.max(1, (current[offerSelectionKey(offer)]?.quantity || 1) - 1) } }))} style={{ width: 36, height: 36, border: 0, background: 'transparent', color: '#f4f1ec', fontSize: 18, cursor: 'pointer' }}>−</button>
+                        <output aria-live="polite" style={{ minWidth: 30, textAlign: 'center', fontSize: 13, fontVariantNumeric: 'tabular-nums' }}>{purchaseSelections[offerSelectionKey(offer)]?.quantity || 1}</output>
+                        <button type="button" aria-label="Increase quantity" onClick={() => setPurchaseSelections((current) => ({ ...current, [offerSelectionKey(offer)]: { size: current[offerSelectionKey(offer)]?.size || offer.sizes?.[0] || '', quantity: (current[offerSelectionKey(offer)]?.quantity || 1) + 1 } }))} style={{ width: 36, height: 36, border: 0, background: 'transparent', color: '#f4f1ec', fontSize: 18, cursor: 'pointer' }}>+</button>
+                      </div>
+                    </div>
                   </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 10 }}>
                     <a href={'/' + offer.storefront} style={{ color: '#f4f1ec', fontSize: 12, fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 3 }}>Visit storefront <span aria-hidden="true">↗</span></a>
