@@ -30,7 +30,10 @@ The shared foundation owns component primitives, layout geometry, spacing, sizin
 ## Adding a storefront
 
 A new storefront should be introduced by adding a configuration entry in
-`core/configuration/storefronts.ts` that satisfies `StorefrontConfiguration`.
+`core/configuration/storefronts.ts` that satisfies `StorefrontConfiguration`. The
+application generates its home, services, catalogue, About, cart and configured
+policy routes from that entry; its isolated cart storage key is also derived
+from the storefront key.
 The configuration owns its route, category taxonomy and labels, navigation,
 hero and collection variants, About-page copy, policy documents, footer links,
 product fallback copy and presentation roles.
