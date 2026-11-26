@@ -1,4 +1,4 @@
-<button type="button" onClick={() => { if (!validSelection) { toast.error(marketplaceVariants.length || hasSizes ? 'Choose a quantity for at least one option' : 'Choose a quantity'); return; } addProductToCart(offer); setSelectedProductGroup(null); }} disabled={!validSelection} style={{ minHeight: 46, padding: '0 20px', border: 0, borderRadius: 999, background: validSelection ? '#f4f1ec' : 'rgba(244,241,236,.18)', color: validSelection ? '#111' : 'rgba(244,241,ec,.42)', font: 'inherit', fontSize: 12, fontWeight: 700, cursor: validSelection ? 'pointer' : 'not-allowed' }}>Add to cart</button>import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useGlobalCart } from '../../../shared/cart/CartContext';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -146,7 +146,7 @@ export default function DiscoveryCategoryPage() {
       const next = { ...current };
       group.offers.forEach((offer) => {
         const key = offerSelectionKey(offer);
-        if (!next[key]) next[key] = { quantity: offer.productSource === 'marketplace' ? 0 : 1, sizeQuantities: {} };
+        if (!next[key]) next[key] = { quantity: 1, sizeQuantities: {} };
       });
       return next;
     });
@@ -433,9 +433,7 @@ export default function DiscoveryCategoryPage() {
                 const selection = purchaseSelections[offerSelectionKey(offer)] || { quantity: 1, sizeQuantities: {} };
                 const hasSizes = (offer.sizes?.length || 0) > 0;
                 const hasAllocatedSizeQuantity = Object.values(selection.sizeQuantities).some((quantity) => quantity > 0);
-                const marketplaceVariants = offer.productSource === 'marketplace' ? (offer.variants || []) : [];
-                const hasMarketplaceVariantQty = marketplaceVariants.some((variant) => (selection.sizeQuantities[variant.id] || 0) > 0);
-                const validSelection = typeof offer.price === 'number' && (marketplaceVariants.length ? hasMarketplaceVariantQty : (!hasSizes || hasAllocatedSizeQuantity)) && (offer.productSource !== 'marketplace' || marketplaceVariants.length > 0 || selection.quantity > 0);
+                const validSelection = typeof offer.price === 'number' && (!hasSizes || hasAllocatedSizeQuantity);
                 const updateQuantity = (size: string | null, nextQuantity: number) => {
                   setPurchaseSelections((current) => {
                     const previous = current[offerSelectionKey(offer)] || { quantity: 1, sizeQuantities: {} };
@@ -443,7 +441,7 @@ export default function DiscoveryCategoryPage() {
                       ...current,
                       [offerSelectionKey(offer)]: size
                         ? { ...previous, sizeQuantities: { ...previous.sizeQuantities, [size]: Math.max(0, nextQuantity) } }
-                        : { ...previous, quantity: Math.max(offer.productSource === 'marketplace' ? 0 : 1, nextQuantity) },
+                        : { ...previous, quantity: Math.max(1, nextQuantity) },
                     };
                   });
                 };
@@ -456,14 +454,7 @@ export default function DiscoveryCategoryPage() {
                 );
                 return <div key={offer.storefront + '-' + offer.id} style={{ display: 'flex', flex: 1, flexDirection: 'column', gap: 20 }}>
                   <strong style={{ fontSize: 22, fontWeight: 550, fontVariantNumeric: 'tabular-nums' }}>{typeof offer.price === 'number' ? 'R' + offer.price.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'Price unavailable'}</strong>
-                  {marketplaceVariants.length > 0
-                    ? <div role="group" aria-label="Marketplace variant quantities" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 10 }}>
-                        {marketplaceVariants.map((variant) => { const quantity = selection.sizeQuantities[variant.id] || 0; const variantLabel = variant.name || Object.values(variant.options || {}).join(' · ') || variant.sku; return <div key={variant.id} style={{ display:'grid',gridTemplateColumns:'minmax(0,1fr) auto',alignItems:'center',gap:12,padding:'9px 0',borderBottom:'1px solid rgba(255,255,255,.12)' }}><span style={{fontSize:13,fontWeight:550}}>{variantLabel}<small style={{display:'block',opacity:.65}}>R{variant.price.toFixed(2)}</small></span>{quantityControl(quantity,variantLabel+' quantity',()=>updateQuantity(variant.id,quantity-1),()=>updateQuantity(variant.id,quantity+1))}</div>; })}
-                      </div>
-                    : null}
-                  {marketplaceVariants.length
-                    ? null
-                    : hasSizes
+                  {hasSizes
                     ? <div role="group" aria-label="Quantity by size" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 10 }}>
                         {offer.sizes?.map((size) => {
                           const quantity = selection.sizeQuantities[size] || 0;
@@ -477,7 +468,7 @@ export default function DiscoveryCategoryPage() {
                         <span style={{ fontSize: 13, fontWeight: 550 }}>Quantity</span>
                         {quantityControl(selection.quantity, 'quantity', () => updateQuantity(null, selection.quantity - 1), () => updateQuantity(null, selection.quantity + 1))}
                       </div>}
-                  <button type="button" onClick={() => { if (!validSelection) { if (marketplaceVariants.length || hasSizes) toast.error('Choose a quantity for at least one option'); else toast.error('Choose a quantity'); return; } addProductToCart(offer); setSelectedProductGroup(null); }} disabled={!validSelection} style={{ minHeight: 46, padding: '0 20px', border: 0, borderRadius: 999, background: validSelection ? '#f4f1ec' : 'rgba(244,241,236,.18)', color: validSelection ? '#111' : 'rgba(244,241,236,.42)', font: 'inherit', fontSize: 12, fontWeight: 700, cursor: validSelection ? 'pointer' : 'not-allowed' }}>Add to cart</button>
+                  {offer.productSource === 'marketplace' ? <div style={{ padding: '12px 14px', border: '1px solid rgba(255,255,255,.18)', borderRadius: 8, fontSize: 12, lineHeight: 1.5, color: 'rgba(244,241,236,.68)' }}>Simatu Marketplace product · Checkout integration is being completed.</div> : <button type="button" onClick={() => { if (!validSelection) { if (hasSizes) toast.error('Choose a quantity for at least one size'); return; } addProductToCart(offer); setSelectedProductGroup(null); }} disabled={!validSelection} style={{ minHeight: 46, padding: '0 20px', border: 0, borderRadius: 999, background: validSelection ? '#f4f1ec' : 'rgba(244,241,236,.18)', color: validSelection ? '#111' : 'rgba(244,241,236,.42)', font: 'inherit', fontSize: 12, fontWeight: 700, cursor: validSelection ? 'pointer' : 'not-allowed' }}>Add to cart</button>}
                   <a href={offer.href} className="marketplace-store-collection-link" style={{ alignSelf: 'center', textAlign: 'center', display: 'inline-flex', alignItems: 'center', gap: 7, color: 'rgba(244,241,236,.72)', fontSize: 12, lineHeight: 1.4, textDecoration: 'none' }}>Discover more from the {offer.storeName} collection.<svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17 17 7M7 7h10v10" /></svg></a>
                 </div>;
               })}
