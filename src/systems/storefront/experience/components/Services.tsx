@@ -1,233 +1,71 @@
 import ProductCarousel from './ProductCarousel';
 import useStorefront from '../../core/hooks/useStorefront.ts';
-import {
-  useProducts,
-  getCategoryProducts,
-  type ProductCategory,
-} from '../../core/hooks/useProducts.ts';
-
-type ServiceCategory = {
-  id: string;
-  title: string;
-  topText: string;
-  description: string;
-  bgColor: string;
-  textColor: string;
-  textFill: string;
-  accentColor: string;
-  placeholderColor?: string;
-  overlayColor?: string;
-  hasImage: boolean;
-  imageSrc?: string;
-  isDark?: boolean;
-  collectionTitle?: string;
-  collectionHeading?: string;
-  productCategory?: ProductCategory;
-};
+import { useProducts, getCategoryProducts } from '../../core/hooks/useProducts.ts';
+import { getMockPoshiesProducts } from '../../stores/poshies/mock-products.ts';
 
 export default function Services() {
   const { products, isLoading, error } = useProducts();
-  const { categoryOrder, name: storeName, pathFor } = useStorefront();
-  // Each collection is filtered by its exact catalogue category; never combine
-  // products from neighbouring collections in the Poshies storefront.
-  const orderedCategoryTypes: readonly ProductCategory[] = categoryOrder;
-  const isYotaabo = storeName === 'Yotaabo';
-  const isPoshies = storeName === 'Poshies';
-
-  const categories: ServiceCategory[] = [
-    {
-      id: 'his',
-      title: isYotaabo ? 'His' : 'Him',
-      topText: isYotaabo ? 'REFINED. GROUNDED. REMEMBERED.' : 'COMFORT THAT FEELS LIKE YOURS.',
-      description:
-        isYotaabo ? 'Crafted for presence. Distinctive scents for the modern man, refined in character, grounded in confidence, and made to be remembered.' : 'Everyday briefs, boxers and trunks with a comfortable fit and a little more confidence in every layer.',
-      bgColor: 'bg-[var(--sf-background)]',
-      textColor: 'text-[var(--sf-text)]',
-      textFill: isPoshies ? 'fill-[var(--sf-accent)]' : 'fill-[var(--sf-accent)]',
-      accentColor: 'text-[var(--sf-text)]',
-      placeholderColor: isPoshies ? 'bg-[var(--sf-accent)]' : 'bg-[var(--sf-accent)]',
-      overlayColor: 'var(--sf-background)',
-      hasImage: isYotaabo,
-      imageSrc: isYotaabo ? '/systems/storefront/shared/images/hisimage.webp' : undefined,
-      isDark: false,
-      collectionTitle: isYotaabo ? 'His Collection' : 'Collection',
-      collectionHeading: isPoshies ? 'His' : undefined,
-      productCategory: 'His',
-    },
-    {
-      id: 'hers',
-      title: isYotaabo ? 'Hers' : 'Her',
-      topText: isYotaabo ? 'ELEGANCE IN EVERY NOTE' : 'MADE TO FEEL GOOD ON YOUR SKIN.',
-      description:
-        isYotaabo ? 'Fragrances crafted to complement elegance and individuality, whether soft and floral or bold and warm.' : 'Discover bras, panties, matching sets and lingerie chosen for the way they feel, fit and let you express yourself.',
-      bgColor: 'bg-[var(--sf-background)]',
-      textColor: isPoshies ? 'text-[var(--sf-text)]' : 'text-[var(--sf-inverse-text)]',
-      textFill: isPoshies ? 'fill-[var(--sf-accent)]' : 'fill-[var(--sf-accent-secondary)]',
-      accentColor: isPoshies ? 'text-[var(--sf-text)]' : 'text-[var(--sf-inverse-text)]',
-      placeholderColor: isPoshies ? 'bg-[var(--sf-accent)]' : 'bg-[var(--sf-accent-secondary)]',
-      overlayColor: 'var(--sf-background)',
-      hasImage: isYotaabo,
-      imageSrc: isYotaabo ? '/systems/storefront/shared/images/herimage.webp' : undefined,
-      isDark: false,
-      collectionTitle: isPoshies ? 'Collection' : 'Her Collection',
-      collectionHeading: isPoshies ? 'Her' : undefined,
-      productCategory: 'Hers',
-    },
-    {
-      id: 'spaces',
-      title: isYotaabo ? 'Spaces' : 'Lounge',
-      topText: isYotaabo ? 'SCENTS FOR EVERY ROOM' : 'SOFT MOMENTS. YOUR OWN SPACE.',
-      description:
-        isYotaabo ? 'Extend your signature into every space. Ambient scents for the home and car, quietly shaping the atmosphere wherever you go.' : 'Slip into soft sleepwear, robes and relaxed sets made for slow mornings, quiet evenings and time that belongs to you.',
-      bgColor: 'bg-[var(--sf-background)]',
-      textColor: isPoshies ? 'text-[var(--sf-text)]' : 'text-[var(--sf-inverse-text)]',
-      textFill: isPoshies ? 'fill-[var(--sf-accent)]' : 'fill-[var(--sf-accent-tertiary)]',
-      accentColor: isPoshies ? 'text-[var(--sf-text)]' : 'text-[var(--sf-inverse-text)]',
-      placeholderColor: isPoshies ? 'bg-[var(--sf-accent)]' : 'bg-[var(--sf-accent-tertiary)]',
-      overlayColor: 'var(--sf-background)',
-      hasImage: false,
-      isDark: false,
-      collectionTitle: isYotaabo ? 'Collections' : 'Collection',
-      collectionHeading: isPoshies ? 'Lounge' : undefined,
-      productCategory: isYotaabo ? 'Spaces' : 'Lounge',
-    },
-    {
-      id: 'about',
-      title: 'about',
-      topText: isYotaabo ? 'THE STORY BEHIND THE SCENT' : 'INTIMACY, ON YOUR OWN TERMS.',
-      description:
-        isYotaabo ? 'Born from a simple, enduring belief: fragrance is not merely something you wear, but a reflection of who you are. We curate distinctive scents that speak quietly yet linger long, carefully designed to become an unforgettable part of how you are remembered.' : 'Poshies is a space for intimate essentials, everyday comfort and personal expression. Find pieces that feel right against your skin and let confidence begin with you.',
-      bgColor: 'bg-[var(--sf-background)]',
-      textColor: isPoshies ? 'text-[var(--sf-text)]' : 'text-[var(--sf-inverse-text)]',
-      textFill: isYotaabo ? 'fill-[var(--sf-accent)]' : 'fill-[var(--sf-accent)]',
-      accentColor: isPoshies ? 'text-[var(--sf-text)]' : 'text-[var(--sf-inverse-text)]',
-      hasImage: false,
-    },
-  ];
-
-  const orderedCategories = [
-    ...categories
-      .filter((category) => category.productCategory)
-      .sort(
-        (a, b) =>
-          orderedCategoryTypes.indexOf(a.productCategory!) -
-          orderedCategoryTypes.indexOf(b.productCategory!)
-      ),
-    ...categories.filter((category) => !category.productCategory),
-  ];
+  const { collections, categoryOrder, pathFor, name: storeName } = useStorefront();
+  const orderedCollections = [...collections].sort((a, b) => {
+    const ai = a.productCategory ? categoryOrder.indexOf(a.productCategory) : Number.MAX_SAFE_INTEGER;
+    const bi = b.productCategory ? categoryOrder.indexOf(b.productCategory) : Number.MAX_SAFE_INTEGER;
+    return ai - bi;
+  });
 
   return (
-    <section id="services" className={`storefront-collections w-full ${isPoshies ? 'bg-[var(--sf-background)] text-[var(--sf-text)] poshies-collections' : 'bg-[var(--sf-background)]'}`}>
-      {orderedCategories.map((category) => (
-        <div key={category.id} id={category.id} className={`flex flex-col w-full ${isPoshies ? `poshies-collection-section poshies-collection-section--${category.id}` : ""}`}>
-          <div
-            className={`relative grid min-h-[100svh] w-full grid-rows-[auto_1fr_auto] overflow-hidden ${category.bgColor} ${category.textColor} ${isPoshies ? `poshies-collection-panel poshies-collection-panel--${category.id}` : ""} px-6 py-12 sm:px-12 lg:px-20 lg:py-16`}
-          >
-            {/* Top Center Text */}
-            {category.topText && (
-              <div className="relative z-20 flex h-8 w-full items-center justify-center text-center sm:h-auto">
-                <h2 className="whitespace-nowrap font-heading text-sm font-medium uppercase tracking-[0.2em] sm:text-2xl">
-                  {category.topText}
-                </h2>
-              </div>
-            )}
+    <section id="services" className="storefront-collections w-full">
+      {orderedCollections.map((collection) => {
+        const inverse = collection.textTone === 'inverse';
+        const accentToken = collection.accentRole === 'secondary'
+          ? 'var(--sf-accent-secondary)'
+          : collection.accentRole === 'tertiary' ? 'var(--sf-accent-tertiary)' : 'var(--sf-accent)';
+        const collectionProducts = collection.productCategory
+          ? getCategoryProducts(products, collection.productCategory, 5).map((product) => ({
+              ...product,
+              price: `R ${Number(product.price).toFixed(2)}`,
+            }))
+          : [];
+        const mockProducts = collection.mockProductCategory && !isLoading && collectionProducts.length === 0
+          ? getMockPoshiesProducts(collection.mockProductCategory)
+          : [];
 
-            {/* Main Content Area */}
-            <div className="relative flex h-full w-full items-center justify-center">
-              {/* Oversized collection watermark is intentionally omitted from About. */}
-              {(category.id !== 'about' || isPoshies) && (
-                <div
-                  className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center"
-                  style={{ height: '45vh', margin: 'auto' }}
-                >
-                  <svg
-                    aria-hidden="true"
-                    viewBox="0 0 100 100"
-                    preserveAspectRatio="none"
-                    style={{ display: 'block', width: '100%', height: '100%' }}
-                  >
-                    <text
-                      x="50"
-                      y="50%"
-                      dominantBaseline="middle"
-                      textAnchor="middle"
-                      textLength="100"
-                      lengthAdjust="spacingAndGlyphs"
-                      style={{ fontFamily: '"Anton", sans-serif', fontWeight: 400 }}
-                      className={category.textFill}
-                      fontSize="100"
-                    >
-                      {category.title}
-                    </text>
+        return (
+          <div key={collection.id} id={collection.id} className={`flex w-full flex-col ${collection.variantClassName ? `poshies-collection-section poshies-collection-section--${collection.variantClassName}` : ''}`}>
+            <div className={`relative grid min-h-[100svh] w-full grid-rows-[auto_1fr_auto] overflow-hidden bg-[var(--sf-background)] px-6 py-12 sm:px-12 lg:px-20 lg:py-16 ${inverse ? 'text-[var(--sf-inverse-text)]' : 'text-[var(--sf-text)]'} ${collection.variantClassName ? `poshies-collection-panel poshies-collection-panel--${collection.variantClassName}` : ''}`}>
+              {collection.eyebrow && <div className="relative z-20 flex h-8 w-full items-center justify-center text-center sm:h-auto"><h2 className="whitespace-nowrap font-heading text-sm font-medium uppercase tracking-[0.2em] sm:text-2xl">{collection.eyebrow}</h2></div>}
+              <div className="relative flex h-full w-full items-center justify-center">
+                {collection.hasWatermark && <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center" style={{ height: '45vh', margin: 'auto' }}>
+                  <svg aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none" style={{ display: 'block', width: '100%', height: '100%' }}>
+                    <text x="50" y="50%" dominantBaseline="middle" textAnchor="middle" textLength="100" lengthAdjust="spacingAndGlyphs" style={{ fontFamily: 'var(--sf-font-display)', fontWeight: 400, fill: accentToken }} fontSize="100">{collection.title}</text>
                   </svg>
-                </div>
-              )}
-
-              {/* Decorative Script Text */}
-              <div className="pointer-events-none absolute inset-0 z-20">
-                {category.id === 'about' && !isPoshies ? (
-                  /* About: Bottom-Right, not rotated */
-                  <div className="absolute bottom-20 inset-x-0 w-full min-w-0 sm:bottom-32">
-                    <span className={`whitespace-nowrap font-accent text-[clamp(80px,12vw,160px)] font-normal leading-[0.7] tracking-normal ${category.accentColor}`}>
-                      {storeName.toLowerCase()}
-                    </span>
-                  </div>
-                ) : null}
+                </div>}
+                {collection.decorativeWordmark && <div className="pointer-events-none absolute bottom-20 inset-x-0 z-20 w-full min-w-0 sm:bottom-32"><span className="whitespace-nowrap font-accent text-[clamp(80px,12vw,160px)] font-normal leading-[0.7] tracking-normal text-[var(--sf-text)]">{storeName.toLowerCase()}</span></div>}
+                {collection.imageSrc && <img src={collection.imageSrc} alt={`${collection.title} collection`} className="poshies-panel-image pointer-events-none absolute bottom-[15%] right-0 z-40 h-[35vh] w-auto object-contain object-right-bottom drop-shadow-2xl sm:bottom-[20%]" />}
               </div>
-
-              {/* Poshies model cutouts will be added once verified African-model transparent PNG assets are available. */}
-
-              {/* Image Overlay */}
-              {category.hasImage && (
-                <img
-                  src={category.imageSrc || "/systems/storefront/shared/images/hisimage.webp"}
-                  alt={`${category.title} collection`}
-                  className="poshies-panel-image pointer-events-none absolute bottom-[15%] right-0 z-40 h-[35vh] w-auto object-contain object-right-bottom drop-shadow-2xl sm:bottom-[20%]"
-                />
-              )}
+              <div className="relative z-20 flex w-full pt-4"><div className="max-w-[420px]"><p className="font-heading text-lg leading-[1.6]">{collection.description}</p></div></div>
             </div>
-
-            {/* Bottom Area — Paragraph */}
-            <div className="relative z-20 flex w-full pt-4">
-              <div className="max-w-[420px]">
-                <p className="font-heading text-lg leading-[1.6]">
-                  {category.description}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Product Carousel */}
-          {category.productCategory &&
-            category.collectionTitle &&
-            category.placeholderColor &&
-            category.isDark !== undefined && (
-            <div className={`w-full ${category.bgColor} ${isPoshies ? `poshies-collection-carousel poshies-collection-carousel--${category.id}` : ""}`}>
+            {collection.productCategory && collection.collectionTitle && <div className={`w-full bg-[var(--sf-background)] ${collection.variantClassName ? `poshies-collection-carousel poshies-collection-carousel--${collection.variantClassName}` : ''}`}>
               <ProductCarousel
-                title={category.collectionTitle}
-                sectionHeading={category.collectionHeading}
-                products={getCategoryProducts(
-                  products,
-                  category.productCategory,
-                  5
-                ).map((product) => ({
-                  ...product,
-                  price: `R ${Number(product.price).toFixed(2)}`,
-                }))}
-                placeholderColor={category.placeholderColor}
-                bgColor={category.bgColor}
-                textColor={category.textColor}
-                accentColor={category.accentColor}
-                themeColor={isPoshies ? 'var(--sf-accent)' : category.id === 'his' ? 'var(--sf-accent)' : category.id === 'hers' ? 'var(--sf-accent-secondary)' : 'var(--sf-accent-tertiary)'}
-                isDark={category.isDark}
+                title={collection.collectionTitle}
+                sectionHeading={collection.collectionHeading}
+                products={collectionProducts}
+                mockProducts={mockProducts}
+                presentation={collection.carouselVariant ?? 'standard'}
+                emptyStateLabel={storeName}
+                placeholderColor="bg-[var(--sf-surface-soft)]"
+                bgColor="bg-[var(--sf-surface)]"
+                textColor={inverse ? 'text-[var(--sf-inverse-text)]' : 'text-[var(--sf-text)]'}
+                accentColor={`text-[${accentToken}]`}
+                themeColor={accentToken}
+                isDark={inverse}
                 isLoading={isLoading}
                 error={error}
-                viewAllHref={pathFor(`catalog?category=${category.productCategory}`)}
+                viewAllHref={pathFor(`catalog?category=${collection.productCategory}`)}
               />
-            </div>
-          )}
-        </div>
-      ))}
+            </div>}
+          </div>
+        );
+      })}
     </section>
   );
 }
