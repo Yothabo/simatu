@@ -276,15 +276,27 @@
 }
 
 
-/* Poshies menu transforms the search pill into an expanding inline menu. */
+/* Poshies search input stays vertically centered in the collapsed pill; the expanded menu aligns its contents to the top. */
 .storefront-controls--poshies .storefront-controls__search {
-  align-items: flex-start;
-  transition: height .28s ease, border-radius .28s ease, padding .28s ease;
+  align-items: center;
+  transition: height .36s cubic-bezier(.2,.65,.25,1), min-height .36s cubic-bezier(.2,.65,.25,1), border-radius .36s cubic-bezier(.2,.65,.25,1), padding .36s ease;
+}
+.storefront-controls--poshies .storefront-controls__search input[type='search'] {
+  display: block;
+  align-self: center;
+  height: auto;
+  min-height: 0;
+  line-height: 1.25;
+  font-size: 14px;
+  text-align: left;
 }
 .storefront-controls--poshies .storefront-controls__search--menu-open {
-  height: auto;
-  min-height: 54px;
-  padding: 10px 18px;
+  height: 236px;
+  min-height: 236px;
+  box-sizing: border-box;
+  align-items: stretch;
+  overflow: hidden;
+  padding: 14px 16px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
