@@ -4,10 +4,9 @@ const image = (id: string) => id.startsWith('http') ? id : `https://images.unspl
 
 export const DISCOVERY_MARKETS: MoodboardItem[] = [
   { id: 'fashion', image: image('photo-1595175131427-97f688d9000a'), alt: 'Fashion collection', category: 'Fashion', title: 'Express your style, your way' },
-  { id: 'spaces', image: image('photo-1576344671262-e7d3697ac226'), alt: 'Home and interior spaces', category: 'Home & Spaces', title: 'Make the spaces around you feel like yours' },
+  { id: 'spaces', image: image('photo-1576344671262-e7d3697ac226'), alt: 'Home and interior spaces', category: 'Home & Living', title: 'Make the spaces around you feel like yours' },
   { id: 'technology', image: image('photo-1779949294758-f2728920623c'), alt: 'Technology and electronics', category: 'Technology', title: 'Discover technology for life and work' },
   { id: 'culture', image: image('photo-1758030306457-e54f25fe4384'), alt: 'African culture and heritage', category: 'African Culture & Heritage', title: 'Explore stories, identity and cultural expression' },
-  { id: 'living', image: image('photo-1544210163-257effe9399e'), alt: 'Everyday living essentials', category: 'Everyday Living', title: 'Find what makes everyday life easier' },
   { id: 'beauty', image: image('photo-1650389402998-038af7f77af0'), alt: 'Beauty and personal care', category: 'Beauty & Care', title: 'Explore your own approach to beauty and care' },
   { id: 'sports', image: image('photo-1636662978233-bbaf957292c9'), alt: 'Sport and fitness', category: 'Sport & Fitness', title: 'Find your way to an active lifestyle' },
   { id: 'food', image: image('photo-1761506389871-5f33c25d8057'), alt: 'Food and drink', category: 'Food & Drink', title: 'Discover tastes, traditions and everyday enjoyment' },
@@ -44,30 +43,12 @@ export const DISCOVERY_SUBCATEGORIES: Record<string, DiscoverySubcategory[]> = {
     tile('interior-services', 'Interior Design', 'photo-1742541656775-5fc717774c02', 'Interior styling, design and furnishing', ['interior','design','styling']),
     tile('storage', 'Storage & Organisation', 'photo-1678108429557-546cf9a84c35', 'Storage solutions and organised spaces', ['storage','organ']),
   ],
-  technology: [
-    tile('phones', 'Phones & Accessories', 'photo-1672413514634-4781b15fd89e', 'Mobile phones, accessories and essentials', ['phone','mobile']),
-    tile('computing', 'Computers & Laptops', 'photo-1563604921937-aafba027ad0b', 'Computers, laptops and peripherals', ['computer','laptop']),
-    tile('audio', 'Audio', 'photo-1546435770-a3e426bf472b', 'Headphones, speakers and sound equipment', ['audio','headphone','speaker']),
-    tile('gaming', 'Gaming', 'photo-1542751371-adc38448a05e', 'Gaming consoles, equipment and accessories', ['gaming','game']),
-    tile('smart-devices', 'Smart Technology', 'photo-1752262167753-37a0ec83f614', 'Connected devices, wearables and smart home tech', ['smart','watch','wearable']),
-    tile('tech-repair-support', 'Tech Repair & Support', 'photo-1746005718012-480a91f6bf76', 'Device repairs, installations and technical assistance', ['repair','support','install']),
-  ],
-  culture: [
-    tile('heritage-fashion', 'Traditional & Heritage Wear', 'photo-1550828536-34a5e748afa5', 'Traditional attire and culturally rooted fashion', ['traditional','heritage','cultural']),
-    tile('beadwork', 'Beadwork', 'photo-1792071718826-818d32e55a15', 'Beaded accessories, ornaments and craftsmanship', ['bead']),
-    tile('crafts', 'Cultural Crafts', 'photo-1791137612351-c4d8612f8c36', 'Handmade crafts and culturally inspired creations', ['craft','handmade']),
-    tile('art', 'Art & Heritage', 'photo-1623492962519-ac982cffae56', 'African art, heritage and artistic expression', ['art','heritage']),
-    tile('ceremonial', 'Ceremonial Goods', 'photo-1776000602712-a814e856b6fd', 'Products for cultural ceremonies and traditions', ['ceremon','traditional']),
-  ],
-  living: [
     tile('kitchen', 'Kitchen & Dining', 'photo-1654064756910-974764816931', 'Cookware, utensils and dining essentials', ['kitchen','cook','dining']),
     tile('bedding', 'Bedding & Bath', 'photo-1766727923864-730fd98dcce2', 'Bedding, towels and bathroom essentials', ['bedding','bath','towel']),
     tile('home-essentials', 'Household Essentials', 'photo-1716625300723-ac2f22574f73', 'Everyday household products and necessities', ['home','household','essential']),
     tile('plants', 'Plants & Gardening', 'photo-1776151243153-7c50dd432304', 'Plants, garden supplies and growing essentials', ['plant','garden']),
     tile('cleaning', 'Cleaning', 'photo-1740657254989-42fe9c3b8cce', 'Cleaning products, tools and supplies', ['clean']),
-    tile('home-organisation', 'Home Organisation', 'photo-1594481939376-2e0a86488a42', 'Everyday organisers and practical storage', ['organ','storage']),
-  ],
-  beauty: [
+    tile('home-organisation', 'Home Organisation', 'photo-1594481939376-2e0a86488a42', 'Everyday organisers and practical storage', ['organ','storage']),  beauty: [
     tile('skincare', 'Skincare', 'photo-1739980155900-36562bcb7857', 'Skincare products and skin essentials', ['skin']),
     tile('makeup', 'Makeup', 'photo-1723150512429-bfa92988d845', 'Cosmetics, makeup and beauty looks', ['makeup','cosmetic']),
     tile('hair', 'Haircare', 'photo-1570464678671-953f859952c4', 'Hair products, wigs and hair essentials', ['hair']),
@@ -165,5 +146,5 @@ export const DISCOVERY_SUBCATEGORIES: Record<string, DiscoverySubcategory[]> = {
   ],
 };
 
-export const getMarketById = (id: string) => DISCOVERY_MARKETS.find((market) => market.id === id || market.category.toLowerCase().replace(/[^a-z0-9]+/g, '-') === id);
-export const getSubcategories = (marketId: string) => DISCOVERY_SUBCATEGORIES[marketId] || [];
+export const getMarketById = (id: string) => DISCOVERY_MARKETS.find((market) => market.id === id || market.category.toLowerCase().replace(/[^a-z0-9]+/g, '-') === id || (id === 'living' && market.id === 'spaces'));
+export const getSubcategories = (marketId: string) => DISCOVERY_SUBCATEGORIES[marketId === 'living' ? 'spaces' : marketId] || [];
