@@ -3,9 +3,9 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
 export type CartItem = {
   id: string; name: string; price: string; placeholderColor: string;
   image_url?: string | null; description?: string | null; category: string;
-  quantity: number; storefront: string; storeName: string;
+  size?: string | null; quantity: number; storefront: string; storeName: string;
 };
-export type NewCartItem = Omit<CartItem, 'quantity' | 'storeName'> & { storeName?: string };
+export type NewCartItem = Omit<CartItem, 'quantity' | 'storeName'> & { storeName?: string; quantity?: number };
 export type CartState = {
   cartItems: CartItem[];
   addToCart: (item: NewCartItem) => void;
@@ -43,6 +43,7 @@ function normalizeItems(value: unknown): CartItem[] {
         image_url: typeof item.image_url === 'string' ? item.image_url : null,
         description: typeof item.description === 'string' ? item.description : null,
         category: String(item.category ?? 'General'),
+        size: typeof item.size === 'string' ? item.size : null,
         quantity: Math.max(1, Number(item.quantity) || 1),
         storefront,
         storeName: typeof item.storeName === 'string' ? item.storeName : storefront,
@@ -76,13 +77,14 @@ export function CartProvider({
 
   const addToCart = (item: NewCartItem) => setCartItems(prev => {
     const storefront = item.storefront || defaultStorefront || 'unknown';
-    const found = prev.find(p => p.id === item.id && p.storefront === storefront);
-    if (found) return prev.map(p => p.id === item.id && p.storefront === storefront ? { ...p, quantity: p.quantity + 1 } : p);
+    const requestedQuantity = Math.max(1, Math.floor(Number(item.quantity) || 1));
+    const found = prev.find(p => p.id === item.id && p.storefront === storefront && (p.size || null) === (item.size || null));
+    if (found) return prev.map(p => p.id === item.id && p.storefront === storefront && (p.size || null) === (item.size || null) ? { ...p, quantity: p.quantity + requestedQuantity } : p);
     return [...prev, {
       ...item,
       storefront,
       storeName: item.storeName || defaultStorefront || storefront,
-      quantity: 1,
+      quantity: requestedQuantity,
     }];
   });
 
