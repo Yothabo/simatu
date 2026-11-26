@@ -15,7 +15,7 @@ export default function CampaignWorkspace({ tier }: { tier: SubscriptionTierId }
   const entitlements=resolveEntitlements(tier);
   const [errors, setErrors] = useState<string[]>([]);
   const create = () => {
-    const validation = validateCampaign({status, startsAt:start, endsAt:end, goal, participatingStoreIds:[], budgetMinor:budget===''?undefined:Math.round(Number(budget)*100});
+    const validation = validateCampaign({status, startsAt:start, endsAt:end, goal, participatingStoreIds:[], budgetMinor:budget===''?undefined:Math.round(Number(budget)*100)});
     const all = [...validation.errors];
     if (!name.trim()) all.unshift('Campaign name is required.');
     if (!canUseBusinessCenterModule(entitlements,'campaigns')) all.unshift('Campaigns are not included in this plan. Preview an eligible tier in Subscriptions.');
