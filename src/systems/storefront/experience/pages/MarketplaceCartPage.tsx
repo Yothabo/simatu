@@ -27,7 +27,6 @@ export default function MarketplaceCartPage() {
   const selectedCartItems = cartItems.filter((item) => selectedStorefronts.includes(item.storefront));
   const selectedStoreItems = selectedCartItems.filter((item) => item.storefront !== 'marketplace');
   const selectedMarketplaceItems = selectedCartItems.filter((item) => item.storefront === 'marketplace');
-  const selectedCartTotal = selectedCartItems.reduce((total, item) => total + Number(item.price.replace(/[^0-9.]/g, '')) * item.quantity, 0);
 
   useEffect(() => {
     const availableStores = Array.from(new Set(cartItems.map((item) => item.storefront)));
@@ -185,7 +184,7 @@ export default function MarketplaceCartPage() {
 
               <div className="marketplace-cart__summary">
                 <div className="marketplace-cart__subtotal">
-                  Selected checkout subtotal: <span className="font-medium">R {selectedCartTotal.toFixed(2)}</span>
+                  Store subtotal: <span className="font-medium">R {selectedStoreItems.reduce((total, item) => total + Number(item.price.replace(/[^0-9.]/g, '')) * item.quantity, 0).toFixed(2)}</span><br />Marketplace subtotal: <span className="font-medium">R {selectedMarketplaceItems.reduce((total, item) => total + Number(item.price.replace(/[^0-9.]/g, '')) * item.quantity, 0).toFixed(2)}</span>
                 </div>
 
                 <div className="flex gap-4">
