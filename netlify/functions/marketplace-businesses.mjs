@@ -38,6 +38,7 @@ export default async (request) => {
     const result = await pool.query(
       `SELECT
          s.id AS store_id,
+         s.name AS store_name,
          s.slug AS store_slug,
          mc.id AS category_id,
          mc.slug AS category_slug,
