@@ -22,7 +22,7 @@ export default function Hero() {
         </div>
       </div>
       <div className="w-full">
-        <ProductCarousel title="Trending" description={hero.description} products={featuredProducts} placeholderColor="bg-[var(--sf-surface-soft)]" bgColor="bg-[var(--sf-surface)]" textColor="text-[var(--sf-text)]" accentColor="text-[var(--sf-accent)]" themeColor={primaryAccent} isDark={false} isLoading={isLoading} error={error} viewAllHref={pathFor('catalog')} useProductTheme />
+        <ProductCarousel title="Trending" description={hero.description} products={featuredProducts} placeholderColor="bg-[var(--sf-surface-soft)]" bgColor="bg-[var(--sf-surface)]" textColor="text-[var(--sf-text)]" accentColor="text-[var(--sf-accent)]" themeColor={primaryAccent} isDark={false} isLoading={isLoading} error={error} viewAllHref={pathFor('catalog')} emptyStateLabel={storeName} useProductTheme />
       </div>
     </section>
   );

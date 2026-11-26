@@ -1,4 +1,4 @@
-import type { StorefrontConfiguration, StorefrontKey } from '../types/storefront';
+import type { StorefrontConfiguration } from '../types/storefront';
 
 /**
  * Store-owned content and presentation configuration.
@@ -88,7 +88,7 @@ export const STOREFRONTS = {
       categories: [
         { id: 'hers', label: 'Hers' },
         { id: 'his', label: 'His' },
-        { id: 'lounge', label: 'Lounge' },
+        { id: 'spaces', label: 'Lounge' },
       ],
     },
     collections: [

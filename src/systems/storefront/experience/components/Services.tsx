@@ -16,6 +16,12 @@ export default function Services() {
     <section id="services" className={`storefront-collections w-full ${collectionsClassName ?? ""}`}>
       {orderedCollections.map((collection) => {
         const inverse = collection.textTone === 'inverse';
+        const accentClass = collection.accentRole === 'secondary'
+          ? 'text-[var(--sf-accent-secondary)]'
+          : collection.accentRole === 'tertiary' ? 'text-[var(--sf-accent-tertiary)]' : 'text-[var(--sf-accent)]';
+        const accentBackgroundClass = collection.accentRole === 'secondary'
+          ? 'bg-[var(--sf-accent-secondary)]'
+          : collection.accentRole === 'tertiary' ? 'bg-[var(--sf-accent-tertiary)]' : 'bg-[var(--sf-accent)]';
         const accentToken = collection.accentRole === 'secondary'
           ? 'var(--sf-accent-secondary)'
           : collection.accentRole === 'tertiary' ? 'var(--sf-accent-tertiary)' : 'var(--sf-accent)';
@@ -26,7 +32,7 @@ export default function Services() {
             }))
           : [];
         const mockProducts = collection.mockProductCategory && !isLoading && collectionProducts.length === 0
-          ? getMockPoshiesProducts(collection.mockProductCategory)
+          ? getMockProducts(collection.mockProductCategory)
           : [];
 
         return (
@@ -52,10 +58,10 @@ export default function Services() {
                 mockProducts={mockProducts}
                 presentation={collection.carouselVariant ?? 'standard'}
                 emptyStateLabel={storeName}
-                placeholderColor="bg-[var(--sf-surface-soft)]"
+                placeholderColor={accentBackgroundClass}
                 bgColor="bg-[var(--sf-surface)]"
                 textColor={inverse ? 'text-[var(--sf-inverse-text)]' : 'text-[var(--sf-text)]'}
-                accentColor={`text-[${accentToken}]`}
+                accentColor={accentClass}
                 themeColor={accentToken}
                 isDark={inverse}
                 isLoading={isLoading}
