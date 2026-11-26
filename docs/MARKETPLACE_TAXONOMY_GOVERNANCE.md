@@ -87,3 +87,11 @@ The marketplace discovery display taxonomy currently contains 17 general top-lev
 - The category database seed now uses `Age-Restricted` as the restricted parent destination, rather than exposing `Sexual Wellness` as a top-level marketplace category.
 - Added a frontend age-confirmation screen on the destination route. The checkbox is only a UI acknowledgement; it is **not secure age verification** and does not grant access to restricted listings. The restricted catalogue remains intentionally unavailable until server-side age verification, listing moderation, authorization checks across search/direct routes/recommendations, and policy/legal checks are implemented.
 - Taxonomy test expectation updated to 18 total discovery tiles, with one dedicated restricted destination.
+
+
+## Platform assignment workflow
+
+Marketplace classification is managed separately from each storefront's private product-category tree. In the platform Admin Settings, super administrators can review the stores, search by store name or slug, filter stores by an existing general marketplace category, and assign or remove category memberships. A store can be assigned to multiple categories; these assignments describe discovery placement and do not duplicate the store's identity or listing records.
+
+
+Assignments are limited to active general-audience marketplace categories. The restricted category is excluded from the public taxonomy and from this assignment interface. Public business discovery only returns active stores that have an explicit category assignment and at least one active, marketplace-visible, non-age-restricted listing. Storefront-specific product categories remain unchanged and are not substitutes for platform marketplace categories.
