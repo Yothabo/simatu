@@ -113,8 +113,10 @@ for (const file of collectFiles(storefrontExperienceRoot)) {
   if (/['"](?:Poshies|Yotaabo)['"]/.test(source)) {
     errors.push(relativeFile + ' contains a hard-coded store identity; read the active store name or copy from configuration');
   }
-  if (/from\s*['"][^'"]*\/stores\/(?:poshies|yotaabo)\//.test(source)) {
-    errors.push(relativeFile + ' imports a store-owned implementation; pass store data through configuration');
+  const importsStoreOwnedModule = /(?:from\s*|import\s*)['"][^'"]*\/stores\/(?:poshies|yotaabo)\//.test(source);
+  const isThemeStylesheetRegistry = file === path.join(storefrontExperienceRoot, 'index.ts');
+  if (importsStoreOwnedModule && !isThemeStylesheetRegistry) {
+    errors.push(relativeFile + ' imports a store-owned implementation; shared experience files may only register theme stylesheets at the experience entry point');
   }
   if (/\b(?:poshies|yotaabo)-[a-z0-9_-]+/i.test(source)) {
     errors.push(relativeFile + ' contains a brand-prefixed presentation selector; use a neutral storefront class');
