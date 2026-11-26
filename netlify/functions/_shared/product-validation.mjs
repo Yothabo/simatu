@@ -86,6 +86,13 @@ export function validateProduct(body) {
       ? body.subcategory_id.trim()
       : '__invalid__';
 
+  const marketplaceSubcategoryId = body?.marketplace_subcategory_id == null ||
+    (typeof body.marketplace_subcategory_id === 'string' && body.marketplace_subcategory_id.trim() === '')
+    ? null
+    : typeof body.marketplace_subcategory_id === 'string'
+      ? body.marketplace_subcategory_id.trim()
+      : '__invalid__';
+
   if (
     body?.description != null &&
     typeof body.description !== 'string'
@@ -187,6 +194,10 @@ export function validateProduct(body) {
     return { error: 'Please provide a valid subcategory.' };
   }
 
+  if (marketplaceSubcategoryId && !uuidPattern.test(marketplaceSubcategoryId)) {
+    return { error: 'Please provide a valid marketplace subcategory.' };
+  }
+
   if (category.length > 120 || subcategory.length > 120) {
     return {
       error: 'The selected category or subcategory is invalid.',
@@ -227,6 +238,7 @@ export function validateProduct(body) {
       category_id: categoryId,
       subcategory,
       subcategory_id: subcategoryId,
+      marketplace_subcategory_id: marketplaceSubcategoryId,
       description,
       image_url: imageUrl,
       is_active: isActive,
