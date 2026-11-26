@@ -4,7 +4,7 @@ import type { StorefrontConfiguration } from '../types/storefront';
  * Store-owned content and presentation configuration.
  * Experience components render these values; they do not identify individual brands.
  */
-export const STOREFRONTS = {
+export const STOREFRONTS: Record<'yotaabo' | 'poshies', StorefrontConfiguration> = {
   yotaabo: {
     name: 'Yotaabo',
     basePath: '/yotaabo',
@@ -100,7 +100,7 @@ export const STOREFRONTS = {
       { id: 'about', title: 'about', eyebrow: 'INTIMACY, ON YOUR OWN TERMS.', description: 'Poshies is a space for intimate essentials, everyday comfort and personal expression. Find pieces that feel right against your skin and let confidence begin with you.', textTone: 'inverse', accentRole: 'primary', hasWatermark: true, variantClassName: 'about' },
     ],
   },
-} as const satisfies Record<string, StorefrontConfiguration>;
+};
 
 export function isStorefrontKey(value: string): value is keyof typeof STOREFRONTS {
   return Object.prototype.hasOwnProperty.call(STOREFRONTS, value);
