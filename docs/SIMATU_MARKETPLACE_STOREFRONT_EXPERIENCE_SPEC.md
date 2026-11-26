@@ -443,3 +443,20 @@ This is a version-controlled migration only. It has not been applied to any data
 - Added a restricted `Sexual Wellness` category with minimum age 18 as a taxonomy classification separate from Technology. It is not a public discovery tile and has no client access; age/visibility enforcement must be implemented and tested before use.
 - Created `docs/MARKETPLACE_TAXONOMY_GOVERNANCE.md` with classification layers, category boundaries, overlap rules, and category review gate.
 - Remaining audit: review all subcategory terms for overlap across parent categories, then implement structured classification/search synonyms and restricted-audience enforcement.
+
+
+## Implementation progress — Phase B (category API foundation)
+
+### Completed on `codex/simatu-work`
+
+- Added `netlify/functions/marketplace-categories.mjs`, a public read-only API for active platform marketplace categories.
+- The endpoint returns categories ordered by platform sort order and excludes restricted-audience categories. Restricted categories remain withheld until secure server-side age verification and authorization exist.
+- Responses use short public cache headers; failures return a non-cacheable error response.
+
+
+### Integration still outstanding
+
+- The database migration that creates `marketplace_categories` must be applied before this endpoint can serve data.
+- The discovery UI still uses the static taxonomy for category cards and route metadata; it has not yet been switched to this API.
+- Business assignments, dynamic business discovery, product/service eligibility, category filtering, and public listing integration are not complete.
+- No build or endpoint test has been run for this increment.
