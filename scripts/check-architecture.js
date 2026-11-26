@@ -113,7 +113,7 @@ for (const file of collectFiles(storefrontExperienceRoot)) {
   if (/['"](?:Poshies|Yotaabo)['"]/.test(source)) {
     errors.push(relativeFile + ' contains a hard-coded store identity; read the active store name or copy from configuration');
   }
-  const importsStoreOwnedModule = /(?:from\s*|import\s*)['"][^'"]*\/stores\/(?:poshies|yotaabo)\//.test(source);
+  const importsStoreOwnedModule = /(?:from\s*|import\s*)['"][^'"]*\/stores\/[a-z0-9_-]+\//i.test(source);
   if (importsStoreOwnedModule) {
     errors.push(relativeFile + ' imports a store-owned implementation; store themes must be discovered by key, not registered in shared experience files');
   }
