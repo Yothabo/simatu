@@ -9,7 +9,7 @@ export type MockStorefrontProduct = {
   image_url: string;
 };
 
-/** Generate neutral preview cards for a configured collection with no catalogue items. */
+/** Neutral preview cards for a configured collection without catalogue items. */
 export function getMockProducts(category: ProductCategory): MockStorefrontProduct[] {
   return Array.from({ length: 3 }, (_, index) => ({
     id: `mock-${category.toLowerCase()}-${index + 1}`,
