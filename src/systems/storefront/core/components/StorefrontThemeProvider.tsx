@@ -1,6 +1,8 @@
 import { useEffect, type ReactNode } from 'react';
 import useStorefront from '../hooks/useStorefront';
 
+const EMPTY_THEME_OVERRIDES: Record<string, string> = {};
+
 type StorefrontThemeProviderProps = {
   children: ReactNode;
 };
@@ -14,11 +16,12 @@ export default function StorefrontThemeProvider({
   children,
 }: StorefrontThemeProviderProps) {
   const { storeKey, designSystem } = useStorefront();
+  const themeOverrides = designSystem.overrides ?? EMPTY_THEME_OVERRIDES;
 
   useEffect(() => {
     const root = document.documentElement;
     const previousStorefront = root.getAttribute('data-storefront');
-    const previousOverrides = Object.entries(designSystem.overrides).map(([property]) => ({
+    const previousOverrides = Object.entries(themeOverrides).map(([property]) => ({
       property,
       value: root.style.getPropertyValue(property),
       priority: root.style.getPropertyPriority(property),
@@ -40,7 +43,7 @@ export default function StorefrontThemeProvider({
         root.setAttribute('data-storefront', previousStorefront);
       }
     };
-  }, [storeKey, designSystem.overrides]);
+  }, [storeKey, themeOverrides]);
 
   return <>{children}</>;
 }
