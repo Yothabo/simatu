@@ -460,3 +460,14 @@ This is a version-controlled migration only. It has not been applied to any data
 - The discovery UI still uses the static taxonomy for category cards and route metadata; it has not yet been switched to this API.
 - Business assignments, dynamic business discovery, product/service eligibility, category filtering, and public listing integration are not complete.
 - No build or endpoint test has been run for this increment.
+
+
+### Phase B update — discovery category API integration
+
+- `KineticMoodboard.tsx` now requests `/api/marketplace-categories` and uses active platform categories to populate its discovery categories, recent-category selector, and category tile pool.
+- Existing visual category metadata (images, labels, legacy IDs) is reused when matching API category slugs/names, including the `home-living` → `spaces` legacy mapping.
+- Unknown platform categories receive a generic image/description presentation rather than being omitted.
+- The age-restricted destination remains locally represented because the public API intentionally omits restricted categories.
+- If the API fails or returns no categories, the static taxonomy remains the fallback.
+- The category API integration commit: `e677955df7b86d34112b858bd9b6687fccf7f462`.
+- This is a transitional integration: subcategory metadata and category matching still use the static taxonomy. The database migration has not been applied or runtime-tested in this increment.
