@@ -29,7 +29,7 @@ export const STOREFRONTS = {
       description: 'Explore the collection and discover a fragrance direction that fits your mood, your style, and your everyday.',
       actionLabel: 'Explore fragrances',
     },
-    footer: { policyLinks: [] },
+    footer: { policyLinks: [], className: 'bg-white' },
     navigation: {
       variant: 'sections',
       homeLabel: 'Home',
@@ -55,7 +55,7 @@ export const STOREFRONTS = {
     primaryAccent: '#ff1493',
     categoryOrder: ['Hers', 'His', 'Lounge'],
     designSystem: { source: 'shared', name: 'storefront-foundation', overrides: {} },
-    hero: { variant: 'campaign', wordmark: 'Poshies', description: 'Comfort, confidence and everyday essentials.' },
+    hero: { variant: 'campaign', wordmark: 'Poshies', description: 'Comfort, confidence and everyday essentials.', className: 'storefront-hero--campaign' },
     story: {
       heading: 'Comfort should feel like you.',
       paragraphs: [
@@ -69,7 +69,9 @@ export const STOREFRONTS = {
       description: 'Explore intimate essentials, everyday underwear, and comfortable pieces for relaxing and unwinding.',
       actionLabel: 'Explore collections',
     },
+    collectionsClassName: 'storefront-collections--campaign',
     footer: {
+      className: 'storefront-footer--campaign',
       policyLinks: [
         { label: 'Privacy policy', path: 'privacy' },
         { label: 'Terms of use', path: 'terms' },

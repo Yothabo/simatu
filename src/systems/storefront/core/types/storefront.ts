@@ -29,10 +29,11 @@ export interface StorefrontConfiguration {
   primaryAccent: string;
   categoryOrder: readonly StorefrontCategory[];
   designSystem: StorefrontDesignSystem;
-  hero: { variant: 'campaign' | 'wordmark'; wordmark: string; description: string };
+  hero: { variant: 'campaign' | 'wordmark'; wordmark: string; description: string; className?: string };
+  collectionsClassName?: string;
   story: { heading: string; paragraphs: readonly string[]; tone: 'canvas' | 'inverse' };
   contact: { heading: string; description: string; actionLabel: string };
-  footer: { policyLinks: readonly { label: string; path: string }[] };
+  footer: { policyLinks: readonly { label: string; path: string }[]; className?: string };
   navigation: {
     variant: 'expanded' | 'sections';
     homeLabel: string;
