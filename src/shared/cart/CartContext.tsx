@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
 export type CartItem = {
   id: string; name: string; price: string; placeholderColor: string;
   image_url?: string | null; description?: string | null; category: string;
-  size?: string | null; quantity: number; storefront: string; storeName: string;
+  size?: string | null; variantId?: string | null; variantName?: string | null; variantOptions?: Record<string, unknown> | null; quantity: number; storefront: string; storeName: string;
 };
 export type NewCartItem = Omit<CartItem, 'quantity' | 'storeName'> & { storeName?: string; quantity?: number };
 export type CartState = {
@@ -44,6 +44,9 @@ function normalizeItems(value: unknown): CartItem[] {
         description: typeof item.description === 'string' ? item.description : null,
         category: String(item.category ?? 'General'),
         size: typeof item.size === 'string' ? item.size : null,
+        variantId: typeof item.variantId === 'string' ? item.variantId : null,
+        variantName: typeof item.variantName === 'string' ? item.variantName : null,
+        variantOptions: item.variantOptions && typeof item.variantOptions === 'object' ? item.variantOptions as Record<string, unknown> : null,
         quantity: Math.max(1, Number(item.quantity) || 1),
         storefront,
         storeName: typeof item.storeName === 'string' ? item.storeName : storefront,
@@ -78,8 +81,8 @@ export function CartProvider({
   const addToCart = (item: NewCartItem) => setCartItems(prev => {
     const storefront = item.storefront || defaultStorefront || 'unknown';
     const requestedQuantity = Math.max(1, Math.floor(Number(item.quantity) || 1));
-    const found = prev.find(p => p.id === item.id && p.storefront === storefront && (p.size || null) === (item.size || null));
-    if (found) return prev.map(p => p.id === item.id && p.storefront === storefront && (p.size || null) === (item.size || null) ? { ...p, quantity: p.quantity + requestedQuantity } : p);
+    const found = prev.find(p => p.id === item.id && p.storefront === storefront && (p.size || null) === (item.size || null) && (p.variantId || null) === (item.variantId || null));
+    if (found) return prev.map(p => p.id === item.id && p.storefront === storefront && (p.size || null) === (item.size || null) && (p.variantId || null) === (item.variantId || null) ? { ...p, quantity: p.quantity + requestedQuantity } : p);
     return [...prev, {
       ...item,
       storefront,
