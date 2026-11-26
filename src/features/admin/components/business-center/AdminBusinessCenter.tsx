@@ -4,6 +4,7 @@ import { resolveEntitlements } from '../../business-center/entitlements';
 import { validatePromotionRule } from '../../business-center/promotion-rules';
 import type { BusinessCenterModuleId, SubscriptionTierId } from '../../business-center/types';
 import type { PromotionDiscount } from '../../business-center/promotion-rules';
+import { canUseBusinessCenterModule, countLimitEligiblePromotions, transitionPromotion } from '../../business-center/lifecycle';
 import CampaignWorkspace from './CampaignWorkspace';
 import AdvertisingWorkspace from './AdvertisingWorkspace';
 import CommissionWorkspace from './CommissionWorkspace';
@@ -31,7 +32,7 @@ type PromotionPreview = {
   discount: PromotionDiscount;
   startsAt: string;
   endsAt: string;
-  status: 'draft' | 'scheduled' | 'active';
+  status: 'draft' | 'scheduled' | 'active' | 'paused';
 };
 
 const formatZar = (minor: number) =>
@@ -86,6 +87,15 @@ export default function AdminBusinessCenter() {
     }]);
     setPromotionName('');
     setPromotionErrors([]);
+  };
+
+  const changePromotionStatus = (id: string, next: PromotionPreview['status']) => {
+    setPromotions((current) => current.map((promotion) => {
+      if (promotion.id !== id) return promotion;
+      const result = transitionPromotion(promotion.status, next);
+      if (!result.valid) { setPromotionErrors([result.error ?? 'Invalid promotion lifecycle transition.']); return promotion; }
+      return { ...promotion, status: result.next };
+    }));
   };
 
   return (
@@ -158,7 +168,7 @@ export default function AdminBusinessCenter() {
               </div>
               <div className="rounded-xl border p-4" style={{ borderColor: 'var(--admin-border-subtle)' }}>
                 <div className="flex items-center justify-between gap-3"><p className="font-medium">Promotion previews</p><span className="text-xs opacity-60">{promotions.length} created</span></div>
-                {promotions.length === 0 ? <p className="mt-3 text-sm opacity-60">No promotions configured in this session.</p> : <ul className="mt-3 space-y-2">{promotions.map((promo) => <li key={promo.id} className="rounded-lg border p-3" style={{ borderColor: 'var(--admin-border-subtle)' }}><div className="flex flex-wrap items-center justify-between gap-2"><strong>{promo.name}</strong><span className="rounded-full border px-2 py-1 text-xs capitalize">{promo.status}</span></div><p className="mt-1 text-sm opacity-70">{promo.discount.kind === 'percentage' ? `${promo.discount.value}% off` : `${formatZar(promo.discount.valueMinor)} off`}</p><p className="text-xs opacity-60">{new Date(promo.startsAt).toLocaleString()} – {new Date(promo.endsAt).toLocaleString()}</p></li>)}</ul>}
+                {promotions.length === 0 ? <p className="mt-3 text-sm opacity-60">No promotions configured in this session.</p> : <ul className="mt-3 space-y-2">{promotions.map((promo) => <li key={promo.id} className="rounded-lg border p-3" style={{ borderColor: 'var(--admin-border-subtle)' }}><div className="flex flex-wrap items-center justify-between gap-2"><strong>{promo.name}</strong><span className="rounded-full border px-2 py-1 text-xs capitalize">{promo.status}</span></div><div className="mt-2 flex flex-wrap gap-2">{promo.status==='active'&&<button type="button" className="rounded-lg border px-2 py-1 text-xs" onClick={()=>changePromotionStatus(promo.id,'paused')}>Pause</button>}{promo.status==='paused'&&<button type="button" className="rounded-lg border px-2 py-1 text-xs" onClick={()=>changePromotionStatus(promo.id,'active')}>Resume</button>}{promo.status==='draft'&&<button type="button" className="rounded-lg border px-2 py-1 text-xs" onClick={()=>changePromotionStatus(promo.id,'scheduled')}>Schedule</button>}</div><p className="mt-1 text-sm opacity-70">{promo.discount.kind === 'percentage' ? `${promo.discount.value}% off` : `${formatZar(promo.discount.valueMinor)} off`}</p><p className="text-xs opacity-60">{new Date(promo.startsAt).toLocaleString()} – {new Date(promo.endsAt).toLocaleString()}</p></li>)}</ul>}
               </div>
             </div>
           ) : selected === 'campaigns' ? (
