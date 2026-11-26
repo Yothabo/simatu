@@ -14,6 +14,7 @@ import MoodboardPredictiveSearch from '../discover/MoodboardPredictiveSearch';
 import { DISCOVERY_MARKETS, getMarketById, getSubcategories } from '../discover/discovery-taxonomy';
 
 const fallback: MoodboardItem = DISCOVERY_MARKETS[0];
+type CategoryBusiness = { store_id: string; store_name: string; store_slug: string; category_id: string; category_slug: string; eligible_listing_count: number };
 type CategoryProduct = { id: string; name: string; storefront: string; sku?: string | null; sizes?: string[]; category?: string; subcategory?: string; brand?: string; description?: string | null; storeName: string; href: string; price?: number; image_url?: string | null };
 const panel: React.CSSProperties = { padding: 'clamp(24px,5vw,72px)', background: '#111', color: '#f4f1ec', fontFamily: 'inherit' };
 
@@ -33,6 +34,9 @@ export default function DiscoveryCategoryPage() {
     } catch { return []; }
   });
   const [products, setProducts] = useState<CategoryProduct[]>([]);
+  const [categoryBusinesses, setCategoryBusinesses] = useState<CategoryBusiness[]>([]);
+  const [businessesLoading, setBusinessesLoading] = useState(false);
+  const [businessesError, setBusinessesError] = useState('');
   const [productsLoading, setProductsLoading] = useState(false);
   const [productsError, setProductsError] = useState('');
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(() => getSubcategories(categoryId)[0]?.id ?? null);
@@ -63,6 +67,23 @@ export default function DiscoveryCategoryPage() {
 
   useEffect(() => {
     let cancelled = false;
+    setBusinessesLoading(true);
+    setBusinessesError('');
+    setCategoryBusinesses([]);
+    fetch('/api/marketplace-businesses?category=' + encodeURIComponent(categoryId), { headers: { Accept: 'application/json' }, cache: 'no-store' })
+      .then(async (response) => {
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Unable to load category businesses.');
+        return Array.isArray(data.businesses) ? data.businesses as CategoryBusiness[] : [];
+      })
+      .then((businesses) => { if (!cancelled) setCategoryBusinesses(businesses); })
+      .catch((error) => { if (!cancelled) setBusinessesError(error instanceof Error ? error.message : 'Businesses are unavailable.'); })
+      .finally(() => { if (!cancelled) setBusinessesLoading(false); });
+    return () => { cancelled = true; };
+  }, [categoryId]);
+
+  useEffect(() => {
+    let cancelled = false;
     setProductsLoading(true);
     fetch('/api/products?scope=marketplace', { headers: { Accept: 'application/json' } })
       .then(async (response) => {
@@ -89,13 +110,9 @@ export default function DiscoveryCategoryPage() {
   }, []);
 
   const marketProducts = useMemo(() => {
-    const categoryTerms = subcategories.flatMap((subcategory) => subcategory.terms).map((term) => term.toLowerCase());
-    const categoryName = (market?.category || categoryId).toLowerCase();
-    return products.filter((product) => {
-      const searchable = [product.name, product.category, product.subcategory, product.brand].filter(Boolean).join(' ').toLowerCase();
-      return categoryTerms.some((term) => searchable.includes(term)) || searchable.includes(categoryName);
-    });
-  }, [products, market, categoryId, subcategories]);
+    const assignedStoreSlugs = new Set(categoryBusinesses.map((business) => business.store_slug));
+    return products.filter((product) => assignedStoreSlugs.has(product.storefront));
+  }, [products, categoryBusinesses]);
 
   const scopedProducts = useMemo(() => {
     if (!selected) return marketProducts;
@@ -108,10 +125,10 @@ export default function DiscoveryCategoryPage() {
   const participatingStores = useMemo(() => Array.from(new Map(
     scopedProducts.map((product) => [product.storefront, {
       key: product.storefront,
-      name: product.storeName,
+      name: categoryBusinesses.find((business) => business.store_slug === product.storefront)?.store_name || product.storeName,
       href: product.href + '?marketplaceTerms=' + encodeURIComponent((selected?.terms || subcategories.flatMap((subcategory) => subcategory.terms)).join(',')),
     }] as const),
-  ).values()), [scopedProducts, selected, subcategories]);
+  ).values()), [scopedProducts, selected, subcategories, categoryBusinesses]);
 
   const addProductToCart = (product: CategoryProduct) => {
     if (!product.storefront || typeof product.price !== 'number') return;
@@ -277,6 +294,10 @@ export default function DiscoveryCategoryPage() {
         ))}
       </Swiper>
 
+      {(businessesLoading || businessesError) && <div role="status" style={{ margin: '0 0 18px', color: '#f4f1ec', fontSize: 13, opacity: .75 }}>
+        {businessesLoading ? 'Loading classified businesses…' : businessesError}
+      </div>}
+      {selected && !businessesLoading && !businessesError && participatingStores.length === 0 && <p style={{ margin: '0 0 18px', color: '#f4f1ec', opacity: .65, fontSize: 13 }}>No businesses are currently assigned to this category with matching listings.</p>}
       {selected && <div className="discovery-results">
         <div className="discovery-store-stage" style={{ position: 'relative', marginTop: 12 }}>
           {outgoingStoreTitle && <div
