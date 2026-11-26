@@ -39,7 +39,7 @@ function normalizeItems(value: unknown): CartItem[] {
         id: String(item.id),
         name: String(item.name),
         price: String(item.price ?? 'R 0'),
-        placeholderColor: String(item.placeholderColor ?? 'bg-[#f1f1ee]'),
+        placeholderColor: String(item.placeholderColor ?? 'bg-[var(--sf-surface-soft)]'),
         image_url: typeof item.image_url === 'string' ? item.image_url : null,
         description: typeof item.description === 'string' ? item.description : null,
         category: String(item.category ?? 'General'),
