@@ -17,7 +17,7 @@ describe('storefront design-system configuration', () => {
     expect(STOREFRONTS.yotaabo.basePath).toBe('/yotaabo');
     expect(STOREFRONTS.poshies.basePath).toBe('/poshies');
     expect(STOREFRONTS.yotaabo.designSystem.overrides['--sf-accent']).toBe('#8aa89b');
-    expect(STOREFRONTS.poshies.designSystem.overrides['--storefront-accent']).toBe('#ff1493');
+    expect(STOREFRONTS.poshies.designSystem.overrides['--sf-accent']).toBe('#ff1493');
   });
 
   it('recognizes only configured storefront keys', () => {
