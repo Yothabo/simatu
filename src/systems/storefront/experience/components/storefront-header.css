@@ -388,3 +388,17 @@
     min-height: 44px;
   }
 }
+
+
+/* Center menu labels and sharply reduce the expanded menu's corner radius. */
+.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__inline-menu button {
+  justify-content: center;
+  text-align: center;
+  border-radius: 2px;
+}
+.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__search {
+  border-radius: 2px;
+}
+.storefront-controls--poshies .storefront-controls__row--menu-open .storefront-controls__inline-menu {
+  border-radius: 2px;
+}
