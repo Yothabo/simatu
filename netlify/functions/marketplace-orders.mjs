@@ -86,7 +86,7 @@ async function adminList(request) {
   const values=[]; const where=[];
   if(status&&orderStatuses.includes(status)){values.push(status);where.push('o.status=$1');}
   const orders=await pool.query('SELECT o.* FROM public.marketplace_orders o '+(where.length?'WHERE '+where.join(' AND '):'')+' ORDER BY o.created_at DESC LIMIT 200',values);
-  if(!orders.rowCount) return json({orders:[]},{headers:{'Cache-Control':'private,no-store'}});
+  if(!orders.rowCount) return json({orders:[]},200,{'Cache-Control':'private,no-store'});
   const ids=orders.rows.map(o=>o.id);
   const items=await pool.query('SELECT * FROM public.marketplace_order_items WHERE order_id=ANY($1::uuid[]) ORDER BY created_at',[ids]);
   const map=new Map();
