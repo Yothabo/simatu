@@ -7,8 +7,10 @@ export default function Services() {
   const { products, isLoading, error } = useProducts();
   const { collections, categoryOrder, pathFor, name: storeName, collectionsClassName } = useStorefront();
   const orderedCollections = [...collections].sort((a, b) => {
-    const ai = a.productCategory ? categoryOrder.indexOf(a.productCategory) : Number.MAX_SAFE_INTEGER;
-    const bi = b.productCategory ? categoryOrder.indexOf(b.productCategory) : Number.MAX_SAFE_INTEGER;
+    const aIndex = a.productCategory ? categoryOrder.indexOf(a.productCategory) : -1;
+    const bIndex = b.productCategory ? categoryOrder.indexOf(b.productCategory) : -1;
+    const ai = aIndex < 0 ? Number.MAX_SAFE_INTEGER : aIndex;
+    const bi = bIndex < 0 ? Number.MAX_SAFE_INTEGER : bIndex;
     return ai - bi;
   });
 
