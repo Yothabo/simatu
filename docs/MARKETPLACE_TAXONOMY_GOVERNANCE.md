@@ -79,3 +79,11 @@ The marketplace discovery display taxonomy currently contains 17 general top-lev
 ## Automated taxonomy guardrails
 
 `tests/unit/discovery-taxonomy.test.ts` now checks top-level ID/name uniqueness, subcategory ID/title uniqueness across the full taxonomy, Home & Living consolidation and legacy `living` alias behavior, and that restricted Sexual Wellness is not exposed as a general discovery tile. These tests are committed but have not yet been run in a local environment.
+
+
+## Age-Restricted destination rollout
+
+- Added a dedicated `Age-Restricted` discovery tile (`age-restricted`) outside ordinary category/subcategory taxonomy.
+- The category database seed now uses `Age-Restricted` as the restricted parent destination, rather than exposing `Sexual Wellness` as a top-level marketplace category.
+- Added a frontend age-confirmation screen on the destination route. The checkbox is only a UI acknowledgement; it is **not secure age verification** and does not grant access to restricted listings. The restricted catalogue remains intentionally unavailable until server-side age verification, listing moderation, authorization checks across search/direct routes/recommendations, and policy/legal checks are implemented.
+- Taxonomy test expectation updated to 18 total discovery tiles, with one dedicated restricted destination.
