@@ -369,7 +369,7 @@ export default function DiscoveryCategoryPage() {
           style={{ position: 'relative', width: '100%', maxWidth: 760, maxHeight: 'min(90dvh,860px)', overflowY: 'auto', border: '1px solid rgba(255,255,255,.16)', borderRadius: 14, background: '#171717', color: '#f4f1ec', boxShadow: '0 24px 80px rgba(0,0,0,.5)' }}
         >
           <button type="button" onClick={() => setSelectedProductGroup(null)} aria-label="Close product details" style={{ position: 'absolute', zIndex: 2, top: 14, right: 14, width: 38, height: 38, border: '1px solid rgba(255,255,255,.35)', borderRadius: '50%', background: 'rgba(17,17,17,.88)', color: '#fff', fontSize: 22, cursor: 'pointer' }}>×</button>
-          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, .9fr) minmax(0, 1.1fr)' }}>
+          <div className="marketplace-product-modal-layout" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, .9fr) minmax(0, 1.1fr)' }}>
             <div style={{ minHeight: 260, background: '#222' }}>
               {selectedProductGroup.image_url
                 ? <img src={selectedProductGroup.image_url} alt={selectedProductGroup.name} style={{ display: 'block', width: '100%', height: '100%', minHeight: 260, maxHeight: 440, objectFit: 'cover' }} />
