@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiMenu, FiX, FiHome, FiGrid, FiChevronDown, FiShoppingBag, FiHeart, FiUser, FiCoffee } from 'react-icons/fi';
+import { FiMenu, FiX, FiHome, FiGrid, FiChevronDown, FiShoppingBag } from 'react-icons/fi';
 import { FaOpencart } from 'react-icons/fa';
 import useStorefront from '../../core/hooks/useStorefront.ts';
 import { useCart } from '../../core/context/CartContext';
@@ -45,9 +45,9 @@ export default function Header({ sticky = true }: HeaderProps) {
                 <FiGrid aria-hidden="true" /><span>Categories</span><FiChevronDown aria-hidden="true" />
               </div>
               <div className="storefront-controls__category-submenu">
-                <button type="button" onClick={() => scrollToSection('hers')}><FiHeart aria-hidden="true" /><span>Hers</span></button>
-                <button type="button" onClick={() => scrollToSection('his')}><FiUser aria-hidden="true" /><span>His</span></button>
-                <button type="button" onClick={() => scrollToSection('lounge')}><FiCoffee aria-hidden="true" /><span>Lounge</span></button>
+                <button type="button" onClick={() => scrollToSection('hers')}><span>Hers</span></button>
+                <button type="button" onClick={() => scrollToSection('his')}><span>His</span></button>
+                <button type="button" onClick={() => scrollToSection('lounge')}><span>Lounge</span></button>
               </div>
               <Link to={pathFor('catalog')} className="storefront-controls__menu-item" onClick={() => setMenuOpen(false)}>
                 <FiShoppingBag aria-hidden="true" /><span>Catalogue</span>
