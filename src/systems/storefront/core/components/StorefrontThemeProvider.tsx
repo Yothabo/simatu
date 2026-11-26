@@ -7,8 +7,8 @@ type StorefrontThemeProviderProps = {
 
 /**
  * Selects the active storefront theme at the document boundary.
- * Brand values are supplied by each store's scoped stylesheet, not inline
- * runtime overrides, so shared components have one predictable token source.
+ * Brand values are supplied by scoped store stylesheets and configuration
+ * overrides. Shared components consume the same semantic token contract.
  */
 export default function StorefrontThemeProvider({
   children,
