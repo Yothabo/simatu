@@ -164,3 +164,63 @@
 .storefront-controls--poshies .storefront-controls__menu button:hover,
 .storefront-controls--poshies .storefront-controls__menu button:focus-visible { background: #FF1493; color: #FFFFFF; }
 .storefront-controls--poshies .storefront-controls__cart-count { background: #FF1493; color: #FFFFFF; }
+
+/* Poshies floating controls: solid white surfaces, charcoal icons/text, pink interaction. */
+.storefront-controls--poshies {
+  color: #292426;
+}
+.storefront-controls--poshies .storefront-controls__search {
+  background: #fff;
+  border: 1px solid rgba(41, 36, 38, .14);
+  color: #292426;
+  box-shadow: 0 5px 18px rgba(41, 36, 38, .08);
+}
+.storefront-controls--poshies .storefront-controls__search input {
+  background: transparent;
+  border: 0;
+  color: #292426;
+}
+.storefront-controls--poshies .storefront-controls__search input::placeholder {
+  color: rgba(41, 36, 38, .55);
+}
+.storefront-controls--poshies .storefront-controls__icon {
+  background: #fff;
+  border: 1px solid rgba(41, 36, 38, .14);
+  color: #292426;
+  box-shadow: 0 5px 18px rgba(41, 36, 38, .08);
+}
+.storefront-controls--poshies .storefront-controls__icon:hover,
+.storefront-controls--poshies .storefront-controls__icon:focus-visible {
+  background: #fff;
+  border-color: #FF1493;
+  color: #FF1493;
+  outline: none;
+}
+.storefront-controls--poshies .storefront-controls__cart-count {
+  background: #FF1493;
+  color: #fff;
+}
+.storefront-controls--poshies .storefront-controls__menu nav {
+  background: #fff;
+  border: 1px solid rgba(41, 36, 38, .14);
+  box-shadow: 0 8px 24px rgba(41, 36, 38, .09);
+}
+.storefront-controls--poshies .storefront-controls__menu button {
+  background: transparent;
+  color: #292426;
+}
+.storefront-controls--poshies .storefront-controls__menu button:hover,
+.storefront-controls--poshies .storefront-controls__menu button:focus-visible {
+  background: rgba(255, 20, 147, .08);
+  color: #FF1493;
+  outline: none;
+}
+.storefront-controls--poshies .storefront-controls__clear {
+  color: #292426;
+}
+.storefront-controls--poshies .storefront-controls__clear:hover,
+.storefront-controls--poshies .storefront-controls__clear:focus-visible {
+  color: #FF1493;
+  background: transparent;
+  outline: none;
+}
