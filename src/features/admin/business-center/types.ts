@@ -56,6 +56,51 @@ export type BusinessCenterRecordBase = {
   updatedAt: string;
 };
 
+export type SubscriptionRecord = BusinessCenterRecordBase & {
+  tier: SubscriptionTierId;
+  status: SubscriptionStatus;
+  startedAt: string;
+  renewsAt?: string | null;
+  cancelledAt?: string | null;
+};
+
+export type PromotionRecord = BusinessCenterRecordBase & {
+  name: string;
+  status: PromotionStatus;
+  startsAt: string;
+  endsAt: string;
+  discount: { kind: 'percentage'; value: number } | { kind: 'fixed'; valueMinor: number };
+  minimumSubtotalMinor?: number;
+  productIds: string[];
+};
+
+export type CampaignRecord = BusinessCenterRecordBase & {
+  name: string;
+  status: CampaignStatus;
+  goal: 'reach' | 'clicks' | 'sales' | 'conversions';
+  startsAt: string;
+  endsAt: string;
+  budgetMinor?: number;
+  participatingStoreIds: string[];
+};
+
+export type SponsoredPlacementRecord = BusinessCenterRecordBase & {
+  status: SponsoredPlacementStatus;
+  startsAt: string;
+  endsAt: string;
+  budgetMinor: number;
+  spentMinor: number;
+  sponsoredLabelRequired: true;
+  placementTarget: 'homepage' | 'category' | 'search';
+};
+
+export type OrderAttribution = {
+  channel: 'organic' | 'promotion' | 'campaign' | 'sponsored';
+  promotionId?: string | null;
+  campaignId?: string | null;
+  sponsoredPlacementId?: string | null;
+};
+
 export type CommissionRule = BusinessCenterRecordBase & {
   rateBps: number;
   basis: 'subtotal' | 'item';
