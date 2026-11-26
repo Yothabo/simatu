@@ -320,13 +320,8 @@ export default function DiscoveryCategoryPage() {
                 {group.image_url && <img src={group.image_url} alt={group.name} loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />}
               </div>
               <div style={{ display: 'grid', gap: 5, padding: '10px 11px 11px' }}>
-                {lowestOffer?.brand && <span style={{ fontSize: 10, lineHeight: 1.2, opacity: .58, textTransform: 'uppercase', letterSpacing: '.06em' }}>{lowestOffer.brand}</span>}
                 <strong style={{ display: '-webkit-box', minHeight: '2.6em', overflow: 'hidden', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, fontSize: 13, lineHeight: 1.3, fontWeight: 550 }}>{group.name}</strong>
-                <a href={lowestOffer ? '/' + lowestOffer.storefront : '#'} onClick={(event) => event.stopPropagation()} style={{ width: 'fit-content', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: 11, opacity: .65, textDecoration: 'underline', textUnderlineOffset: 3 }}>{lowestOffer?.storeName || 'Marketplace seller'}</a>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, marginTop: 3 }}>
-                  <strong style={{ fontSize: 14, whiteSpace: 'nowrap' }}>{lowestOffer ? 'R' + Number(lowestOffer.price || 0).toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'Price unavailable'}</strong>
-                  {group.offers.length > 1 && <span style={{ fontSize: 10, opacity: .58, whiteSpace: 'nowrap' }}>+{group.offers.length - 1} sellers</span>}
-                </div>
+                <p style={{ display: '-webkit-box', minHeight: '2.8em', margin: 0, overflow: 'hidden', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, fontSize: 11, lineHeight: 1.4, opacity: .66 }}>{lowestOffer?.description?.trim() || 'Explore this product and learn more from its seller.'}</p>
                 <button type="button" onClick={(event) => { event.stopPropagation(); if (lowestOffer) addProductToCart(lowestOffer); }} disabled={!lowestOffer || typeof lowestOffer.price !== 'number'} style={{ minHeight: 34, marginTop: 4, padding: '0 10px', border: '1px solid rgba(255,255,255,.55)', borderRadius: 999, background: '#f4f1ec', color: '#111', font: 'inherit', fontSize: 11, fontWeight: 650, cursor: 'pointer' }}>
                   Add to cart
                 </button>
@@ -363,9 +358,10 @@ export default function DiscoveryCategoryPage() {
             <div style={{ display: 'grid', gap: 8 }}>
               {selectedProductGroup.offers.map((offer, offerIndex) => <div key={`${offer.storefront}-${offer.id}`} style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) auto', alignItems: 'center', gap: 12, padding: '12px 0', borderTop: '1px solid rgba(255,255,255,.12)' }}>
                 <div style={{ minWidth: 0 }}>
-                  <a href={'/' + offer.storefront} style={{ display: 'inline-block', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#f4f1ec', fontSize: 13, textDecoration: 'underline', textUnderlineOffset: 3 }}>{offer.storeName} ↗</a>
-                  <span style={{ display: 'block', marginTop: 3, fontSize: 11, opacity: .58 }}>{offer.subcategory || offer.category || 'Marketplace offer'}{offerIndex === 0 && selectedProductGroup.offers.length > 1 ? ' · Lowest price' : ''}</span>
-                  <strong style={{ display: 'block', marginTop: 5, fontSize: 15 }}>R{Number(offer.price || 0).toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
+                  <strong style={{ display: 'block', fontSize: 13, fontWeight: 550 }}>{offer.storeName}</strong>
+                  <span style={{ display: 'block', marginTop: 3, fontSize: 11, opacity: .58 }}>{offer.subcategory || offer.category || 'Marketplace seller'}{offerIndex === 0 && selectedProductGroup.offers.length > 1 ? ' · Lowest price' : ''}</span>
+                  <a href={'/' + offer.storefront} style={{ display: 'inline-block', marginTop: 9, color: '#f4f1ec', fontSize: 12, fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 3 }}>Visit storefront <span aria-hidden="true">↗</span></a>
+                  <a href={'/' + offer.storefront} style={{ display: 'block', width: 'fit-content', marginTop: 5, color: 'rgba(244,241,236,.68)', fontSize: 11, textDecoration: 'underline', textUnderlineOffset: 3 }}>Learn more from seller</a>
                 </div>
                 <button type="button" onClick={() => addProductToCart(offer)} disabled={typeof offer.price !== 'number'} style={{ minHeight: 38, padding: '0 13px', border: '1px solid rgba(255,255,255,.55)', borderRadius: 999, background: '#f4f1ec', color: '#111', font: 'inherit', fontSize: 12, fontWeight: 650, cursor: 'pointer' }}>Add to cart</button>
               </div>)}
