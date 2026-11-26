@@ -19,7 +19,7 @@ type ProductCarouselProps = {
   mockProducts?: CarouselProduct[]; presentation?: 'standard' | 'editorial'; emptyStateLabel: string;
   placeholderColor: string; bgColor: string; textColor: string; accentColor: string;
   themeColor: string; isDark: boolean; isLoading?: boolean; error?: string | null;
-  viewAllHref: string; useProductTheme?: boolean;
+  viewAllHref: string;
 };
 
 export default function ProductCarousel({
