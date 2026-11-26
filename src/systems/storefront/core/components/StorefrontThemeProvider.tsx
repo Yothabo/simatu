@@ -13,22 +13,34 @@ type StorefrontThemeProviderProps = {
 export default function StorefrontThemeProvider({
   children,
 }: StorefrontThemeProviderProps) {
-  const { storeKey } = useStorefront();
+  const { storeKey, designSystem } = useStorefront();
 
   useEffect(() => {
     const root = document.documentElement;
     const previousStorefront = root.getAttribute('data-storefront');
+    const previousOverrides = Object.entries(designSystem.overrides).map(([property]) => ({
+      property,
+      value: root.style.getPropertyValue(property),
+      priority: root.style.getPropertyPriority(property),
+    }));
 
     root.setAttribute('data-storefront', storeKey);
+    Object.entries(designSystem.overrides).forEach(([property, value]) => {
+      root.style.setProperty(property, value);
+    });
 
     return () => {
+      previousOverrides.forEach(({ property, value, priority }) => {
+        if (value) root.style.setProperty(property, value, priority);
+        else root.style.removeProperty(property);
+      });
       if (previousStorefront === null) {
         root.removeAttribute('data-storefront');
       } else {
         root.setAttribute('data-storefront', previousStorefront);
       }
     };
-  }, [storeKey]);
+  }, [storeKey, designSystem.overrides]);
 
   return <>{children}</>;
 }
