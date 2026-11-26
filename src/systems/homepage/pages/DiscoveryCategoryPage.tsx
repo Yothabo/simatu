@@ -146,7 +146,7 @@ export default function DiscoveryCategoryPage() {
       const next = { ...current };
       group.offers.forEach((offer) => {
         const key = offerSelectionKey(offer);
-        if (!next[key]) next[key] = { quantity: 1, sizeQuantities: {} };
+        if (!next[key]) next[key] = { quantity: offer.productSource === 'marketplace' ? 0 : 1, sizeQuantities: {} };
       });
       return next;
     });
@@ -433,7 +433,9 @@ export default function DiscoveryCategoryPage() {
                 const selection = purchaseSelections[offerSelectionKey(offer)] || { quantity: 1, sizeQuantities: {} };
                 const hasSizes = (offer.sizes?.length || 0) > 0;
                 const hasAllocatedSizeQuantity = Object.values(selection.sizeQuantities).some((quantity) => quantity > 0);
-                const validSelection = typeof offer.price === 'number' && (!hasSizes || hasAllocatedSizeQuantity);
+                const marketplaceVariants = offer.productSource === 'marketplace' ? (offer.variants || []) : [];
+                const hasMarketplaceVariantQty = marketplaceVariants.some((variant) => (selection.sizeQuantities[variant.id] || 0) > 0;
+                const validSelection = typeof offer.price === 'number' && (marketplaceVariants.length ? hasMarketplaceVariantQty : (!hasSizes || hasAllocatedSizeQuantity)) && (offer.productSource !== 'marketplace' || marketplaceVariants.length > 0 || selection.quantity > 0);
                 const updateQuantity = (size: string | null, nextQuantity: number) => {
                   setPurchaseSelections((current) => {
                     const previous = current[offerSelectionKey(offer)] || { quantity: 1, sizeQuantities: {} };
@@ -441,7 +443,7 @@ export default function DiscoveryCategoryPage() {
                       ...current,
                       [offerSelectionKey(offer)]: size
                         ? { ...previous, sizeQuantities: { ...previous.sizeQuantities, [size]: Math.max(0, nextQuantity) } }
-                        : { ...previous, quantity: Math.max(1, nextQuantity) },
+                        : { ...previous, quantity: Math.max(offer.productSource === 'marketplace' ? 0 : 1, nextQuantity) },
                     };
                   });
                 };
@@ -454,6 +456,11 @@ export default function DiscoveryCategoryPage() {
                 );
                 return <div key={offer.storefront + '-' + offer.id} style={{ display: 'flex', flex: 1, flexDirection: 'column', gap: 20 }}>
                   <strong style={{ fontSize: 22, fontWeight: 550, fontVariantNumeric: 'tabular-nums' }}>{typeof offer.price === 'number' ? 'R' + offer.price.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'Price unavailable'}</strong>
+                  {marketplaceVariants.length > 0
+                    ? <div role="group" aria-label="Marketplace variant quantities" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 10 }}>
+                        {marketplaceVariants.map((variant) => { const quantity = selection.sizeQuantities[variant.id] || 0; const variantLabel = variant.name || Object.values(variant.options || {}).join(' · ') || variant.sku; return <div key={variant.id} style={{ display:'grid',gridTemplateColumns:'minmax(0,1fr) auto',alignItems:'center',gap:12,padding:'9px 0',borderBottom:'1px solid rgba(255,255,255,.12)' }}><span style={{fontSize:13,fontWeight:550}}>{variantLabel}<small style={{display:'block',opacity:.65}}>R{variant.price.toFixed(2)}</small></span>{quantityControl(quantity,variantLabel+' quantity',()=>updateQuantity(variant.id,quantity-1),()=>updateQuantity(variant.id,quantity+1))}</div>; })}
+                      </div>
+                    : null}
                   {hasSizes
                     ? <div role="group" aria-label="Quantity by size" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 10 }}>
                         {offer.sizes?.map((size) => {
