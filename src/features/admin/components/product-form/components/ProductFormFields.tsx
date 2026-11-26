@@ -6,6 +6,8 @@ import ProductImageField from './fields/ProductImageField';
 import ProductPricingFields from './fields/ProductPricingFields';
 import ProductSizesField from './fields/ProductSizesField';
 
+const SELECT_STYLE: React.CSSProperties = { width: '100%', minHeight: 42, border: '1px solid var(--admin-border)', borderRadius: 'var(--ds-radius-md)', background: 'var(--admin-surface)', color: 'var(--admin-text-primary)', padding: '8px 12px', font: 'inherit' };
+
 export default function ProductFormFields(props: ProductFormFieldsProps) {
   return (
     <>
@@ -39,6 +41,16 @@ export default function ProductFormFields(props: ProductFormFieldsProps) {
         categoryLoadError={props.categoryLoadError}
         onChange={props.onChange}
       />
+      <section style={{ display: 'grid', gap: 'var(--admin-space-sm)', padding: 'var(--admin-space-md)', border: '1px solid var(--admin-border)', borderRadius: 'var(--ds-radius-lg)' }}>
+        <div><strong style={{ display: 'block', color: 'var(--admin-text-primary)', fontSize: 'var(--admin-size-body)' }}>Marketplace classification</strong><span style={{ color: 'var(--admin-text-secondary)', fontSize: 'var(--admin-size-caption)' }}>Separate from your storefront category. Used for Simatu-wide discovery.</span></div>
+        <label style={{ display: 'grid', gap: 6, color: 'var(--admin-text-primary)', fontSize: 'var(--admin-size-body)' }}>Marketplace category
+          <select value={props.form.marketplace_category_slug ?? ''} onChange={(e) => props.onChange('marketplace_category_slug', e.target.value || null)} disabled={props.isLoadingMarketplaceTaxonomy} style={SELECT_STYLE}><option value="">{props.isLoadingMarketplaceTaxonomy ? 'Loading categories…' : 'Choose marketplace category'}</option>{props.marketplaceCategoryOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>
+        </label>
+        <label style={{ display: 'grid', gap: 6, color: 'var(--admin-text-primary)', fontSize: 'var(--admin-size-body)' }}>Marketplace subcategory
+          <select value={props.form.marketplace_subcategory_id ?? ''} onChange={(e) => props.onChange('marketplace_subcategory_id', e.target.value || null)} disabled={!props.form.marketplace_category_slug || props.isLoadingMarketplaceTaxonomy} style={SELECT_STYLE}><option value="">{!props.form.marketplace_category_slug ? 'Choose category first' : props.isLoadingMarketplaceTaxonomy ? 'Loading subcategories…' : 'Choose subcategory'}</option>{props.marketplaceSubcategoryOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>
+        </label>
+        {props.marketplaceTaxonomyError && <span role="status" style={{ color: 'var(--admin-text-secondary)', fontSize: 'var(--admin-size-caption)' }}>{props.marketplaceTaxonomyError}</span>}
+      </section>
       <ProductDescriptionField form={props.form} onChange={props.onChange} />
       <ProductSizesField
         form={props.form}
