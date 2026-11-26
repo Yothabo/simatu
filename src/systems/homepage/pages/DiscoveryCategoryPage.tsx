@@ -329,11 +329,12 @@ export default function DiscoveryCategoryPage() {
               }}
               style={{ animationDelay: `${Math.min(index, 8) * 45}ms`, minWidth: 0, color: '#f4f1ec', border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, overflow: 'hidden', cursor: 'pointer' }}
             >
-              <div style={{ width: '100%', aspectRatio: '1 / 1', background: '#222', overflow: 'hidden' }}>
+              <div style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1', background: '#222', overflow: 'hidden' }}>
                 {group.image_url && <img src={group.image_url} alt={group.name} loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />}
+                <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(0,0,0,.84) 0%,rgba(0,0,0,.22) 36%,transparent 72%)' }} />
+                <strong style={{ position: 'absolute', left: 12, right: 12, bottom: 12, zIndex: 1, display: '-webkit-box', overflow: 'hidden', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, fontSize: 14, lineHeight: 1.25, fontWeight: 550, textShadow: '0 1px 8px rgba(0,0,0,.45)' }}>{group.name}</strong>
               </div>
-              <div style={{ display: 'grid', gridTemplateRows: 'auto 1fr auto', gap: 8, minHeight: 164, padding: '10px 11px 11px' }}>
-                <strong style={{ display: '-webkit-box', minHeight: '2.6em', overflow: 'hidden', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, fontSize: 13, lineHeight: 1.3, fontWeight: 550 }}>{group.name}</strong>
+              <div style={{ display: 'grid', gridTemplateRows: '1fr auto', gap: 8, minHeight: 92, padding: '10px 11px 11px' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 7, alignContent: 'end', fontSize: 11 }}>
                   <span style={{ opacity: .58 }}>From</span>
                   <strong style={{ fontSize: 14, whiteSpace: 'nowrap' }}>{lowestOffer && typeof lowestOffer.price === 'number' ? 'R' + lowestOffer.price.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'Price unavailable'}</strong>
