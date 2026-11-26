@@ -485,3 +485,14 @@ This is a version-controlled migration only. It has not been applied to any data
 - The endpoint is not yet connected to the category-page UI. Existing product-based discovery remains unchanged pending the next integration step.
 - No runtime database test or build was executed for this endpoint.
 - Commit: `68f7fea5545683596db59d432dd72dadfc4cdf60`.
+
+
+## Phase C follow-up — platform category assignment endpoint
+
+- Added `netlify/functions/marketplace-category-assignments.mjs`, a POST-only endpoint for assigning or unassigning a store to an active general marketplace category.
+- Requires a valid admin session and restricts mutations to `super_admin`.
+- Validates action and UUIDs, locks the category/store rows within a transaction, and uses conflict-safe insertion for repeated assignments.
+- Restricted/inactive categories cannot be assigned through this endpoint.
+- The endpoint is API groundwork only; no admin UI is wired to it yet.
+- No endpoint runtime tests or build were run.
+- Commit: `d5cfce8a89e9562c788a2e1d77d34a991ac6ebaa`.
