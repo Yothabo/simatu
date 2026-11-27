@@ -96,16 +96,27 @@ export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
     finally { setSaving(false); }
   }
 
-  async function remove(product: MarketplaceProduct) {
-    if (!window.confirm(`Delete "${product.name}" from Simatu Marketplace? This action is permanent.`)) return;
+  async function archive(product: MarketplaceProduct) {
+    if (!window.confirm(`Remove "${product.name}" from marketplace visibility and archive it?`)) return;
     setError(''); setNotice('');
     try {
-      const response = await fetch('/api/marketplace-products', { method: 'DELETE', headers: { ...headers, 'Content-Type': 'application/json' }, body: JSON.stringify({ id: product.id }) });
+      const response = await fetch('/api/marketplace-products', {
+        method: 'PATCH',
+        headers: { ...headers, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: product.id, name: product.name, sku: product.sku, description: product.description || '',
+          image_url: product.image_url, price: Number(product.price), supplier_cost: product.supplier_cost ?? null,
+          category_slug: product.category_slug, subcategory_id: product.marketplace_subcategory_id,
+          is_active: false, marketplace_visible: false, sort_order: product.sort_order ?? 0,
+          variants: (product.variants ?? []).map(v => ({ sku: v.sku, name: v.name, price: v.price, supplier_cost: v.supplier_cost ?? null, options: v.options ?? {}, is_active: v.is_active !== false })),
+          attributes: (product.attributes ?? []).map(a => ({ key: a.attribute_key ?? a.key, label: a.label, data_type: a.data_type, unit: a.unit ?? null, validation: a.validation ?? {}, required: Boolean(a.is_required ?? a.required), value: a.value, sort_order: a.sort_order ?? 0, is_active: a.is_active !== false })),
+        }),
+      });
       const data = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(data.error || 'Product deletion failed.');
-      setNotice(`\"${product.name}\" deleted.`);
+      if (!response.ok) throw new Error(data.error || 'Product could not be archived.');
+      setNotice(`"${product.name}" archived and removed from marketplace visibility.`);
       await load();
-    } catch (e) { setError(e instanceof Error ? e.message : 'Delete failed.'); }
+    } catch (e) { setError(e instanceof Error ? e.message : 'Archive failed.'); }
   }
 
   const labelStyle = { display: 'grid', gap: 6, fontSize: 13, fontWeight: 600, color: 'var(--admin-text-primary)' } as const;
@@ -139,7 +150,7 @@ export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
     {loading ? <p className="text-sm opacity-70">Loading marketplace catalogue…</p> : filtered.length===0 ? <div className="rounded-2xl border p-6 text-sm opacity-70" style={surface}>No Simatu marketplace products found.</div> : <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {filtered.map(product=><article key={product.id} className="overflow-hidden rounded-2xl border" style={surface}>
         <img src={product.image_url} alt={product.name} className="h-48 w-full object-cover" loading="lazy"/>
-        <div className="space-y-2 p-4"><div className="flex items-start justify-between gap-2"><h2 className="font-semibold">{product.name}</h2><span className="text-xs opacity-60">{product.is_active?'Active':'Inactive'}</span></div><p className="text-sm opacity-70">{product.sku}</p><p className="text-sm font-semibold">R {Number(product.price).toFixed(2)}</p><p className="text-xs opacity-60">{product.category_name} · {product.subcategory_name}</p><p className="text-xs opacity-60">{product.marketplace_visible?'Marketplace visible':'Not published'}</p><div className="flex gap-2 pt-2"><button type="button" onClick={()=>startEdit(product)} className="rounded-lg border px-3 py-2 text-sm">Edit</button><button type="button" onClick={()=>void remove(product)} className="rounded-lg border px-3 py-2 text-sm">Delete</button></div></div>
+        <div className="space-y-2 p-4"><div className="flex items-start justify-between gap-2"><h2 className="font-semibold">{product.name}</h2><span className="text-xs opacity-60">{product.is_active?'Active':'Inactive'}</span></div><p className="text-sm opacity-70">{product.sku}</p><p className="text-sm font-semibold">R {Number(product.price).toFixed(2)}</p><p className="text-xs opacity-60">{product.category_name} · {product.subcategory_name}</p><p className="text-xs opacity-60">{product.marketplace_visible?'Marketplace visible':'Not published'}</p><div className="flex gap-2 pt-2"><button type="button" onClick={()=>startEdit(product)} className="rounded-lg border px-3 py-2 text-sm">Edit</button><button type="button" onClick={()=>void archive(product)} className="rounded-lg border px-3 py-2 text-sm">Archive</button></div></div>
       </article>)}
     </div>}
   </section>;
