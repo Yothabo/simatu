@@ -162,6 +162,7 @@ export default function AdminPage() {
       <AdminBottomNavigation
         activeTab={activeTab}
         onTabChange={setActiveTab}
+        adminRole={admin?.role}
       />
 
       <AdminPageModals
