@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import KineticMoodboard, { type MoodboardItem } from '../../../systems/homepage/discover/KineticMoodboard';
-import { DISCOVERY_MARKETS, getSubcategories } from '../../../systems/homepage/discover/discovery-taxonomy';
+import { getSubcategories } from '../../../systems/homepage/discover/discovery-taxonomy';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { A11y, Keyboard, Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
