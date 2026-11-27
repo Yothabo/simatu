@@ -471,7 +471,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
               type="button"
               className="kinetic-moodboard__tile"
               key={`${item.id}-${index}`}
-              onClick={() => { if (dragRef.current.moved) { dragRef.current.moved = false; return; } if (adminMode) { onItemClick?.(item); openDiscovery(item); return; } openDiscovery(item); }}
+              onClick={() => { if (dragRef.current.moved) { dragRef.current.moved = false; return; } if (adminMode) { onItemClick?.(item); return; } openDiscovery(item); }}
               aria-label={`${item.category}: ${item.title}`}
               disabled={!interactive}
               data-reveal-final={index === tiles.length - 1 ? "true" : "false"}
