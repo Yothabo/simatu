@@ -4,7 +4,7 @@ import AdminInventory from '../../../features/admin/components/inventory/AdminIn
 import AdminOrders from '../../../features/admin/components/AdminOrders';
 import AdminActivities from '../../../features/admin/components/AdminActivities';
 import AdminBusinessCenter from '../../../features/admin/components/business-center/AdminBusinessCenter';
-import AdminSettingsTab from '../../../features/admin/components/AdminSettingsTab';
+import AdminSettingsTab from '../../../features/admin/components/AdminSettingsTab';\nimport SimatuMarketplaceAdmin from '../../../features/admin/components/SimatuMarketplaceAdmin';
 import type { AdminDashboardContentProps } from './AdminDashboardContent.types';
 
 export default function AdminDashboardContent({
@@ -151,7 +151,7 @@ export default function AdminDashboardContent({
         />
       )}
 
-      {activeTab === 'business' && <AdminBusinessCenter />}
+      {activeTab === 'business' && <AdminBusinessCenter />}\n\n      {activeTab === 'marketplace' && adminRole === 'super_admin' && (\n        <SimatuMarketplaceAdmin accessToken={accessToken} />\n      )}
 
       {activeTab === 'activities' && (
         <AdminActivities
