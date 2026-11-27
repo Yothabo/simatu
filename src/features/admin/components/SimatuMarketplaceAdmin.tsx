@@ -80,8 +80,8 @@ export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
     const payload = {
       ...draft, price: Number(draft.price), supplier_cost: draft.supplier_cost === '' ? null : Number(draft.supplier_cost),
       sort_order: Number(draft.sort_order), id: editing?.id,
-      variants: (editing?.variants ?? []).map(v => ({ sku: v.sku, name: v.name, price: v.price, supplier_cost: v.supplier_cost ?? null, options: v.options ?? {} })),
-      attributes: (editing?.attributes ?? []).map(a => ({ key: a.attribute_key ?? a.key, label: a.label, data_type: a.data_type, unit: a.unit ?? null, validation: a.validation ?? {}, required: Boolean(a.required), value: a.value, sort_order: a.sort_order ?? 0 })),
+      variants: (editing?.variants ?? []).map(v => ({ sku: v.sku, name: v.name, price: v.price, supplier_cost: v.supplier_cost ?? null, options: v.options ?? {}, is_active: v.is_active !== false })),
+      attributes: (editing?.attributes ?? []).map(a => ({ key: a.attribute_key ?? a.key, label: a.label, data_type: a.data_type, unit: a.unit ?? null, validation: a.validation ?? {}, required: Boolean(a.is_required ?? a.required), value: a.value, sort_order: a.sort_order ?? 0, is_active: a.is_active !== false })),
     };
     try {
       const response = await fetch('/api/marketplace-products', {
