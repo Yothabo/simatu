@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { FormEvent } from 'react';
+import type { FormEvent } from 'react';\nimport SimatuPlatformServicesAdmin from './SimatuPlatformServicesAdmin';
 
 type Category = { id: string; name: string; slug: string };
 type Subcategory = { id: string; name: string; slug: string; category_slug: string };
@@ -20,7 +20,7 @@ const field = 'w-full rounded-xl border px-3 py-2 text-sm';
 const surface = { borderColor: 'var(--admin-border-subtle)', background: 'var(--admin-surface)' };
 
 export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
-  const [products, setProducts] = useState<MarketplaceProduct[]>([]);
+  const [section, setSection] = useState<'products'|'services'>('products');\n  const [products, setProducts] = useState<MarketplaceProduct[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
   const [draft, setDraft] = useState(blank);
@@ -127,6 +127,9 @@ export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
       <div><p className="text-xs font-semibold uppercase tracking-widest opacity-60">Platform-owned catalogue</p><h1 className="mt-1 text-2xl font-semibold">Simatu Marketplace</h1><p className="mt-2 max-w-xl text-sm opacity-70">Create and manage products published directly by Simatu. These products are independent of store-owned catalogues.</p></div>
       <button type="button" onClick={() => { reset(); setFormOpen(true); }} className="rounded-xl border px-4 py-2 text-sm font-semibold">+ Add marketplace product</button>
     </header>
+    <nav className="flex flex-wrap gap-2" aria-label="Marketplace admin sections">{(['products','services'] as const).map(item=><button key={item} type="button" onClick={()=>setSection(item)} className={`rounded-xl border px-4 py-2 text-sm font-semibold ${section===item?'bg-neutral-900 text-white':'opacity-70'}`}>{item==='products'?'Products':'Services'}</button>)}</nav>
+    {section === 'services' && <SimatuPlatformServicesAdmin accessToken={accessToken} />}
+    {section === 'products' && <>
     {error && <p role="alert" className="rounded-xl border border-red-300 p-3 text-sm text-red-700">{error}</p>}
     {notice && <p role="status" className="rounded-xl border p-3 text-sm">{notice}</p>}
     {formOpen ? <form onSubmit={save} className="space-y-4 rounded-2xl border p-4" style={surface}>
@@ -153,5 +156,5 @@ export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
         <div className="space-y-2 p-4"><div className="flex items-start justify-between gap-2"><h2 className="font-semibold">{product.name}</h2><span className="text-xs opacity-60">{product.is_active?'Active':'Inactive'}</span></div><p className="text-sm opacity-70">{product.sku}</p><p className="text-sm font-semibold">R {Number(product.price).toFixed(2)}</p><p className="text-xs opacity-60">{product.category_name} · {product.subcategory_name}</p><p className="text-xs opacity-60">{product.marketplace_visible?'Marketplace visible':'Not published'}</p><div className="flex gap-2 pt-2"><button type="button" onClick={()=>startEdit(product)} className="rounded-lg border px-3 py-2 text-sm">Edit</button><button type="button" onClick={()=>void archive(product)} className="rounded-lg border px-3 py-2 text-sm">Archive</button></div></div>
       </article>)}
     </div>}
-  </section>;
+    </>}\n  </section>;
 }
