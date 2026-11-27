@@ -7,7 +7,7 @@ export type AdminRow = AdminProduct & {
   created_at: string;
 };
 
-export type Tab = 'overview' | 'products' | 'orders' | 'inventory' | 'activities' | 'business' | 'settings';
+export type Tab = 'overview' | 'products' | 'orders' | 'inventory' | 'activities' | 'business' | 'marketplace' | 'settings';
 
 export type CategoryFilter = 'All' | 'His' | 'Hers' | 'Spaces' | 'Lounge' | 'Hidden';
 
