@@ -1,11 +1,13 @@
 # Product Core Persistence Transition — Implementation Plan
 
 **Branch:** `codex/simatu-work`
-**Status:** Design gate; no schema changes or data migration executed.
+**Status:** Architecture transition in progress; no schema changes or data migration executed.
 
 ## Decision
 
-Do not create a third competing product identity table. The existing `public.marketplace_products` is store-independent and is the strongest candidate for evolving into the canonical Simatu product core, but it currently mixes core identity with channel/commercial fields. The existing `public.products` table remains a legacy store-owned catalogue and must stay available as a compatibility source while consumers are migrated.
+Do not create a third competing product identity table. The existing `public.marketplace_products` is the candidate to evolve into canonical Simatu Product Core, but it currently mixes identity with channel/commercial fields. The existing `public.products` table is legacy store-owned catalogue infrastructure; it will not dictate the new architecture.
+
+No legacy product crosswalk or automatic identity matching will be introduced. We are designing the new model cleanly. Legacy consumers will be retired or replaced according to the transition plan, not kept alive by new mapping infrastructure.
 
 ## Verified table/API constraints
 
@@ -15,74 +17,71 @@ The current independent Marketplace schema includes:
 - `marketplace_product_attribute_values`: Marketplace product FK, attribute-definition FK and JSON value.
 - Product attribute definitions have a marketplace scope/owner in addition to system, store and legacy product scopes.
 
-The Marketplace API and order system directly depend on these table/column semantics today. Marketplace order items retain a restrictive FK to Marketplace products and price/name/SKU snapshots. Existing products API writes the store-owned `public.products` records, resolving store category and subcategory within a store.
+The Marketplace API and order system directly depend on these table/column semantics today. Marketplace order items retain a restrictive FK to Marketplace products and price/name/SKU snapshots. Existing products API writes store-owned `public.products` records and resolves store category/subcategory within a store.
 
-## Target logical model (no premature table design)
+## Target logical model
 
-1. **Product core:** Simatu-owned identity, descriptive content, shared platform taxonomy, governed attributes, media, and product variants. No store owner, store price, or channel publication flags.
-2. **Store listing:** explicit store-to-product association, listing state, store price/compare-at price, presentation overrides, store sort/navigation metadata. Listing lifecycle is independent from core status.
-3. **Marketplace participation:** separate lifecycle/eligibility/submission/approval and stock/custody states. It is not a product boolean.
-4. **Inventory:** store/custody/variant-scoped quantities, movements, reservations and receiving. Inventory is not product identity.
-5. **Commerce:** order lines retain immutable product/variant, SKU, description and price snapshots and existing historical references.
+1. **Product Core:** Simatu-owned canonical identity, descriptive content, shared taxonomy, governed attributes, media, variants. No store ownership, store price, or channel publication flags.
+2. **Store Listings:** Separate store-to-core-product association, store price/compare-at price, listing lifecycle, presentation overrides, and store merchandising/navigation metadata.
+3. **Marketplace Participation:** Independent eligibility, subscription/participation, submission, verification/approval, receiving/stock/custody and publishing lifecycle—not a product visibility boolean.
+4. **Inventory:** Stock, reservations, movements, receiving and custody separate from product identity.
+5. **Commerce:** Cart, checkout, orders, refunds and immutable historical snapshots.
 
 ## Transition strategy
 
 ### Stage 0 — compatibility and evidence (current)
-- Trace every consumer, FK, trigger, RLS/grant, unique constraint and index of both product models.
-- Establish an explicit legacy-product-to-core/listing mapping table design. Never match solely by product name or SKU.
-- Verify product variants, media, inventory, POS, storefront, Marketplace checkout, refunds, analytics and historical order consumers.
-- Establish backup/rollback and validation counts before migration.
+- Trace consumers, FK, triggers, RLS/grants, unique constraints and indexes across the legacy and Marketplace product systems.
+- Audit variants, media, inventory, POS, storefront, Marketplace checkout, refunds, analytics and historical order consumers.
+- Establish backup/rollback and validation counts before any migration.
+- Do not create legacy-to-core mapping/crosswalk tables or match products by name/SKU.
 
-### Stage 1 — additive core compatibility
-- Evolve/reuse the independent product identity only after the full schema audit.
-- Preserve Marketplace API response fields using a compatibility projection; existing Marketplace listing/order behavior must continue.
-- Keep current `public.products` reads/writes operational during transition.
-- Add a stable crosswalk from each legacy product ID to the canonical core ID and store-listing ID. Mapping must be explicit, unique and auditable.
-- Add the store listing layer without moving/deleting legacy data. No automatic destructive cleanup.
+### Stage 1 — clean core and listing persistence
+- Evolve/reuse the independent product identity only after schema audit.
+- Preserve existing Marketplace API response compatibility while decoupling core identity from commercial/channel fields.
+- Keep legacy `public.products` available only as needed for current compatibility; do not expand its role.
+- Build Store Listing persistence as a distinct association that references canonical core product identity. Do not move, match, copy or delete legacy product data as part of its foundation.
+- No automatic destructive cleanup.
 
 ### Stage 2 — new platform product API
 - Introduce platform product CRUD that does not require a storefront or store category.
-- Authorization: only platform-authorized roles may create/edit product core. Store admins must not gain cross-store or core-edit privileges by virtue of the new endpoint.
+- Only platform-authorized roles may create/edit product core. Store admins must not gain cross-store/core privileges.
 - Store listing CRUD is a separate endpoint/service with explicit store authorization.
-- API writes should validate canonical taxonomy, variants and governed attributes in a transaction.
-- Marketplace participation requests are separate lifecycle actions, not a visibility flag.
+- Validate canonical taxonomy, variants and governed attributes transactionally.
+- Marketplace participation uses separate lifecycle actions, not product visibility.
 
 ### Stage 3 — Admin form cutover
-- Admin product creation/edit targets product core only: name, SKU/identity rules, description, shared category/subcategory, attributes, variants and media.
-- Store selection, price, listing status and navigation are moved to a separate listing workflow.
-- Remove legacy store-category validation from product-core submission only after the new API and crosswalk exist.
-- Preserve edit compatibility for legacy records until migrated and verified.
+- Product creation/edit targets Product Core: identity, description, shared category/subcategory, attributes, variants and media.
+- Store selection, price, listing status and navigation move to a separate Store Listing workflow.
+- Remove legacy store-category validation from core submission as the new API is implemented.
+- Legacy UI/API compatibility is not a reason to add crosswalk infrastructure.
 
 ### Stage 4 — consumer adapters
-Move consumers individually, with tests and rollback:
+Move consumers individually with tests and rollback:
 - Admin list/details
-- storefront listing and search/category filtering
+- Storefront listing and search/category filtering
 - POS lookup
-- inventory/receiving/variant movement
+- Inventory/receiving/variant movement
 - Marketplace catalogue/participation
-- cart, checkout, order, refunds
-- analytics/reporting
+- Cart, checkout, order, refunds
+- Analytics/reporting
 
 ### Stage 5 — retirement gate
-Legacy store-owned product fields/API may be retired only after all consumers are migrated, crosswalk integrity is verified, historical records remain accessible, and a separate explicit retirement approval is granted.
+Legacy store-owned product fields/API may be retired only after consumers are replaced, historical records remain safely accessible, and explicit retirement approval is granted.
 
-## Migration validation gates
+## Validation gates
 
 Before any owner-applied SQL migration:
-- schema and FK inventory reviewed;
+- schema/FK inventory reviewed;
 - counts captured for legacy/core/variants/media/attributes/listings/orders/inventory;
-- all legacy products have either a verified mapping or a documented exception;
-- no orphaned variant, inventory, cart, order or historical reference;
-- unique SKU scope and SKU collisions resolved;
-- category mapping reviewed (no silent label matching);
+- SKU scope and collisions understood without auto-matching;
+- taxonomy reviewed;
 - RLS, role authorization and API tests pass;
-- compatibility API smoke tests pass;
+- compatibility smoke tests pass;
 - rollback/forward-repair instructions reviewed.
 
 ## Explicitly not done
-
-- No migration SQL created or applied.
-- No data copied, re-keyed or deleted.
+- No schema migration created or applied as part of this transition.
+- No data copied, re-keyed, matched or deleted.
 - No endpoint cutover.
 - No Admin/storefront/POS/inventory/Marketplace consumer switched.
 - No build or test run is claimed.
