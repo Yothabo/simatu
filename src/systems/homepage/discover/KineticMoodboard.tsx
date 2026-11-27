@@ -471,7 +471,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
               type="button"
               className="kinetic-moodboard__tile"
               key={`${item.id}-${index}`}
-              onClick={() => { if (dragRef.current.moved) { dragRef.current.moved = false; return; } if (adminMode) { const market = marketItems.find((entry) => entry.id === item.id); if (market) { setSelectedCategory((current) => current === market.category ? null : market.category); return; } onItemClick?.(item); return; } openDiscovery(item); }}
+              onClick={() => { if (dragRef.current.moved) { dragRef.current.moved = false; return; } if (adminMode) { onItemClick?.(item); openDiscovery(item); return; } openDiscovery(item); }}
               aria-label={`${item.category}: ${item.title}`}
               disabled={!interactive}
               data-reveal-final={index === tiles.length - 1 ? "true" : "false"}
@@ -486,7 +486,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       </div>
 
 
-      {adminMode && selectedCategory && <button type="button" aria-label="Back to marketplace categories" onClick={() => setSelectedCategory(null)} style={{ position: 'absolute', zIndex: 20, top: 16, left: 16, minWidth: 44, minHeight: 44, padding: '0 16px', border: '1px solid rgba(255,255,255,.25)', borderRadius: 999, background: 'rgba(20,20,20,.55)', color: '#fff', backdropFilter: 'blur(16px)', cursor: 'pointer' }}>Back to categories</button>}
+      
       {!adminMode && normalizedSearch.length >= 1 && interactive && !searchDismissed && <MoodboardPredictiveSearch query={searchQuery} loading={networkLoading} error={networkError} stores={searchStores.map(store => ({ key: store.key, name: store.name, href: store.href }))} categories={searchCategories} products={matchingProducts} onCategorySelect={setSearchQuery} />}
 
     </section>
