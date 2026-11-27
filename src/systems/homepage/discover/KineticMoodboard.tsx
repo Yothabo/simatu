@@ -145,7 +145,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         const data = await response.json();
         if (!response.ok || !Array.isArray(data.tiles) || !data.tiles.length) return;
         const managed = data.tiles.map((tile: { category_slug?: string; category_name?: string; image_url?: string; alt_text?: string; title?: string; subtitle?: string; sort_order?: number }) => ({
-          id: String(tile.category_slug || ''),
+          id: String(tile.category_slug || '') === 'home-living' ? 'spaces' : String(tile.category_slug || ''),
           image: String(tile.image_url || ''),
           alt: String(tile.alt_text || tile.category_name || 'Marketplace category'),
           category: String(tile.category_name || tile.category_slug || ''),
