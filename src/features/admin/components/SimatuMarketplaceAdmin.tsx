@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';\nimport type { FormEvent } from 'react';
 
 type Category = { id: string; name: string; slug: string };
 type Subcategory = { id: string; name: string; slug: string; category_slug: string };
 type MarketplaceProduct = {
   id: string; name: string; sku: string; description: string; image_url: string;
   price: number; supplier_cost: number | null; category_slug: string; category_name: string;
-  subcategory_id: string; subcategory_name: string; is_active: boolean;
+  marketplace_subcategory_id: string; subcategory_name: string; is_active: boolean;
   marketplace_visible: boolean; sort_order: number;
   variants?: Array<Record<string, unknown>>; attributes?: Array<Record<string, unknown>>;
 };
@@ -62,7 +62,7 @@ export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
       name: product.name, sku: product.sku, description: product.description || '',
       image_url: product.image_url, price: String(product.price ?? 0),
       supplier_cost: product.supplier_cost == null ? '' : String(product.supplier_cost),
-      category_slug: product.category_slug, subcategory_id: product.subcategory_id,
+      category_slug: product.category_slug, subcategory_id: product.marketplace_subcategory_id,
       is_active: product.is_active, marketplace_visible: product.marketplace_visible,
       sort_order: String(product.sort_order ?? 0),
     });
@@ -74,7 +74,7 @@ export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
     ...(key === 'category_slug' ? { subcategory_id: '' } : {}),
   }));
 
-  async function save(event: React.FormEvent) {
+  async function save(event: FormEvent) {
     event.preventDefault(); setSaving(true); setError(''); setNotice('');
     const payload = {
       ...draft, price: Number(draft.price), supplier_cost: draft.supplier_cost === '' ? null : Number(draft.supplier_cost),
