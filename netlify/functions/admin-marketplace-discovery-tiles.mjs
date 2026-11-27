@@ -1,0 +1,17 @@
+import { Pool } from 'pg';
+import { requireAdmin } from './_shared/auth.mjs';
+const pool=new Pool({connectionString:process.env.SUPABASE_DB_URL,ssl:{rejectUnauthorized:false},max:2,idleTimeoutMillis:10000,connectionTimeoutMillis:10000});
+const json=(data,status=200)=>Response.json(data,{status,headers:{'Cache-Control':'no-store'}});
+const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9]{3}-[89ab][0-9]{3}-[0-9a-f]{12}$/i;
+const validPath=(s)=>typeof s==='string'&&/^\/discover\/[a-z0-9-]+$/.test(s);
+export default async request=>{
+ const admin=await requireAdmin(request,pool);if(!admin)return json({error:'Authentication required.'},401);if(admin.role!=='super_admin')return json({error:'Super Admin only.'},403);
+ if(request.method==='GET'){try{const r=await pool.query(`SELECT t.*,c.name AS category_name,c.slug AS category_slug,c.audience_policy,c.minimum_age FROM public.marketplace_discovery_tiles t JOIN public.marketplace_categories c ON c.id=t.marketplace_category_id ORDER BY t.sort_order,t.title`);return json({tiles:r.rows});}catch(e){console.error('[admin-marketplace-tiles] read',e?.code);return json({error:'Tiles could not be loaded.'},500);}}
+ if(!['POST','PATCH','DELETE'].includes(request.method))return json({error:'Method not allowed.'},405);
+ let b;try{b=await request.json()}catch{return json({error:'Invalid JSON.'},400)}
+ const id=String(b.id||'');if(request.method!=='POST'&&!uuid.test(id))return json({error:'Valid tile ID required.'},400);
+ if(request.method==='DELETE'){try{const r=await pool.query('UPDATE public.marketplace_discovery_tiles SET is_active=FALSE,updated_at=NOW() WHERE id=$1 RETURNING id',[id]);return r.rowCount?json({archived:true}):json({error:'Tile not found.'},404);}catch{return json({error:'Tile archive failed.'},500)}}
+ const categoryId=String(b.marketplace_category_id||''),title=String(b.title||'').trim(),imageUrl=String(b.image_url||'').trim(),alt=String(b.alt_text||'').trim(),subtitle=b.subtitle==null?null:String(b.subtitle).trim().slice(0,300),path=String(b.destination_path||''),order=Number(b.sort_order??0),active=b.is_active!==false;
+ if(!uuid.test(categoryId)||title.length<1||title.length>120||!/^https?:\/\//.test(imageUrl)||alt.length<1||alt.length>250||!validPath(path)||!Number.isInteger(order)||order<0)return json({error:'Category, title, HTTP image URL, alt text, /discover/ destination and non-negative order are required.'},400);
+ try{const values=[categoryId,title,imageUrl,alt,subtitle,path,order,active];const sql=request.method==='POST'? `INSERT INTO public.marketplace_discovery_tiles(marketplace_category_id,title,image_url,alt_text,subtitle,destination_path,sort_order,is_active) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`:`UPDATE public.marketplace_discovery_tiles SET marketplace_category_id=$1,title=$2,image_url=$3,alt_text=$4,subtitle=$5,destination_path=$6,sort_order=$7,is_active=$8,updated_at=NOW() WHERE id=$9 RETURNING *`;const r=await pool.query(sql,request.method==='POST'?values:[...values,id]);return r.rowCount?json({tile:r.rows[0]},request.method==='POST'?201:200):json({error:'Tile not found.'},404);}catch(e){if(e?.code==='23505')return json({error:'A tile already exists for this category.'},409);console.error('[admin-marketplace-tiles] mutation',e?.code);return json({error:'Tile could not be saved.'},500)}
+};
