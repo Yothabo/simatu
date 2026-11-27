@@ -16,7 +16,7 @@ export default function ProductFormFields(props: ProductFormFieldsProps) {
       <ProductPricingFields form={props.form} onChange={props.onChange} />
 
       <section style={SECTION_STYLE}>
-        <strong style={SECTION_TITLE_STYLE}>Visibility</strong>
+        <strong>Visibility</strong>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--admin-space-md)' }}>
           <label style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--admin-text-primary)', fontSize: 'var(--admin-size-body)' }}>
             <input type="checkbox" checked={props.form.storefront_visible} onChange={(event) => props.onChange('storefront_visible', event.target.checked)} /> Storefront
