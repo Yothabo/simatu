@@ -6,19 +6,22 @@ import AccentButton from './AccentButton';
 
 type AdminBottomNavigationProps = {
   activeTab: Tab;
-  onTabChange: (tab: Tab) => void;\n  adminRole?: string;
+  onTabChange: (tab: Tab) => void;
+  adminRole?: string;
 };
 
 export default function AdminBottomNavigation({
   activeTab,
   onTabChange,
+  adminRole,
 }: AdminBottomNavigationProps) {
   const tabs: { tab: Tab; label: string; Icon: typeof FiGrid }[] = [
     { tab: 'overview', label: 'Overview', Icon: FiGrid },
     { tab: 'products', label: 'Products', Icon: VscPackage },
     { tab: 'orders', label: 'Orders', Icon: FaOpencart },
     { tab: 'inventory', label: 'Inventory', Icon: FiPackage },
-    { tab: 'business', label: 'Business', Icon: FiBriefcase },\n    ...(adminRole === 'super_admin' ? [{ tab: 'marketplace' as Tab, label: 'Market', Icon: FiShoppingBag }] : []),
+    { tab: 'business', label: 'Business', Icon: FiBriefcase },
+    ...(adminRole === 'super_admin' ? [{ tab: 'marketplace' as Tab, label: 'Market', Icon: FiShoppingBag }] : []),
     { tab: 'settings', label: 'Settings', Icon: FiSettings },
   ];
 
