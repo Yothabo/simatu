@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';\nimport type { FormEvent } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import type { FormEvent } from 'react';
 
 type Category = { id: string; name: string; slug: string };
 type Subcategory = { id: string; name: string; slug: string; category_slug: string };
@@ -89,8 +90,8 @@ export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error || 'Product could not be saved.');
-      setNotice(editing ? 'Marketplace product updated.' : 'Marketplace product created.');
-      reset(); await load();
+      const successMessage = editing ? 'Marketplace product updated.' : 'Marketplace product created.';
+      setEditing(null); setFormOpen(false); setDraft(blank); setError(''); setNotice(successMessage); await load();
     } catch (e) { setError(e instanceof Error ? e.message : 'Save failed.'); }
     finally { setSaving(false); }
   }
