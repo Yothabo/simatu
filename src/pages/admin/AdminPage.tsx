@@ -126,20 +126,24 @@ export default function AdminPage() {
     session.user.email?.split('@')[0] ??
     'Admin';
 
+  const isMarketplace = activeTab === 'marketplace';
+
   return (
     <main
       className="admin-scope min-h-screen bg-white"
       data-theme={adminTheme}
       style={buildAdminThemeStyle(adminTheme)}
     >
-      <AdminPageHeader
-        email={session.user.email?.split('@')[0] || 'Admin'}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        adminTheme={adminTheme}
-        setAdminTheme={setAdminTheme}
-        onLogout={logout}
-      />
+      {!isMarketplace && (
+        <AdminPageHeader
+          email={session.user.email?.split('@')[0] || 'Admin'}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          adminTheme={adminTheme}
+          setAdminTheme={setAdminTheme}
+          onLogout={logout}
+        />
+      )}
 
       <AdminPageDashboard
         activeTab={activeTab}
@@ -159,11 +163,13 @@ export default function AdminPage() {
         onStorefrontChange={pageActions.clearSelectionForStorefrontChange}
       />
 
-      <AdminBottomNavigation
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        adminRole={admin?.role}
-      />
+      {!isMarketplace && (
+        <AdminBottomNavigation
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          adminRole={admin?.role}
+        />
+      )}
 
       <AdminPageModals
         productProps={pageActions.productModalProps}
