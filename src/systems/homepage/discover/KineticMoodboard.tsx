@@ -150,7 +150,8 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
           image: String(tile.image_url || ''),
           alt: String(tile.alt_text || tile.category_name || 'Marketplace category'),
           category: String(tile.category_name || tile.category_slug || ''),
-          title: String(tile.subtitle || tile.title || tile.category_name || ''),\n          destinationPath: String(tile.destination_path || ''),
+          title: String(tile.subtitle || tile.title || tile.category_name || ''),
+          destinationPath: String(tile.destination_path || ''),
         } as MoodboardItem)).filter((tile: MoodboardItem) => Boolean(tile.id && tile.image));
         if (!cancelled && managed.length) setMarketItems(managed);
       })
