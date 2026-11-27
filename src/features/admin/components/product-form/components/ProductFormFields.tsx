@@ -29,22 +29,19 @@ export default function ProductFormFields(props: ProductFormFieldsProps) {
 
       <section style={SECTION_STYLE}>
         <label style={{ display: 'grid', gap: 6, color: 'var(--admin-text-primary)', fontSize: 'var(--admin-size-body)' }}>Category
-          <select value={props.form.marketplace_category_slug ?? ''} onChange={(e) => props.onChange('marketplace_category_slug', e.target.value || null)} disabled={props.isLoadingMarketplaceTaxonomy} style={SELECT_STYLE}><option value=""> </option>{props.marketplaceCategoryOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>
+          <select value={props.form.marketplace_category_slug ?? ''} onChange={(e) => props.onChange('marketplace_category_slug', e.target.value || null)} disabled={props.isLoadingMarketplaceTaxonomy} style={SELECT_STYLE}><option value="" disabled>Select category</option>{props.marketplaceCategoryOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>
         </label>
         <label style={{ display: 'grid', gap: 6, color: 'var(--admin-text-primary)', fontSize: 'var(--admin-size-body)' }}>Subcategory
-          <select value={props.form.marketplace_subcategory_id ?? ''} onChange={(e) => props.onChange('marketplace_subcategory_id', e.target.value || null)} disabled={!props.form.marketplace_category_slug || props.isLoadingMarketplaceTaxonomy} style={SELECT_STYLE}><option value="">{!props.form.marketplace_category_slug ? '' : ''}</option>{props.marketplaceSubcategoryOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>
+          <select value={props.form.marketplace_subcategory_id ?? ''} onChange={(e) => props.onChange('marketplace_subcategory_id', e.target.value || null)} disabled={!props.form.marketplace_category_slug || props.isLoadingMarketplaceTaxonomy} style={SELECT_STYLE}><option value="" disabled>Select subcategory</option>{props.marketplaceSubcategoryOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>
         </label>
         {props.marketplaceTaxonomyError && <span role="status" style={{ color: 'var(--admin-text-secondary)', fontSize: 'var(--admin-size-caption)' }}>{props.marketplaceTaxonomyError}</span>}
       </section>
 
-      <details style={{ border: '1px solid var(--admin-border)', borderRadius: 'var(--ds-radius-lg)', padding: 'var(--admin-space-md)' }}>
-        <summary style={{ cursor: 'pointer', color: 'var(--admin-text-primary)', fontWeight: 600 }}>Additional details</summary>
-        <div style={{ display: 'grid', gap: 'var(--admin-space-md)', marginTop: 'var(--admin-space-md)' }}>
-          <ProductDescriptionField form={props.form} onChange={props.onChange} />
-          <ProductSizesField form={props.form} sizeInput={props.sizeInput} setSizeInput={props.setSizeInput} onAddSize={props.onAddSize} onRemoveSize={props.onRemoveSize} />
-          <ProductImageField form={props.form} isUploading={props.isUploading} onChange={props.onChange} onImageUpload={props.onImageUpload} />
-        </div>
-      </details>
+      <section style={{ display: 'grid', gap: 'var(--admin-space-md)' }}>
+        <ProductDescriptionField form={props.form} onChange={props.onChange} />
+        <ProductSizesField form={props.form} sizeInput={props.sizeInput} setSizeInput={props.setSizeInput} onAddSize={props.onAddSize} onRemoveSize={props.onRemoveSize} />
+        <ProductImageField form={props.form} isUploading={props.isUploading} onChange={props.onChange} onImageUpload={props.onImageUpload} />
+      </section>
     </>
   );
 }
