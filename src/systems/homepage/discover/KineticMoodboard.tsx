@@ -137,6 +137,25 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       });
     return () => { cancelled = true; };
   }, []);
+  // Managed Admin tiles override category imagery and ordering when configured.
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/marketplace-discovery-tiles', { headers: { Accept: 'application/json' } })
+      .then(async response => {
+        const data = await response.json();
+        if (!response.ok || !Array.isArray(data.tiles) || !data.tiles.length) return;
+        const managed = data.tiles.map((tile: { category_slug?: string; category_name?: string; image_url?: string; alt_text?: string; title?: string; subtitle?: string; sort_order?: number }) => ({
+          id: String(tile.category_slug || ''),
+          image: String(tile.image_url || ''),
+          alt: String(tile.alt_text || tile.category_name || 'Marketplace category'),
+          category: String(tile.category_name || tile.category_slug || ''),
+          title: String(tile.subtitle || tile.title || tile.category_name || ''),
+        } as MoodboardItem)).filter((tile: MoodboardItem) => Boolean(tile.id && tile.image));
+        if (!cancelled && managed.length) setMarketItems(managed);
+      })
+      .catch(() => { /* Existing taxonomy fallback remains usable. */ });
+    return () => { cancelled = true; };
+  }, []);
   const [networkProducts, setNetworkProducts] = useState<NetworkProduct[]>([]);
   const [networkLoading, setNetworkLoading] = useState(false);
   const [networkError, setNetworkError] = useState('');
