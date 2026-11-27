@@ -1,7 +1,7 @@
 import KineticMoodboard from '../../../systems/homepage/discover/KineticMoodboard';
 import '../../../systems/homepage/design-system/index.css';
 
-/** Admin Market renders the existing homepage moodboard without a separate dashboard UI. */
+/** Admin Market renders the shared moodboard in management-only mode. */
 export default function SimatuMarketplaceAdmin() {
   return (
     <div
@@ -15,16 +15,7 @@ export default function SimatuMarketplaceAdmin() {
         background: '#111',
       }}
     >
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          inset: 0,
-          pointerEvents: 'none',
-          background: 'linear-gradient(180deg,rgba(12,12,12,.08) 0%,rgba(12,12,12,.28) 48%,rgba(12,12,12,.62) 100%)',
-        }}
-      />
-      <KineticMoodboard colorReveal interactive />
+      <KineticMoodboard colorReveal interactive adminMode />
     </div>
   );
 }
