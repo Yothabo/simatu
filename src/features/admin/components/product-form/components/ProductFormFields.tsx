@@ -16,18 +16,6 @@ export default function ProductFormFields(props: ProductFormFieldsProps) {
       <ProductPricingFields form={props.form} onChange={props.onChange} />
 
       <section style={SECTION_STYLE}>
-        <strong>Visibility</strong>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--admin-space-md)' }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--admin-text-primary)', fontSize: 'var(--admin-size-body)' }}>
-            <input type="checkbox" checked={props.form.storefront_visible} onChange={(event) => props.onChange('storefront_visible', event.target.checked)} /> Storefront
-          </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--admin-text-primary)', fontSize: 'var(--admin-size-body)' }}>
-            <input type="checkbox" checked={props.form.marketplace_visible} onChange={(event) => props.onChange('marketplace_visible', event.target.checked)} /> Simatu Marketplace
-          </label>
-        </div>
-      </section>
-
-      <section style={SECTION_STYLE}>
         <label style={{ display: 'grid', gap: 6, color: 'var(--admin-text-primary)', fontSize: 'var(--admin-size-body)' }}>Category
           <select value={props.form.marketplace_category_slug ?? ''} onChange={(e) => props.onChange('marketplace_category_slug', e.target.value || null)} disabled={props.isLoadingMarketplaceTaxonomy} style={SELECT_STYLE}><option value="" disabled>Select category</option>{props.marketplaceCategoryOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>
         </label>
