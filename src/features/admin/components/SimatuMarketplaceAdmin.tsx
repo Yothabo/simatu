@@ -134,7 +134,7 @@ export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
       <div><p className="ma-eyebrow">Platform-owned catalogue</p><h1 className="ma-title">Simatu Marketplace</h1><p className="ma-description">Create and manage products published directly by Simatu. These products are independent of store-owned catalogues.</p></div>
       {section === 'products' && <button type="button" onClick={() => { reset(); setFormOpen(true); }} className="ma-button ma-button-primary">+ Add marketplace product</button>}
     </header>
-    <nav className="ma-toolbar" aria-label="Marketplace admin sections">{(['taxonomy','tiles','products','services','campaigns','advertising'] as const).map(item=><button key={item} type="button" onClick={()=>setSection(item)} className={`rounded-xl border px-4 py-2 text-sm font-semibold ${section===item?'bg-neutral-900 text-white':'opacity-70'}`}>{item==='taxonomy'?'Taxonomy':item==='tiles'?'Discovery Tiles':item==='products'?'Products':item==='services'?'Services':item==='campaigns'?'Campaigns':'Advertising'}</button>)}</nav>
+    <nav className="ma-tabs" aria-label="Marketplace admin sections">{(['taxonomy','tiles','products','services','campaigns','advertising'] as const).map(item=><button key={item} type="button" onClick={()=>setSection(item)} className={`ma-tab ${section===item?'is-active':''}`}>{item==='taxonomy'?'Taxonomy':item==='tiles'?'Discovery Tiles':item==='products'?'Products':item==='services'?'Services':item==='campaigns'?'Campaigns':'Advertising'}</button>)}</nav>
     {section === 'taxonomy' && <MarketplaceTaxonomyAdmin accessToken={accessToken} />}
     {section === 'tiles' && <MarketplaceDiscoveryTilesAdmin accessToken={accessToken} />}
     {section === 'services' && <SimatuPlatformServicesAdmin accessToken={accessToken} />}
@@ -142,7 +142,7 @@ export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
     {section === 'advertising' && <SimatuPlatformAdvertisingAdmin accessToken={accessToken} />}
     {section === 'products' && <>
     {error && <p role="alert" className="rounded-xl border border-red-300 p-3 text-sm text-red-700">{error}</p>}
-    {notice && <p role="status" className="rounded-xl border p-3 text-sm">{notice}</p>}
+    {notice && <p role="status" className="ma-notice">{notice}</p>}
     {formOpen ? <form onSubmit={save} className="ma-form" style={surface}>
       <div className="ma-form-header"><h2 className="font-semibold">{editing ? 'Edit platform product' : 'Create platform product'}</h2><button type="button" onClick={reset} className="ma-link-button">Cancel</button></div>
       <div className="ma-form-grid">
