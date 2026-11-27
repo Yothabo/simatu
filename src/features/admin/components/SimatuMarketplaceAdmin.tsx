@@ -5,6 +5,7 @@ import SimatuPlatformCampaignsAdmin from './SimatuPlatformCampaignsAdmin';
 import SimatuPlatformAdvertisingAdmin from './SimatuPlatformAdvertisingAdmin';
 import MarketplaceTaxonomyAdmin from './MarketplaceTaxonomyAdmin';
 import MarketplaceDiscoveryTilesAdmin from './MarketplaceDiscoveryTilesAdmin';
+import './marketplace-admin.css';
 
 type Category = { id: string; name: string; slug: string };
 type Subcategory = { id: string; name: string; slug: string; category_slug: string };
@@ -21,8 +22,8 @@ const blank = {
   name: '', sku: '', description: '', image_url: '', price: '0', supplier_cost: '',
   category_slug: '', subcategory_id: '', is_active: true, marketplace_visible: true, sort_order: '0',
 };
-const field = 'w-full rounded-xl border px-3 py-2 text-sm';
-const surface = { borderColor: 'var(--admin-border-subtle)', background: 'var(--admin-surface)' };
+const field = 'ma-input';
+const surface = { borderColor: 'var(--admin-border-subtle)', background: 'var(--admin-surface)', color: 'var(--admin-text-primary)' };
 
 export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
   const [section, setSection] = useState<'taxonomy'|'tiles'|'products'|'services'|'campaigns'|'advertising'>('taxonomy');
@@ -128,12 +129,12 @@ export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
   const labelStyle = { display: 'grid', gap: 6, fontSize: 13, fontWeight: 600, color: 'var(--admin-text-primary)' } as const;
   const inputStyle = { borderColor: 'var(--admin-border-strong)', background: 'var(--admin-surface)', color: 'var(--admin-text-primary)' };
 
-  return <section className="mx-auto w-full max-w-6xl space-y-5 px-4 pb-28 pt-5" aria-label="Simatu marketplace administration">
-    <header className="flex flex-wrap items-start justify-between gap-3">
-      <div><p className="text-xs font-semibold uppercase tracking-widest opacity-60">Platform-owned catalogue</p><h1 className="mt-1 text-2xl font-semibold">Simatu Marketplace</h1><p className="mt-2 max-w-xl text-sm opacity-70">Create and manage products published directly by Simatu. These products are independent of store-owned catalogues.</p></div>
-      {section === 'products' && <button type="button" onClick={() => { reset(); setFormOpen(true); }} className="rounded-xl border px-4 py-2 text-sm font-semibold">+ Add marketplace product</button>}
+  return <section className="ma-shell" aria-label="Simatu marketplace administration">
+    <header className="ma-header">
+      <div><p className="ma-eyebrow">Platform-owned catalogue</p><h1 className="ma-title">Simatu Marketplace</h1><p className="ma-description">Create and manage products published directly by Simatu. These products are independent of store-owned catalogues.</p></div>
+      {section === 'products' && <button type="button" onClick={() => { reset(); setFormOpen(true); }} className="ma-button ma-button-primary">+ Add marketplace product</button>}
     </header>
-    <nav className="flex flex-wrap gap-2" aria-label="Marketplace admin sections">{(['taxonomy','tiles','products','services','campaigns','advertising'] as const).map(item=><button key={item} type="button" onClick={()=>setSection(item)} className={`rounded-xl border px-4 py-2 text-sm font-semibold ${section===item?'bg-neutral-900 text-white':'opacity-70'}`}>{item==='taxonomy'?'Taxonomy':item==='tiles'?'Discovery Tiles':item==='products'?'Products':item==='services'?'Services':item==='campaigns'?'Campaigns':'Advertising'}</button>)}</nav>
+    <nav className="ma-toolbar" aria-label="Marketplace admin sections">{(['taxonomy','tiles','products','services','campaigns','advertising'] as const).map(item=><button key={item} type="button" onClick={()=>setSection(item)} className={`rounded-xl border px-4 py-2 text-sm font-semibold ${section===item?'bg-neutral-900 text-white':'opacity-70'}`}>{item==='taxonomy'?'Taxonomy':item==='tiles'?'Discovery Tiles':item==='products'?'Products':item==='services'?'Services':item==='campaigns'?'Campaigns':'Advertising'}</button>)}</nav>
     {section === 'taxonomy' && <MarketplaceTaxonomyAdmin accessToken={accessToken} />}
     {section === 'tiles' && <MarketplaceDiscoveryTilesAdmin accessToken={accessToken} />}
     {section === 'services' && <SimatuPlatformServicesAdmin accessToken={accessToken} />}
@@ -142,9 +143,9 @@ export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
     {section === 'products' && <>
     {error && <p role="alert" className="rounded-xl border border-red-300 p-3 text-sm text-red-700">{error}</p>}
     {notice && <p role="status" className="rounded-xl border p-3 text-sm">{notice}</p>}
-    {formOpen ? <form onSubmit={save} className="space-y-4 rounded-2xl border p-4" style={surface}>
-      <div className="flex items-center justify-between"><h2 className="font-semibold">{editing ? 'Edit platform product' : 'Create platform product'}</h2><button type="button" onClick={reset} className="text-sm underline">Cancel</button></div>
-      <div className="grid gap-3 sm:grid-cols-2">
+    {formOpen ? <form onSubmit={save} className="ma-form" style={surface}>
+      <div className="ma-form-header"><h2 className="font-semibold">{editing ? 'Edit platform product' : 'Create platform product'}</h2><button type="button" onClick={reset} className="ma-link-button">Cancel</button></div>
+      <div className="ma-form-grid">
         <label style={labelStyle}>Product name<input required maxLength={200} className={field} style={inputStyle} value={draft.name} onChange={e=>change('name',e.target.value)}/></label>
         <label style={labelStyle}>SKU<input required maxLength={100} className={field} style={inputStyle} value={draft.sku} onChange={e=>change('sku',e.target.value.toUpperCase())}/></label>
         <label style={labelStyle}>Marketplace category<select required className={field} style={inputStyle} value={draft.category_slug} onChange={e=>change('category_slug',e.target.value)}><option value="">Select category</option>{categories.map(c=><option key={c.id} value={c.slug}>{c.name}</option>)}</select></label>
@@ -155,15 +156,15 @@ export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
         <label style={labelStyle}>Sort order<input type="number" min="0" step="1" className={field} style={inputStyle} value={draft.sort_order} onChange={e=>change('sort_order',e.target.value)}/></label>
       </div>
       <label style={labelStyle}>Description<textarea maxLength={10000} rows={4} className={field} style={inputStyle} value={draft.description} onChange={e=>change('description',e.target.value)}/></label>
-      <div className="flex flex-wrap gap-5 text-sm"><label className="flex items-center gap-2"><input type="checkbox" checked={draft.is_active} onChange={e=>change('is_active',e.target.checked)}/>Active</label><label className="flex items-center gap-2"><input type="checkbox" checked={draft.marketplace_visible} onChange={e=>change('marketplace_visible',e.target.checked)}/>Marketplace presence</label></div>
-      {editing && ((editing.variants?.length ?? 0)>0 || (editing.attributes?.length ?? 0)>0) && <aside className="rounded-xl border p-3 text-sm opacity-80"><strong>Existing product configuration preserved.</strong><p className="mt-1">Variants and attributes are retained during edits; their editors are not included in this first management slice.</p></aside>}
-      <button disabled={saving} className="rounded-xl border px-4 py-2 text-sm font-semibold" type="submit">{saving ? 'Saving…' : editing ? 'Save changes' : 'Create marketplace product'}</button>
+      <div className="ma-checkbox-row"><label className="flex items-center gap-2"><input type="checkbox" checked={draft.is_active} onChange={e=>change('is_active',e.target.checked)}/>Active</label><label className="flex items-center gap-2"><input type="checkbox" checked={draft.marketplace_visible} onChange={e=>change('marketplace_visible',e.target.checked)}/>Marketplace presence</label></div>
+      {editing && ((editing.variants?.length ?? 0)>0 || (editing.attributes?.length ?? 0)>0) && <aside className="ma-notice"><strong>Existing product configuration preserved.</strong><p className="mt-1">Variants and attributes are retained during edits; their editors are not included in this first management slice.</p></aside>}
+      <button disabled={saving} className="ma-button ma-button-primary" type="submit">{saving ? 'Saving…' : editing ? 'Save changes' : 'Create marketplace product'}</button>
     </form> : null}
-    <div className="flex flex-wrap gap-2"><input value={search} onChange={e=>setSearch(e.target.value)} className={field} style={{...inputStyle, maxWidth:420}} placeholder="Search marketplace products by name or SKU"/><button type="button" onClick={()=>void load()} className="rounded-xl border px-3 py-2 text-sm">Refresh</button></div>
-    {loading ? <p className="text-sm opacity-70">Loading marketplace catalogue…</p> : filtered.length===0 ? <div className="rounded-2xl border p-6 text-sm opacity-70" style={surface}>No Simatu marketplace products found.</div> : <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-      {filtered.map(product=><article key={product.id} className="overflow-hidden rounded-2xl border" style={surface}>
+    <div className="ma-toolbar"><input value={search} onChange={e=>setSearch(e.target.value)} className={field} style={{...inputStyle, maxWidth:420}} placeholder="Search marketplace products by name or SKU"/><button type="button" onClick={()=>void load()} className="ma-button ma-button-secondary">Refresh</button></div>
+    {loading ? <p className="text-sm opacity-70">Loading marketplace catalogue…</p> : filtered.length===0 ? <div className="ma-empty-state" style={surface}>No Simatu marketplace products found.</div> : <div className="ma-card-grid">
+      {filtered.map(product=><article key={product.id} className="ma-card" style={surface}>
         <img src={product.image_url} alt={product.name} className="h-48 w-full object-cover" loading="lazy"/>
-        <div className="space-y-2 p-4"><div className="flex items-start justify-between gap-2"><h2 className="font-semibold">{product.name}</h2><span className="text-xs opacity-60">{product.is_active?'Active':'Inactive'}</span></div><p className="text-sm opacity-70">{product.sku}</p><p className="text-sm font-semibold">R {Number(product.price).toFixed(2)}</p><p className="text-xs opacity-60">{product.category_name} · {product.subcategory_name}</p><p className="text-xs opacity-60">{product.marketplace_visible?'Marketplace visible':'Not published'}</p><div className="flex gap-2 pt-2"><button type="button" onClick={()=>startEdit(product)} className="rounded-lg border px-3 py-2 text-sm">Edit</button><button type="button" onClick={()=>void archive(product)} className="rounded-lg border px-3 py-2 text-sm">Archive</button></div></div>
+        <div className="ma-card-body"><div className="ma-card-heading"><h2 className="font-semibold">{product.name}</h2><span className="text-xs opacity-60">{product.is_active?'Active':'Inactive'}</span></div><p className="text-sm opacity-70">{product.sku}</p><p className="text-sm font-semibold">R {Number(product.price).toFixed(2)}</p><p className="text-xs opacity-60">{product.category_name} · {product.subcategory_name}</p><p className="text-xs opacity-60">{product.marketplace_visible?'Marketplace visible':'Not published'}</p><div className="ma-actions"><button type="button" onClick={()=>startEdit(product)} className="ma-button ma-button-secondary">Edit</button><button type="button" onClick={()=>void archive(product)} className="ma-button ma-button-secondary">Archive</button></div></div>
       </article>)}
     </div>}
     </>}
