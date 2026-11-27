@@ -15,6 +15,7 @@ export interface MoodboardItem {
   category: string;
   title: string;
   objectPosition?: string;
+  destinationPath?: string;
 }
 
 interface KineticMoodboardProps {
@@ -105,7 +106,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const openDiscovery = (item: MoodboardItem) => {
     recordVisitedCategory(item.category);
     try { sessionStorage.setItem('simatu-discover-return', JSON.stringify({ position: positionRef.current })); } catch {}
-    navigate(getDiscoveryPath(item), { state: { discovery: item, position: positionRef.current } });
+    navigate(item.destinationPath || getDiscoveryPath(item), { state: { discovery: item, position: positionRef.current } });
   };
   useEffect(() => { if (colorReveal) setSearchDismissed(false); }, [colorReveal]);
   const [marketItems, setMarketItems] = useState<MoodboardItem[]>(DISCOVERY_MARKETS);
@@ -149,7 +150,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
           image: String(tile.image_url || ''),
           alt: String(tile.alt_text || tile.category_name || 'Marketplace category'),
           category: String(tile.category_name || tile.category_slug || ''),
-          title: String(tile.subtitle || tile.title || tile.category_name || ''),
+          title: String(tile.subtitle || tile.title || tile.category_name || ''),\n          destinationPath: String(tile.destination_path || ''),
         } as MoodboardItem)).filter((tile: MoodboardItem) => Boolean(tile.id && tile.image));
         if (!cancelled && managed.length) setMarketItems(managed);
       })
