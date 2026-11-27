@@ -1,7 +1,7 @@
 # Product Core Persistence Transition — Implementation Plan
 
 **Branch:** `codex/simatu-work`
-**Status:** Architecture transition in progress; no schema changes or data migration executed.
+**Status:** Store Listing persistence foundation created; migration remains unapplied and no data migration has been executed.
 
 ## Decision
 
