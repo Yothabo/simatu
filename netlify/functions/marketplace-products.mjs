@@ -48,7 +48,7 @@ async function list(request) {
   const url = new URL(request.url);
   const adminScope = url.searchParams.get('scope') === 'admin';
   if (adminScope) { const auth = await superAdmin(request); if (auth.response) return auth.response; }
-  const filters = ['mp.is_active IS TRUE'];
+  const filters = adminScope ? [] : ['mp.is_active IS TRUE'];
   const vals = [];
   if (!adminScope) filters.push("mp.marketplace_visible IS TRUE AND mc.audience_policy = 'general'");
   const cat = url.searchParams.get('category');
