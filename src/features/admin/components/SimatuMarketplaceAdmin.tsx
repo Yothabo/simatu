@@ -4,6 +4,7 @@ import SimatuPlatformServicesAdmin from './SimatuPlatformServicesAdmin';
 import SimatuPlatformCampaignsAdmin from './SimatuPlatformCampaignsAdmin';
 import SimatuPlatformAdvertisingAdmin from './SimatuPlatformAdvertisingAdmin';
 import MarketplaceTaxonomyAdmin from './MarketplaceTaxonomyAdmin';
+import MarketplaceDiscoveryTilesAdmin from './MarketplaceDiscoveryTilesAdmin';
 
 type Category = { id: string; name: string; slug: string };
 type Subcategory = { id: string; name: string; slug: string; category_slug: string };
@@ -24,7 +25,7 @@ const field = 'w-full rounded-xl border px-3 py-2 text-sm';
 const surface = { borderColor: 'var(--admin-border-subtle)', background: 'var(--admin-surface)' };
 
 export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
-  const [section, setSection] = useState<'taxonomy'|'products'|'services'|'campaigns'|'advertising'>('taxonomy');
+  const [section, setSection] = useState<'taxonomy'|'tiles'|'products'|'services'|'campaigns'|'advertising'>('taxonomy');
   const [products, setProducts] = useState<MarketplaceProduct[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
@@ -132,8 +133,9 @@ export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
       <div><p className="text-xs font-semibold uppercase tracking-widest opacity-60">Platform-owned catalogue</p><h1 className="mt-1 text-2xl font-semibold">Simatu Marketplace</h1><p className="mt-2 max-w-xl text-sm opacity-70">Create and manage products published directly by Simatu. These products are independent of store-owned catalogues.</p></div>
       {section === 'products' && <button type="button" onClick={() => { reset(); setFormOpen(true); }} className="rounded-xl border px-4 py-2 text-sm font-semibold">+ Add marketplace product</button>}
     </header>
-    <nav className="flex flex-wrap gap-2" aria-label="Marketplace admin sections">{(['taxonomy','products','services','campaigns','advertising'] as const).map(item=><button key={item} type="button" onClick={()=>setSection(item)} className={`rounded-xl border px-4 py-2 text-sm font-semibold ${section===item?'bg-neutral-900 text-white':'opacity-70'}`}>{item==='taxonomy'?'Taxonomy':item==='products'?'Products':item==='services'?'Services':item==='campaigns'?'Campaigns':'Advertising'}</button>)}</nav>
+    <nav className="flex flex-wrap gap-2" aria-label="Marketplace admin sections">{(['taxonomy','tiles','products','services','campaigns','advertising'] as const).map(item=><button key={item} type="button" onClick={()=>setSection(item)} className={`rounded-xl border px-4 py-2 text-sm font-semibold ${section===item?'bg-neutral-900 text-white':'opacity-70'}`}>{item==='taxonomy'?'Taxonomy':item==='tiles'?'Discovery Tiles':item==='products'?'Products':item==='services'?'Services':item==='campaigns'?'Campaigns':'Advertising'}</button>)}</nav>
     {section === 'taxonomy' && <MarketplaceTaxonomyAdmin accessToken={accessToken} />}
+    {section === 'tiles' && <MarketplaceDiscoveryTilesAdmin accessToken={accessToken} />}
     {section === 'services' && <SimatuPlatformServicesAdmin accessToken={accessToken} />}
     {section === 'campaigns' && <SimatuPlatformCampaignsAdmin accessToken={accessToken} />}
     {section === 'advertising' && <SimatuPlatformAdvertisingAdmin accessToken={accessToken} />}
