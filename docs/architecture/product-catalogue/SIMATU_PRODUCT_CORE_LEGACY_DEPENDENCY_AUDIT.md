@@ -103,3 +103,12 @@ This is a required audit queue, not an assertion that every item is currently st
 ## 7. Audit completion requirements
 
 Do not claim the product system is fully unwired until the inventory above has been traced, schema/reference mapping is complete, migrated consumers are tested, and the legacy model can be retired safely. This document records confirmed findings and outstanding work; it is not a migration completion certificate.
+
+
+## 8. Contract foundation added
+
+
+- `src/shared/products/productCore.types.ts` provides the platform product core and separate store listing type.
+- `src/shared/products/productCore.api.types.ts` defines product-core create/update/list response DTOs, a separate store-listing creation DTO, and a Marketplace participation request DTO.
+- These are TypeScript contracts only. No product API endpoint, database cutover, form migration, or store consumer has been switched yet.
+- API implementation is blocked on a verified database transition design: reuse/evolve the existing store-independent `marketplace_products` table rather than creating a third competing product identity, while preserving its current Marketplace and checkout consumers.
