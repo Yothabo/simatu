@@ -35,6 +35,7 @@ interface KineticMoodboardProps {
   interactive?: boolean;
   onExit?: () => void;
   decorativeOnly?: boolean;
+  adminMode?: boolean;
 }
 
 const DEFAULT_ITEMS: MoodboardItem[] = DISCOVERY_MARKETS;
@@ -63,6 +64,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   interactive = colorReveal,
   onExit,
   decorativeOnly = false,
+  adminMode = false,
   className = '',
   style,
   onItemClick,
@@ -213,7 +215,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   );
 
   useEffect(() => {
-    if (decorativeOnly || !interactive) return;
+    if (decorativeOnly || adminMode || !interactive) return;
     let cancelled = false;
     setNetworkLoading(true);
     Promise.all(NETWORK_STORES.map(async (store) => {
@@ -226,7 +228,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       .catch((error) => { if (!cancelled) setNetworkError(error instanceof Error ? error.message : 'Network search unavailable.'); })
       .finally(() => { if (!cancelled) setNetworkLoading(false); });
     return () => { cancelled = true; };
-  }, [interactive, decorativeOnly]);
+  }, [interactive, decorativeOnly, adminMode]);
   const normalizedSearch = searchQuery.trim().toLowerCase();
   const searchMatches = (value: string) => value.toLowerCase().includes(normalizedSearch);
   const startsWithSearch = (value: string) => value.toLowerCase().startsWith(normalizedSearch);
@@ -424,7 +426,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         .kinetic-moodboard__store-sub{color:var(--hp-color-text-muted);font:var(--hp-font-weight-regular) var(--hp-font-size-sm)/var(--hp-line-height-normal) var(--hp-font-family);margin-top:var(--hp-size-md)}
         @media(max-width:640px){.kinetic-moodboard__search-header{padding:var(--hp-size-12)}.kinetic-moodboard__search-shell{height:var(--hp-size-55);width:calc(100vw - var(--hp-size-24))}.kinetic-moodboard__search-results{top:var(--hp-size-80)}.kinetic-moodboard__dialog-backdrop{padding:0;padding-top:max(0px,env(safe-area-inset-top))}.kinetic-moodboard__dialog{width:100%;max-height:min(92vh,900px);max-height:min(92dvh,var(--hp-size-950));padding:0 var(--hp-size-18) calc(var(--hp-size-18) + env(safe-area-inset-bottom));border-radius:var(--hp-size-22) var(--hp-size-22) 0 0;overflow-y:auto;overscroll-behavior:contain}.kinetic-moodboard__dialog-heading{top:0;margin:0 -var(--hp-size-18);padding:var(--hp-size-18)}}
       `}</style>
-      <MoodboardSearchBar
+      {!adminMode && <MoodboardSearchBar
         value={searchQuery}
         onChange={setSearchQuery}
         onBack={onExit ? () => { setSearchQuery(""); setSearchDismissed(true); onExit(); } : undefined}
@@ -448,7 +450,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         }}
         onMenuClick={() => setMenuOpen((open) => !open)}
         className={menuOpen ? "menu-expanded" : ""}
-      />
+      />}
       <span className="kinetic-moodboard__reveal-sentinel" aria-hidden="true" />
       <div
         ref={viewportRef}
@@ -465,7 +467,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
               type="button"
               className="kinetic-moodboard__tile"
               key={`${item.id}-${index}`}
-              onClick={() => { if (dragRef.current.moved) { dragRef.current.moved = false; return; } openDiscovery(item); }}
+              onClick={() => { if (dragRef.current.moved) { dragRef.current.moved = false; return; } if (adminMode) { onItemClick?.(item); return; } openDiscovery(item); }}
               aria-label={`${item.category}: ${item.title}`}
               disabled={!interactive}
               data-reveal-final={index === tiles.length - 1 ? "true" : "false"}
@@ -480,7 +482,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       </div>
 
 
-      {normalizedSearch.length >= 1 && interactive && !searchDismissed && <MoodboardPredictiveSearch query={searchQuery} loading={networkLoading} error={networkError} stores={searchStores.map(store => ({ key: store.key, name: store.name, href: store.href }))} categories={searchCategories} products={matchingProducts} onCategorySelect={setSearchQuery} />}
+      {!adminMode && normalizedSearch.length >= 1 && interactive && !searchDismissed && <MoodboardPredictiveSearch query={searchQuery} loading={networkLoading} error={networkError} stores={searchStores.map(store => ({ key: store.key, name: store.name, href: store.href }))} categories={searchCategories} products={matchingProducts} onCategorySelect={setSearchQuery} />}
 
     </section>
   );
