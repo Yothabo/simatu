@@ -24,6 +24,7 @@ export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
   const [draft, setDraft] = useState(blank);
   const [editing, setEditing] = useState<MarketplaceProduct | null>(null);
+  const [formOpen, setFormOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -56,7 +57,7 @@ export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
   const availableSubcategories = subcategories.filter(s => s.category_slug === draft.category_slug);
 
   const startEdit = (product: MarketplaceProduct) => {
-    setEditing(product);
+    setEditing(product); setFormOpen(true);
     setDraft({
       name: product.name, sku: product.sku, description: product.description || '',
       image_url: product.image_url, price: String(product.price ?? 0),
@@ -67,7 +68,7 @@ export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
     });
     setNotice(''); setError('');
   };
-  const reset = () => { setEditing(null); setDraft(blank); setError(''); setNotice(''); };
+  const reset = () => { setEditing(null); setFormOpen(false); setDraft(blank); setError(''); setNotice(''); };
   const change = (key: keyof typeof blank, value: string | boolean) => setDraft(current => ({
     ...current, [key]: value,
     ...(key === 'category_slug' ? { subcategory_id: '' } : {}),
@@ -78,7 +79,8 @@ export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
     const payload = {
       ...draft, price: Number(draft.price), supplier_cost: draft.supplier_cost === '' ? null : Number(draft.supplier_cost),
       sort_order: Number(draft.sort_order), id: editing?.id,
-      variants: editing?.variants ?? [], attributes: editing?.attributes ?? [],
+      variants: (editing?.variants ?? []).map(v => ({ sku: v.sku, name: v.name, price: v.price, supplier_cost: v.supplier_cost ?? null, options: v.options ?? {} })),
+      attributes: (editing?.attributes ?? []).map(a => ({ key: a.attribute_key ?? a.key, label: a.label, data_type: a.data_type, unit: a.unit ?? null, validation: a.validation ?? {}, required: Boolean(a.required), value: a.value, sort_order: a.sort_order ?? 0 })),
     };
     try {
       const response = await fetch('/api/marketplace-products', {
@@ -111,11 +113,11 @@ export default function SimatuMarketplaceAdmin({ accessToken }: Props) {
   return <section className="mx-auto w-full max-w-6xl space-y-5 px-4 pb-28 pt-5" aria-label="Simatu marketplace administration">
     <header className="flex flex-wrap items-start justify-between gap-3">
       <div><p className="text-xs font-semibold uppercase tracking-widest opacity-60">Platform-owned catalogue</p><h1 className="mt-1 text-2xl font-semibold">Simatu Marketplace</h1><p className="mt-2 max-w-xl text-sm opacity-70">Create and manage products published directly by Simatu. These products are independent of store-owned catalogues.</p></div>
-      <button type="button" onClick={() => { reset(); setEditing(null); }} className="rounded-xl border px-4 py-2 text-sm font-semibold">+ Add marketplace product</button>
+      <button type="button" onClick={() => { reset(); setFormOpen(true); }} className="rounded-xl border px-4 py-2 text-sm font-semibold">+ Add marketplace product</button>
     </header>
     {error && <p role="alert" className="rounded-xl border border-red-300 p-3 text-sm text-red-700">{error}</p>}
     {notice && <p role="status" className="rounded-xl border p-3 text-sm">{notice}</p>}
-    {editing !== null || draft.name !== '' ? <form onSubmit={save} className="space-y-4 rounded-2xl border p-4" style={surface}>
+    {formOpen ? <form onSubmit={save} className="space-y-4 rounded-2xl border p-4" style={surface}>
       <div className="flex items-center justify-between"><h2 className="font-semibold">{editing ? 'Edit platform product' : 'Create platform product'}</h2><button type="button" onClick={reset} className="text-sm underline">Cancel</button></div>
       <div className="grid gap-3 sm:grid-cols-2">
         <label style={labelStyle}>Product name<input required maxLength={200} className={field} style={inputStyle} value={draft.name} onChange={e=>change('name',e.target.value)}/></label>
