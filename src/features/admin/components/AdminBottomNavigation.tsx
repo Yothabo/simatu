@@ -1,4 +1,4 @@
-import { FiGrid, FiPackage, FiSettings, FiBriefcase } from 'react-icons/fi';
+import { FiGrid, FiPackage, FiSettings, FiBriefcase, FiShoppingBag } from 'react-icons/fi';
 import { VscPackage } from 'react-icons/vsc';
 import { FaOpencart } from 'react-icons/fa';
 import type { Tab } from '../types/admin.types';
@@ -6,7 +6,7 @@ import AccentButton from './AccentButton';
 
 type AdminBottomNavigationProps = {
   activeTab: Tab;
-  onTabChange: (tab: Tab) => void;
+  onTabChange: (tab: Tab) => void;\n  adminRole?: string;
 };
 
 export default function AdminBottomNavigation({
@@ -18,7 +18,7 @@ export default function AdminBottomNavigation({
     { tab: 'products', label: 'Products', Icon: VscPackage },
     { tab: 'orders', label: 'Orders', Icon: FaOpencart },
     { tab: 'inventory', label: 'Inventory', Icon: FiPackage },
-    { tab: 'business', label: 'Business', Icon: FiBriefcase },
+    { tab: 'business', label: 'Business', Icon: FiBriefcase },\n    ...(adminRole === 'super_admin' ? [{ tab: 'marketplace' as Tab, label: 'Market', Icon: FiShoppingBag }] : []),
     { tab: 'settings', label: 'Settings', Icon: FiSettings },
   ];
 
