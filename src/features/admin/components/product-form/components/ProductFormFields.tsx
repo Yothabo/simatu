@@ -1,6 +1,5 @@
 import type { CSSProperties } from 'react';
 import type { ProductFormFieldsProps } from './ProductFormFields.types';
-import ProductCategoryFields from './fields/ProductCategoryFields';
 import ProductDescriptionField from './fields/ProductDescriptionField';
 import ProductIdentityFields from './fields/ProductIdentityFields';
 import ProductImageField from './fields/ProductImageField';
@@ -29,10 +28,8 @@ export default function ProductFormFields(props: ProductFormFieldsProps) {
         </div>
       </section>
 
-      <ProductCategoryFields form={props.form} categoryOptions={props.categoryOptions} subcategoryOptions={props.subcategoryOptions} isLoadingCategories={props.isLoadingCategories} categoryLoadError={props.categoryLoadError} onChange={props.onChange} />
-
       <section style={SECTION_STYLE}>
-        <strong style={SECTION_TITLE_STYLE}>Marketplace classification</strong>
+        <strong style={SECTION_TITLE_STYLE}>Category</strong>
         <label style={{ display: 'grid', gap: 6, color: 'var(--admin-text-primary)', fontSize: 'var(--admin-size-body)' }}>Category
           <select value={props.form.marketplace_category_slug ?? ''} onChange={(e) => props.onChange('marketplace_category_slug', e.target.value || null)} disabled={props.isLoadingMarketplaceTaxonomy} style={SELECT_STYLE}><option value="">Select</option>{props.marketplaceCategoryOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>
         </label>
