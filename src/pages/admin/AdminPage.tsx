@@ -130,9 +130,11 @@ export default function AdminPage() {
 
   return (
     <main
-      className="admin-scope min-h-screen bg-white"
+      className={isMarketplace ? "admin-scope admin-marketplace-admin-viewport" : "admin-scope min-h-screen bg-white"}
       data-theme={adminTheme}
-      style={buildAdminThemeStyle(adminTheme)}
+      style={isMarketplace
+        ? { ...buildAdminThemeStyle(adminTheme), height: '100dvh', maxHeight: '100dvh', minHeight: 0, overflow: 'hidden', padding: 0, margin: 0, background: '#111' }
+        : buildAdminThemeStyle(adminTheme)}
     >
       {!isMarketplace && (
         <AdminPageHeader
