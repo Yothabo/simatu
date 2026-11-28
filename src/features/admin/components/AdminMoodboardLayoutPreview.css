@@ -62,3 +62,27 @@
   .admin-moodboard-layout-preview__toolbar { justify-content:flex-start; gap:6px; }
   .admin-moodboard-layout-preview__toolbar button { flex-basis:38px; width:38px; height:38px; padding:7px; }
 }
+
+/* Full-scale advertising placement template library beneath the admin Moodboard. */
+.admin-moodboard-layout-preview__shape-library { width:100%; min-width:0; display:flex; flex-direction:column; gap:18px; padding:28px 0 40px; box-sizing:border-box; }
+.admin-moodboard-layout-preview__shape-library-header { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; color:#f5f5f5; }
+.admin-moodboard-layout-preview__shape-library-header h2 { margin:0; font-size:18px; font-weight:500; letter-spacing:.02em; }
+.admin-moodboard-layout-preview__shape-library-header p { margin:6px 0 0; font-size:12px; color:rgba(255,255,255,.55); }
+.admin-moodboard-layout-preview__shape-library-header>span { color:rgba(255,255,255,.6); font-size:12px; white-space:nowrap; }
+.admin-moodboard-layout-preview__shape-library-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr)); gap:18px; align-items:start; }
+.admin-moodboard-layout-preview__shape-card { min-width:0; overflow:hidden; border:1px solid rgba(255,255,255,.14); border-radius:4px; background:#181818; }
+.admin-moodboard-layout-preview__shape-stage { width:100%; min-width:0; overflow:auto; padding:14px; box-sizing:border-box; background:#111; }
+.admin-moodboard-layout-preview__shape-design { display:grid; width:max-content; gap:16px; }
+.admin-moodboard-layout-preview__shape-cell { position:relative; display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-end; width:230px; height:290px; padding:18px; overflow:hidden; box-sizing:border-box; color:#fff; background:linear-gradient(150deg,#444 0%,#282828 48%,#151515 100%); border:1px solid rgba(255,255,255,.16); }
+.admin-moodboard-layout-preview__shape-cell::before { content:""; position:absolute; inset:0; background:linear-gradient(180deg,rgba(255,255,255,.06),transparent 45%,rgba(0,0,0,.55)); pointer-events:none; }
+.admin-moodboard-layout-preview__shape-mark,.admin-moodboard-layout-preview__shape-cell strong,.admin-moodboard-layout-preview__shape-cell small { position:relative; z-index:1; }
+.admin-moodboard-layout-preview__shape-mark { font-size:10px; letter-spacing:.16em; color:rgba(255,255,255,.55); }
+.admin-moodboard-layout-preview__shape-cell strong { margin-top:8px; font-size:20px; font-weight:500; letter-spacing:.02em; }
+.admin-moodboard-layout-preview__shape-cell small { margin-top:5px; font-size:12px; color:rgba(255,255,255,.65); }
+.admin-moodboard-layout-preview__shape-card-footer { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px; color:#f5f5f5; }
+.admin-moodboard-layout-preview__shape-card-footer>div { display:flex; flex-direction:column; gap:5px; min-width:0; }
+.admin-moodboard-layout-preview__shape-card-footer strong { font-size:13px; font-weight:500; }
+.admin-moodboard-layout-preview__shape-card-footer small { color:rgba(255,255,255,.5); font-size:11px; }
+.admin-moodboard-layout-preview__shape-card-footer button { flex:0 0 auto; border:1px solid rgba(255,255,255,.4); border-radius:3px; padding:9px 12px; color:#fff; background:transparent; font-size:11px; cursor:pointer; }
+.admin-moodboard-layout-preview__shape-card-footer button:hover,.admin-moodboard-layout-preview__shape-card-footer button.is-active { background:rgba(255,255,255,.12); border-color:#fff; }
+@media(max-width:640px) { .admin-moodboard-layout-preview__shape-library-header { align-items:flex-start; flex-direction:column; gap:8px; } .admin-moodboard-layout-preview__shape-library-grid { grid-template-columns:1fr; } }
