@@ -156,7 +156,7 @@ export default function SimatuMarketplaceAdmin({ accessToken, onReturn }: Props)
       });
       const data = await response.json();
       if (!response.ok || !data.media) throw new Error(data.error || 'Optimized image upload failed.');
-      return data.media as { image_url: string; image_jxl_url: string; alt_text: string };
+      return data.media as { id: string; image_url: string; image_jxl_url: string; alt_text: string };
     } finally {
       setUploadingImage(false);
     }
@@ -237,7 +237,7 @@ export default function SimatuMarketplaceAdmin({ accessToken, onReturn }: Props)
         };
         if (pendingImageFile) {
           const media = await uploadMarketplaceImage('subcategory', created.id, created.title, pendingImageFile);
-          created = { ...created, image: media.image_url, imageJxl: media.image_jxl_url, alt: media.alt_text };
+          created = { ...created, image: media.image_url, imageJxl: media.image_jxl_url, alt: media.alt_text, imageMediaId: media.id };
         }
         setSubcategoryDrafts((items) => [...items, created]);
         setAllSubcategories((items) => [...items, created]);
