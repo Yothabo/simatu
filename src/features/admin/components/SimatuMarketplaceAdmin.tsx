@@ -121,8 +121,8 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
       {!activeMarket || !categoryDraft ? (
         <AdminMoodboardLayoutPreview items={managedMarkets} onItemClick={openMarket} onAddCategory={openAddCategory} onOpenManual={() => setManualOpen(true)} onReturn={onReturn} />
       ) : (
-        <main style={{ height: '100dvh', maxHeight: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: '#111', color: '#f4f1ec', width: '100vw', maxWidth: '100vw', marginInline: 'calc(50% - 50vw)', padding: 0, boxSizing: 'border-box' }}>
-          <section style={{ position: 'relative', flex: '0 0 35dvh', minHeight: 0, display: 'flex', alignItems: 'flex-end', padding: 0, overflow: 'hidden' }}>
+        <main style={{ height: '100vh', maxHeight: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: '#111', color: '#f4f1ec', width: '100vw', maxWidth: '100vw', marginInline: 'calc(50% - 50vw)', padding: 0, boxSizing: 'border-box' }}>
+          <section style={{ position: 'relative', flex: '0 0 48vh', minHeight: 0, display: 'flex', alignItems: 'flex-end', padding: 0, overflow: 'hidden' }}>
             <img src={categoryDraft.image} alt={categoryDraft.alt} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: categoryDraft.objectPosition || 'center' }} />
             <button type="button" onClick={editCategoryImage} aria-label="Edit category image" title="Edit category image" style={overlayButton}>▧</button>
             <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,#111 0%,rgba(17,17,17,.92) 14%,rgba(17,17,17,.38) 58%,transparent 100%)' }} />
@@ -136,7 +136,7 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
             </div>
           </section>
           <section style={{ flex: '1 1 auto', minHeight: 0, display: 'flex', flexDirection: 'column', padding: 'clamp(16px, 2vw, 24px) clamp(16px, 4vw, 48px)', margin: 0, width: '100%', boxSizing: 'border-box', overflow: 'hidden' }}>
-            <Swiper modules={[A11y, Keyboard, Navigation, Pagination]} slidesPerView="auto" slidesPerGroup={1} spaceBetween={16} speed={520} threshold={6} resistanceRatio={0.85} roundLengths watchSlidesProgress navigation={subcategoryDrafts.length > 2} pagination={subcategoryDrafts.length > 0 ? { clickable: true } : false} keyboard={{ enabled: true, onlyInViewport: true }} grabCursor slideToClickedSlide watchOverflow loop={false} aria-label={categoryDraft.category + ' subcategories'} style={{ width: '100%', height: 290, flex: '0 0 auto', paddingBottom: 24, overflow: 'visible', alignItems: 'flex-start', '--swiper-theme-color': '#f4f1ec' } as React.CSSProperties}>
+            <Swiper className="admin-marketplace-subcategory-swiper" modules={[A11y, Keyboard, Navigation, Pagination]} slidesPerView="auto" slidesPerGroup={1} spaceBetween={16} speed={520} threshold={6} resistanceRatio={0.85} roundLengths watchSlidesProgress navigation={subcategoryDrafts.length > 2} pagination={subcategoryDrafts.length > 0 ? { clickable: true } : false} keyboard={{ enabled: true, onlyInViewport: true }} grabCursor slideToClickedSlide watchOverflow loop={false} aria-label={categoryDraft.category + ' subcategories'} style={{ width: '100%', height: 326, flex: '0 0 auto', paddingBottom: 36, overflow: 'visible', alignItems: 'flex-start', '--swiper-theme-color': '#f4f1ec' } as React.CSSProperties}>
               {subcategoryDrafts.map((sub) => (
                 <SwiperSlide key={sub.id} style={{ width: 230, height: 290, flexShrink: 0 }}>
                   <article className="discovery-subcategory-card" style={{ position: 'relative', display: 'block', width: 230, height: 290, padding: 0, textAlign: 'left', border: 0, borderRadius: 3, background: '#111', color: '#fff', overflow: 'hidden' }}>
