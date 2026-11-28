@@ -12,49 +12,18 @@ function homepagePool(items: MoodboardItem[]) {
   for(let i=pool.length-1;i>0;i-=1){const j=Math.floor(random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];} return pool;
 }
 export default function AdminMoodboardLayoutPreview({items,hiddenMarketIds=[],onReactivateCategory,onItemClick,onAddCategory,onOpenManual,onReturn}:Props) {
-  const [selectedShape,setSelectedShape]=useState<ShapeId>('horizontal-2'),[ads,setAds]=useState<AdDraft[]>([]),[placementMode,setPlacementMode]=useState(false);
-  const pool=useMemo(()=>homepagePool(items),[items]),tiles=pool.slice(0,BOARD_COUNT-1),occupied=useMemo(()=>new Set(ads.flatMap(cellsFor)),[ads]);
-  const canPlace=(anchor:number)=>{if(!placementMode||anchor===0)return false;const row=Math.floor(anchor/8),col=anchor%8,shape=shapeFor(selectedShape),cells=shape.cells.map(([dr,dc])=>(row+dr)*8+col+dc);return anchor<BOARD_COUNT&&shape.cells.every(([dr,dc])=>row+dr<BOARD_ROWS&&col+dc<BOARD_COLUMNS)&&cells.every((slot)=>slot<BOARD_COUNT&&!occupied.has(slot));};
-  const placeAd=(anchor:number)=>{if(!canPlace(anchor))return;setAds((current)=>[...current,{id:Date.now(),shape:selectedShape,anchor}]);setPlacementMode(false);};
-  const adStyle=(ad:AdDraft):React.CSSProperties=>{const shape=shapeFor(ad.shape),row=Math.floor(ad.anchor/8),col=ad.anchor%8;return {gridRow:row+1+' / span '+shape.height,gridColumn:col+1+' / span '+shape.width,clipPath:ad.shape==='l-3'?'polygon(0 0,100% 0,100% 50%,50% 50%,50% 100%,0 100%)':undefined};};
+  const pool=useMemo(()=>homepagePool(items),[items]);
+  const tiles=pool.slice(0,BOARD_COUNT-1);
   return <div className="admin-moodboard-layout-preview">
-    <div className="admin-moodboard-layout-preview__toolbar" role="toolbar" aria-label="Moodboard controls">
+    <header className="admin-moodboard-layout-preview__toolbar" aria-label="Moodboard header">
       <button type="button" onClick={onReturn} aria-label="Home" title="Home">⌂</button>
-      <button type="button" onClick={onOpenManual} aria-label="Moodboard settings" title="Moodboard settings">⚙</button>
-      {SHAPES.map((shape)=><button type="button" key={shape.id} className={selectedShape===shape.id&&placementMode?'is-selected is-active':''} aria-label={shape.label} title={shape.label} aria-pressed={selectedShape===shape.id&&placementMode} onClick={()=>{if(selectedShape===shape.id&&placementMode){setPlacementMode(false);}else{setSelectedShape(shape.id);setPlacementMode(true);}}}><span className="admin-moodboard-layout-preview__shape-icon">{shape.cells.map(([r,c])=><i key={r+'-'+c} style={{gridRow:r+1,gridColumn:c+1}} />)}</span></button>)}
-    </div>
+      <button type="button" onClick={onOpenManual} aria-label="Menu" title="Menu">⋯</button>
+    </header>
     <div className="admin-moodboard-layout-preview__scroll">
       <div className="admin-moodboard-layout-preview__board" role="grid" aria-label="Homepage moodboard" style={{gridTemplateColumns:'repeat(8, 230px)',gridTemplateRows:'repeat(8, 290px)',zoom:ADMIN_CANVAS_SCALE}}>
         <button type="button" role="gridcell" className="admin-moodboard-layout-preview__add-category" onClick={onAddCategory} aria-label="Add category"><span>+</span><small>Category</small></button>
-        {tiles.map((item,index)=>{const slot=index+1;return <button type="button" role="gridcell" key={item.id} className={'admin-moodboard-layout-preview__tile'+(hiddenMarketIds.includes(item.id)?' is-hidden':'')+(canPlace(slot)?' is-ad-target':'')} onClick={()=>{if(occupied.has(slot))return;if(canPlace(slot)){placeAd(slot);return;}if(hiddenMarketIds.includes(item.id)){onReactivateCategory?.(item.id);return;}onItemClick?.(items.find((m)=>m.id===item.id)||items.find((m)=>item.id.startsWith(m.id+'-'))||item);}} aria-label={item.category+': '+item.title}><img src={item.image} alt={item.alt} draggable={false} loading={index<8?'eager':'lazy'}/><span>{item.category}</span></button>;})}
-        <div className="admin-moodboard-layout-preview__ad-layer">{ads.map((ad)=>{const shape=shapeFor(ad.shape);return <button type="button" key={ad.id} className="admin-moodboard-layout-preview__ad-preview" style={adStyle(ad)} onClick={()=>setAds((current)=>current.filter((entry)=>entry.id!==ad.id))} aria-label={'Remove '+shape.label+' ad placement'}><span>AD SLOT</span><small>{shape.label}</small><b>×</b></button>;})}</div>
+        {tiles.map((item,index)=><button type="button" role="gridcell" key={item.id} className={'admin-moodboard-layout-preview__tile'+(hiddenMarketIds.includes(item.id)?' is-hidden':'')} onClick={()=>{if(hiddenMarketIds.includes(item.id)){onReactivateCategory?.(item.id);return;}onItemClick?.(items.find((m)=>m.id===item.id)||items.find((m)=>item.id.startsWith(m.id+'-'))||item);}} aria-label={item.category+': '+item.title}><img src={item.image} alt={item.alt} draggable={false} loading={index<8?'eager':'lazy'}/><span>{item.category}</span></button>)}
       </div>
     </div>
-    <section className="admin-moodboard-layout-preview__shape-library" aria-label="Advertising placement designs">
-      <header className="admin-moodboard-layout-preview__shape-library-header">
-        <div><h2>Advertising placements</h2><p>Full-scale designs · activate a shape to place it on the Moodboard</p></div>
-        <span>{ads.length} active placement{ads.length===1?'':'s'}</span>
-      </header>
-      <div className="admin-moodboard-layout-preview__shape-library-grid">
-        {SHAPES.map((shape) => {
-          const isActive = ads.some((ad) => ad.shape === shape.id);
-          return <article className="admin-moodboard-layout-preview__shape-card" key={shape.id}>
-            <div className="admin-moodboard-layout-preview__shape-stage">
-              <div className={'admin-moodboard-layout-preview__shape-design shape-'+shape.id} style={{gridTemplateColumns:'repeat('+shape.width+', 230px)',gridTemplateRows:'repeat('+shape.height+', 290px)'}}>
-                {shape.cells.map(([r,c],index)=><div className="admin-moodboard-layout-preview__shape-cell" key={r+'-'+c} style={{gridRow:r+1,gridColumn:c+1}}>
-                  <span className="admin-moodboard-layout-preview__shape-mark">{index===0?'SIMATU / DISCOVER':' '}</span>
-                  <strong>{index===0?'Discover something new':''}</strong>
-                  <small>{index===0?'Curated for you':' '}</small>
-                </div>)}
-              </div>
-            </div>
-            <div className="admin-moodboard-layout-preview__shape-card-footer">
-              <div><strong>{shape.label}</strong><small>{shape.width} × {shape.height} tile footprint · {shape.cells.length} tiles</small></div>
-              <button type="button" className={isActive?'is-active':''} onClick={()=>{setSelectedShape(shape.id);setPlacementMode(true);}}>{isActive?'Add another':'Activate'}</button>
-            </div>
-          </article>;
-        })}
-      </div>
-    </section>
   </div>;
 }
