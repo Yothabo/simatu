@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { useGlobalCart } from '../../../shared/cart/CartContext';
 import { FaHome, FaBars, FaTimes, FaUsers, FaBookmark, FaHistory, FaRandom, FaThLarge, FaOpencart, FaCreditCard } from 'react-icons/fa';
@@ -32,6 +32,7 @@ type MoodboardSearchBarProps = {
   onClearCategory?: () => void;
   onRandomDiscovery?: () => void;
   storefrontMenuLinks?: StorefrontMenuLink[];
+  adminMenuContent?: ReactNode;
 };
 
 export default function MoodboardSearchBar({
@@ -56,6 +57,7 @@ export default function MoodboardSearchBar({
   onClearCategory,
   onRandomDiscovery,
   storefrontMenuLinks,
+  adminMenuContent,
 }: MoodboardSearchBarProps) {
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [savedOpen, setSavedOpen] = useState(false);
@@ -69,7 +71,9 @@ export default function MoodboardSearchBar({
         {onBack && <button type="button" className="kinetic-moodboard__search-back" aria-label="Back" onClick={onBack} tabIndex={visible ? 0 : -1}>{backIcon === 'arrow' ? <TiArrowBack size={21} aria-hidden="true" /> : <FaHome size={18} aria-hidden="true" />}</button>}
         <div className={`kinetic-moodboard__search-shell ${showMenu ? "has-menu" : ""}`}>
           {menuExpanded ? (
-            <nav className="kinetic-moodboard__discover-tools" aria-label={storefrontMenuLinks ? 'Storefront navigation' : 'Discover tools'}>
+            <nav className="kinetic-moodboard__discover-tools" aria-label={adminMenuContent ? 'Marketplace admin menu' : storefrontMenuLinks ? 'Storefront navigation' : 'Discover tools'}>
+              {adminMenuContent != null ? adminMenuContent : null}
+              {adminMenuContent == null && (
               {storefrontMenuLinks && storefrontMenuLinks.map((link) => <Link key={link.label} to={link.to} className="kinetic-moodboard__discover-tool" onClick={() => onMenuClick?.()}><span>{link.label}</span></Link>)}
               {!storefrontMenuLinks && (
               <>
@@ -97,6 +101,7 @@ export default function MoodboardSearchBar({
                 {recentOpen && <div className="kinetic-moodboard__discover-category-list" aria-label="Recently visited categories">{recentCategories.length ? recentCategories.map((category) => <button type="button" key={category.id} className="kinetic-moodboard__discover-category kinetic-moodboard__saved-discovery" onClick={() => { onRecentCategorySelect?.(category.category); onMenuClick?.(); }}><img src={category.image} alt="" loading="lazy"/><span>{category.category}</span></button>) : <p className="kinetic-moodboard__saved-empty">Categories you visit will appear here.</p>}</div>}
               </div>
               </>
+              )}
               )}
             </nav>
           ) : (
