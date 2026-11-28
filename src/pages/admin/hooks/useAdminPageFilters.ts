@@ -53,7 +53,9 @@ export function useAdminPageFilters({
     () => Array.from(new Set(
       storefrontProducts
         .map((product) => product.category?.trim())
-        .filter((category): category is string => Boolean(category)),
+        .filter((category): category is string =>
+          Boolean(category) && !/^(his|hers|spaces|lounge)$/i.test(category),
+        ),
     )).sort((a, b) => a.localeCompare(b)),
     [storefrontProducts],
   );
