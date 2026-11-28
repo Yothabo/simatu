@@ -149,3 +149,9 @@
 .admin-market-edit-modal__image-source input[type='url'] {
   border: 1px solid var(--market-modal-border);
 }
+
+
+/* Marketplace category carousel: pagination sits below the fixed-size cards. */
+.admin-marketplace-subcategory-swiper { position: relative; }
+.admin-marketplace-subcategory-swiper .swiper-pagination { position: absolute; inset: auto 0 0 !important; height: 8px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.admin-marketplace-subcategory-swiper .swiper-pagination-bullet { margin: 0 !important; }
