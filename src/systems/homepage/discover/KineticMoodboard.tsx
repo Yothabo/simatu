@@ -193,7 +193,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
     const sources = Array.from(new Set([
       ...marketItems.slice(0, 8).map((item) => item.image),
       ...(marketSubcategoriesLoaded ? Object.values(marketSubcategories).flat().slice(0, 24).map((item) => item.image) : []),
-    ].filter((source): source is string => Boolean(source)));
+    ].filter((source): source is string => Boolean(source))));
     if (!sources.length) {
       setCriticalImagesLoaded(true);
       return;
@@ -562,3 +562,11 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
 
 
       
+      {!adminMode && normalizedSearch.length >= 1 && interactive && !searchDismissed && <MoodboardPredictiveSearch query={searchQuery} loading={networkLoading} error={networkError} stores={searchStores.map(store => ({ key: store.key, name: store.name, href: store.href }))} categories={searchCategories} products={matchingProducts} onCategorySelect={setSearchQuery} />}
+
+    </section>
+  );
+};
+
+
+export default KineticMoodboard;
