@@ -96,6 +96,14 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
   const editCategoryImage = () => { if (categoryDraft) beginEdit('category-image', categoryDraft.image); };
   const editSubcategoryImage = (id: string) => { const current = subcategoryDrafts.find((item) => item.id === id); if (current) beginEdit('subcategory-image-' + id, current.image); };
   const addSubcategory = () => { setNewSubcategoryTitle(''); setNewSubcategoryDescription(''); setNewSubcategoryImage(''); setIsAddingSubcategory(true); setEditingField('add-subcategory'); };
+  const importDeviceImage = (file: File | undefined, onLoaded: (dataUrl: string) => void) => {
+    if (!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') onLoaded(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
 
   return (
     <>
@@ -159,13 +167,19 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
           <div className="admin-market-edit-modal__fields">
             <label className="admin-market-edit-modal__field"><span>Title</span><input value={newSubcategoryTitle} onChange={(event) => setNewSubcategoryTitle(event.target.value)} autoFocus placeholder="Subcategory title" /></label>
             <label className="admin-market-edit-modal__field"><span>Description <small>Optional</small></span><textarea value={newSubcategoryDescription} onChange={(event) => setNewSubcategoryDescription(event.target.value)} rows={3} placeholder="Describe this subcategory" /></label>
-            <label className="admin-market-edit-modal__field"><span>Image URL <small>Optional</small></span><input value={newSubcategoryImage} onChange={(event) => setNewSubcategoryImage(event.target.value)} placeholder="https://…" /></label>
-            {newSubcategoryImage.trim() && <img className="admin-market-edit-modal__preview" src={newSubcategoryImage} alt="Subcategory image preview" onError={(event) => { event.currentTarget.style.display = 'none'; }} />}
+            <div className="admin-market-edit-modal__image-source">
+              <label className="admin-market-edit-modal__field"><span>Image link <small>Optional</small></span><input type="url" value={newSubcategoryImage.startsWith('data:') ? '' : newSubcategoryImage} onChange={(event) => setNewSubcategoryImage(event.target.value)} placeholder="Paste image URL" /></label>
+              <label className="admin-market-edit-modal__device-picker">▧ Choose image from device<input type="file" accept="image/*" onChange={(event) => importDeviceImage(event.target.files?.[0], setNewSubcategoryImage)} /></label>
+              {newSubcategoryImage.trim() && <img className="admin-market-edit-modal__preview" src={newSubcategoryImage} alt="Subcategory image preview" onError={(event) => { event.currentTarget.style.display = 'none'; }} />}
+            </div>
           </div>
         ) : editingField === 'category-image' || editingField?.startsWith('subcategory-image-') ? (
           <div className="admin-market-edit-modal__fields">
-            <label className="admin-market-edit-modal__field"><span>Image URL</span><input value={editingValue} onChange={(event) => setEditingValue(event.target.value)} autoFocus placeholder="Paste image URL" onKeyDown={(event) => { if (event.key === 'Enter') saveEdit(); if (event.key === 'Escape') cancelEdit(); }} /></label>
-            {editingValue.trim() && <img className="admin-market-edit-modal__preview" src={editingValue} alt="Image preview" onError={(event) => { event.currentTarget.style.display = 'none'; }} />}
+            <div className="admin-market-edit-modal__image-source">
+              <label className="admin-market-edit-modal__field"><span>Image link</span><input type="url" value={editingValue.startsWith('data:') ? '' : editingValue} onChange={(event) => setEditingValue(event.target.value)} autoFocus={!editingValue.startsWith('data:')} placeholder="Paste image URL" onKeyDown={(event) => { if (event.key === 'Enter') saveEdit(); if (event.key === 'Escape') cancelEdit(); }} /></label>
+              <label className="admin-market-edit-modal__device-picker">▧ Choose image from device<input type="file" accept="image/*" onChange={(event) => importDeviceImage(event.target.files?.[0], setEditingValue)} /></label>
+              {editingValue.trim() && <img className="admin-market-edit-modal__preview" src={editingValue} alt="Image preview" onError={(event) => { event.currentTarget.style.display = 'none'; }} />}
+            </div>
           </div>
         ) : editingField?.endsWith('description') ? (
           <div className="admin-market-edit-modal__fields"><label className="admin-market-edit-modal__field"><span>Description</span><textarea value={editingValue} onChange={(event) => setEditingValue(event.target.value)} autoFocus rows={5} /></label></div>
