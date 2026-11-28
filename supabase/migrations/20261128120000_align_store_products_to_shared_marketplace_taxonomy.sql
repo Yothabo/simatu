@@ -45,13 +45,10 @@ BEGIN
 
   NEW.store_id := v_store_id;
 
-  -- Shared marketplace classification is authoritative for new product rows.
-  IF NEW.category_id IS NULL AND NEW.subcategory_id IS NULL THEN
-    IF NEW.marketplace_subcategory_id IS NULL THEN
-      RAISE EXCEPTION 'A marketplace subcategory is required for store products.'
-        USING ERRCODE = '23514';
-    END IF;
-
+  -- Shared marketplace classification is authoritative whenever present.
+  -- Clear old store-owned references on the next save instead of allowing two
+  -- competing taxonomies to remain attached to the same product.
+  IF NEW.marketplace_subcategory_id IS NOT NULL THEN
     SELECT mc.name, msc.name
     INTO v_category_name, v_subcategory_name
     FROM public.marketplace_subcategories msc
@@ -73,9 +70,16 @@ BEGIN
         USING ERRCODE = '23514';
     END IF;
 
+    NEW.category_id := NULL;
+    NEW.subcategory_id := NULL;
     NEW.category := v_category_name;
     NEW.subcategory := v_subcategory_name;
     RETURN NEW;
+  END IF;
+
+  IF NEW.category_id IS NULL AND NEW.subcategory_id IS NULL THEN
+    RAISE EXCEPTION 'A marketplace subcategory is required for store products.'
+      USING ERRCODE = '23514';
   END IF;
 
   -- Partially populated legacy references are never valid.
