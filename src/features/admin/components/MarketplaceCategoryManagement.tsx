@@ -102,6 +102,8 @@ export default function MarketplaceCategoryManagement({ accessToken }: Props) {
         : action === 'assign'
           ? category.name + ' assigned to ' + store.store_name + '.'
           : category.name + ' removed from ' + store.store_name + '.');
+      // Reconcile the primary marker with the server's transaction ordering.
+      void load();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Assignment update failed.');
     } finally {
