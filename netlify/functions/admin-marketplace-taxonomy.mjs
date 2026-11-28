@@ -3,7 +3,7 @@ import { requireAdmin } from './_shared/auth.mjs';
 
 const pool = new Pool({
   connectionString: process.env.SUPABASE_DB_URL,
-  ssl: { rejectUnauthorized: false },
+  ssl: { rejectUnauthorized: true },
   max: 2,
   idleTimeoutMillis: 10000,
   connectionTimeoutMillis: 10000,
@@ -22,7 +22,13 @@ const mediaUrl = (path) => path && storageBase
   : null;
 
 export default async (request) => {
-  const admin = await requireAdmin(request, pool);
+  let admin;
+  try {
+    admin = await requireAdmin(request, pool);
+  } catch (error) {
+    console.error('[admin-marketplace-taxonomy] auth failed', error?.message || 'unknown');
+    return json({ error: 'Unable to verify administrator access.' }, 503);
+  }
   if (!admin) return json({ error: 'Authentication required.' }, 401);
   if (admin.role !== 'super_admin') return json({ error: 'Only platform administrators may manage marketplace taxonomy.' }, 403);
 
