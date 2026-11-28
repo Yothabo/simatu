@@ -50,7 +50,7 @@ async function list(request) {
   if (adminScope) { const auth = await superAdmin(request); if (auth.response) return auth.response; }
   const filters = adminScope ? ['TRUE'] : ['mp.is_active IS TRUE'];
   const vals = [];
-  if (!adminScope) filters.push("mp.marketplace_visible IS TRUE AND mc.audience_policy = 'general'");
+  if (!adminScope) filters.push("mp.marketplace_visible IS TRUE AND mc.is_active IS TRUE AND mc.publication_status = 'published' AND mc.audience_policy = 'general' AND msc.is_active IS TRUE AND msc.publication_status = 'published'");
   const cat = url.searchParams.get('category');
   const sub = url.searchParams.get('subcategory_id');
   if (cat) { vals.push(cat); filters.push('mc.slug = $' + vals.length); }
@@ -75,7 +75,7 @@ async function save(body, update) {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
-    const taxonomy = await client.query("SELECT mc.id category_id,ms.id subcategory_id FROM public.marketplace_categories mc JOIN public.marketplace_subcategories ms ON ms.marketplace_category_id=mc.id WHERE mc.slug=$1 AND mc.is_active IS TRUE AND mc.audience_policy='general' AND ms.id=$2 AND ms.is_active IS TRUE", [p.category_slug,p.subcategory_id]);
+    const taxonomy = await client.query("SELECT mc.id category_id,ms.id subcategory_id FROM public.marketplace_categories mc JOIN public.marketplace_subcategories ms ON ms.marketplace_category_id=mc.id WHERE mc.slug=$1 AND mc.is_active IS TRUE AND mc.publication_status='published' AND mc.audience_policy='general' AND ms.id=$2 AND ms.is_active IS TRUE AND ms.publication_status='published'", [p.category_slug,p.subcategory_id]);
     if (!taxonomy.rowCount) { await client.query('ROLLBACK'); return json({ error: 'Category or subcategory unavailable.' }, 400); }
     const t=taxonomy.rows[0];
     const params=[p.name,p.sku,p.description,p.price,p.supplier_cost,p.image_url,t.category_id,t.subcategory_id,p.is_active,p.marketplace_visible,p.sort_order];
