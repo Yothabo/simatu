@@ -14,6 +14,7 @@ type MarketplaceSubcategory = {
 type MarketplaceCategory = { id: string; slug: string; name: string };
 
 export function useMarketplaceTaxonomy(
+  enabled: boolean,
   storefront: string,
   selectedCategorySlug: string | null,
   selectedSubcategoryId: string | null,
@@ -55,14 +56,16 @@ export function useMarketplaceTaxonomy(
       }
     }
 
-    if (storefront) void load();
+    if (!enabled) {
+      setIsLoadingMarketplaceTaxonomy(false);
+    } else if (storefront) void load();
     else {
       setIsLoadingMarketplaceTaxonomy(false);
       setMarketplaceTaxonomyError('Choose a storefront before classifying marketplace products.');
     }
 
     return () => { cancelled = true; };
-  }, [storefront]);
+  }, [enabled, storefront]);
 
   const marketplaceCategoryOptions: CategoryOption[] = useMemo(
     () => categories.map((item) => ({ value: item.slug, label: item.name })),
