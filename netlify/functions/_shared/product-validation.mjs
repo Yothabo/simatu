@@ -191,32 +191,22 @@ export function validateProduct(body) {
     return { error: 'SKU must contain 1–80 valid letters, numbers or . _ / - characters.' };
   }
 
-  if (!categoryId && !category) {
-    return { error: 'Please select a valid category.' };
-  }
-
+  // Store products use the shared marketplace taxonomy. The old
+  // store-owned category IDs are optional legacy references only.
   if (categoryId && !uuidPattern.test(categoryId)) {
-    return { error: 'Please provide a valid category.' };
-  }
-
-  if (!subcategoryId && !subcategory) {
-    return { error: 'Please provide a valid subcategory.' };
+    return { error: 'Please provide a valid legacy category reference.' };
   }
 
   if (subcategoryId && !uuidPattern.test(subcategoryId)) {
-    return { error: 'Please provide a valid subcategory.' };
+    return { error: 'Please provide a valid legacy subcategory reference.' };
   }
 
-  if (marketplaceSubcategoryId && !uuidPattern.test(marketplaceSubcategoryId)) {
-    return { error: 'Please provide a valid marketplace subcategory.' };
+  if (!marketplaceCategorySlug || marketplaceCategorySlug === '__invalid__') {
+    return { error: 'Select a marketplace category assigned to this store.' };
   }
 
-  if (marketplaceCategorySlug === '__invalid__') {
-    return { error: 'Please provide a valid marketplace category.' };
-  }
-
-  if (marketplaceCategorySlug && !marketplaceSubcategoryId) {
-    return { error: 'Select a marketplace subcategory for the chosen category.' };
+  if (!marketplaceSubcategoryId || !uuidPattern.test(marketplaceSubcategoryId)) {
+    return { error: 'Select a valid marketplace subcategory.' };
   }
 
   if (category.length > 120 || subcategory.length > 120) {
