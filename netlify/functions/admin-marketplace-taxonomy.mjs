@@ -15,6 +15,11 @@ const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}
 const validName = (name) => typeof name === 'string' && name.trim().length > 0 && name.trim().length <= 120;
 const validSlug = (slug) => typeof slug === 'string' && slugPattern.test(slug);
 const validAgePolicy = (policy, age) => policy === 'general' ? age == null : policy === 'restricted' && Number.isInteger(age) && age >= 18 && age <= 120;
+const validPublicationStatus = (status) => ['draft', 'published', 'archived'].includes(status);
+const storageBase = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\\/+$/, '');
+const mediaUrl = (path) => path && storageBase
+  ? `${storageBase}/storage/v1/object/public/marketplace-media/${path.split('/').map(encodeURIComponent).join('/')}`
+  : null;
 
 export default async (request) => {
   const admin = await requireAdmin(request, pool);
@@ -24,12 +29,27 @@ export default async (request) => {
   if (request.method === 'GET') {
     try {
       const [categories, subcategories] = await Promise.all([
-        pool.query(`SELECT id,name,slug,description,sort_order,audience_policy,minimum_age,is_active
-          FROM public.marketplace_categories ORDER BY sort_order,name`),
-        pool.query(`SELECT id,marketplace_category_id,name,slug,description,sort_order,is_active
-          FROM public.marketplace_subcategories ORDER BY marketplace_category_id,sort_order,name`),
+        pool.query(`SELECT mc.id,mc.name,mc.slug,mc.description,mc.sort_order,
+            mc.audience_policy,mc.minimum_age,mc.is_active,mc.publication_status,
+            media.jpeg_path,media.jxl_path,media.alt_text AS image_alt_text
+          FROM public.marketplace_categories mc
+          LEFT JOIN public.marketplace_content_media media
+            ON media.id=mc.image_media_id AND media.retired_at IS NULL
+          ORDER BY mc.sort_order,mc.name`),
+        pool.query(`SELECT msc.id,msc.marketplace_category_id,msc.name,msc.slug,
+            msc.description,msc.sort_order,msc.is_active,msc.publication_status,
+            media.jpeg_path,media.jxl_path,media.alt_text AS image_alt_text
+          FROM public.marketplace_subcategories msc
+          LEFT JOIN public.marketplace_content_media media
+            ON media.id=msc.image_media_id AND media.retired_at IS NULL
+          ORDER BY msc.marketplace_category_id,msc.sort_order,msc.name`),
       ]);
-      return json({ categories: categories.rows, subcategories: subcategories.rows });
+      const withMedia = (rows) => rows.map(({ jpeg_path, jxl_path, ...item }) => ({
+        ...item,
+        image_url: mediaUrl(jpeg_path),
+        image_jxl_url: mediaUrl(jxl_path),
+      }));
+      return json({ categories: withMedia(categories.rows), subcategories: withMedia(subcategories.rows) });
     } catch (error) {
       console.error('[admin-marketplace-taxonomy] list failed', error?.code || error?.message);
       return json({ error: 'Unable to load marketplace taxonomy.' }, 500);
@@ -50,6 +70,12 @@ export default async (request) => {
   const description = body?.description == null ? null : String(body.description).trim().slice(0,2000);
   const sortOrder = Number(body?.sort_order ?? 0);
   const isActive = body?.is_active !== false;
+  const publicationStatus = body?.publication_status == null
+    ? (request.method === 'POST' ? 'draft' : 'published')
+    : String(body.publication_status);
+  if (request.method !== 'DELETE' && !validPublicationStatus(publicationStatus)) {
+    return json({ error: 'Publication status must be draft, published or archived.' }, 400);
+  }
 
   if (request.method !== 'DELETE' && (!validName(name) || !validSlug(slug) || !Number.isInteger(sortOrder) || sortOrder < 0)) {
     return json({ error: 'Name, valid slug and non-negative sort order are required.' }, 400);
@@ -64,17 +90,20 @@ export default async (request) => {
     try {
       if (request.method === 'POST') {
         const result = await pool.query(`INSERT INTO public.marketplace_categories
-          (name,slug,description,sort_order,audience_policy,minimum_age,is_active)
-          VALUES ($1,$2,$3,$4,$5,$6,$7)
-          RETURNING id,name,slug,description,sort_order,audience_policy,minimum_age,is_active`,
-          [name.trim(),slug,description,sortOrder,audiencePolicy,minimumAge,isActive]);
+          (name,slug,description,sort_order,audience_policy,minimum_age,is_active,publication_status,published_at)
+          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,CASE WHEN $8='published' THEN NOW() ELSE NULL END)
+          RETURNING id,name,slug,description,sort_order,audience_policy,minimum_age,is_active,publication_status`,
+          [name.trim(),slug,description,sortOrder,audiencePolicy,minimumAge,isActive,publicationStatus]);
         return json({ category: result.rows[0] }, 201);
       }
       if (request.method === 'PATCH') {
         const result = await pool.query(`UPDATE public.marketplace_categories SET
-          name=$2,slug=$3,description=$4,sort_order=$5,audience_policy=$6,minimum_age=$7,is_active=$8,updated_at=NOW()
-          WHERE id=$1 RETURNING id,name,slug,description,sort_order,audience_policy,minimum_age,is_active`,
-          [id,name.trim(),slug,description,sortOrder,audiencePolicy,minimumAge,isActive]);
+          name=$2,slug=$3,description=$4,sort_order=$5,audience_policy=$6,minimum_age=$7,
+          is_active=$8,publication_status=$9,
+          published_at=CASE WHEN $9='published' THEN COALESCE(published_at,NOW()) ELSE published_at END,
+          updated_at=NOW()
+          WHERE id=$1 RETURNING id,name,slug,description,sort_order,audience_policy,minimum_age,is_active,publication_status`,
+          [id,name.trim(),slug,description,sortOrder,audiencePolicy,minimumAge,isActive,publicationStatus]);
         return result.rowCount ? json({ category: result.rows[0] }) : json({ error: 'Category not found.' }, 404);
       }
       const result = await pool.query(`UPDATE public.marketplace_categories SET is_active=FALSE,updated_at=NOW() WHERE id=$1 RETURNING id`,[id]);
@@ -92,17 +121,20 @@ export default async (request) => {
   try {
     if (request.method === 'POST') {
       const result = await pool.query(`INSERT INTO public.marketplace_subcategories
-        (marketplace_category_id,name,slug,description,sort_order,is_active)
-        VALUES ($1,$2,$3,$4,$5,$6)
-        RETURNING id,marketplace_category_id,name,slug,description,sort_order,is_active`,
-        [categoryId,name.trim(),slug,description,sortOrder,isActive]);
+        (marketplace_category_id,name,slug,description,sort_order,is_active,publication_status,published_at)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,CASE WHEN $7='published' THEN NOW() ELSE NULL END)
+        RETURNING id,marketplace_category_id,name,slug,description,sort_order,is_active,publication_status`,
+        [categoryId,name.trim(),slug,description,sortOrder,isActive,publicationStatus]);
       return json({ subcategory: result.rows[0] }, 201);
     }
     if (request.method === 'PATCH') {
       const result = await pool.query(`UPDATE public.marketplace_subcategories SET
-        marketplace_category_id=$2,name=$3,slug=$4,description=$5,sort_order=$6,is_active=$7,updated_at=NOW()
-        WHERE id=$1 RETURNING id,marketplace_category_id,name,slug,description,sort_order,is_active`,
-        [id,categoryId,name.trim(),slug,description,sortOrder,isActive]);
+        marketplace_category_id=$2,name=$3,slug=$4,description=$5,sort_order=$6,is_active=$7,
+        publication_status=$8,
+        published_at=CASE WHEN $8='published' THEN COALESCE(published_at,NOW()) ELSE published_at END,
+        updated_at=NOW()
+        WHERE id=$1 RETURNING id,marketplace_category_id,name,slug,description,sort_order,is_active,publication_status`,
+        [id,categoryId,name.trim(),slug,description,sortOrder,isActive,publicationStatus]);
       return result.rowCount ? json({ subcategory: result.rows[0] }) : json({ error: 'Subcategory not found.' }, 404);
     }
     const result = await pool.query(`UPDATE public.marketplace_subcategories SET is_active=FALSE,updated_at=NOW() WHERE id=$1 RETURNING id`,[id]);
