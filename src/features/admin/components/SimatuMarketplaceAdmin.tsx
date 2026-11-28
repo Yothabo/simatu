@@ -8,17 +8,19 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import '../../../systems/homepage/design-system/index.css';
 
-export default function SimatuMarketplaceAdmin() {
+type Props = { onReturn: () => void; };
+
+export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
   const [activeMarket, setActiveMarket] = useState<MoodboardItem | null>(null);
   const subcategories = activeMarket ? getSubcategories(activeMarket.id) : [];
 
   return (
     <div className="admin-marketplace-moodboard" aria-label="Marketplace management" style={{ position: 'fixed', inset: 0, zIndex: 10, overflow: 'hidden', background: '#111', color: '#f4f1ec' }}>
+      <button type="button" onClick={activeMarket ? () => setActiveMarket(null) : onReturn} aria-label={activeMarket ? 'Back to Admin Market categories' : 'Return to Admin dashboard'} style={{ position: 'fixed', zIndex: 30, top: 18, left: 18, minHeight: 46, padding: '0 16px', border: '1px solid rgba(255,255,255,.35)', borderRadius: 999, background: 'rgba(17,17,17,.72)', color: '#fff', fontSize: 14, fontWeight: 500, cursor: 'pointer', backdropFilter: 'blur(12px)' }}>{activeMarket ? '← Back' : '← Return'}</button>
       {!activeMarket ? (
         <KineticMoodboard colorReveal interactive adminMode onItemClick={setActiveMarket} />
       ) : (
         <main style={{ minHeight: '100dvh', overflowY: 'auto', background: '#111', color: '#f4f1ec' }}>
-          <button type="button" onClick={() => setActiveMarket(null)} aria-label="Back to Admin Market categories" style={{ position: 'fixed', zIndex: 20, top: 18, left: 18, width: 46, height: 46, border: '1px solid rgba(255,255,255,.35)', borderRadius: '50%', background: 'rgba(17,17,17,.72)', color: '#fff', fontSize: 20, cursor: 'pointer', backdropFilter: 'blur(12px)' }}>←</button>
           <section style={{ position: 'relative', minHeight: '42vh', display: 'flex', alignItems: 'flex-end', padding: 'clamp(24px,5vw,72px)', overflow: 'hidden' }}>
             <img src={activeMarket.image} alt={activeMarket.alt} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: activeMarket.objectPosition || 'center' }} />
             <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,#111 0%,rgba(17,17,17,.92) 14%,rgba(17,17,17,.38) 58%,transparent 100%)' }} />
