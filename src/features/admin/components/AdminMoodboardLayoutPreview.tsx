@@ -31,12 +31,11 @@ export default function AdminMoodboardLayoutPreview({items,onItemClick,onAddCate
   const adStyle=(ad:AdDraft):React.CSSProperties=>{const shape=shapeFor(ad.shape),row=Math.floor(ad.anchor/8),col=ad.anchor%8;return {gridRow:row+1+' / span '+shape.height,gridColumn:col+1+' / span '+shape.width,clipPath:ad.shape==='l-3'?'polygon(0 0,100% 0,100% 50%,50% 50%,50% 100%,0 100%)':undefined};};
   return <div className="admin-moodboard-layout-preview">
     <div className="admin-moodboard-layout-preview__toolbar">
-      <button type="button" onClick={onReturn} aria-label="Back to Admin" title="Back to Admin">⌂</button>
-      <button type="button" onClick={onOpenManual} aria-label="Moodboard manual" title="Manual">ⓘ</button>
+      <button type="button" onClick={onReturn} aria-label="Home" title="Home">⌂</button>
+      <button type="button" onClick={onOpenManual} aria-label="Moodboard settings" title="Moodboard settings">⚙</button>
     </div>
     <div className="admin-moodboard-layout-preview__shape-list" aria-label="Ad shapes">
-      {SHAPES.map((shape)=><button type="button" key={shape.id} className={selectedShape===shape.id?'is-selected':''} aria-pressed={selectedShape===shape.id} onClick={()=>setSelectedShape(shape.id)}><span className="admin-moodboard-layout-preview__shape-icon">{shape.cells.map(([r,c])=><i key={r+'-'+c} style={{gridRow:r+1,gridColumn:c+1}} />)}</span><span>{shape.label}</span></button>)}
-      <button type="button" className={'admin-moodboard-layout-preview__add-placement'+(placementMode?' is-active':'')} onClick={()=>setPlacementMode((v)=>!v)}>{placementMode?'Cancel':'Add placement'}</button>
+      {SHAPES.map((shape)=><button type="button" key={shape.id} className={selectedShape===shape.id&&placementMode?'is-selected is-active':''} aria-label={shape.label} title={shape.label} aria-pressed={selectedShape===shape.id&&placementMode} onClick={()=>{if(selectedShape===shape.id&&placementMode){setPlacementMode(false);}else{setSelectedShape(shape.id);setPlacementMode(true);}}}><span className="admin-moodboard-layout-preview__shape-icon">{shape.cells.map(([r,c])=><i key={r+'-'+c} style={{gridRow:r+1,gridColumn:c+1}} />)}</span></button>)}
     </div>
     <div className="admin-moodboard-layout-preview__scroll">
       <div className="admin-moodboard-layout-preview__board" role="grid" aria-label="Homepage moodboard" style={{gridTemplateColumns:'repeat(8, 230px)',gridTemplateRows:'repeat(8, 290px)',zoom:ADMIN_CANVAS_SCALE}}>
