@@ -17,7 +17,8 @@
 .admin-moodboard-home-button {
   position: fixed;
   top: 14px;
-  left: 14px;
+  right: 14px;
+  left: auto;
   z-index: 125;
   display: grid;
   place-items: center;
@@ -46,7 +47,7 @@
 .admin-moodboard-layout-preview__composer-heading small,.admin-moodboard-layout-preview__board-header small,.admin-moodboard-layout-preview__board-footer small { color:rgba(255,255,255,.5); font-size:11px; }
 .admin-moodboard-layout-preview__board-section { width:100%; max-width:100%; min-width:0; }
 .admin-moodboard-layout-preview__board-header { margin-bottom:12px; }
-.admin-moodboard-layout-preview__scroll { display:block; width:100%; max-width:100%; max-height:70dvh; overflow:auto; overscroll-behavior:auto; -webkit-overflow-scrolling:touch; padding:0 0 14px; box-sizing:border-box; touch-action:auto; }
+.admin-moodboard-layout-preview__scroll { display:block; width:100%; max-width:100%; max-height:none; overflow:auto; overscroll-behavior:auto; -webkit-overflow-scrolling:touch; padding:0 0 14px; box-sizing:border-box; touch-action:auto; }
 .admin-moodboard-layout-preview__add-category { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; width:230px; height:290px; border:1px dashed rgba(255,255,255,.4); border-radius:3px; background:rgba(255,255,255,.04); color:#fff; cursor:pointer; box-sizing:border-box; }
 .admin-moodboard-layout-preview__add-category span { display:grid; place-items:center; width:46px; height:46px; border:1px solid rgba(255,255,255,.55); border-radius:50%; font-size:28px; font-weight:300; }
 .admin-moodboard-layout-preview__add-category small { font-size:12px; }
