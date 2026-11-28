@@ -121,8 +121,8 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
       {!activeMarket || !categoryDraft ? (
         <AdminMoodboardLayoutPreview items={managedMarkets} onItemClick={openMarket} onAddCategory={openAddCategory} onOpenManual={() => setManualOpen(true)} onReturn={onReturn} />
       ) : (
-        <main style={{ minHeight: '100dvh', overflowY: 'auto', background: '#111', color: '#f4f1ec' }}>
-          <section style={{ position: 'relative', minHeight: '42vh', display: 'flex', alignItems: 'flex-end', padding: 'clamp(24px,5vw,72px)', overflow: 'hidden' }}>
+        <main style={{ minHeight: '100dvh', overflowY: 'auto', background: '#111', color: '#f4f1ec', width: '100vw', maxWidth: '100vw', marginInline: 'calc(50% - 50vw)', padding: 0, boxSizing: 'border-box' }}>
+          <section style={{ position: 'relative', minHeight: '42vh', display: 'flex', alignItems: 'flex-end', padding: 0, overflow: 'hidden' }}>
             <img src={categoryDraft.image} alt={categoryDraft.alt} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: categoryDraft.objectPosition || 'center' }} />
             <button type="button" onClick={editCategoryImage} aria-label="Edit category image" title="Edit category image" style={overlayButton}>▧</button>
             <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,#111 0%,rgba(17,17,17,.92) 14%,rgba(17,17,17,.38) 58%,transparent 100%)' }} />
@@ -135,7 +135,7 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
               </p>
             </div>
           </section>
-          <section style={{ padding: 'clamp(24px,5vw,72px)' }}>
+          <section style={{ padding: 0, margin: 0, width: '100%' }}>
             <Swiper modules={[A11y, Keyboard, Navigation, Pagination]} slidesPerView={1.35} slidesPerGroup={1} spaceBetween={14} speed={520} threshold={6} resistanceRatio={0.85} roundLengths watchSlidesProgress breakpoints={{ 480: { slidesPerView: 2.15, spaceBetween: 16 }, 768: { slidesPerView: 3.15, spaceBetween: 20 }, 1100: { slidesPerView: 4.15, spaceBetween: 24 } }} navigation={subcategoryDrafts.length > 2} pagination={subcategoryDrafts.length > 0 ? { clickable: true } : false} keyboard={{ enabled: true, onlyInViewport: true }} grabCursor slideToClickedSlide watchOverflow loop={false} aria-label={categoryDraft.category + ' subcategories'} style={{ paddingBottom: 34, overflow: 'visible', '--swiper-theme-color': '#f4f1ec' } as React.CSSProperties}>
               {subcategoryDrafts.map((sub) => (
                 <SwiperSlide key={sub.id}>
