@@ -134,19 +134,28 @@ export default async (request) => {
   const uploadedPaths = [];
   const client = await pool.connect();
 
+  let transactionStarted = false;
   try {
-    const target = categoryId
-      ? await client.query('SELECT id, image_media_id FROM public.marketplace_categories WHERE id=$1 FOR UPDATE', [categoryId])
-      : await client.query('SELECT id, image_media_id FROM public.marketplace_subcategories WHERE id=$1 FOR UPDATE', [subcategoryId]);
-
-    if (!target.rowCount) return json({ error: 'Marketplace content item not found.' }, 404);
-
+    // Upload to unique immutable paths before acquiring the database row lock.
+    // This keeps storage latency outside the critical transaction.
     await uploadObject(baseUrl, storageSecret, jpegPath, jpegBuffer, 'image/jpeg');
     uploadedPaths.push(jpegPath);
     await uploadObject(baseUrl, storageSecret, jxlPath, jxlBuffer, 'image/jxl');
     uploadedPaths.push(jxlPath);
 
     await client.query('BEGIN');
+    transactionStarted = true;
+    const target = categoryId
+      ? await client.query('SELECT id, image_media_id FROM public.marketplace_categories WHERE id=$1 FOR UPDATE', [categoryId])
+      : await client.query('SELECT id, image_media_id FROM public.marketplace_subcategories WHERE id=$1 FOR UPDATE', [subcategoryId]);
+
+    if (!target.rowCount) {
+      await client.query('ROLLBACK');
+      transactionStarted = false;
+      await removeObjects(baseUrl, storageSecret, uploadedPaths);
+      return json({ error: 'Marketplace content item not found.' }, 404);
+    }
+
     const previousMediaId = target.rows[0].image_media_id;
     if (previousMediaId) {
       await client.query(
@@ -177,6 +186,7 @@ export default async (request) => {
       );
     }
     await client.query('COMMIT');
+    transactionStarted = false;
 
     const publicBase = `${baseUrl}/storage/v1/object/public/marketplace-media/`;
     return json({
@@ -192,7 +202,7 @@ export default async (request) => {
       },
     }, 201);
   } catch (error) {
-    await client.query('ROLLBACK').catch(() => {});
+    if (transactionStarted) await client.query('ROLLBACK').catch(() => {});
     await removeObjects(baseUrl, storageSecret, uploadedPaths);
     console.error('[admin-marketplace-media] upload failed', {
       errorCode: error?.code || null,
