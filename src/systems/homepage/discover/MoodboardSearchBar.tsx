@@ -73,7 +73,7 @@ export default function MoodboardSearchBar({
           {menuExpanded ? (
             <nav className="kinetic-moodboard__discover-tools" aria-label={adminMenuContent ? 'Marketplace admin menu' : storefrontMenuLinks ? 'Storefront navigation' : 'Discover tools'}>
               {adminMenuContent != null ? adminMenuContent : null}
-              {adminMenuContent == null && (
+              {adminMenuContent == null && (<>
               {storefrontMenuLinks && storefrontMenuLinks.map((link) => <Link key={link.label} to={link.to} className="kinetic-moodboard__discover-tool" onClick={() => onMenuClick?.()}><span>{link.label}</span></Link>)}
               {!storefrontMenuLinks && (
               <>
@@ -102,7 +102,7 @@ export default function MoodboardSearchBar({
               </div>
               </>
               )}
-              )}
+              </>)}
             </nav>
           ) : (
             <input className="kinetic-moodboard__search-input" type="search" placeholder={placeholder} value={value} onChange={(event) => onChange(event.target.value)} tabIndex={visible ? 0 : -1} aria-label={ariaLabel} />
