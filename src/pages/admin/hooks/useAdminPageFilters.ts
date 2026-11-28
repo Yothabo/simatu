@@ -32,14 +32,6 @@ export function useAdminPageFilters({
   const [categoryFilter, setCategoryFilter] =
     useState<CategoryFilter>('All');
 
-  const availableCategories = useMemo(
-    () => Array.from(new Set(
-      storefrontProducts
-        .map((product) => product.category?.trim())
-        .filter((category): category is string => Boolean(category)),
-    )).sort((a, b) => a.localeCompare(b)),
-    [storefrontProducts],
-  );
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -55,6 +47,15 @@ export function useAdminPageFilters({
             (product) => product.storefront === storefrontFilter,
           ),
     [products, storefrontFilter],
+  );
+
+  const availableCategories = useMemo(
+    () => Array.from(new Set(
+      storefrontProducts
+        .map((product) => product.category?.trim())
+        .filter((category): category is string => Boolean(category)),
+    )).sort((a, b) => a.localeCompare(b)),
+    [storefrontProducts],
   );
 
   const storefrontOrders = useMemo(
