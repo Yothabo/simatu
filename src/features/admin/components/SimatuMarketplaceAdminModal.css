@@ -201,3 +201,14 @@
   width: 7px;
   height: 7px;
 }
+
+
+/* Prevent the global 100vh root from creating mobile viewport overflow while Marketplace is fullscreen. */
+html:has(.admin-marketplace-admin-viewport),
+body:has(.admin-marketplace-admin-viewport),
+#root:has(.admin-marketplace-admin-viewport) {
+  height: 100dvh;
+  min-height: 0;
+  max-height: 100dvh;
+  overflow: hidden;
+}
