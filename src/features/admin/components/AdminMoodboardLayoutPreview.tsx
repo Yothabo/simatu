@@ -31,7 +31,8 @@ export default function AdminMoodboardLayoutPreview({items,onItemClick,onAddCate
   const adStyle=(ad:AdDraft):React.CSSProperties=>{const shape=shapeFor(ad.shape),row=Math.floor(ad.anchor/8),col=ad.anchor%8;return {gridRow:row+1+' / span '+shape.height,gridColumn:col+1+' / span '+shape.width,clipPath:ad.shape==='l-3'?'polygon(0 0,100% 0,100% 50%,50% 50%,50% 100%,0 100%)':undefined};};
   return <div className="admin-moodboard-layout-preview">
     <div className="admin-moodboard-layout-preview__toolbar">
-      <button type="button" onClick={onToggleScroll} aria-pressed={scrollEnabled}>{scrollEnabled?'Scroll on':'Scroll off'}</button>\n      <button type="button" onClick={onReturn} aria-label="Back to Admin" title="Back to Admin">⌂</button>
+      <button type="button" onClick={onToggleScroll} aria-pressed={scrollEnabled}>{scrollEnabled?'Scroll on':'Scroll off'}</button>
+      <button type="button" onClick={onReturn} aria-label="Back to Admin" title="Back to Admin">⌂</button>
       <button type="button" onClick={onOpenManual} aria-label="Moodboard manual" title="Manual">ⓘ</button>
     </div>
     <div className="admin-moodboard-layout-preview__shape-list" aria-label="Ad shapes">
