@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaHome, FaEllipsisV } from 'react-icons/fa';
+import { FaPalette, FaEllipsisV } from 'react-icons/fa';
 import Modal from '../../../shared/components/Modal';
 import type { MoodboardItem } from '../../../systems/homepage/discover/KineticMoodboard';
 import { DISCOVERY_MARKETS } from '../../../systems/homepage/discover/discovery-taxonomy';
@@ -132,7 +132,7 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
       ) : (
         <main style={{ height: '100%', minHeight: 0, maxHeight: '100dvh', overflow: 'hidden', position: 'relative', display: 'flex', flexDirection: 'column', background: '#111', color: '#f4f1ec', width: '100%', maxWidth: '100%', margin: 0, padding: 0, boxSizing: 'border-box' }}>
           <header className="admin-marketplace-category-header">
-            <button type="button" className="admin-marketplace-category-action" onClick={returnToTiles} aria-label="Moodboard" title="Moodboard"><FaHome aria-hidden="true" /></button>
+            <button type="button" className="admin-marketplace-category-action" onClick={returnToTiles} aria-label="Moodboard" title="Moodboard"><FaPalette aria-hidden="true" /></button>
             <button type="button" className="admin-marketplace-category-action" onClick={() => setCategoryMenuOpen((open) => !open)} aria-label="Category options" aria-expanded={categoryMenuOpen} title="Category options"><FaEllipsisV aria-hidden="true" /></button>
             {categoryMenuOpen && <div role="menu" style={{ position: 'absolute', top: 48, right: 16, width: 200, display: 'grid', gap: 2, padding: 6, border: '1px solid rgba(255,255,255,.14)', borderRadius: 10, background: '#262626', boxShadow: '0 12px 32px rgba(0,0,0,.35)', zIndex: 20 }}>
               <button type="button" role="menuitem" onClick={() => { setHiddenMarketIds((ids) => ids.includes(activeMarket.id) ? ids : [...ids, activeMarket.id]); setCategoryMenuOpen(false); returnToTiles(); }} style={{ textAlign: 'left', border: 0, borderRadius: 6, background: 'transparent', color: '#f4f1ec', padding: '11px 12px', cursor: 'pointer' }}>Hide category</button>
