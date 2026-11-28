@@ -40,7 +40,8 @@ export function useProductFormSubmit({
     if (categoryLoadError) return toast.error('Categories could not be loaded');
     if (!form.category_id) return toast.error('Select a valid category');
     if (!form.subcategory_id) return toast.error('Select a valid subcategory');
-    if (form.marketplace_visible && (!form.marketplace_category_slug || !form.marketplace_subcategory_id)) return toast.error('Assign this product to an available marketplace category and subcategory before publishing it to the marketplace.');
+    const legacyPublishedWithoutClassification = Boolean(productToEdit?.marketplace_visible && !productToEdit.marketplace_category_slug && !productToEdit.marketplace_subcategory_id);
+    if (form.marketplace_visible && (!form.marketplace_category_slug || !form.marketplace_subcategory_id) && !legacyPublishedWithoutClassification) return toast.error('Assign this product to an available marketplace category and subcategory before publishing it to the marketplace.');
 
     setIsSaving(true);
 
