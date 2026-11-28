@@ -48,7 +48,10 @@ export default function AdminPageDashboard({
   onStorefrontChange,
 }: Props) {
   return (
-    <div className="admin-page-shell mx-auto">
+    <div
+      className={activeTab === 'marketplace' ? "admin-page-shell admin-page-shell--marketplace mx-auto" : "admin-page-shell mx-auto"}
+      style={activeTab === 'marketplace' ? { width: '100%', maxWidth: 'none', height: '100dvh', minHeight: 0, maxHeight: '100dvh', overflow: 'hidden', padding: 0, margin: 0 } : undefined}
+    >
       <AdminDashboardContent
         activeTab={activeTab}
         setActiveTab={setActiveTab}
