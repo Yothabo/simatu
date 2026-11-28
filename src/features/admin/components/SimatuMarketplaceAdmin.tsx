@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaPalette, FaEllipsisV } from 'react-icons/fa';
 import Modal from '../../../shared/components/Modal';
+import toast from 'react-hot-toast';
 import type { MoodboardItem } from '../../../systems/homepage/discover/KineticMoodboard';
 import { DISCOVERY_MARKETS } from '../../../systems/homepage/discover/discovery-taxonomy';
 import AdminMoodboardLayoutPreview from './AdminMoodboardLayoutPreview';
@@ -173,42 +174,168 @@ export default function SimatuMarketplaceAdmin({ accessToken, onReturn }: Props)
   };
   const beginEdit = (field: string, value: string) => { setEditingField(field); setEditingValue(value); };
   const cancelEdit = () => { setEditingField(null); setEditingValue(''); setPendingImageFile(null); };
-  const saveEdit = () => {
+  const slugify = (value: string) => value.toLowerCase().normalize('NFKD').replace(/[\\u0300-\\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const categoryPayload = (item: CategoryDraft, overrides: Record<string, unknown> = {}) => ({
+    type: 'category',
+    id: item.dbId,
+    name: item.category,
+    slug: item.slug || slugify(item.category),
+    description: item.title,
+    sort_order: Math.max(0, managedMarkets.findIndex((entry) => entry.dbId === item.dbId)) * 10,
+    audience_policy: 'general',
+    minimum_age: null,
+    is_active: item.isActive !== false,
+    publication_status: item.publicationStatus || 'draft',
+    ...overrides,
+  });
+  const subcategoryPayload = (item: SubcategoryDraft, overrides: Record<string, unknown> = {}) => ({
+    type: 'subcategory',
+    id: item.dbId || item.id,
+    marketplace_category_id: item.marketplaceCategoryId || categoryDraft?.dbId,
+    name: item.title,
+    slug: item.slug || slugify(item.title),
+    description: item.description,
+    sort_order: Math.max(0, subcategoryDrafts.findIndex((entry) => entry.id === item.id)) * 10,
+    is_active: item.isActive !== false,
+    publication_status: item.publicationStatus || 'draft',
+    ...overrides,
+  });
+
+  const saveEdit = async () => {
     if (!editingField) return;
     const value = editingValue.trim();
-    if (editingField === 'add-subcategory') {
-      const title = newSubcategoryTitle.trim();
-      if (!title) return;
-      const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' + Date.now().toString(36);
-      setSubcategoryDrafts((items) => [...items, { id, title, description: newSubcategoryDescription.trim(), image: newSubcategoryImage.trim(), alt: title, terms: [title.toLowerCase()] }]);
-      setNewSubcategoryTitle(''); setNewSubcategoryDescription(''); setNewSubcategoryImage(''); setIsAddingSubcategory(false);
-    } else {
-      if (!value) return;
-      if (editingField === 'category-title') setCategoryDraft((current) => current ? { ...current, category: value } : current);
-      else if (editingField === 'category-description') setCategoryDraft((current) => current ? { ...current, title: value } : current);
-      else if (editingField === 'category-image') setCategoryDraft((current) => current ? { ...current, image: value } : current);
-      else if (editingField.startsWith('subcategory-title-')) {
-        const id = editingField.slice('subcategory-title-'.length);
-        setSubcategoryDrafts((items) => items.map((item) => item.id === id ? { ...item, title: value } : item));
-      } else if (editingField.startsWith('subcategory-description-')) {
-        const id = editingField.slice('subcategory-description-'.length);
-        setSubcategoryDrafts((items) => items.map((item) => item.id === id ? { ...item, description: value } : item));
+    try {
+      if (editingField === 'add-subcategory') {
+        const title = newSubcategoryTitle.trim();
+        if (!title || !categoryDraft?.dbId) return toast.error('A title and parent category are required.');
+        const payload = {
+          type: 'subcategory',
+          marketplace_category_id: categoryDraft.dbId,
+          name: title,
+          slug: slugify(title),
+          description: newSubcategoryDescription.trim(),
+          sort_order: subcategoryDrafts.length * 10,
+          is_active: true,
+          publication_status: 'draft',
+        };
+        const result = await apiRequest('POST', payload);
+        let created: SubcategoryDraft = {
+          id: result.subcategory.id,
+          dbId: result.subcategory.id,
+          slug: result.subcategory.slug,
+          marketplaceCategoryId: result.subcategory.marketplace_category_id,
+          title: result.subcategory.name,
+          description: result.subcategory.description || '',
+          image: '',
+          alt: result.subcategory.name,
+          terms: [result.subcategory.name.toLowerCase()],
+          publicationStatus: result.subcategory.publication_status,
+          isActive: true,
+        };
+        if (pendingImageFile) {
+          const media = await uploadMarketplaceImage('subcategory', created.id, created.title, pendingImageFile);
+          created = { ...created, image: media.image_url, imageJxl: media.image_jxl_url, alt: media.alt_text };
+        }
+        setSubcategoryDrafts((items) => [...items, created]);
+        setAllSubcategories((items) => [...items, created]);
+        setNewSubcategoryTitle('');
+        setNewSubcategoryDescription('');
+        setNewSubcategoryImage('');
+        setIsAddingSubcategory(false);
+        toast.success('Subcategory saved as a draft.');
+      } else if (editingField === 'category-image') {
+        if (!pendingImageFile || !categoryDraft?.dbId) return toast.error('Choose an image file first.');
+        const media = await uploadMarketplaceImage('category', categoryDraft.dbId, categoryDraft.category, pendingImageFile);
+        const updated = { ...categoryDraft, image: media.image_url, imageJxl: media.image_jxl_url, alt: media.alt_text };
+        setCategoryDraft(updated);
+        setActiveMarket(updated);
+        setManagedMarkets((items) => items.map((item) => item.dbId === updated.dbId ? updated : item));
+        toast.success('Category image optimized and uploaded.');
       } else if (editingField.startsWith('subcategory-image-')) {
         const id = editingField.slice('subcategory-image-'.length);
-        setSubcategoryDrafts((items) => items.map((item) => item.id === id ? { ...item, image: value, alt: item.title } : item));
+        const current = subcategoryDrafts.find((item) => item.id === id);
+        if (!pendingImageFile || !current) return toast.error('Choose an image file first.');
+        const media = await uploadMarketplaceImage('subcategory', id, current.title, pendingImageFile);
+        const updated = { ...current, image: media.image_url, imageJxl: media.image_jxl_url, alt: media.alt_text };
+        setSubcategoryDrafts((items) => items.map((item) => item.id === id ? updated : item));
+        setAllSubcategories((items) => items.map((item) => item.id === id ? updated : item));
+        toast.success('Subcategory image optimized and uploaded.');
+      } else if (editingField === 'category-title' || editingField === 'category-description') {
+        if (!value || !categoryDraft?.dbId) return;
+        const updated = editingField === 'category-title'
+          ? { ...categoryDraft, category: value, slug: slugify(value), id: slugify(value) === 'home-living' ? 'spaces' : slugify(value) }
+          : { ...categoryDraft, title: value };
+        const result = await apiRequest('PATCH', categoryPayload(updated));
+        const saved = { ...updated, publicationStatus: result.category.publication_status };
+        setCategoryDraft(saved);
+        setActiveMarket(saved);
+        setManagedMarkets((items) => items.map((item) => item.dbId === saved.dbId ? saved : item));
+        toast.success('Category updated.');
+      } else if (editingField.startsWith('subcategory-title-') || editingField.startsWith('subcategory-description-')) {
+        if (!value) return;
+        const isTitle = editingField.startsWith('subcategory-title-');
+        const id = editingField.slice(isTitle ? 'subcategory-title-'.length : 'subcategory-description-'.length);
+        const current = subcategoryDrafts.find((item) => item.id === id);
+        if (!current) return;
+        const updated = isTitle
+          ? { ...current, title: value, slug: slugify(value) }
+          : { ...current, description: value };
+        const result = await apiRequest('PATCH', subcategoryPayload(updated));
+        const saved = { ...updated, publicationStatus: result.subcategory.publication_status };
+        setSubcategoryDrafts((items) => items.map((item) => item.id === id ? saved : item));
+        setAllSubcategories((items) => items.map((item) => item.id === id ? saved : item));
+        toast.success('Subcategory updated.');
       }
+      cancelEdit();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Marketplace content could not be saved.');
     }
-    cancelEdit();
   };
-  const editCategoryImage = () => { if (categoryDraft) beginEdit('category-image', categoryDraft.image); };
-  const editSubcategoryImage = (id: string) => { const current = subcategoryDrafts.find((item) => item.id === id); if (current) beginEdit('subcategory-image-' + id, current.image); };
-  const addSubcategory = () => { setNewSubcategoryTitle(''); setNewSubcategoryDescription(''); setNewSubcategoryImage(''); setIsAddingSubcategory(true); setEditingField('add-subcategory'); };
-  const openAddCategory = () => { setNewCategoryName(''); setNewCategoryDescription(''); setNewCategoryImage(''); setEditingField('add-category'); };
-  const saveNewCategory = () => {
-    const name = newCategoryName.trim(); if (!name) return;
-    const id = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' + Date.now().toString(36);
-    const created: CategoryDraft = { id, category: name, title: newCategoryDescription.trim() || name, image: newCategoryImage.trim() || DISCOVERY_MARKETS[0]?.image || '', alt: name };
-    setManagedMarkets((current) => [...current, created]); setEditingField(null); setActiveMarket(created); setCategoryDraft(created); setSubcategoryDrafts([]);
+  const editCategoryImage = () => { setPendingImageFile(null); if (categoryDraft) beginEdit('category-image', categoryDraft.image); };
+  const editSubcategoryImage = (id: string) => { setPendingImageFile(null); const current = subcategoryDrafts.find((item) => item.id === id); if (current) beginEdit('subcategory-image-' + id, current.image); };
+  const addSubcategory = () => { setPendingImageFile(null); setNewSubcategoryTitle(''); setNewSubcategoryDescription(''); setNewSubcategoryImage(''); setIsAddingSubcategory(true); setEditingField('add-subcategory'); };
+  const openAddCategory = () => { setPendingImageFile(null); setNewCategoryName(''); setNewCategoryDescription(''); setNewCategoryImage(''); setEditingField('add-category'); };
+  const saveNewCategory = async () => {
+    const name = newCategoryName.trim();
+    if (!name) return toast.error('Category name is required.');
+    try {
+      const slug = slugify(name);
+      const result = await apiRequest('POST', {
+        type: 'category',
+        name,
+        slug,
+        description: newCategoryDescription.trim() || name,
+        sort_order: managedMarkets.length * 10,
+        audience_policy: 'general',
+        minimum_age: null,
+        is_active: true,
+        publication_status: 'draft',
+      });
+      let created: CategoryDraft = {
+        id: slug === 'home-living' ? 'spaces' : slug,
+        dbId: result.category.id,
+        slug,
+        category: result.category.name,
+        title: result.category.description || name,
+        image: '',
+        alt: name,
+        publicationStatus: 'draft',
+        isActive: true,
+      };
+      if (pendingImageFile) {
+        const media = await uploadMarketplaceImage('category', created.dbId!, created.category, pendingImageFile);
+        created = { ...created, image: media.image_url, imageJxl: media.image_jxl_url, alt: media.alt_text };
+      }
+      setManagedMarkets((items) => [...items, created]);
+      setActiveMarket(created);
+      setCategoryDraft(created);
+      setSubcategoryDrafts([]);
+      setEditingField(null);
+      setPendingImageFile(null);
+      toast.success('Category created as a draft.');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Category could not be created.');
+    }
   };
   const importDeviceImage = (file: File | undefined, onLoaded: (dataUrl: string) => void) => {
     if (!file || !file.type.startsWith('image/')) return;
