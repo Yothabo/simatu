@@ -97,6 +97,19 @@ export default async (request) => {
         return json({ category: result.rows[0] }, 201);
       }
       if (request.method === 'PATCH') {
+        if (publicationStatus === 'published') {
+          const current = await pool.query(
+            `SELECT mc.publication_status,
+                    EXISTS (SELECT 1 FROM public.marketplace_content_media media
+                            WHERE media.id = mc.image_media_id AND media.retired_at IS NULL) AS has_active_image
+             FROM public.marketplace_categories mc WHERE mc.id = $1`,
+            [id]
+          );
+          if (!current.rowCount) return json({ error: 'Category not found.' }, 404);
+          if (current.rows[0].publication_status !== 'published' && !current.rows[0].has_active_image) {
+            return json({ error: 'Upload an optimized JPEG and JPEG XL image before publishing this category.' }, 409);
+          }
+        }
         const result = await pool.query(`UPDATE public.marketplace_categories SET
           name=$2,slug=$3,description=$4,sort_order=$5,audience_policy=$6,minimum_age=$7,
           is_active=$8,publication_status=$9,
@@ -128,6 +141,19 @@ export default async (request) => {
       return json({ subcategory: result.rows[0] }, 201);
     }
     if (request.method === 'PATCH') {
+      if (publicationStatus === 'published') {
+        const current = await pool.query(
+          `SELECT msc.publication_status,
+                  EXISTS (SELECT 1 FROM public.marketplace_content_media media
+                          WHERE media.id = msc.image_media_id AND media.retired_at IS NULL) AS has_active_image
+           FROM public.marketplace_subcategories msc WHERE msc.id = $1`,
+          [id]
+        );
+        if (!current.rowCount) return json({ error: 'Subcategory not found.' }, 404);
+        if (current.rows[0].publication_status !== 'published' && !current.rows[0].has_active_image) {
+          return json({ error: 'Upload an optimized JPEG and JPEG XL image before publishing this subcategory.' }, 409);
+        }
+      }
       const result = await pool.query(`UPDATE public.marketplace_subcategories SET
         marketplace_category_id=$2,name=$3,slug=$4,description=$5,sort_order=$6,is_active=$7,
         publication_status=$8,
