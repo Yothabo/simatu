@@ -56,6 +56,7 @@ export interface AdminDashboardContentProps {
 
   categoryFilter: CategoryFilter;
   setCategoryFilter: Dispatch<SetStateAction<CategoryFilter>>;
+  availableCategories: string[];
   searchQuery: string;
   setSearchQuery: Dispatch<SetStateAction<string>>;
   currentPage: number;
