@@ -1,22 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import type { MoodboardItem } from '../../../systems/homepage/discover/KineticMoodboard';
 import { DISCOVERY_SUBCATEGORIES } from '../../../systems/homepage/discover/discovery-taxonomy';
 
 type Props = { items: MoodboardItem[]; hiddenMarketIds?: string[]; onReactivateCategory?: (id: string) => void; onItemClick?: (item: MoodboardItem) => void; onAddCategory?: () => void; onOpenManual?: () => void; onReturn?: () => void };
-type ShapeId = 'horizontal-2' | 'vertical-2' | 'l-3' | 'square-4' | 'wide-8';
-type Shape = { id: ShapeId; label: string; cells: Array<[number, number]>; width: number; height: number };
-type AdDraft = { id: number; shape: ShapeId; anchor: number };
-const BOARD_COLUMNS = 8, BOARD_ROWS = 8, BOARD_COUNT = 64;
+const BOARD_COUNT = 64;
 const ADMIN_CANVAS_SCALE = 0.35;
-const SHAPES: Shape[] = [
-  { id: 'horizontal-2', label: 'Horizontal · 2', cells: [[0,0],[0,1]], width: 2, height: 1 },
-  { id: 'vertical-2', label: 'Vertical · 2', cells: [[0,0],[1,0]], width: 1, height: 2 },
-  { id: 'l-3', label: 'L · 3', cells: [[0,0],[0,1],[1,0]], width: 2, height: 2 },
-  { id: 'square-4', label: 'Square · 4', cells: [[0,0],[0,1],[1,0],[1,1]], width: 2, height: 2 },
-  { id: 'wide-8', label: 'Wide · 8', cells: [[0,0],[0,1],[0,2],[0,3],[1,0],[1,1],[1,2],[1,3]], width: 4, height: 2 },
-];
-const shapeFor = (id: ShapeId) => SHAPES.find((shape) => shape.id === id)!;
-function cellsFor(ad: AdDraft) { const shape=shapeFor(ad.shape), row=Math.floor(ad.anchor/8), col=ad.anchor%8; return shape.cells.map(([dr,dc])=>(row+dr)*8+col+dc); }
 function seededRandom(seed: number) { let value=seed; return () => { value=(value*16807)%2147483647; return (value-1)/2147483646; }; }
 function homepagePool(items: MoodboardItem[]) {
   const subs=items.flatMap((market)=>(DISCOVERY_SUBCATEGORIES[market.id]||[]).map((sub)=>({id:market.id+'-'+sub.id,image:sub.image,alt:sub.alt,category:market.category,title:sub.title} as MoodboardItem)));
