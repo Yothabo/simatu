@@ -41,9 +41,6 @@ export function useProductFormSubmit({
     if (!form.marketplace_category_slug || !form.marketplace_subcategory_id) {
       return toast.error('Select a marketplace category and subcategory assigned to this store');
     }
-    const legacyPublishedWithoutClassification = Boolean(productToEdit?.marketplace_visible && !productToEdit.marketplace_category_slug && !productToEdit.marketplace_subcategory_id);
-    if (form.marketplace_visible && (!form.marketplace_category_slug || !form.marketplace_subcategory_id) && !legacyPublishedWithoutClassification) return toast.error('Assign this product to an available marketplace category and subcategory before publishing it to the marketplace.');
-
     setIsSaving(true);
 
     const payload = {
