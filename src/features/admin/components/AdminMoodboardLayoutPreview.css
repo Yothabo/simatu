@@ -8,7 +8,7 @@
   gap: 22px;
   width: 100%;
   min-width: 0;
-  padding: 24px;
+  padding: 0;
   color: #f5f5f5;
   box-sizing: border-box;
 }
@@ -48,7 +48,7 @@
 .admin-moodboard-layout-preview__board-footer { margin-top:2px; }
 .admin-moodboard-layout-preview__board-footer small { text-align:right; }
 @media(max-width:640px) {
-  .admin-moodboard-layout-preview { padding:12px; gap:18px; }
+  .admin-moodboard-layout-preview { padding:0; gap:18px; }
   .admin-moodboard-layout-preview__composer-heading,.admin-moodboard-layout-preview__board-header,.admin-moodboard-layout-preview__board-footer { align-items:flex-start; flex-direction:column; gap:6px; }
   .admin-moodboard-layout-preview__board-header small,.admin-moodboard-layout-preview__board-footer small { text-align:left; }
   .admin-moodboard-layout-preview__shape-list button { padding:8px 9px; }
