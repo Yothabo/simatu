@@ -23,7 +23,7 @@ export function scoreOrganicProduct(product = {}) {
   const recency = clamp(Number(product.recency_score ?? 0.5));
 
   // Cold-start floor avoids burying new products due to absent engagement.
-  const engagement = clamp((views * 0.15) + (clicks * 0.2) + (carts * 0.25) + (purchases * 0.3) + (conversion * 0.1);
+  const engagement = clamp((views * 0.15) + (clicks * 0.2) + (carts * 0.25) + (purchases * 0.3) + (conversion * 0.1));
   const score = (completeness * 0.35) + (engagement * 0.4) + (recency * 0.15) + (0.1 * (1 - clamp(Number(product.age_days || 0) / 90)));
   return Number(clamp(score).toFixed(6));
 }
