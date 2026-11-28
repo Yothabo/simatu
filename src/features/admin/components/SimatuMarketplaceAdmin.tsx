@@ -26,7 +26,7 @@ const overlayButton: React.CSSProperties = {
 const addCardStyle: React.CSSProperties = {
   display: 'flex', width: '100%', aspectRatio: '4 / 5', flexDirection: 'column',
   alignItems: 'center', justifyContent: 'center', gap: 12, border: '1px dashed rgba(255,255,255,.55)',
-  borderRadius: 8, background: 'rgba(255,255,255,.035)', color: '#fff,', cursor: 'pointer',
+  borderRadius: 8, background: 'rgba(255,255,255,.035)', color: '#fff', cursor: 'pointer',
 };
 
 export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
