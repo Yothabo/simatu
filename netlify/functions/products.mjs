@@ -277,9 +277,12 @@ async function listProducts(request, requestId) {
     filters.push('is_active = TRUE');
     // Restricted listings are never exposed to public marketplace/storefront APIs.
     filters.push('COALESCE(is_age_restricted, FALSE) = FALSE');
-    // Public listings must still belong to a published general category
-    // assigned to their store; hiding/archiving taxonomy removes them from
-    // every public surface without deleting the product record.
+  }
+  if (isMarketplaceRequest) {
+    filters.push('marketplace_visible = TRUE');
+    // Marketplace discovery requires a current shared classification assigned
+    // to the product's store. Legacy storefront products remain readable while
+    // they are migrated, but cannot enter shared marketplace discovery.
     filters.push(`EXISTS (
       SELECT 1
       FROM public.marketplace_subcategories msc
@@ -299,7 +302,6 @@ async function listProducts(request, requestId) {
         AND msc.publication_status = 'published'
     )`);
   }
-  if (isMarketplaceRequest) filters.push('marketplace_visible = TRUE');
   else if (!isAdminRequest) filters.push('storefront_visible = TRUE');
 
   if (storefrontFilter) {
