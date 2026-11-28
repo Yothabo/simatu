@@ -91,114 +91,56 @@ async function saveProduct(body, isUpdate, admin, requestId) {
 
     const storeId = storeResult.rows[0].id;
 
-    // Resolve category IDs within the effective storefront.
-    // Legacy Poshies "Spaces" submissions resolve to canonical "Lounge".
-    const categoryResult = product.category_id
-      ? await client.query(
-          `SELECT id, name, is_active
-           FROM public.categories
-           WHERE id = $1
-             AND store_id = $2
-             AND (is_active IS TRUE OR id = $3)`,
-          [product.category_id, storeId, existingProduct?.category_id ?? null]
-        )
-      : await client.query(
-          `SELECT id, name, is_active
-           FROM public.categories
-           WHERE store_id = $1
-             AND is_active IS TRUE
-             AND lower(name) = lower(
-               CASE
-                 WHEN $2 = 'poshies' AND lower(trim($3)) = 'spaces'
-                   THEN 'Lounge'
-                 ELSE trim($3)
-               END
-             )`,
-          [storeId, product.storefront, product.category]
-        );
+    // Resolve the selected shared marketplace category/subcategory and
+    // verify that the category is assigned to this active storefront.
+    const taxonomyResult = await client.query(
+      `SELECT mc.id AS category_id,
+              mc.name AS category_name,
+              msc.id AS subcategory_id,
+              msc.name AS subcategory_name
+       FROM public.stores s
+       JOIN public.store_marketplace_categories smc
+         ON smc.store_id = s.id
+       JOIN public.marketplace_categories mc
+         ON mc.id = smc.marketplace_category_id
+       JOIN public.marketplace_subcategories msc
+         ON msc.marketplace_category_id = mc.id
+       WHERE s.id = $1
+         AND s.is_active IS TRUE
+         AND mc.slug = $2
+         AND mc.is_active IS TRUE
+         AND mc.publication_status = 'published'
+         AND mc.audience_policy = 'general'
+         AND msc.id = $3
+         AND msc.is_active IS TRUE
+         AND msc.publication_status = 'published'
+       FOR KEY SHARE OF smc`,
+      [storeId, product.marketplace_category_slug, product.marketplace_subcategory_id]
+    );
 
-    if (!categoryResult.rowCount) {
+    if (!taxonomyResult.rowCount) {
       await client.query('ROLLBACK');
-      return json({ error: 'The selected category is not available in this storefront.' }, 400);
+      return json({
+        error: 'Choose a published subcategory within a marketplace category assigned to this store.',
+      }, 400);
     }
 
-    const category = categoryResult.rows[0];
-
-    // Resolve the subcategory within the selected category and storefront.
-    const subcategoryResult = product.subcategory_id
-      ? await client.query(
-          `SELECT id, name
-           FROM public.subcategories
-           WHERE id = $1
-             AND store_id = $2
-             AND category_id = $3
-             AND (is_active IS TRUE OR id = $4)
-             AND ( $5::boolean IS TRUE OR id = $4 )`,
-          [
-            product.subcategory_id,
-            storeId,
-            category.id,
-            existingProduct?.subcategory_id ?? null,
-            category.is_active,
-          ]
-        )
-      : await client.query(
-          `SELECT id, name
-           FROM public.subcategories
-           WHERE store_id = $1
-             AND category_id = $2
-             AND is_active IS TRUE
-             AND lower(name) = lower(trim($3))`,
-          [storeId, category.id, product.subcategory]
-        );
-
-    if (!subcategoryResult.rowCount) {
-      await client.query('ROLLBACK');
-      return json({ error: 'The selected subcategory is not available under this category.' }, 400);
-    }
-
-    const subcategory = subcategoryResult.rows[0];
-
-    // Preserve legacy classification when omitted; otherwise validate selected category scope.
-    product.marketplace_subcategory_id = product.marketplace_subcategory_id ?? existingProduct?.marketplace_subcategory_id ?? null;
-    if (product.marketplace_visible && !product.marketplace_subcategory_id && (!isUpdate || existingProduct?.marketplace_visible === false)) {
-      await client.query('ROLLBACK');
-      return json({ error: 'Assign this product to a marketplace category and subcategory before publishing it to the marketplace.' }, 400);
-    }
-    if (product.marketplace_subcategory_id) {
-      const platformSubcategory = await client.query(
-        `SELECT msc.id
-         FROM public.marketplace_subcategories msc
-         JOIN public.marketplace_categories mc ON mc.id = msc.marketplace_category_id
-         WHERE msc.id = $1
-           AND (msc.is_active IS TRUE OR msc.id = $2)
-           AND mc.is_active IS TRUE
-           AND mc.publication_status = 'published'
-           AND mc.audience_policy = 'general'
-           AND (msc.publication_status = 'published' OR msc.id = $2)
-           AND ($3::text IS NULL OR mc.slug = $3)`,
-        [product.marketplace_subcategory_id, existingProduct?.marketplace_subcategory_id ?? null, product.marketplace_category_slug ?? null]
-      );
-      if (!platformSubcategory.rowCount) {
-        await client.query('ROLLBACK');
-        return json({ error: 'The selected marketplace subcategory is unavailable.' }, 400);
-      }
-    }
-
+    const taxonomy = taxonomyResult.rows[0];
+    product.marketplace_subcategory_id = taxonomy.subcategory_id;
 
     const values = [
       product.name,
       product.price,
-      category.name,
-      subcategory.name,
+      taxonomy.category_name,
+      taxonomy.subcategory_name,
       product.description,
       product.image_url,
       product.is_active,
       product.sort_order,
       product.storefront,
       storeId,
-      category.id,
-      subcategory.id,
+      null,
+      null,
       product.supplier_cost,
       product.sku,
       product.sizes,
