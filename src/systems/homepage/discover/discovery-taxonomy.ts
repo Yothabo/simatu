@@ -23,7 +23,7 @@ export const DISCOVERY_MARKETS: MoodboardItem[] = [
   { id: 'age-restricted', image: image('photo-1519681393784-d120267933ba'), alt: 'Age restricted category', category: 'Age-Restricted', title: 'Restricted products and services — 18+' },
 ];
 
-export type DiscoverySubcategory = { id: string; title: string; image: string; alt: string; description: string; terms: string[] };
+export type DiscoverySubcategory = { id: string; title: string; image: string; imageJxl?: string; alt: string; description: string; terms: string[] };
 
 const tile = (id: string, title: string, photo: string, description: string, terms: string[] = [title.toLowerCase()]) => ({ id, title, image: image(photo), alt: title, description, terms });
 
