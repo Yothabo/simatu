@@ -16,6 +16,7 @@ import {
 type AdminProductsProps = {
   searchQuery: string;
   categoryFilter: CategoryFilter;
+  availableCategories: string[];
   filteredProducts: AdminRow[];
   paginatedProducts: AdminRow[];
   currentPage: number;
@@ -34,6 +35,7 @@ type AdminProductsProps = {
 export default function AdminProducts({
   searchQuery,
   categoryFilter,
+  availableCategories,
   filteredProducts,
   paginatedProducts,
   currentPage,
@@ -77,7 +79,7 @@ export default function AdminProducts({
       </div>
 
       <ProductsCategoryFilter
-        storefrontFilter={storefrontFilter}
+        availableCategories={availableCategories}
         categoryFilter={categoryFilter}
         onCategoryChange={onCategoryChange}
       />
