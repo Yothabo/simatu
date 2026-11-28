@@ -172,6 +172,10 @@ async function saveProduct(body, isUpdate, admin, requestId) {
          JOIN public.marketplace_categories mc ON mc.id = msc.marketplace_category_id
          WHERE msc.id = $1
            AND (msc.is_active IS TRUE OR msc.id = $2)
+           AND mc.is_active IS TRUE
+           AND mc.publication_status = 'published'
+           AND mc.audience_policy = 'general'
+           AND (msc.publication_status = 'published' OR msc.id = $2)
            AND ($3::text IS NULL OR mc.slug = $3)`,
         [product.marketplace_subcategory_id, existingProduct?.marketplace_subcategory_id ?? null, product.marketplace_category_slug ?? null]
       );
