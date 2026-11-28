@@ -16,7 +16,7 @@ const json = (data, status = 200) => Response.json(data, {
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const MAX_VARIANT_BYTES = 5 * 1024 * 1024;
 
-function getJpegDimensions(bytes) {
+export function getJpegDimensions(bytes) {
   if (!isJpeg(bytes) || bytes.length < 4 || bytes[bytes.length - 2] !== 0xff || bytes[bytes.length - 1] !== 0xd9) {
     return null;
   }
@@ -57,7 +57,7 @@ function isJpeg(bytes) {
   return bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
 }
 
-function isJxl(bytes) {
+export function isJxl(bytes) {
   const codestream = bytes.length >= 2 && bytes[0] === 0xff && bytes[1] === 0x0a;
   const container = bytes.length >= 12 &&
     bytes[0] === 0x00 && bytes[1] === 0x00 && bytes[2] === 0x00 && bytes[3] === 0x0c &&
