@@ -39,10 +39,15 @@ export function getJpegDimensions(bytes) {
     // SOF markers carrying frame dimensions (excluding DHT/JPG/DAC markers).
     const isStartOfFrame = [0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf].includes(marker);
     if (isStartOfFrame) {
-      if (segmentLength < 8) return null;
+      if (segmentLength < 8 || offset + 8 > bytes.length) return null;
+      const precision = bytes[offset + 2];
       const height = bytes.readUInt16BE(offset + 3);
       const width = bytes.readUInt16BE(offset + 5);
-      if (!width || !height) return null;
+      const componentCount = bytes[offset + 7];
+      // The SOF segment must contain all component descriptors (3 bytes each).
+      if (!width || !height || !componentCount || componentCount > 4 ||
+          segmentLength < 8 + (componentCount * 3) ||
+          (precision !== 8 && precision !== 12)) return null;
       return { width, height };
     }
 
