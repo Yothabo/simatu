@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import type { MoodboardItem } from '../../../systems/homepage/discover/KineticMoodboard';
 import { DISCOVERY_SUBCATEGORIES } from '../../../systems/homepage/discover/discovery-taxonomy';
 
-type Props = { items: MoodboardItem[]; onItemClick?: (item: MoodboardItem) => void; onAddCategory?: () => void; onOpenManual?: () => void; onReturn?: () => void };
+type Props = { items: MoodboardItem[]; hiddenMarketIds?: string[]; onReactivateCategory?: (id: string) => void; onItemClick?: (item: MoodboardItem) => void; onAddCategory?: () => void; onOpenManual?: () => void; onReturn?: () => void };
 type ShapeId = 'horizontal-2' | 'vertical-2' | 'l-3' | 'square-4' | 'wide-8';
 type Shape = { id: ShapeId; label: string; cells: Array<[number, number]>; width: number; height: number };
 type AdDraft = { id: number; shape: ShapeId; anchor: number };
@@ -23,7 +23,7 @@ function homepagePool(items: MoodboardItem[]) {
   const pool=Array.from(new Map([...items,...subs].map((item)=>[item.id,item])).values()), random=seededRandom(29);
   for(let i=pool.length-1;i>0;i-=1){const j=Math.floor(random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];} return pool;
 }
-export default function AdminMoodboardLayoutPreview({items,onItemClick,onAddCategory,onOpenManual,onReturn}:Props) {
+export default function AdminMoodboardLayoutPreview({items,hiddenMarketIds=[],onReactivateCategory,onItemClick,onAddCategory,onOpenManual,onReturn}:Props) {
   const [selectedShape,setSelectedShape]=useState<ShapeId>('horizontal-2'),[ads,setAds]=useState<AdDraft[]>([]),[placementMode,setPlacementMode]=useState(false);
   const pool=useMemo(()=>homepagePool(items),[items]),tiles=pool.slice(0,BOARD_COUNT-1),occupied=useMemo(()=>new Set(ads.flatMap(cellsFor)),[ads]);
   const canPlace=(anchor:number)=>{if(!placementMode||anchor===0)return false;const row=Math.floor(anchor/8),col=anchor%8,shape=shapeFor(selectedShape),cells=shape.cells.map(([dr,dc])=>(row+dr)*8+col+dc);return anchor<BOARD_COUNT&&shape.cells.every(([dr,dc])=>row+dr<BOARD_ROWS&&col+dc<BOARD_COLUMNS)&&cells.every((slot)=>slot<BOARD_COUNT&&!occupied.has(slot));};
@@ -38,7 +38,7 @@ export default function AdminMoodboardLayoutPreview({items,onItemClick,onAddCate
     <div className="admin-moodboard-layout-preview__scroll">
       <div className="admin-moodboard-layout-preview__board" role="grid" aria-label="Homepage moodboard" style={{gridTemplateColumns:'repeat(8, 230px)',gridTemplateRows:'repeat(8, 290px)',zoom:ADMIN_CANVAS_SCALE}}>
         <button type="button" role="gridcell" className="admin-moodboard-layout-preview__add-category" onClick={onAddCategory} aria-label="Add category"><span>+</span><small>Category</small></button>
-        {tiles.map((item,index)=>{const slot=index+1;return <button type="button" role="gridcell" key={item.id} className={'admin-moodboard-layout-preview__tile'+(canPlace(slot)?' is-ad-target':'')} onClick={()=>occupied.has(slot)?undefined:canPlace(slot)?placeAd(slot):onItemClick?.(items.find((m)=>m.id===item.id)||items.find((m)=>item.id.startsWith(m.id+'-'))||item)} aria-label={item.category+': '+item.title}><img src={item.image} alt={item.alt} draggable={false} loading={index<8?'eager':'lazy'}/><span>{item.category}</span></button>;})}
+        {tiles.map((item,index)=>{const slot=index+1;return <button type="button" role="gridcell" key={item.id} className={'admin-moodboard-layout-preview__tile'+(hiddenMarketIds.includes(item.id)?' is-hidden':'')+(canPlace(slot)?' is-ad-target':'')} onClick={()=>{if(occupied.has(slot))return;if(canPlace(slot)){placeAd(slot);return;}if(hiddenMarketIds.includes(item.id)){onReactivateCategory?.(item.id);return;}onItemClick?.(items.find((m)=>m.id===item.id)||items.find((m)=>item.id.startsWith(m.id+'-'))||item);}} aria-label={item.category+': '+item.title}><img src={item.image} alt={item.alt} draggable={false} loading={index<8?'eager':'lazy'}/><span>{item.category}</span></button>;})}
         <div className="admin-moodboard-layout-preview__ad-layer">{ads.map((ad)=>{const shape=shapeFor(ad.shape);return <button type="button" key={ad.id} className="admin-moodboard-layout-preview__ad-preview" style={adStyle(ad)} onClick={()=>setAds((current)=>current.filter((entry)=>entry.id!==ad.id))} aria-label={'Remove '+shape.label+' ad placement'}><span>AD SLOT</span><small>{shape.label}</small><b>×</b></button>;})}</div>
       </div>
     </div>
