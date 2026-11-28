@@ -27,15 +27,25 @@ export default async (request) => {
 
   try {
     const result = await pool.query(
-      `SELECT id, name, slug, description, sort_order
-       FROM public.marketplace_categories
-       WHERE is_active IS TRUE
-         AND audience_policy = 'general'
-       ORDER BY sort_order ASC, name ASC`
+      `SELECT mc.id, mc.name, mc.slug, mc.description, mc.sort_order,
+              media.jpeg_path, media.jxl_path, media.alt_text AS image_alt_text
+       FROM public.marketplace_categories mc
+       LEFT JOIN public.marketplace_content_media media
+         ON media.id = mc.image_media_id AND media.retired_at IS NULL
+       WHERE mc.is_active IS TRUE
+         AND mc.publication_status = 'published'
+         AND mc.audience_policy = 'general'
+       ORDER BY mc.sort_order ASC, mc.name ASC`
     );
+    const storageBase = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\\/+$/, '');
+    const categories = result.rows.map(({ jpeg_path, jxl_path, ...category }) => ({
+      ...category,
+      image_url: jpeg_path && storageBase ? `${storageBase}/storage/v1/object/public/marketplace-media/${jpeg_path.split('/').map(encodeURIComponent).join('/')}` : null,
+      image_jxl_url: jxl_path && storageBase ? `${storageBase}/storage/v1/object/public/marketplace-media/${jxl_path.split('/').map(encodeURIComponent).join('/')}` : null,
+    }));
 
     return json(
-      { categories: result.rows },
+      { categories },
       200,
       {
         'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=600',
