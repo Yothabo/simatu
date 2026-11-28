@@ -3,7 +3,7 @@ import { requireAdmin } from './_shared/auth.mjs';
 
 const pool = new Pool({
   connectionString: process.env.SUPABASE_DB_URL,
-  ssl: { rejectUnauthorized: false },
+  ssl: { rejectUnauthorized: true },
   max: 2,
   idleTimeoutMillis: 10000,
   connectionTimeoutMillis: 10000,
