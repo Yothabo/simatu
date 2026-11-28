@@ -52,7 +52,7 @@ function seededRandom(seed: number) {
 }
 
 const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
-  items = DEFAULT_ITEMS,
+  items,
   columns = 8,
   tileWidth = 230,
   tileHeight = 290,
@@ -114,6 +114,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   useEffect(() => { if (colorReveal) setSearchDismissed(false); }, [colorReveal]);
   const [marketItems, setMarketItems] = useState<MoodboardItem[]>(DISCOVERY_MARKETS);
   const [marketSubcategories, setMarketSubcategories] = useState<Record<string, Array<{ id: string; title: string; image: string; imageJxl?: string; alt: string; description: string; terms: string[] }>>>({});
+  const [marketSubcategoriesLoaded, setMarketSubcategoriesLoaded] = useState(false);
   useEffect(() => {
     let cancelled = false;
     fetch('/api/marketplace-categories', { headers: { Accept: 'application/json' } })
@@ -170,7 +171,10 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
           };
           (grouped[categoryKey] ||= []).push(entry);
         }
-        if (!cancelled && Object.keys(grouped).length) setMarketSubcategories(grouped);
+        if (!cancelled) {
+          setMarketSubcategories(grouped);
+          setMarketSubcategoriesLoaded(true);
+        }
       })
       .catch(() => { /* Curated local subcategory data remains as a fallback. */ });
     return () => { cancelled = true; };
@@ -214,10 +218,10 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
     }
   }, []);
 
-  const sourceItems = items.length ? items : DEFAULT_ITEMS;
+  const sourceItems = items?.length ? items : marketItems;
   const boardTilePool = useMemo(() => {
     const subcategoryTiles = marketItems.flatMap((market) =>
-      (marketSubcategories[market.id]?.length ? marketSubcategories[market.id] : (DISCOVERY_SUBCATEGORIES[market.id] || [])).map((subcategory) => ({
+      (marketSubcategoriesLoaded ? (marketSubcategories[market.id] || []) : (DISCOVERY_SUBCATEGORIES[market.id] || [])).map((subcategory) => ({
         id: `${market.id}-${subcategory.id}`,
         image: subcategory.image,
         imageJxl: subcategory.imageJxl,
@@ -227,7 +231,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       } as MoodboardItem))
     );
     return [...sourceItems, ...subcategoryTiles];
-  }, [sourceItems, marketItems, marketSubcategories]);
+  }, [sourceItems, marketItems, marketSubcategories, marketSubcategoriesLoaded]);
   const allTiles = useMemo(() => {
     const random = seededRandom(29);
     const uniquePool = Array.from(new Map(boardTilePool.map((item) => [item.id, item])).values());
