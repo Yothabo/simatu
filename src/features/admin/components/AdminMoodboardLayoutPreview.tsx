@@ -42,5 +42,31 @@ export default function AdminMoodboardLayoutPreview({items,hiddenMarketIds=[],on
         <div className="admin-moodboard-layout-preview__ad-layer">{ads.map((ad)=>{const shape=shapeFor(ad.shape);return <button type="button" key={ad.id} className="admin-moodboard-layout-preview__ad-preview" style={adStyle(ad)} onClick={()=>setAds((current)=>current.filter((entry)=>entry.id!==ad.id))} aria-label={'Remove '+shape.label+' ad placement'}><span>AD SLOT</span><small>{shape.label}</small><b>×</b></button>;})}</div>
       </div>
     </div>
+    <section className="admin-moodboard-layout-preview__shape-library" aria-label="Advertising placement designs">
+      <header className="admin-moodboard-layout-preview__shape-library-header">
+        <div><h2>Advertising placements</h2><p>Full-scale designs · activate a shape to place it on the Moodboard</p></div>
+        <span>{ads.length} active placement{ads.length===1?'':'s'}</span>
+      </header>
+      <div className="admin-moodboard-layout-preview__shape-library-grid">
+        {SHAPES.map((shape) => {
+          const isActive = ads.some((ad) => ad.shape === shape.id);
+          return <article className="admin-moodboard-layout-preview__shape-card" key={shape.id}>
+            <div className="admin-moodboard-layout-preview__shape-stage">
+              <div className={'admin-moodboard-layout-preview__shape-design shape-'+shape.id} style={{gridTemplateColumns:'repeat('+shape.width+', 230px)',gridTemplateRows:'repeat('+shape.height+', 290px)'}}>
+                {shape.cells.map(([r,c],index)=><div className="admin-moodboard-layout-preview__shape-cell" key={r+'-'+c} style={{gridRow:r+1,gridColumn:c+1}}>
+                  <span className="admin-moodboard-layout-preview__shape-mark">{index===0?'SIMATU / DISCOVER':' '}</span>
+                  <strong>{index===0?'Discover something new':''}</strong>
+                  <small>{index===0?'Curated for you':' '}</small>
+                </div>)}
+              </div>
+            </div>
+            <div className="admin-moodboard-layout-preview__shape-card-footer">
+              <div><strong>{shape.label}</strong><small>{shape.width} × {shape.height} tile footprint · {shape.cells.length} tiles</small></div>
+              <button type="button" className={isActive?'is-active':''} onClick={()=>{setSelectedShape(shape.id);setPlacementMode(true);}}>{isActive?'Add another':'Activate'}</button>
+            </div>
+          </article>;
+        })}
+      </div>
+    </section>
   </div>;
 }
