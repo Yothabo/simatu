@@ -13,9 +13,9 @@
   box-sizing: border-box;
 }
 .admin-moodboard-layout-preview__composer { width: 100%; max-width: 1120px; }
-.admin-moodboard-layout-preview__toolbar { display:flex; gap:8px; }
-.admin-moodboard-layout-preview__toolbar button,.admin-moodboard-layout-preview__add-placement { border:1px solid rgba(255,255,255,.22); background:transparent; color:#f5f5f5; border-radius:4px; padding:7px 10px; font-size:11px; cursor:pointer; }
-.admin-moodboard-layout-preview__toolbar button:hover,.admin-moodboard-layout-preview__add-placement:hover,.admin-moodboard-layout-preview__add-placement.is-active { background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.55); }
+.admin-moodboard-layout-preview__toolbar { display:flex; flex-direction:row; flex-wrap:nowrap; align-items:center; justify-content:center; gap:8px; width:100%; }
+.admin-moodboard-layout-preview__toolbar button { display:grid; flex:0 0 42px; place-items:center; width:42px; height:42px; padding:8px; border:1px solid rgba(255,255,255,.22); background:transparent; color:#f5f5f5; border-radius:4px; font-size:16px; cursor:pointer; box-sizing:border-box; }
+.admin-moodboard-layout-preview__toolbar button:hover { background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.55); }\n.admin-moodboard-layout-preview__toolbar button.is-selected { background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.7); }\n.admin-moodboard-layout-preview__toolbar button.is-active { background:rgba(255,255,255,.2); border-color:#fff; }
 .admin-moodboard-layout-preview__composer-heading,.admin-moodboard-layout-preview__board-header,.admin-moodboard-layout-preview__board-footer { display:flex; align-items:baseline; justify-content:space-between; gap:14px; }
 .admin-moodboard-layout-preview__composer-heading { margin-bottom:12px; }
 .admin-moodboard-layout-preview__composer-heading span,.admin-moodboard-layout-preview__board-header span,.admin-moodboard-layout-preview__board-footer span { font-size:11px; letter-spacing:.18em; }
@@ -51,5 +51,5 @@
   .admin-moodboard-layout-preview { padding:0; gap:18px; }
   .admin-moodboard-layout-preview__composer-heading,.admin-moodboard-layout-preview__board-header,.admin-moodboard-layout-preview__board-footer { align-items:flex-start; flex-direction:column; gap:6px; }
   .admin-moodboard-layout-preview__board-header small,.admin-moodboard-layout-preview__board-footer small { text-align:left; }
-  .admin-moodboard-layout-preview__shape-list button { flex-basis:38px; width:38px; height:38px; padding:7px; }
+  .admin-moodboard-layout-preview__toolbar { gap:6px; }\n  .admin-moodboard-layout-preview__toolbar button { flex-basis:38px; width:38px; height:38px; padding:7px; }
 }
