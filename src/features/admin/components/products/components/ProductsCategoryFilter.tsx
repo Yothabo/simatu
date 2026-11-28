@@ -1,19 +1,19 @@
 import { AdminButton } from '../../../../../design-system/components';
-import type { CategoryFilter, Storefront } from '../../../types/admin.types';
+import type { CategoryFilter } from '../../../types/admin.types';
 import { getVisibleCategories } from '../utils';
 
 type Props = {
-  storefrontFilter: 'all' | Storefront;
+  availableCategories: string[];
   categoryFilter: CategoryFilter;
   onCategoryChange: (value: CategoryFilter) => void;
 };
 
 export default function ProductsCategoryFilter({
-  storefrontFilter,
+  availableCategories,
   categoryFilter,
   onCategoryChange,
 }: Props) {
-  const visibleCategories = getVisibleCategories(storefrontFilter);
+  const visibleCategories = getVisibleCategories(availableCategories);
 
   return (
     <div
