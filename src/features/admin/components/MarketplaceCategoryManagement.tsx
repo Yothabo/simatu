@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { CSSProperties } from 'react';
 
-type MarketplaceCategory = { id: string; name: string; slug: string };
+type MarketplaceCategory = {
+  id: string;
+  name: string;
+  slug: string;
+  is_primary: boolean;
+};
 type MarketplaceStore = {
   store_id: string;
   store_name: string;
@@ -9,7 +14,6 @@ type MarketplaceStore = {
   is_active: boolean;
   categories: MarketplaceCategory[];
 };
-
 type Props = { accessToken: string };
 
 const surface: CSSProperties = {
@@ -33,15 +37,14 @@ export default function MarketplaceCategoryManagement({ accessToken }: Props) {
     setLoading(true);
     setError('');
     try {
-      const headers = { Authorization: `Bearer ${accessToken}` };
+      const headers = { Authorization: 'Bearer ' + accessToken };
       const [assignmentResponse, categoryResponse] = await Promise.all([
         fetch('/api/marketplace-category-assignments', { headers, cache: 'no-store' }),
         fetch('/api/marketplace-categories', { cache: 'no-store' }),
       ]);
       if (!assignmentResponse.ok) throw new Error('Could not load platform business assignments.');
       if (!categoryResponse.ok) throw new Error('Could not load marketplace categories.');
-      const assignments = await assignmentResponse.json();
-      const categoryData = await categoryResponse.json();
+      const [assignments, categoryData] = await Promise.all([assignmentResponse.json(), categoryResponse.json()]);
       setStores(Array.isArray(assignments.stores) ? assignments.stores : []);
       setCategories(Array.isArray(categoryData.categories) ? categoryData.categories : []);
     } catch (err) {
@@ -60,27 +63,45 @@ export default function MarketplaceCategoryManagement({ accessToken }: Props) {
     return matchesSearch && (categoryFilter === 'all' || assigned);
   }), [stores, search, categoryFilter]);
 
-  async function toggle(store: MarketplaceStore, category: MarketplaceCategory) {
-    const assigned = store.categories.some((item) => item.id === category.id);
-    const key = `${store.store_id}:${category.id}`;
+  async function mutateAssignment(store: MarketplaceStore, category: MarketplaceCategory, action: 'assign' | 'unassign' | 'set-primary') {
+    const key = store.store_id + ':' + category.id;
     setBusyKey(key);
     setError('');
     setNotice('');
     try {
       const response = await fetch('/api/marketplace-category-assignments', {
         method: 'POST',
-        headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: assigned ? 'unassign' : 'assign', storeId: store.store_id, categoryId: category.id }),
+        headers: { Authorization: 'Bearer ' + accessToken, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, storeId: store.store_id, categoryId: category.id }),
       });
       const result = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(result.error || 'Assignment update failed.');
-      setStores((current) => current.map((entry) => entry.store_id !== store.store_id ? entry : {
-        ...entry,
-        categories: assigned
-          ? entry.categories.filter((item) => item.id !== category.id)
-          : [...entry.categories, category].sort((a, b) => a.name.localeCompare(b.name)),
+
+      setStores((current) => current.map((entry) => {
+        if (entry.store_id !== store.store_id) return entry;
+        const sorted = [...entry.categories].sort((a, b) => a.name.localeCompare(b.name));
+        if (action === 'assign') {
+          const primaryExists = sorted.some((item) => item.is_primary);
+          return {
+            ...entry,
+            categories: [...sorted, { ...category, is_primary: !primaryExists }].sort((a, b) => a.name.localeCompare(b.name)),
+          };
+        }
+        if (action === 'set-primary') {
+          return { ...entry, categories: sorted.map((item) => ({ ...item, is_primary: item.id === category.id })) };
+        }
+        const remaining = sorted.filter((item) => item.id !== category.id);
+        if (sorted.find((item) => item.id === category.id)?.is_primary && remaining.length) {
+          remaining[0] = { ...remaining[0], is_primary: true };
+        }
+        return { ...entry, categories: remaining };
       }));
-      setNotice(`${category.name} ${assigned ? 'removed from' : 'assigned to'} ${store.store_name}.`);
+
+      setNotice(action === 'set-primary'
+        ? category.name + ' is now the primary category for ' + store.store_name + '.'
+        : action === 'assign'
+          ? category.name + ' assigned to ' + store.store_name + '.'
+          : category.name + ' removed from ' + store.store_name + '.');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Assignment update failed.');
     } finally {
@@ -95,7 +116,7 @@ export default function MarketplaceCategoryManagement({ accessToken }: Props) {
           Marketplace classification
         </h2>
         <p style={{ margin: 0, fontSize: 'var(--admin-size-supporting)', lineHeight: 1.5, color: 'var(--admin-text-secondary)' }}>
-          Assign platform-wide discovery categories to businesses. A business may belong to multiple categories; only eligible public listings are surfaced.
+          Give each store one primary marketplace category, then add other categories only when its wider assortment requires them. Products are classified in the relevant category subcategory.
         </p>
       </div>
 
@@ -126,49 +147,60 @@ export default function MarketplaceCategoryManagement({ accessToken }: Props) {
         <div style={surface}><p style={{ margin: 0, color: 'var(--admin-text-secondary)', fontSize: 'var(--admin-size-supporting)' }}>No businesses match this filter.</p></div>
       ) : (
         <div className="flex flex-col" style={{ gap: 'var(--admin-space-md)' }}>
-          {visibleStores.map((store) => (
-            <article key={store.store_id} style={surface}>
-              <div className="flex flex-col" style={{ gap: 'var(--admin-space-xs)', marginBottom: 'var(--admin-space-md)' }}>
-                <div className="flex items-center justify-between" style={{ gap: 'var(--admin-space-sm)' }}>
-                  <h3 style={{ margin: 0, fontSize: 'var(--admin-size-heading-3)', fontWeight: 'var(--admin-weight-semibold)', color: 'var(--admin-text-primary)' }}>{store.store_name}</h3>
-                  <span style={{ fontSize: '12px', color: store.is_active ? 'var(--admin-status-green)' : 'var(--admin-text-tertiary)' }}>{store.is_active ? 'Active' : 'Inactive'}</span>
+          {visibleStores.map((store) => {
+            const primary = store.categories.find((item) => item.is_primary);
+            return (
+              <article key={store.store_id} style={surface}>
+                <div className="flex flex-col" style={{ gap: 'var(--admin-space-xs)', marginBottom: 'var(--admin-space-md)' }}>
+                  <div className="flex items-center justify-between" style={{ gap: 'var(--admin-space-sm)' }}>
+                    <h3 style={{ margin: 0, fontSize: 'var(--admin-size-heading-3)', fontWeight: 'var(--admin-weight-semibold)', color: 'var(--admin-text-primary)' }}>{store.store_name}</h3>
+                    <span style={{ fontSize: '12px', color: store.is_active ? 'var(--admin-status-green)' : 'var(--admin-text-tertiary)' }}>{store.is_active ? 'Active' : 'Inactive'}</span>
+                  </div>
+                  <span style={{ color: 'var(--admin-text-secondary)', fontSize: '12px' }}>{store.store_slug}</span>
+                  <span style={{ color: 'var(--admin-text-secondary)', fontSize: '12px' }}>
+                    Primary category: {primary?.name || 'Not assigned yet'}
+                  </span>
                 </div>
-                <span style={{ color: 'var(--admin-text-secondary)', fontSize: '12px' }}>{store.store_slug}</span>
-              </div>
-              <div className="flex flex-wrap" style={{ gap: '8px' }}>
-                {categories.map((category) => {
-                  const assigned = store.categories.some((item) => item.id === category.id);
-                  const key = `${store.store_id}:${category.id}`;
-                  const isBusy = busyKey === key;
-                  return (
-                    <button
-                      key={category.id}
-                      type="button"
-                      disabled={Boolean(busyKey)}
-                      onClick={() => void toggle(store, category)}
-                      aria-pressed={assigned}
-                      style={{
-                        border: assigned ? '1px solid var(--admin-text-primary)' : '1px solid var(--admin-border-strong)',
-                        borderRadius: '999px',
-                        padding: '7px 11px',
-                        background: assigned ? 'var(--admin-text-primary)' : 'var(--admin-surface)',
-                        color: assigned ? 'var(--admin-surface)' : 'var(--admin-text-primary)',
-                        fontSize: '12px',
-                        cursor: busyKey ? 'wait' : 'pointer',
-                        opacity: isBusy ? 0.65 : 1,
-                      }}
-                    >
-                      {isBusy ? 'Saving…' : category.name}
-                    </button>
-                  );
-                })}
-              </div>
-              {store.categories.length === 0 && <p style={{ margin: 'var(--admin-space-sm) 0 0', fontSize: '12px', color: 'var(--admin-text-tertiary)' }}>No marketplace categories assigned yet.</p>}
-            </article>
-          ))}
+                <div className="flex flex-wrap" style={{ gap: '8px' }}>
+                  {categories.map((category) => {
+                    const assignment = store.categories.find((item) => item.id === category.id);
+                    const assigned = Boolean(assignment);
+                    const key = store.store_id + ':' + category.id;
+                    const isBusy = busyKey === key;
+                    return (
+                      <div key={category.id} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, border: '1px solid var(--admin-border-strong)', borderRadius: 999, padding: '4px 6px 4px 10px', background: assigned ? 'var(--admin-surface-subtle)' : 'var(--admin-surface)' }}>
+                        <button
+                          type="button"
+                          disabled={Boolean(busyKey)}
+                          onClick={() => void mutateAssignment(store, category, assigned ? 'unassign' : 'assign')}
+                          aria-pressed={assigned}
+                          style={{ border: 0, padding: '3px 2px', background: 'transparent', color: 'var(--admin-text-primary)', fontSize: 12, cursor: busyKey ? 'wait' : 'pointer' }}
+                        >
+                          {isBusy ? 'Saving…' : category.name}
+                        </button>
+                        {assignment?.is_primary ? (
+                          <span style={{ borderRadius: 999, padding: '3px 7px', background: 'var(--admin-text-primary)', color: 'var(--admin-surface)', fontSize: 10, whiteSpace: 'nowrap' }}>Primary</span>
+                        ) : assignment ? (
+                          <button
+                            type="button"
+                            disabled={Boolean(busyKey)}
+                            onClick={() => void mutateAssignment(store, category, 'set-primary')}
+                            style={{ border: 0, borderRadius: 999, padding: '3px 7px', background: 'var(--admin-surface)', color: 'var(--admin-text-secondary)', fontSize: 10, cursor: busyKey ? 'wait' : 'pointer', whiteSpace: 'nowrap' }}
+                          >
+                            Make primary
+                          </button>
+                        ) : null}
+                      </div>
+                    );
+                  })}
+                </div>
+                {store.categories.length === 0 && <p style={{ margin: 'var(--admin-space-sm) 0 0', fontSize: 12, color: 'var(--admin-text-tertiary)' }}>No marketplace category assigned yet. Assign one to enable marketplace product classification.</p>}
+              </article>
+            );
+          })}
         </div>
       )}
-      {!loading && <button type="button" onClick={() => void load()} disabled={Boolean(busyKey)} style={{ alignSelf: 'flex-start', border: '1px solid var(--admin-border-strong)', borderRadius: '999px', padding: '8px 13px', background: 'var(--admin-surface)', color: 'var(--admin-text-primary)', fontSize: 'var(--admin-size-supporting)' }}>Refresh businesses</button>}
+      {!loading && <button type="button" onClick={() => void load()} disabled={Boolean(busyKey)} style={{ alignSelf: 'flex-start', border: '1px solid var(--admin-border-strong)', borderRadius: 999, padding: '8px 13px', background: 'var(--admin-surface)', color: 'var(--admin-text-primary)', fontSize: 'var(--admin-size-supporting)' }}>Refresh businesses</button>}
     </section>
   );
 }
