@@ -161,6 +161,10 @@ async function saveProduct(body, isUpdate, admin, requestId) {
 
     // Preserve legacy classification when omitted; otherwise validate selected category scope.
     product.marketplace_subcategory_id = product.marketplace_subcategory_id ?? existingProduct?.marketplace_subcategory_id ?? null;
+    if (product.marketplace_visible && !product.marketplace_subcategory_id) {
+      await client.query('ROLLBACK');
+      return json({ error: 'Assign this product to a marketplace category and subcategory before publishing it to the marketplace.' }, 400);
+    }
     if (product.marketplace_subcategory_id) {
       const platformSubcategory = await client.query(
         `SELECT msc.id
