@@ -1,12 +1,12 @@
 import { Pool } from 'pg';
 import { requireAdmin } from './_shared/auth.mjs';
-const pool=new Pool({connectionString:process.env.SUPABASE_DB_URL,ssl:{rejectUnauthorized:false},max:2,idleTimeoutMillis:10000,connectionTimeoutMillis:10000});
+const pool=new Pool({connectionString:process.env.SUPABASE_DB_URL,ssl:{rejectUnauthorized:true},max:2,idleTimeoutMillis:10000,connectionTimeoutMillis:10000});
 const json=(data,status=200)=>Response.json(data,{status,headers:{'Cache-Control':'no-store'}});
 const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9]{3}-[89ab][0-9]{3}-[0-9a-f]{12}$/i;
 const validPath=(s)=>typeof s==='string'&&/^\/discover\/[a-z0-9-]+$/.test(s);
 const validImageUrl=(value)=>{try{const url=new URL(value);return url.protocol==='https:'&&Boolean(url.hostname)&&!url.username&&!url.password;}catch{return false;}};
 export default async request=>{
- const admin=await requireAdmin(request,pool);if(!admin)return json({error:'Authentication required.'},401);if(admin.role!=='super_admin')return json({error:'Super Admin only.'},403);
+ let admin;try{admin=await requireAdmin(request,pool);}catch(e){console.error('[admin-marketplace-tiles] auth failed',e?.message||'unknown');return json({error:'Unable to verify administrator access.'},503);}if(!admin)return json({error:'Authentication required.'},401);if(admin.role!=='super_admin')return json({error:'Super Admin only.'},403);
  if(request.method==='GET'){try{const r=await pool.query(`SELECT t.*,c.name AS category_name,c.slug AS category_slug,c.audience_policy,c.minimum_age FROM public.marketplace_discovery_tiles t JOIN public.marketplace_categories c ON c.id=t.marketplace_category_id ORDER BY t.sort_order,t.title`);return json({tiles:r.rows});}catch(e){console.error('[admin-marketplace-tiles] read',e?.code);return json({error:'Tiles could not be loaded.'},500);}}
  if(!['POST','PATCH','DELETE'].includes(request.method))return json({error:'Method not allowed.'},405);
  let b;try{b=await request.json()}catch{return json({error:'Invalid JSON.'},400)}
