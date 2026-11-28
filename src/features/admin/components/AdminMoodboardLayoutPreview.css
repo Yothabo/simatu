@@ -15,7 +15,7 @@
   box-sizing: border-box;
 }
 .admin-moodboard-layout-preview__composer { width: 100%; max-width: 1120px; }
-.admin-moodboard-layout-preview__toolbar { display:flex; flex-direction:row; flex-wrap:nowrap; align-items:center; justify-content:flex-start; gap:8px; width:100%; padding:0; margin:0; box-sizing:border-box; }
+.admin-moodboard-layout-preview__toolbar { display:flex; flex-direction:row; flex-wrap:nowrap; align-items:center; justify-content:space-between; gap:8px; width:100%; padding:0; margin:0; box-sizing:border-box; }
 .admin-moodboard-layout-preview__toolbar button { display:flex; flex:0 0 42px; align-items:center; justify-content:center; width:42px; height:42px; padding:0; border:1px solid rgba(255,255,255,.22); background:transparent; color:#f5f5f5; border-radius:4px; font-size:16px; cursor:pointer; box-sizing:border-box; }
 .admin-moodboard-layout-preview__toolbar button:hover { background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.55); }
 .admin-moodboard-layout-preview__toolbar button.is-selected { background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.7); }
@@ -24,13 +24,6 @@
 .admin-moodboard-layout-preview__composer-heading { margin-bottom:12px; }
 .admin-moodboard-layout-preview__composer-heading span,.admin-moodboard-layout-preview__board-header span,.admin-moodboard-layout-preview__board-footer span { font-size:11px; letter-spacing:.18em; }
 .admin-moodboard-layout-preview__composer-heading small,.admin-moodboard-layout-preview__board-header small,.admin-moodboard-layout-preview__board-footer small { color:rgba(255,255,255,.5); font-size:11px; }
-.admin-moodboard-layout-preview__shape-list { display:flex; flex-wrap:nowrap; align-items:center; gap:8px; width:max-content; max-width:100%; overflow-x:auto; }
-.admin-moodboard-layout-preview__shape-list button { display:grid; flex:0 0 42px; place-items:center; width:42px; height:42px; padding:8px; border:1px solid rgba(255,255,255,.14); border-radius:3px; background:transparent; color:rgba(255,255,255,.72); cursor:pointer; transition:background .18s,border-color .18s,color .18s; }
-.admin-moodboard-layout-preview__shape-list button.is-selected { border-color:rgba(255,255,255,.7); background:rgba(255,255,255,.1); color:#fff; }
-.admin-moodboard-layout-preview__shape-list button.is-active { background:rgba(255,255,255,.2); border-color:#fff; }
-.admin-moodboard-layout-preview__shape-icon { display:grid; grid-template-columns:repeat(4,5px); grid-template-rows:repeat(2,5px); gap:2px; width:26px; height:12px; }
-.admin-moodboard-layout-preview__shape-icon i { display:block; background:currentColor; border-radius:1px; }
-
 .admin-moodboard-layout-preview__board-section { width:100%; max-width:100%; min-width:0; }
 .admin-moodboard-layout-preview__board-header { margin-bottom:12px; }
 .admin-moodboard-layout-preview__scroll { display:block; width:100%; max-width:100%; max-height:70dvh; overflow:auto; overscroll-behavior:auto; -webkit-overflow-scrolling:touch; padding:0 0 14px; box-sizing:border-box; touch-action:auto; }
@@ -46,13 +39,6 @@
 .admin-moodboard-layout-preview__tile.is-hidden::after { background:linear-gradient(transparent,rgba(0,0,0,.78)); }
 .admin-moodboard-layout-preview__tile span { position:absolute; inset:auto 12px 14px; z-index:1; font-size:12px; line-height:1.3; letter-spacing:.04em; text-shadow:0 1px 5px rgba(0,0,0,.8); }
 .admin-moodboard-layout-preview__tile::after { content:""; position:absolute; inset:45% 0 0; background:linear-gradient(transparent,rgba(0,0,0,.62)); pointer-events:none; }
-.admin-moodboard-layout-preview__tile.is-ad-target { outline:1px solid rgba(255,255,255,.24); outline-offset:-5px; }
-.admin-moodboard-layout-preview__tile.is-ad-target:hover { outline-color:rgba(255,255,255,.8); }
-.admin-moodboard-layout-preview__ad-layer { position:absolute; inset:0; display:grid; grid-template-columns:repeat(8,230px); grid-template-rows:repeat(8,290px); gap:16px; pointer-events:none; }
-.admin-moodboard-layout-preview__ad-preview { position:relative; z-index:5; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; min-width:0; min-height:0; overflow:hidden; border:1px solid rgba(255,255,255,.4); border-radius:3px; background:linear-gradient(135deg,#343434,#171717 55%,#404040); color:#fff; font:inherit; letter-spacing:.14em; cursor:pointer; pointer-events:auto; box-sizing:border-box; }
-.admin-moodboard-layout-preview__ad-preview span { font-size:11px; font-weight:600; }
-.admin-moodboard-layout-preview__ad-preview small { font-size:10px; letter-spacing:.08em; color:rgba(255,255,255,.65); }
-.admin-moodboard-layout-preview__ad-preview b { position:absolute; top:8px; right:10px; font-size:18px; font-weight:400; opacity:.7; }
 .admin-moodboard-layout-preview__board-footer { margin-top:2px; }
 .admin-moodboard-layout-preview__board-footer small { text-align:right; }
 @media(max-width:640px) {
@@ -61,40 +47,6 @@
   .admin-moodboard-layout-preview__board-header small,.admin-moodboard-layout-preview__board-footer small { text-align:left; }
   .admin-moodboard-layout-preview__toolbar { justify-content:flex-start; gap:6px; }
   .admin-moodboard-layout-preview__toolbar button { flex-basis:38px; width:38px; height:38px; padding:7px; }
-}
-
-/* Full-scale advertising placement template library beneath the admin Moodboard. */
-.admin-moodboard-layout-preview__shape-library { width:100%; min-width:0; display:flex; flex-direction:column; gap:18px; padding:28px 0 40px; box-sizing:border-box; }
-.admin-moodboard-layout-preview__shape-library-header { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; color:#f5f5f5; }
-.admin-moodboard-layout-preview__shape-library-header h2 { margin:0; font-size:18px; font-weight:500; letter-spacing:.02em; }
-.admin-moodboard-layout-preview__shape-library-header p { margin:6px 0 0; font-size:12px; color:rgba(255,255,255,.55); }
-.admin-moodboard-layout-preview__shape-library-header>span { color:rgba(255,255,255,.6); font-size:12px; white-space:nowrap; }
-.admin-moodboard-layout-preview__shape-library-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr)); gap:18px; align-items:start; }
-.admin-moodboard-layout-preview__shape-card { min-width:0; overflow:hidden; border:1px solid rgba(255,255,255,.14); border-radius:4px; background:#181818; }
-.admin-moodboard-layout-preview__shape-stage { width:100%; min-width:0; overflow:auto; padding:14px; box-sizing:border-box; background:#111; }
-.admin-moodboard-layout-preview__shape-design { display:grid; width:max-content; gap:16px; }
-.admin-moodboard-layout-preview__shape-cell { position:relative; display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-end; width:230px; height:290px; padding:18px; overflow:hidden; box-sizing:border-box; color:#fff; background:linear-gradient(150deg,#444 0%,#282828 48%,#151515 100%); border:1px solid rgba(255,255,255,.16); }
-.admin-moodboard-layout-preview__shape-cell::before { content:""; position:absolute; inset:0; background:linear-gradient(180deg,rgba(255,255,255,.06),transparent 45%,rgba(0,0,0,.55)); pointer-events:none; }
-.admin-moodboard-layout-preview__shape-mark,.admin-moodboard-layout-preview__shape-cell strong,.admin-moodboard-layout-preview__shape-cell small { position:relative; z-index:1; }
-.admin-moodboard-layout-preview__shape-mark { font-size:10px; letter-spacing:.16em; color:rgba(255,255,255,.55); }
-.admin-moodboard-layout-preview__shape-cell strong { margin-top:8px; font-size:20px; font-weight:500; letter-spacing:.02em; }
-.admin-moodboard-layout-preview__shape-cell small { margin-top:5px; font-size:12px; color:rgba(255,255,255,.65); }
-.admin-moodboard-layout-preview__shape-card-footer { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px; color:#f5f5f5; }
-.admin-moodboard-layout-preview__shape-card-footer>div { display:flex; flex-direction:column; gap:5px; min-width:0; }
-.admin-moodboard-layout-preview__shape-card-footer strong { font-size:13px; font-weight:500; }
-.admin-moodboard-layout-preview__shape-card-footer small { color:rgba(255,255,255,.5); font-size:11px; }
-.admin-moodboard-layout-preview__shape-card-footer button { flex:0 0 auto; border:1px solid rgba(255,255,255,.4); border-radius:3px; padding:9px 12px; color:#fff; background:transparent; font-size:11px; cursor:pointer; }
-.admin-moodboard-layout-preview__shape-card-footer button:hover,.admin-moodboard-layout-preview__shape-card-footer button.is-active { background:rgba(255,255,255,.12); border-color:#fff; }
-@media(max-width:640px) { .admin-moodboard-layout-preview__shape-library-header { align-items:flex-start; flex-direction:column; gap:8px; } .admin-moodboard-layout-preview__shape-library-grid { grid-template-columns:1fr; } }
-
-/* The Moodboard board is horizontally navigable, but it must not trap page-level vertical scrolling. */
-.admin-moodboard-layout-preview__scroll {
-  max-height: none;
-  overflow-x: auto;
-  overflow-y: hidden;
-  touch-action: pan-x;
-  overscroll-behavior-x: contain;
-  overscroll-behavior-y: auto;
 }
 
 /* Release the fullscreen Marketplace shell only while the Moodboard/library view is active. */
@@ -126,3 +78,8 @@ body:has(.admin-marketplace-admin-viewport .admin-marketplace-moodboard),
   max-height: none !important;
   overflow: visible !important;
 }
+
+/* Category-management Moodboard page scroll; category detail remains fullscreen. */
+.admin-scope.admin-marketplace-admin-viewport:has(.admin-marketplace-moodboard > .admin-moodboard-layout-preview), .admin-page-shell--marketplace:has(.admin-marketplace-moodboard > .admin-moodboard-layout-preview) { height:auto !important; min-height:100dvh !important; max-height:none !important; overflow:visible !important; }
+html:has(.admin-marketplace-moodboard > .admin-moodboard-layout-preview), body:has(.admin-marketplace-moodboard > .admin-moodboard-layout-preview), #root:has(.admin-marketplace-moodboard > .admin-moodboard-layout-preview) { height:auto; min-height:100dvh; max-height:none; overflow-x:hidden; overflow-y:auto; }
+.admin-marketplace-moodboard:has(.admin-moodboard-layout-preview) { height:auto !important; min-height:0 !important; max-height:none !important; overflow:visible !important; }
