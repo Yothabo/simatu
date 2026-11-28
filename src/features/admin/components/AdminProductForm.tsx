@@ -5,7 +5,6 @@ import {
 import { EMPTY_PRODUCT } from './product-form/constants';
 import { ProductFormFields } from './product-form/components';
 import {
-  useProductCategories,
   useProductDraft,
   useProductImageUpload,
   useProductFormSubmit,
@@ -44,19 +43,6 @@ export default function AdminProductForm({
     setStatusValue,
   });
 
-  const {
-    isLoadingCategories,
-    categoryLoadError,
-    categoryOptions,
-    subcategoryOptions,
-  } = useProductCategories({
-    isOpen,
-    isDraftHydrated,
-    adminRole,
-    form,
-    setForm,
-  });
-
   const { marketplaceCategoryOptions, marketplaceSubcategoryOptions, isLoadingMarketplaceTaxonomy, marketplaceTaxonomyError, selectedSubcategoryCategorySlug } = useMarketplaceTaxonomy(isOpen && isDraftHydrated, form.storefront, form.marketplace_category_slug ?? null, form.marketplace_subcategory_id ?? null);
 
   useEffect(() => {
@@ -93,43 +79,14 @@ export default function AdminProductForm({
         return;
       }
 
-      // category change: resolve subcategory from the selected category
-      if (field === 'category') {
-        const selected = categoryOptions.find((item) => item.value === value);
-        if (!selected) return;
-
-        // Look up the full category object to get its first subcategory
-        setForm((prev) => ({
-          ...prev,
-          category: selected.label.replace(/ \(Inactive\)$/, ''),
-          category_id: selected.value,
-          subcategory: '',
-          subcategory_id: null,
-        }));
-        return;
-      }
-
       if (field === 'marketplace_category_slug') {
         setForm((prev) => ({ ...prev, marketplace_category_slug: value as string | null, marketplace_subcategory_id: null }));
         return;
       }
 
-      // subcategory change
-      if (field === 'subcategory') {
-        const selected = subcategoryOptions.find((item) => item.value === value);
-        if (!selected) return;
-
-        setForm((prev) => ({
-          ...prev,
-          subcategory: selected.label.replace(/ \(Inactive\)$/, ''),
-          subcategory_id: selected.value,
-        }));
-        return;
-      }
-
       setForm((prev) => ({ ...prev, [field]: value }));
     },
-    [categoryOptions, subcategoryOptions],
+    [],
   );
 
   const addSize = useCallback(() => {
@@ -164,8 +121,8 @@ export default function AdminProductForm({
   const handleSubmit = useProductFormSubmit({
     form,
     statusValue,
-    isLoadingCategories,
-    categoryLoadError,
+    isLoadingMarketplaceTaxonomy,
+    marketplaceTaxonomyError,
     productToEdit,
     onSaved,
     handleClose,
@@ -191,14 +148,10 @@ export default function AdminProductForm({
         setStatusValue={setStatusValue}
         sizeInput={sizeInput}
         setSizeInput={setSizeInput}
-        categoryOptions={categoryOptions}
-        subcategoryOptions={subcategoryOptions}
         marketplaceCategoryOptions={marketplaceCategoryOptions}
         marketplaceSubcategoryOptions={marketplaceSubcategoryOptions}
         isLoadingMarketplaceTaxonomy={isLoadingMarketplaceTaxonomy}
         marketplaceTaxonomyError={marketplaceTaxonomyError}
-        isLoadingCategories={isLoadingCategories}
-        categoryLoadError={categoryLoadError}
         isUploading={isUploading}
         onChange={handleChange}
         onImageUpload={handleImageUpload}
