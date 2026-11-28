@@ -176,18 +176,40 @@
 }
 .admin-marketplace-subcategory-swiper {
   position: relative;
-  min-height: 0;
-  overflow: hidden;
+  height: auto !important;
+  min-height: 290px;
+  overflow: visible;
+}
+.admin-marketplace-subcategory-swiper > .swiper-wrapper {
+  height: 290px;
 }
 .admin-marketplace-subcategory-swiper .swiper-pagination {
-  position: absolute;
-  inset: auto 0 12px !important;
+  position: relative;
+  inset: auto !important;
+  width: 100%;
   height: 8px;
+  margin: 18px auto 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
   z-index: 5;
+}
+
+/* Keep card titles readable over every image, independent of image brightness. */
+.admin-marketplace-subcategory-swiper .discovery-subcategory-card::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  inset: 42% 0 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(17, 17, 17, 0) 0%,
+    rgba(17, 17, 17, .32) 34%,
+    rgba(17, 17, 17, .78) 72%,
+    rgba(17, 17, 17, .94) 100%
+  );
 }
 .admin-marketplace-subcategory-swiper .swiper-pagination-bullet {
   margin: 0 !important;
