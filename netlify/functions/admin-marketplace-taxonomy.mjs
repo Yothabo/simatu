@@ -30,14 +30,14 @@ export default async (request) => {
     try {
       const [categories, subcategories] = await Promise.all([
         pool.query(`SELECT mc.id,mc.name,mc.slug,mc.description,mc.sort_order,
-            mc.audience_policy,mc.minimum_age,mc.is_active,mc.publication_status,
+            mc.audience_policy,mc.minimum_age,mc.is_active,mc.publication_status,mc.image_media_id,
             media.jpeg_path,media.jxl_path,media.alt_text AS image_alt_text
           FROM public.marketplace_categories mc
           LEFT JOIN public.marketplace_content_media media
             ON media.id=mc.image_media_id AND media.retired_at IS NULL
           ORDER BY mc.sort_order,mc.name`),
         pool.query(`SELECT msc.id,msc.marketplace_category_id,msc.name,msc.slug,
-            msc.description,msc.sort_order,msc.is_active,msc.publication_status,
+            msc.description,msc.sort_order,msc.is_active,msc.publication_status,msc.image_media_id,
             media.jpeg_path,media.jxl_path,media.alt_text AS image_alt_text
           FROM public.marketplace_subcategories msc
           LEFT JOIN public.marketplace_content_media media
