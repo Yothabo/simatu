@@ -86,6 +86,13 @@ export default async (request) => {
     return json({ error: 'Marketplace media storage is not configured on the server.' }, 503);
   }
 
+  // Reject oversized uploads before multipart parsing to limit memory pressure.
+  const contentLength = Number(request.headers.get('content-length') || 0);
+  const MAX_REQUEST_BYTES = (MAX_VARIANT_BYTES * 2) + (256 * 1024);
+  if (contentLength > MAX_REQUEST_BYTES) {
+    return json({ error: 'Marketplace media upload exceeds the 10 MB request limit.' }, 413);
+  }
+
   let form;
   try {
     form = await request.formData();
