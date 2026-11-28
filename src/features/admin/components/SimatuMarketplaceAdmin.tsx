@@ -54,6 +54,12 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
   const [newSubcategoryTitle, setNewSubcategoryTitle] = useState('');
   const [newSubcategoryDescription, setNewSubcategoryDescription] = useState('');
   const [newSubcategoryImage, setNewSubcategoryImage] = useState('');
+  const [managedMarkets, setManagedMarkets] = useState<CategoryDraft[]>(DISCOVERY_MARKETS);
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [newCategoryDescription, setNewCategoryDescription] = useState('');
+  const [newCategoryImage, setNewCategoryImage] = useState('');
+  const [scrollEnabled, setScrollEnabled] = useState(true);
+  const [manualOpen, setManualOpen] = useState(false);
 
   const openMarket = (market: MoodboardItem) => {
     setActiveMarket(market);
@@ -99,6 +105,13 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
   const editCategoryImage = () => { if (categoryDraft) beginEdit('category-image', categoryDraft.image); };
   const editSubcategoryImage = (id: string) => { const current = subcategoryDrafts.find((item) => item.id === id); if (current) beginEdit('subcategory-image-' + id, current.image); };
   const addSubcategory = () => { setNewSubcategoryTitle(''); setNewSubcategoryDescription(''); setNewSubcategoryImage(''); setIsAddingSubcategory(true); setEditingField('add-subcategory'); };
+  const openAddCategory = () => { setNewCategoryName(''); setNewCategoryDescription(''); setNewCategoryImage(''); setEditingField('add-category'); };
+  const saveNewCategory = () => {
+    const name = newCategoryName.trim(); if (!name) return;
+    const id = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' + Date.now().toString(36);
+    const created: CategoryDraft = { id, category: name, title: newCategoryDescription.trim() || name, image: newCategoryImage.trim() || DISCOVERY_MARKETS[0]?.image || '', alt: name };
+    setManagedMarkets((current) => [...current, created]); setEditingField(null); setActiveMarket(created); setCategoryDraft(created); setSubcategoryDrafts([]);
+  };
   const importDeviceImage = (file: File | undefined, onLoaded: (dataUrl: string) => void) => {
     if (!file || !file.type.startsWith('image/')) return;
     const reader = new FileReader();
@@ -110,10 +123,10 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
 
   return (
     <>
-    <div className="admin-marketplace-moodboard" aria-label="Marketplace management" style={{ position: 'fixed', inset: 0, zIndex: 10, overflow: 'hidden', background: '#111', color: '#f4f1ec' }}>
+    <div className="admin-marketplace-moodboard" aria-label="Marketplace management" style={{ position: 'fixed', inset: 0, zIndex: 10, overflowY: scrollEnabled ? 'hidden' : 'auto', overflowX: 'hidden', background: '#111', color: '#f4f1ec' }}>
       <button type="button" onClick={activeMarket ? returnToTiles : onReturn} aria-label={activeMarket ? 'Back to Admin Market categories' : 'Return to Admin dashboard'} style={floatingButtonStyle}>{activeMarket ? '← Back' : '← Return'}</button>
       {!activeMarket || !categoryDraft ? (
-        <div style={{ position: 'absolute', inset: '64px 0 0', overflow: 'auto', overscrollBehavior: 'contain' }}><AdminMoodboardLayoutPreview items={DISCOVERY_MARKETS} onItemClick={openMarket} /></div>
+        <div style={{ position: 'absolute', inset: '64px 0 0', overflow: scrollEnabled ? 'hidden' : 'visible', overscrollBehavior: 'contain' }}><AdminMoodboardLayoutPreview items={managedMarkets} onItemClick={openMarket} onAddCategory={openAddCategory} scrollEnabled={scrollEnabled} onToggleScroll={() => setScrollEnabled((value) => !value)} onOpenManual={() => setManualOpen(true)} /></div>
       ) : (
         <main style={{ minHeight: '100dvh', overflowY: 'auto', background: '#111', color: '#f4f1ec' }}>
           <section style={{ position: 'relative', minHeight: '42vh', display: 'flex', alignItems: 'flex-end', padding: 'clamp(24px,5vw,72px)', overflow: 'hidden' }}>
@@ -166,7 +179,13 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
           <h2>{editingField === 'add-subcategory' ? 'Add subcategory' : ((editingField === 'category-image' || editingField?.startsWith('subcategory-image-')) ? 'Edit image' : 'Edit ' + (editingField?.startsWith('category-') ? 'category' : 'subcategory') + ' ' + (editingField?.endsWith('title') ? 'title' : 'description'))}</h2>
           <p>Changes apply to this element only.</p>
         </div>
-        {editingField === 'add-subcategory' ? (
+        {editingField === 'add-category' ? (
+          <div className="admin-market-edit-modal__fields">
+            <label className="admin-market-edit-modal__field"><span>Category name</span><input value={newCategoryName} onChange={(event) => setNewCategoryName(event.target.value)} autoFocus placeholder="New category" /></label>
+            <label className="admin-market-edit-modal__field"><span>Description</span><textarea value={newCategoryDescription} onChange={(event) => setNewCategoryDescription(event.target.value)} rows={3} placeholder="Category description" /></label>
+            <label className="admin-market-edit-modal__field"><span>Image URL</span><input type="url" value={newCategoryImage} onChange={(event) => setNewCategoryImage(event.target.value)} placeholder="Optional image URL" /></label>
+          </div>
+        ) : editingField === 'add-subcategory' ? (
           <div className="admin-market-edit-modal__fields">
             <label className="admin-market-edit-modal__field"><span>Title</span><input value={newSubcategoryTitle} onChange={(event) => setNewSubcategoryTitle(event.target.value)} autoFocus placeholder="Subcategory title" /></label>
             <label className="admin-market-edit-modal__field"><span>Description <small>Optional</small></span><textarea value={newSubcategoryDescription} onChange={(event) => setNewSubcategoryDescription(event.target.value)} rows={3} placeholder="Describe this subcategory" /></label>
@@ -191,8 +210,15 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
         )}
         <div className="admin-market-edit-modal__actions">
           <button type="button" onClick={cancelEdit} className="admin-market-edit-modal__button admin-market-edit-modal__button--secondary">Cancel</button>
-          <button type="button" onClick={saveEdit} className="admin-market-edit-modal__button admin-market-edit-modal__button--primary">Save changes</button>
+          <button type="button" onClick={editingField === 'add-category' ? saveNewCategory : saveEdit} className="admin-market-edit-modal__button admin-market-edit-modal__button--primary">Save changes</button>
         </div>
+      </div>
+    </Modal>
+    <Modal isOpen={manualOpen} onClose={() => setManualOpen(false)} maxWidth="max-w-md">
+      <div className="admin-market-edit-modal">
+        <div className="admin-market-edit-modal__header"><h2>Moodboard manual</h2></div>
+        <div className="admin-market-edit-modal__fields"><p>Choose an ad shape, select Add placement, then select a tile. Click a placed ad to remove it.</p><p>Use + Category to create a category. Select a category tile to edit its content and subcategories.</p><p>Scroll controls the Moodboard canvas. Published placements use the homepage scale.</p></div>
+        <div className="admin-market-edit-modal__actions"><button type="button" onClick={() => setManualOpen(false)} className="admin-market-edit-modal__button admin-market-edit-modal__button--primary">Close</button></div>
       </div>
     </Modal>
     </>
