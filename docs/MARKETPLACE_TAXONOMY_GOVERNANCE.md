@@ -91,11 +91,11 @@ The marketplace discovery display taxonomy currently contains 17 general top-lev
 
 ## Platform assignment workflow
 
-Marketplace classification is managed separately from each storefront's private product-category tree. In the platform Admin Settings, super administrators can review the stores, search by store name or slug, filter stores by an existing general marketplace category, and assign or remove category memberships. A store can be assigned to multiple categories; these assignments describe discovery placement and do not duplicate the store's identity or listing records.
+Marketplace taxonomy is the authoritative classification system for store products. In platform Admin Settings, super administrators can review stores, search by store name or slug, filter stores by an existing general marketplace category, and assign or remove category memberships. A store can belong to multiple marketplace categories, with one primary placement; these assignments describe the store's marketplace presence and do not duplicate its identity or listings.
 
+Every newly created or reclassified store product must belong to a published marketplace subcategory whose parent category is assigned to that store. Product category and subcategory labels are derived from the shared taxonomy; store admins do not create or select a private category tree for marketplace products. The former store-owned `categories` and `subcategories` tables (including legacy His, Hers, Spaces, and Lounge records) are retained for compatibility with existing catalogue records and are not the classification source for new product saves.
 
-Assignments are limited to active general-audience marketplace categories. The restricted category is excluded from the public taxonomy and from this assignment interface. Public business discovery only returns active stores that have an explicit category assignment and at least one active, marketplace-visible, non-age-restricted listing. Storefront-specific product categories remain unchanged and are not substitutes for platform marketplace categories.
-
+Assignments are limited to active general-audience marketplace categories. The restricted category is excluded from the public taxonomy and from this assignment interface. Public business discovery only returns active stores that have an explicit category assignment and at least one active, marketplace-visible, non-age-restricted listing.
 
 ## Discovery page integration
 
@@ -105,9 +105,10 @@ Public category pages use the platform category slug to request businesses from 
 ## Structured product subcategory foundation
 
 - Added platform-owned `marketplace_subcategories`, linked to a marketplace category with stable UUIDs and unique slugs scoped to the parent category.
-- Added nullable `products.marketplace_subcategory_id`. Null means legacy/unclassified; existing products are deliberately not auto-classified.
+- Added nullable `products.marketplace_subcategory_id`. Existing products were not automatically classified during the initial rollout.
 - Seeded the curated discovery subcategory set (87 current nodes) from the existing taxonomy, scoped to its parent marketplace category. The platform categories Technology and African Culture & Heritage currently have no curated subcategory tiles in the source taxonomy and are intentionally left empty.
-- The product API accepts and validates an optional platform subcategory UUID, checks it against active platform subcategories, and returns it on product reads/saves.
-- When existing products are edited before the product-admin classification UI is available, their current platform subcategory is preserved rather than cleared by older clients.
-- This foundation is not yet the complete workflow: admin selection UI, parent-category consistency checks, and ID-based discovery filtering are follow-up work.
-- Migrations `20261126150000_create_marketplace_subcategories.sql` and `20261126160000_seed_marketplace_subcategories.sql` are committed but **not applied to the database**. Product API changes depend on that migration being applied before deployment.
+- Store product administration selects a marketplace category assigned to the store and one of that category's published subcategories. The API validates this relationship, and database triggers enforce it independently.
+- New product saves derive their category/subcategory labels from the shared marketplace taxonomy. Legacy store-owned category IDs are nullable for new rows; existing category/subcategory tables and references remain intact.
+- New store products require marketplace classification. Changing marketplace visibility cannot bypass the classification or store/category assignment checks. Existing legacy products remain intact and must be assigned a valid shared subcategory when edited or made marketplace-visible.
+- Discovery uses the shared marketplace category/subcategory identifiers. Store-specific His/Hers/Spaces/Lounge labels are not a parallel marketplace taxonomy.
+- Migrations `20261126150000_create_marketplace_subcategories.sql` and `20261126160000_seed_marketplace_subcategories.sql` establish the shared taxonomy; the follow-on product alignment migration is `20261128120000_align_store_products_to_shared_marketplace_taxonomy.sql`.
