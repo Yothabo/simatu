@@ -264,7 +264,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       .map((name) => marketItems.find((market) => market.category === name))
       .filter((market): market is MoodboardItem => Boolean(market))
       .slice(0, 5),
-    [recentCategoryNames]
+    [recentCategoryNames, marketItems]
   );
 
   useEffect(() => {
