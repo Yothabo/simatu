@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react';\nimport Modal from '../../../shared/components/Modal';
 import KineticMoodboard, { type MoodboardItem } from '../../../systems/homepage/discover/KineticMoodboard';
 import { getSubcategories, type DiscoverySubcategory } from '../../../systems/homepage/discover/discovery-taxonomy';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -10,34 +10,14 @@ import '../../../systems/homepage/design-system/index.css';
 
 type Props = { onReturn: () => void; };
 
-type InlineEditableProps = {
-  value: string;
-  editing: boolean;
-  onEdit: () => void;
-  onChange: (value: string) => void;
-  onSave: () => void;
-  onCancel: () => void;
-  inputStyle?: React.CSSProperties;
-  multiline?: boolean;
-};
-function InlineEditable({ value, editing, onEdit, onChange, onSave, onCancel, inputStyle, multiline = false }: InlineEditableProps) {
-  const controlStyle: React.CSSProperties = { background: 'rgba(255,255,255,.08)', color: '#fff', border: '1px solid rgba(255,255,255,.3)', borderRadius: 6, padding: '8px 10px', font: 'inherit', width: '100%', outline: 'none', ...inputStyle };
-  if (!editing) return (
+type TextEditTriggerProps = { value: string; onEdit: () => void; };
+function TextEditTrigger({ value, onEdit }: TextEditTriggerProps) {
+  return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, maxWidth: '100%' }}>
       <span>{value}</span>
       <button type="button" onClick={onEdit} aria-label="Edit this text" title="Edit this text" style={{ display: 'inline-grid', placeItems: 'center', flex: '0 0 30px', width: 30, height: 30, border: '1px solid rgba(255,255,255,.28)', borderRadius: '50%', background: 'rgba(15,15,15,.55)', color: '#fff', cursor: 'pointer', fontSize: 13 }}>✎</button>
     </span>
-  );
-  const sharedProps = { value, onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange(event.target.value), onKeyDown: (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => { if (event.key === 'Enter' && !multiline) { event.preventDefault(); onSave(); } if (event.key === 'Escape') onCancel(); }, autoFocus: true, style: controlStyle };
-  return (
-    <span style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'stretch', gap: 8, width: '100%' }}>
-      {multiline ? <textarea {...sharedProps} rows={3} /> : <input {...sharedProps} />}
-      <span style={{ display: 'inline-flex', gap: 6, alignSelf: 'flex-start' }}>
-        <button type="button" onClick={onSave} title="Save" aria-label="Save text edit" style={{ border: '1px solid rgba(255,255,255,.35)', borderRadius: 6, padding: '5px 10px', background: '#fff', color: '#111', cursor: 'pointer' }}>Save</button>
-        <button type="button" onClick={onCancel} title="Cancel" aria-label="Cancel text edit" style={{ border: '1px solid rgba(255,255,255,.25)', borderRadius: 6, padding: '5px 10px', background: 'transparent', color: '#fff', cursor: 'pointer' }}>Cancel</button>
-      </span>
-    </span>
-);}
+}
 type CategoryDraft = MoodboardItem;
 type SubcategoryDraft = DiscoverySubcategory;
 
@@ -80,16 +60,18 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
   };
   const beginEdit = (field: string, value: string) => { setEditingField(field); setEditingValue(value); };
   const cancelEdit = () => { setEditingField(null); setEditingValue(''); };
-  const saveCategoryField = (field: 'category' | 'title') => {
+  const saveEdit = () => {
     const value = editingValue.trim();
-    if (!value) { cancelEdit(); return; }
-    setCategoryDraft((current) => current ? { ...current, [field]: value } : current);
-    cancelEdit();
-  };
-  const saveSubcategoryField = (id: string, field: 'title' | 'description') => {
-    const value = editingValue.trim();
-    if (!value) { cancelEdit(); return; }
-    setSubcategoryDrafts((items) => items.map((item) => item.id === id ? { ...item, [field]: value } : item));
+    if (!value || !editingField) return;
+    if (editingField === 'category-title') setCategoryDraft((current) => current ? { ...current, category: value } : current);
+    else if (editingField === 'category-description') setCategoryDraft((current) => current ? { ...current, title: value } : current);
+    else if (editingField.startsWith('subcategory-title-')) {
+      const id = editingField.slice('subcategory-title-'.length);
+      setSubcategoryDrafts((items) => items.map((item) => item.id === id ? { ...item, title: value } : item));
+    } else if (editingField.startsWith('subcategory-description-')) {
+      const id = editingField.slice('subcategory-description-'.length);
+      setSubcategoryDrafts((items) => items.map((item) => item.id === id ? { ...item, description: value } : item));
+    }
     cancelEdit();
   };
   const editCategoryImage = () => {
@@ -128,10 +110,10 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
             <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,#111 0%,rgba(17,17,17,.92) 14%,rgba(17,17,17,.38) 58%,transparent 100%)' }} />
             <div style={{ position: 'relative', zIndex: 1, maxWidth: 760 }}>
               <h1 style={{ fontSize: 'clamp(40px,8vw,96px)', lineHeight: .95, fontWeight: 500, margin: '18px 0' }}>
-                <InlineEditable value={categoryDraft.category} editing={editingField === 'category-title'} onEdit={() => beginEdit('category-title', categoryDraft.category)} onChange={setEditingValue} onSave={() => saveCategoryField('category')} onCancel={cancelEdit} inputStyle={{ fontSize: 'clamp(32px,7vw,80px)', lineHeight: .95 }} />
+                <TextEditTrigger value={categoryDraft.category} onEdit={() => beginEdit('category-title', categoryDraft.category)} />
               </h1>
               <p style={{ fontSize: 'clamp(14px,1.4vw,18px)', lineHeight: 1.65, maxWidth: 680 }}>
-                <InlineEditable value={categoryDraft.title} editing={editingField === 'category-description'} onEdit={() => beginEdit('category-description', categoryDraft.title)} onChange={setEditingValue} onSave={() => saveCategoryField('title')} onCancel={cancelEdit} multiline inputStyle={{ maxWidth: 680 }} />
+                <TextEditTrigger value={categoryDraft.title} onEdit={() => beginEdit('category-description', categoryDraft.title)} />
               </p>
             </div>
           </section>
@@ -143,12 +125,12 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
                     {sub.image ? <img src={sub.image} alt={sub.alt} loading="lazy" decoding="async" draggable={false} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(.58)' }} /> : null}
                     <button type="button" onClick={() => editSubcategoryImage(sub.id)} aria-label={'Change image for ' + sub.title} title="Change image" style={overlayButton}>▧</button>
                     <span aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(0,0,0,.8),rgba(0,0,0,.02) 76%)' }} />
-                    <span style={{ position: 'absolute', left: 16, right: 16, bottom: 16, zIndex: 1, pointerEvents: 'none' }}>
+                    <span style={{ position: 'absolute', left: 16, right: 16, bottom: 16, zIndex: 1, pointerEvents: 'auto' }}>
                       <strong style={{ display: 'block', fontSize: 18, fontWeight: 500 }}>
-                        <InlineEditable value={sub.title} editing={editingField === 'subcategory-title-' + sub.id} onEdit={() => beginEdit('subcategory-title-' + sub.id, sub.title)} onChange={setEditingValue} onSave={() => saveSubcategoryField(sub.id, 'title')} onCancel={cancelEdit} />
+                        <TextEditTrigger value={sub.title} onEdit={() => beginEdit('subcategory-title-' + sub.id, sub.title)} />
                       </strong>
                       <span style={{ display: 'block', marginTop: 7, fontSize: 13, lineHeight: 1.45, fontWeight: 400, color: 'rgba(255,255,255,.82)' }}>
-                        <InlineEditable value={sub.description} editing={editingField === 'subcategory-description-' + sub.id} onEdit={() => beginEdit('subcategory-description-' + sub.id, sub.description)} onChange={setEditingValue} onSave={() => saveSubcategoryField(sub.id, 'description')} onCancel={cancelEdit} multiline inputStyle={{ fontSize: 13 }} />
+                        <TextEditTrigger value={sub.description} onEdit={() => beginEdit('subcategory-description-' + sub.id, sub.description)} />
                       </span>
                     </span>
                   </article>
