@@ -1,0 +1,205 @@
+import { Pool } from 'pg';
+import { requireAdmin } from './_shared/auth.mjs';
+
+const pool = new Pool({
+  connectionString: process.env.SUPABASE_DB_URL,
+  ssl: { rejectUnauthorized: false },
+  max: 2,
+  idleTimeoutMillis: 10000,
+  connectionTimeoutMillis: 10000,
+});
+
+const json = (data, status = 200) => Response.json(data, {
+  status,
+  headers: { 'Cache-Control': 'no-store' },
+});
+const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const MAX_VARIANT_BYTES = 5 * 1024 * 1024;
+
+function isJpeg(bytes) {
+  return bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+}
+
+function isJxl(bytes) {
+  const codestream = bytes.length >= 2 && bytes[0] === 0xff && bytes[1] === 0x0a;
+  const container = bytes.length >= 12 &&
+    bytes[0] === 0x00 && bytes[1] === 0x00 && bytes[2] === 0x00 && bytes[3] === 0x0c &&
+    bytes.toString('ascii', 4, 8) === 'JXL ';
+  return codestream || container;
+}
+
+function encodeStoragePath(path) {
+  return path.split('/').map(encodeURIComponent).join('/');
+}
+
+async function uploadObject(baseUrl, secret, path, bytes, contentType) {
+  const response = await fetch(
+    `${baseUrl}/storage/v1/object/marketplace-media/${encodeStoragePath(path)}`,
+    {
+      method: 'POST',
+      headers: {
+        apikey: secret,
+        Authorization: `Bearer ${secret}`,
+        'Content-Type': contentType,
+        'Cache-Control': 'public, max-age=31536000, immutable',
+        'x-upsert': 'false',
+      },
+      body: bytes,
+      signal: AbortSignal.timeout(20000),
+    }
+  );
+  if (!response.ok) {
+    const detail = await response.text().catch(() => '');
+    throw new Error(`Storage upload failed (${response.status}): ${detail.slice(0, 300)}`);
+  }
+}
+
+async function removeObjects(baseUrl, secret, paths) {
+  await fetch(`${baseUrl}/storage/v1/object/marketplace-media`, {
+    method: 'DELETE',
+    headers: {
+      apikey: secret,
+      Authorization: `Bearer ${secret}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ prefixes: paths }),
+    signal: AbortSignal.timeout(10000),
+  }).catch(() => {});
+}
+
+export default async (request) => {
+  if (request.method !== 'POST') return json({ error: 'Method not allowed.' }, 405);
+
+  let admin;
+  try {
+    admin = await requireAdmin(request, pool);
+  } catch (error) {
+    console.error('[admin-marketplace-media] auth failed', error?.message || 'unknown');
+    return json({ error: 'Unable to verify administrator access.' }, 503);
+  }
+  if (!admin) return json({ error: 'Authentication required.' }, 401);
+  if (admin.role !== 'super_admin') return json({ error: 'Only platform administrators may manage marketplace images.' }, 403);
+
+  const baseUrl = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\/+$/, '');
+  const storageSecret = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+  if (!baseUrl || !storageSecret) {
+    return json({ error: 'Marketplace media storage is not configured on the server.' }, 503);
+  }
+
+  let form;
+  try {
+    form = await request.formData();
+  } catch {
+    return json({ error: 'A valid multipart image upload is required.' }, 400);
+  }
+
+  const categoryId = String(form.get('category_id') || '');
+  const subcategoryId = String(form.get('subcategory_id') || '');
+  const altText = String(form.get('alt_text') || '').trim();
+  const jpegFile = form.get('jpeg');
+  const jxlFile = form.get('jxl');
+
+  if ((Boolean(categoryId) === Boolean(subcategoryId)) ||
+      (categoryId && !uuid.test(categoryId)) ||
+      (subcategoryId && !uuid.test(subcategoryId))) {
+    return json({ error: 'Specify exactly one valid category or subcategory ID.' }, 400);
+  }
+  if (!altText || altText.length > 250) return json({ error: 'Image alt text is required and must not exceed 250 characters.' }, 400);
+  if (!(jpegFile instanceof File) || !(jxlFile instanceof File)) {
+    return json({ error: 'Both optimized JPEG and JPEG XL variants are required.' }, 400);
+  }
+  if (jpegFile.size < 1 || jpegFile.size > MAX_VARIANT_BYTES || jxlFile.size < 1 || jxlFile.size > MAX_VARIANT_BYTES) {
+    return json({ error: 'Each optimized image variant must be between 1 byte and 5 MB.' }, 413);
+  }
+
+  const [jpegBuffer, jxlBuffer] = await Promise.all([
+    jpegFile.arrayBuffer().then((value) => Buffer.from(value)),
+    jxlFile.arrayBuffer().then((value) => Buffer.from(value)),
+  ]);
+  if (!isJpeg(jpegBuffer)) return json({ error: 'The JPEG variant failed file-signature validation.' }, 415);
+  if (!isJxl(jxlBuffer)) return json({ error: 'The JPEG XL variant failed file-signature validation.' }, 415);
+
+  const width = Number(form.get('width'));
+  const height = Number(form.get('height'));
+  if (!Number.isInteger(width) || !Number.isInteger(height) ||
+      width < 1 || height < 1 || width > 6000 || height > 6000) {
+    return json({ error: 'Valid optimized image dimensions are required.' }, 400);
+  }
+
+  const resourceType = categoryId ? 'categories' : 'subcategories';
+  const resourceId = categoryId || subcategoryId;
+  const assetId = crypto.randomUUID();
+  const jpegPath = `${resourceType}/${resourceId}/${assetId}.jpg`;
+  const jxlPath = `${resourceType}/${resourceId}/${assetId}.jxl`;
+  const uploadedPaths = [];
+  const client = await pool.connect();
+
+  try {
+    const target = categoryId
+      ? await client.query('SELECT id, image_media_id FROM public.marketplace_categories WHERE id=$1 FOR UPDATE', [categoryId])
+      : await client.query('SELECT id, image_media_id FROM public.marketplace_subcategories WHERE id=$1 FOR UPDATE', [subcategoryId]);
+
+    if (!target.rowCount) return json({ error: 'Marketplace content item not found.' }, 404);
+
+    await uploadObject(baseUrl, storageSecret, jpegPath, jpegBuffer, 'image/jpeg');
+    uploadedPaths.push(jpegPath);
+    await uploadObject(baseUrl, storageSecret, jxlPath, jxlBuffer, 'image/jxl');
+    uploadedPaths.push(jxlPath);
+
+    await client.query('BEGIN');
+    const previousMediaId = target.rows[0].image_media_id;
+    if (previousMediaId) {
+      await client.query(
+        'UPDATE public.marketplace_content_media SET retired_at=NOW() WHERE id=$1 AND retired_at IS NULL',
+        [previousMediaId]
+      );
+    }
+
+    const media = await client.query(
+      `INSERT INTO public.marketplace_content_media
+        (marketplace_category_id, marketplace_subcategory_id, jpeg_path, jxl_path,
+         jpeg_size_bytes, jxl_size_bytes, width, height, alt_text, created_by)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+       RETURNING id`,
+      [categoryId || null, subcategoryId || null, jpegPath, jxlPath,
+       jpegBuffer.length, jxlBuffer.length, width, height, altText, admin.id]
+    );
+
+    if (categoryId) {
+      await client.query(
+        'UPDATE public.marketplace_categories SET image_media_id=$2,updated_at=NOW() WHERE id=$1',
+        [categoryId, media.rows[0].id]
+      );
+    } else {
+      await client.query(
+        'UPDATE public.marketplace_subcategories SET image_media_id=$2,updated_at=NOW() WHERE id=$1',
+        [subcategoryId, media.rows[0].id]
+      );
+    }
+    await client.query('COMMIT');
+
+    const publicBase = `${baseUrl}/storage/v1/object/public/marketplace-media/`;
+    return json({
+      media: {
+        id: media.rows[0].id,
+        image_url: publicBase + encodeStoragePath(jpegPath),
+        image_jxl_url: publicBase + encodeStoragePath(jxlPath),
+        width,
+        height,
+        jpeg_size_bytes: jpegBuffer.length,
+        jxl_size_bytes: jxlBuffer.length,
+        alt_text: altText,
+      },
+    }, 201);
+  } catch (error) {
+    await client.query('ROLLBACK').catch(() => {});
+    await removeObjects(baseUrl, storageSecret, uploadedPaths);
+    console.error('[admin-marketplace-media] upload failed', {
+      errorCode: error?.code || null,
+      errorMessage: error?.message || 'Unknown error',
+    });
+    return json({ error: 'Marketplace image could not be stored.' }, 500);
+  } finally {
+    client.release();
+  }
+};
