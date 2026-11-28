@@ -57,6 +57,12 @@ function isJpeg(bytes) {
   return bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
 }
 
+export function validateDimensions(width, height, jpegDimensions) {
+  return Number.isInteger(width) && Number.isInteger(height) &&
+    width >= 1 && height >= 1 && width <= 6000 && height <= 6000 &&
+    jpegDimensions?.width === width && jpegDimensions?.height === height;
+}
+
 export function isJxl(bytes) {
   const codestream = bytes.length >= 2 && bytes[0] === 0xff && bytes[1] === 0x0a;
   const container = bytes.length >= 12 &&
@@ -166,9 +172,7 @@ export default async (request) => {
 
   const width = Number(form.get('width'));
   const height = Number(form.get('height'));
-  if (!Number.isInteger(width) || !Number.isInteger(height) ||
-      width < 1 || height < 1 || width > 6000 || height > 6000 ||
-      width !== jpegDimensions.width || height !== jpegDimensions.height) {
+  if (!validateDimensions(width, height, jpegDimensions)) {
     return json({ error: 'Valid optimized image dimensions are required.' }, 400);
   }
 
