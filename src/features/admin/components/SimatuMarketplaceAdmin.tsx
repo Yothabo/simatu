@@ -136,25 +136,25 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
             </div>
           </section>
           <section style={{ flex: '1 1 auto', minHeight: 0, display: 'flex', flexDirection: 'column', padding: 'clamp(16px, 2vw, 24px) clamp(16px, 4vw, 48px)', margin: 0, width: '100%', boxSizing: 'border-box', overflow: 'hidden' }}>
-            <Swiper modules={[A11y, Keyboard, Navigation, Pagination]} slidesPerView={1.35} slidesPerGroup={1} spaceBetween={14} speed={520} threshold={6} resistanceRatio={0.85} roundLengths watchSlidesProgress breakpoints={{ 480: { slidesPerView: 2.15, spaceBetween: 16 }, 768: { slidesPerView: 3.15, spaceBetween: 20 }, 1100: { slidesPerView: 4.15, spaceBetween: 24 } }} navigation={subcategoryDrafts.length > 2} pagination={subcategoryDrafts.length > 0 ? { clickable: true } : false} keyboard={{ enabled: true, onlyInViewport: true }} grabCursor slideToClickedSlide watchOverflow loop={false} aria-label={categoryDraft.category + ' subcategories'} style={{ flex: '1 1 auto', minHeight: 0, height: '100%', paddingBottom: 24, overflow: 'visible', '--swiper-theme-color': '#f4f1ec' } as React.CSSProperties}>
+            <Swiper modules={[A11y, Keyboard, Navigation, Pagination]} slidesPerView="auto" slidesPerGroup={1} spaceBetween={16} speed={520} threshold={6} resistanceRatio={0.85} roundLengths watchSlidesProgress navigation={subcategoryDrafts.length > 2} pagination={subcategoryDrafts.length > 0 ? { clickable: true } : false} keyboard={{ enabled: true, onlyInViewport: true }} grabCursor slideToClickedSlide watchOverflow loop={false} aria-label={categoryDraft.category + ' subcategories'} style={{ width: '100%', height: 290, flex: '0 0 auto', paddingBottom: 24, overflow: 'visible', alignItems: 'flex-start', '--swiper-theme-color': '#f4f1ec' } as React.CSSProperties}>
               {subcategoryDrafts.map((sub) => (
-                <SwiperSlide key={sub.id}>
-                  <article className="discovery-subcategory-card" style={{ position: 'relative', display: 'block', width: '100%', aspectRatio: '4 / 5', padding: 0, textAlign: 'left', border: '1px solid rgba(255,255,255,.14)', borderRadius: 8, background: '#222', color: '#fff', overflow: 'hidden' }}>
-                    {sub.image ? <img src={sub.image} alt={sub.alt} loading="lazy" decoding="async" draggable={false} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(.58)' }} /> : null}
+                <SwiperSlide key={sub.id} style={{ width: 230, height: 290, flexShrink: 0 }}>
+                  <article className="discovery-subcategory-card" style={{ position: 'relative', display: 'block', width: 230, height: 290, padding: 0, textAlign: 'left', border: 0, borderRadius: 3, background: 'transparent', color: '#fff', overflow: 'hidden' }}>
+                    {sub.image ? <img src={sub.image} alt={sub.alt} loading="lazy" decoding="async" draggable={false} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(1)' }} /> : null}
                     <button type="button" onClick={() => editSubcategoryImage(sub.id)} aria-label={'Change image for ' + sub.title} title="Change image" style={overlayButton}>▧</button>
-                    <span aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(0,0,0,.8),rgba(0,0,0,.02) 76%)' }} />
-                    <span style={{ position: 'absolute', left: 16, right: 16, bottom: 16, zIndex: 1, pointerEvents: 'auto' }}>
-                      <strong style={{ display: 'block', fontSize: 18, fontWeight: 500 }}>
+                    <span aria-hidden="true" style={{ position: 'absolute', inset: '38% 0 0', background: 'linear-gradient(to bottom,rgba(0,0,0,0),rgba(0,0,0,.16) 24%,rgba(0,0,0,.48) 60%,rgba(0,0,0,.76) 100%)' }} />
+                    <span style={{ position: 'absolute', left: 12, right: 12, bottom: 14, zIndex: 2, pointerEvents: 'auto' }}>
+                      <strong style={{ display: 'block', fontSize: 12, fontWeight: 600, letterSpacing: '.04em', lineHeight: 1.3 }}>
                         <TextEditTrigger value={sub.title} onEdit={() => beginEdit('subcategory-title-' + sub.id, sub.title)} />
                       </strong>
-                      <span style={{ display: 'block', marginTop: 7, fontSize: 13, lineHeight: 1.45, fontWeight: 400, color: 'rgba(255,255,255,.82)' }}>
+                      <span style={{ display: 'block', marginTop: 6, fontSize: 11, lineHeight: 1.35, fontWeight: 400, color: 'rgba(255,255,255,.8)' }}>
                         <TextEditTrigger value={sub.description} onEdit={() => beginEdit('subcategory-description-' + sub.id, sub.description)} />
                       </span>
                     </span>
                   </article>
                 </SwiperSlide>
               ))}
-              <SwiperSlide key="add-subcategory">
+              <SwiperSlide key="add-subcategory" style={{ width: 230, height: 290, flexShrink: 0 }}>
                 <button type="button" onClick={addSubcategory} aria-label="Add subcategory" style={addCardStyle}>
                   <span style={{ display: 'grid', placeItems: 'center', width: 62, height: 62, border: '1px solid rgba(255,255,255,.55)', borderRadius: '50%', fontSize: 32, lineHeight: 1 }}>+</span>
                   <span style={{ fontSize: 15, letterSpacing: '.04em' }}>Add subcategory</span>
