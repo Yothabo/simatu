@@ -23,24 +23,18 @@ export default async (request) => {
   try {
     const result = await pool.query(`
       SELECT t.id,t.title,t.image_url,t.alt_text,t.subtitle,t.destination_path,t.sort_order,
-             c.name AS category_name,c.slug AS category_slug,
-             media.jpeg_path,media.jxl_path,media.alt_text AS media_alt_text
+             c.name AS category_name,c.slug AS category_slug
       FROM public.marketplace_discovery_tiles t
       JOIN public.marketplace_categories c ON c.id=t.marketplace_category_id
-      LEFT JOIN public.marketplace_content_media media
-        ON media.id=c.image_media_id AND media.retired_at IS NULL
       WHERE t.is_active IS TRUE
         AND c.is_active IS TRUE
         AND c.publication_status='published'
         AND c.audience_policy='general'
       ORDER BY t.sort_order,t.title
     `);
-    const tiles = result.rows.map(({ jpeg_path, jxl_path, media_alt_text, ...tile }) => ({
-      ...tile,
-      image_url: mediaUrl(jpeg_path) || tile.image_url,
-      image_jxl_url: mediaUrl(jxl_path),
-      alt_text: media_alt_text || tile.alt_text,
-    }));
+    // Discovery tiles own their imagery and alt text. Category imagery belongs
+    // to category cards and must not override tile-specific content.
+    const tiles = result.rows;
     return Response.json({ tiles }, {
       headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=600' },
     });
