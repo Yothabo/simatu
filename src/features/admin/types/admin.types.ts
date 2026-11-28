@@ -9,7 +9,7 @@ export type AdminRow = AdminProduct & {
 
 export type Tab = 'overview' | 'products' | 'orders' | 'inventory' | 'activities' | 'business' | 'marketplace' | 'settings';
 
-export type CategoryFilter = 'All' | 'His' | 'Hers' | 'Spaces' | 'Lounge' | 'Hidden';
+export type CategoryFilter = string;
 
 export type OrderStatus =
   | 'pending'
