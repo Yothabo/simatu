@@ -30,7 +30,7 @@ export default async (request) => {
          AND msc.publication_status = 'published'
        ORDER BY mc.sort_order, msc.sort_order, msc.name`
     );
-    const storageBase = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\\/+$/, '');
+    const storageBase = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\/+$/, '');
     const subcategories = result.rows.map(({ jpeg_path, jxl_path, ...subcategory }) => ({
       ...subcategory,
       image_url: jpeg_path && storageBase ? `${storageBase}/storage/v1/object/public/marketplace-media/${jpeg_path.split('/').map(encodeURIComponent).join('/')}` : null,
