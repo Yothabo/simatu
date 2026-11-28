@@ -126,7 +126,7 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
     <div className="admin-marketplace-moodboard" aria-label="Marketplace management" style={{ position: 'fixed', inset: 0, zIndex: 10, overflowY: scrollEnabled ? 'hidden' : 'auto', overflowX: 'hidden', background: '#111', color: '#f4f1ec' }}>
       <button type="button" onClick={activeMarket ? returnToTiles : onReturn} aria-label={activeMarket ? 'Back to Admin Market categories' : 'Return to Admin dashboard'} style={floatingButtonStyle}>{activeMarket ? '← Back' : '← Return'}</button>
       {!activeMarket || !categoryDraft ? (
-        <div style={{ position: 'absolute', inset: '64px 0 0', overflow: scrollEnabled ? 'hidden' : 'visible', overscrollBehavior: 'contain' }}><AdminMoodboardLayoutPreview items={managedMarkets} onItemClick={openMarket} onAddCategory={openAddCategory} scrollEnabled={scrollEnabled} onToggleScroll={() => setScrollEnabled((value) => !value)} onOpenManual={() => setManualOpen(true)} /></div>
+        <div style={{ position: scrollEnabled ? 'absolute' : 'relative', inset: scrollEnabled ? '64px 0 0' : undefined, marginTop: scrollEnabled ? 0 : 64, overflow: scrollEnabled ? 'hidden' : 'visible', overscrollBehavior: 'contain' }}><AdminMoodboardLayoutPreview items={managedMarkets} onItemClick={openMarket} onAddCategory={openAddCategory} scrollEnabled={scrollEnabled} onToggleScroll={() => setScrollEnabled((value) => !value)} onOpenManual={() => setManualOpen(true)} /></div>
       ) : (
         <main style={{ minHeight: '100dvh', overflowY: 'auto', background: '#111', color: '#f4f1ec' }}>
           <section style={{ position: 'relative', minHeight: '42vh', display: 'flex', alignItems: 'flex-end', padding: 'clamp(24px,5vw,72px)', overflow: 'hidden' }}>
