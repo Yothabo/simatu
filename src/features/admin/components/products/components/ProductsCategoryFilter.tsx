@@ -23,6 +23,8 @@ export default function ProductsCategoryFilter({
       style={{
         gap: 'var(--admin-space-xs)',
         flexWrap: 'nowrap',
+        overflowX: 'auto',
+        paddingBottom: 4,
       }}
     >
       {visibleCategories.map((category) => {
@@ -30,7 +32,7 @@ export default function ProductsCategoryFilter({
         return (
           <div
             key={category}
-            style={{ flex: '1 1 0', minWidth: 0 }}
+            style={{ flex: '0 0 auto', minWidth: 84 }}
           >
             <AdminButton
               variant={isActive ? 'primary' : 'neutral'}
@@ -40,9 +42,9 @@ export default function ProductsCategoryFilter({
               onClick={() => onCategoryChange(category)}
               fullWidth
               style={{
-                minWidth: 0,
+                minWidth: 84,
                 fontSize: 'clamp(10px, 2.5vw, 14px)',
-                paddingInline: 0,
+                paddingInline: 10,
               }}
             >
               {category}
