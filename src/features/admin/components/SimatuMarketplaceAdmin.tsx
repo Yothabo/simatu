@@ -27,11 +27,6 @@ function TextEditTrigger({ value, onEdit }: TextEditTriggerProps) {
 type CategoryDraft = MoodboardItem;
 type SubcategoryDraft = DiscoverySubcategory;
 
-const floatingButtonStyle: React.CSSProperties = {
-  position: 'fixed', zIndex: 30, top: 18, left: 18, minHeight: 46, padding: '0 16px',
-  border: '1px solid rgba(255,255,255,.35)', borderRadius: 999, background: 'rgba(17,17,17,.72)',
-  color: '#fff', fontSize: 14, fontWeight: 500, cursor: 'pointer', backdropFilter: 'blur(12px)',
-};
 const overlayButton: React.CSSProperties = {
   position: 'absolute', zIndex: 3, top: 12, right: 12, width: 38, height: 38,
   display: 'grid', placeItems: 'center', border: '1px solid rgba(255,255,255,.5)',
@@ -124,7 +119,6 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
   return (
     <>
     <div className="admin-marketplace-moodboard" aria-label="Marketplace management" style={{ position: 'fixed', inset: 0, zIndex: 10, overflowY: scrollEnabled ? 'auto' : 'hidden', overflowX: 'hidden', background: '#111', color: '#f4f1ec' }}>
-      <button type="button" onClick={activeMarket ? returnToTiles : onReturn} aria-label={activeMarket ? 'Back to Admin Market categories' : 'Return to Admin dashboard'} style={floatingButtonStyle}>{activeMarket ? '← Back' : '← Return'}</button>
       {!activeMarket || !categoryDraft ? (
         <div style={{ position: 'relative', marginTop: 64, overflow: 'visible' }}><AdminMoodboardLayoutPreview items={managedMarkets} onItemClick={openMarket} onAddCategory={openAddCategory} scrollEnabled={scrollEnabled} onToggleScroll={() => setScrollEnabled((value) => !value)} onOpenManual={() => setManualOpen(true)} onReturn={onReturn} /></div>
       ) : (
