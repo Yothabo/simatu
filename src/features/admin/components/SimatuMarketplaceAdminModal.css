@@ -234,3 +234,49 @@ body:has(.admin-marketplace-admin-viewport),
   max-height: 100dvh;
   overflow: hidden;
 }
+
+
+/* Category detail actions share the Moodboard home control's solid, circular button system. */
+.admin-marketplace-category-header {
+  position: absolute;
+  z-index: 10;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+.admin-marketplace-category-action {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  color: #242424;
+  box-shadow: 0 4px 16px rgba(0,0,0,.22);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: background-color 150ms ease, transform 150ms ease;
+}
+.admin-marketplace-category-action svg {
+  width: 19px;
+  height: 19px;
+}
+.admin-marketplace-category-action:hover {
+  background: #eaeaea;
+}
+.admin-marketplace-category-action:active {
+  transform: scale(.96);
+}
+.admin-marketplace-category-action:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+.admin-marketplace-category-header [aria-expanded="true"] {
+  background: #eaeaea;
+}
