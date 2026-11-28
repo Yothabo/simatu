@@ -16,6 +16,43 @@ const json = (data, status = 200) => Response.json(data, {
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const MAX_VARIANT_BYTES = 5 * 1024 * 1024;
 
+function getJpegDimensions(bytes) {
+  if (!isJpeg(bytes) || bytes.length < 4 || bytes[bytes.length - 2] !== 0xff || bytes[bytes.length - 1] !== 0xd9) {
+    return null;
+  }
+
+  let offset = 2;
+  while (offset < bytes.length - 2) {
+    if (bytes[offset] !== 0xff) return null;
+    while (offset < bytes.length && bytes[offset] === 0xff) offset += 1;
+    if (offset >= bytes.length) return null;
+
+    const marker = bytes[offset++];
+    // Standalone markers have no length field.
+    if (marker === 0xd8 || marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) continue;
+    if (marker === 0xd9) break;
+    if (offset + 2 > bytes.length) return null;
+
+    const segmentLength = bytes.readUInt16BE(offset);
+    if (segmentLength < 2 || offset + segmentLength > bytes.length) return null;
+
+    // SOF markers carrying frame dimensions (excluding DHT/JPG/DAC markers).
+    const isStartOfFrame = [0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf].includes(marker);
+    if (isStartOfFrame) {
+      if (segmentLength < 8) return null;
+      const height = bytes.readUInt16BE(offset + 3);
+      const width = bytes.readUInt16BE(offset + 5);
+      if (!width || !height) return null;
+      return { width, height };
+    }
+
+    // SOS starts compressed scan data; no frame header after this point.
+    if (marker === 0xda) return null;
+    offset += segmentLength;
+  }
+  return null;
+}
+
 function isJpeg(bytes) {
   return bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
 }
@@ -123,13 +160,15 @@ export default async (request) => {
     jpegFile.arrayBuffer().then((value) => Buffer.from(value)),
     jxlFile.arrayBuffer().then((value) => Buffer.from(value)),
   ]);
-  if (!isJpeg(jpegBuffer)) return json({ error: 'The JPEG variant failed file-signature validation.' }, 415);
+  const jpegDimensions = getJpegDimensions(jpegBuffer);
+  if (!jpegDimensions) return json({ error: 'The JPEG variant is malformed or missing valid frame dimensions.' }, 415);
   if (!isJxl(jxlBuffer)) return json({ error: 'The JPEG XL variant failed file-signature validation.' }, 415);
 
   const width = Number(form.get('width'));
   const height = Number(form.get('height'));
   if (!Number.isInteger(width) || !Number.isInteger(height) ||
-      width < 1 || height < 1 || width > 6000 || height > 6000) {
+      width < 1 || height < 1 || width > 6000 || height > 6000 ||
+      width !== jpegDimensions.width || height !== jpegDimensions.height) {
     return json({ error: 'Valid optimized image dimensions are required.' }, 400);
   }
 
