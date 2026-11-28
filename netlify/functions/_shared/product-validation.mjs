@@ -201,12 +201,20 @@ export function validateProduct(body) {
     return { error: 'Please provide a valid legacy subcategory reference.' };
   }
 
-  if (!marketplaceCategorySlug || marketplaceCategorySlug === '__invalid__') {
+  if (storefront === '__invalid__' || (storefront !== null && !['yotaabo', 'poshies'].includes(storefront))) {
+    return { error: 'Please select a valid storefront.' };
+  }
+
+  if (marketplaceCategorySlug === '__invalid__') {
+    return { error: 'Please provide a valid marketplace category.' };
+  }
+
+  if (!marketplaceCategorySlug) {
     return { error: 'Select a marketplace category assigned to this store.' };
   }
 
   if (!marketplaceSubcategoryId || !uuidPattern.test(marketplaceSubcategoryId)) {
-    return { error: 'Select a valid marketplace subcategory.' };
+    return { error: marketplaceSubcategoryId === '__invalid__' ? 'Please provide a valid marketplace subcategory.' : 'Select a valid marketplace subcategory.' };
   }
 
   if (category.length > 120 || subcategory.length > 120) {
