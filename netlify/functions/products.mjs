@@ -277,6 +277,27 @@ async function listProducts(request, requestId) {
     filters.push('is_active = TRUE');
     // Restricted listings are never exposed to public marketplace/storefront APIs.
     filters.push('COALESCE(is_age_restricted, FALSE) = FALSE');
+    // Public listings must still belong to a published general category
+    // assigned to their store; hiding/archiving taxonomy removes them from
+    // every public surface without deleting the product record.
+    filters.push(`EXISTS (
+      SELECT 1
+      FROM public.marketplace_subcategories msc
+      JOIN public.marketplace_categories mc
+        ON mc.id = msc.marketplace_category_id
+      JOIN public.store_marketplace_categories smc
+        ON smc.marketplace_category_id = mc.id
+      JOIN public.stores s
+        ON s.id = smc.store_id
+      WHERE msc.id = public.products.marketplace_subcategory_id
+        AND s.slug = public.products.storefront
+        AND s.is_active IS TRUE
+        AND mc.is_active IS TRUE
+        AND mc.publication_status = 'published'
+        AND mc.audience_policy = 'general'
+        AND msc.is_active IS TRUE
+        AND msc.publication_status = 'published'
+    )`);
   }
   if (isMarketplaceRequest) filters.push('marketplace_visible = TRUE');
   else if (!isAdminRequest) filters.push('storefront_visible = TRUE');
