@@ -1018,7 +1018,7 @@ describe('products API: shared marketplace classification', () => {
         rows: [{
           category_id: 'market-category',
           category_name: 'Fashion',
-          subcategory_id: 'market-subcategory',
+          subcategory_id: '223e4567-e89b-42d3-a456-426614174000',
           subcategory_name: 'Fragrance',
         }],
       }, // Assigned shared taxonomy
