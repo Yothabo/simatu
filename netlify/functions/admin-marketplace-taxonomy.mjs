@@ -16,7 +16,7 @@ const validName = (name) => typeof name === 'string' && name.trim().length > 0 &
 const validSlug = (slug) => typeof slug === 'string' && slugPattern.test(slug);
 const validAgePolicy = (policy, age) => policy === 'general' ? age == null : policy === 'restricted' && Number.isInteger(age) && age >= 18 && age <= 120;
 const validPublicationStatus = (status) => ['draft', 'published', 'archived'].includes(status);
-const storageBase = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\\/+$/, '');
+const storageBase = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\/+$/, '');
 const mediaUrl = (path) => path && storageBase
   ? `${storageBase}/storage/v1/object/public/marketplace-media/${path.split('/').map(encodeURIComponent).join('/')}`
   : null;
