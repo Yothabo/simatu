@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
+import MoodboardSearchBar from '../../../systems/homepage/discover/MoodboardSearchBar';
 import type { MoodboardItem } from '../../../systems/homepage/discover/KineticMoodboard';
 import { DISCOVERY_SUBCATEGORIES } from '../../../systems/homepage/discover/discovery-taxonomy';
 
@@ -14,11 +15,9 @@ function homepagePool(items: MoodboardItem[]) {
 export default function AdminMoodboardLayoutPreview({items,hiddenMarketIds=[],onReactivateCategory,onItemClick,onAddCategory,onOpenManual,onReturn}:Props) {
   const pool=useMemo(()=>homepagePool(items),[items]);
   const tiles=pool.slice(0,BOARD_COUNT-1);
+  const [menuOpen, setMenuOpen] = useState(false);
   return <div className="admin-moodboard-layout-preview">
-    <header className="admin-moodboard-layout-preview__toolbar" aria-label="Moodboard header">
-      <button type="button" onClick={onReturn} aria-label="Home" title="Home">⌂</button>
-      <button type="button" onClick={onOpenManual} aria-label="Menu" title="Menu">⋯</button>
-    </header>
+    <MoodboardSearchBar value="" onChange={() => {}} onBack={onReturn} visible fixed showMenu onMenuClick={() => setMenuOpen((open) => !open)} className={menuOpen ? 'admin-moodboard-header menu-expanded' : 'admin-moodboard-header'} adminMenuContent={<div className="admin-moodboard-menu-content"><button type="button" onClick={() => { setMenuOpen(false); onOpenManual?.(); }}>Moodboard manual</button></div>} />
     <div className="admin-moodboard-layout-preview__scroll">
       <div className="admin-moodboard-layout-preview__board" role="grid" aria-label="Homepage moodboard" style={{gridTemplateColumns:'repeat(8, 230px)',gridTemplateRows:'repeat(8, 290px)',zoom:ADMIN_CANVAS_SCALE}}>
         <button type="button" role="gridcell" className="admin-moodboard-layout-preview__add-category" onClick={onAddCategory} aria-label="Add category"><span>+</span><small>Category</small></button>
