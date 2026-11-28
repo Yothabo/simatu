@@ -505,7 +505,7 @@ describe('validateProduct: platform subcategory validation', () => {
     expect(validateProduct({
       ...validProduct(),
       marketplace_subcategory_id: 'not-a-uuid',
-    }).error).toBe('Please provide a valid marketplace subcategory.');
+    }).error).toBe('Select a valid marketplace subcategory.');
   });
 });
 
