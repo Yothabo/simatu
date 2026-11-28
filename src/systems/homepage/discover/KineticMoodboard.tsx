@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import MoodboardSearchBar from './MoodboardSearchBar';
 import SharedImage from '../../../components/SharedImage';
 import MoodboardPredictiveSearch from './MoodboardPredictiveSearch';
-import { DISCOVERY_MARKETS, DISCOVERY_SUBCATEGORIES } from './discovery-taxonomy';
 
 type NetworkProduct = { id: string; name: string; price: number; category: string; subcategory?: string; brand?: string; image_url?: string | null; storeKey: 'yotaabo' | 'poshies'; storeName: string; href: string };
 const NETWORK_STORES = [{ key: 'yotaabo' as const, name: 'Yotaabo', href: '/yotaabo/catalog', description: 'A curated selection of fragrance, fashion, and spaces for everyday living.', categories: ['His', 'Hers', 'Spaces'] }, { key: 'poshies' as const, name: 'Poshies', href: '/poshies/catalog', description: 'Fashion, accessories, and lifestyle pieces with a bold, expressive point of view.', categories: ['Hers', 'His', 'Lounge'] }];
@@ -39,7 +38,6 @@ interface KineticMoodboardProps {
   adminMode?: boolean;
 }
 
-const DEFAULT_ITEMS: MoodboardItem[] = DISCOVERY_MARKETS;
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
@@ -112,42 +110,34 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
     navigate(item.destinationPath || getDiscoveryPath(item), { state: { discovery: item, position: positionRef.current } });
   };
   useEffect(() => { if (colorReveal) setSearchDismissed(false); }, [colorReveal]);
-  const [marketItems, setMarketItems] = useState<MoodboardItem[]>(DISCOVERY_MARKETS);
+  const [marketItems, setMarketItems] = useState<MoodboardItem[]>([]);
   const [marketSubcategories, setMarketSubcategories] = useState<Record<string, Array<{ id: string; title: string; image: string; imageJxl?: string; alt: string; description: string; terms: string[] }>>>({});
   const [marketSubcategoriesLoaded, setMarketSubcategoriesLoaded] = useState(false);
+  const [marketCategoriesLoaded, setMarketCategoriesLoaded] = useState(false);
+  const [discoveryTilesLoaded, setDiscoveryTilesLoaded] = useState(false);
+  const [marketDataError, setMarketDataError] = useState('');
+  const [criticalImagesLoaded, setCriticalImagesLoaded] = useState(false);
   useEffect(() => {
     let cancelled = false;
     fetch('/api/marketplace-categories', { headers: { Accept: 'application/json' } })
       .then(async (response) => {
         const data = await response.json();
         if (!response.ok || !Array.isArray(data.categories)) throw new Error('Marketplace categories unavailable');
-        const mapped = data.categories.map((category: { slug?: string; name?: string; description?: string; image_url?: string | null; image_jxl_url?: string | null; image_alt_text?: string | null }) => {
+        const mapped = data.categories.map((category: { id?: string; slug?: string; name?: string; description?: string; image_url?: string | null; image_jxl_url?: string | null; image_alt_text?: string | null }) => {
           const slug = String(category.slug || '');
-          const legacyId = slug === 'home-living' ? 'spaces' : slug;
-          const existing = DISCOVERY_MARKETS.find((market) => market.id === legacyId || market.category.toLowerCase() === String(category.name || '').toLowerCase());
           return {
-            ...(existing || {
-              id: legacyId,
-              image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=900&q=85',
-              alt: String(category.name || 'Marketplace category'),
-              category: String(category.name || slug),
-              title: String(category.description || ('Discover ' + (category.name || slug))),
-            }),
-            image: String(category.image_url || existing?.image || ''),
+            id: String(category.id || (slug === 'home-living' ? 'spaces' : slug)),
+            image: String(category.image_url || ''),
             imageJxl: category.image_jxl_url || undefined,
-            alt: String(category.image_alt_text || category.name || existing?.alt || 'Marketplace category'),
+            alt: String(category.image_alt_text || category.name || 'Marketplace category'),
             category: String(category.name || slug),
-            title: String(category.description || existing?.title || ('Discover ' + (category.name || slug))),
+            title: String(category.description || ('Discover ' + (category.name || slug))),
           } as MoodboardItem;
-        }).filter((item: MoodboardItem) => item.id !== 'age-restricted');
-        // Keep the restricted destination locally; the public API intentionally excludes it.
-        const restricted = DISCOVERY_MARKETS.find((item) => item.id === 'age-restricted');
-        if (restricted) mapped.push(restricted);
-        if (!cancelled && mapped.length) setMarketItems(mapped);
+        }).filter((item: MoodboardItem) => Boolean(item.id));
+        if (!cancelled) setMarketItems(mapped);
       })
-      .catch(() => {
-        // Static taxonomy remains available when the API or database is not ready.
-      });
+      .catch((error) => { if (!cancelled) setMarketDataError(error instanceof Error ? error.message : 'Marketplace categories unavailable'); })
+      .finally(() => { if (!cancelled) setMarketCategoriesLoaded(true); });
     return () => { cancelled = true; };
   }, []);
   useEffect(() => {
@@ -159,33 +149,29 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         const grouped: Record<string, Array<{ id: string; title: string; image: string; imageJxl?: string; alt: string; description: string; terms: string[] }>> = {};
         for (const item of data.subcategories as Array<{ id: string; slug: string; name: string; description?: string | null; category_slug: string; image_url?: string | null; image_jxl_url?: string | null; image_alt_text?: string | null }>) {
           const categoryKey = item.category_slug === 'home-living' ? 'spaces' : item.category_slug;
-          const fallback = (DISCOVERY_SUBCATEGORIES[categoryKey] || []).find((entry) => entry.id === item.slug);
           const entry = {
             id: item.id,
             title: item.name,
-            image: item.image_url || fallback?.image || '',
+            image: item.image_url || '',
             imageJxl: item.image_jxl_url || undefined,
             alt: item.image_alt_text || item.name,
-            description: item.description || fallback?.description || '',
+            description: item.description || '',
             terms: [item.name.toLowerCase()],
           };
           (grouped[categoryKey] ||= []).push(entry);
         }
-        if (!cancelled) {
-          setMarketSubcategories(grouped);
-          setMarketSubcategoriesLoaded(true);
-        }
+        if (!cancelled) setMarketSubcategories(grouped);
       })
-      .catch(() => { /* Curated local subcategory data remains as a fallback. */ });
+      .catch((error) => { if (!cancelled) setMarketDataError((current) => current || (error instanceof Error ? error.message : 'Marketplace subcategories unavailable')); })
+      .finally(() => { if (!cancelled) setMarketSubcategoriesLoaded(true); });
     return () => { cancelled = true; };
   }, []);
-  // Managed Admin tiles override category imagery and ordering when configured.
   useEffect(() => {
     let cancelled = false;
     fetch('/api/marketplace-discovery-tiles', { headers: { Accept: 'application/json' } })
-      .then(async response => {
+      .then(async (response) => {
         const data = await response.json();
-        if (!response.ok || !Array.isArray(data.tiles) || !data.tiles.length) return;
+        if (!response.ok || !Array.isArray(data.tiles)) throw new Error('Discovery tiles unavailable');
         const managed = data.tiles.map((tile: { category_slug?: string; category_name?: string; image_url?: string; image_jxl_url?: string; alt_text?: string; title?: string; subtitle?: string; sort_order?: number; destination_path?: string }) => ({
           id: String(tile.category_slug || '') === 'home-living' ? 'spaces' : String(tile.category_slug || ''),
           image: String(tile.image_url || ''),
@@ -197,9 +183,31 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         } as MoodboardItem)).filter((tile: MoodboardItem) => Boolean(tile.id && tile.image));
         if (!cancelled && managed.length) setMarketItems(managed);
       })
-      .catch(() => { /* Existing taxonomy fallback remains usable. */ });
+      .catch((error) => { if (!cancelled) setMarketDataError((current) => current || (error instanceof Error ? error.message : 'Discovery tiles unavailable')); })
+      .finally(() => { if (!cancelled) setDiscoveryTilesLoaded(true); });
     return () => { cancelled = true; };
   }, []);
+  useEffect(() => {
+    if (adminMode || items) return;
+    let cancelled = false;
+    const sources = Array.from(new Set([
+      ...marketItems.slice(0, 8).map((item) => item.image),
+      ...(marketSubcategoriesLoaded ? Object.values(marketSubcategories).flat().slice(0, 24).map((item) => item.image) : []),
+    ].filter((source): source is string => Boolean(source)));
+    if (!sources.length) {
+      setCriticalImagesLoaded(true);
+      return;
+    }
+    setCriticalImagesLoaded(false);
+    Promise.all(sources.map((source) => new Promise<void>((resolve) => {
+      const image = new Image();
+      image.onload = () => resolve();
+      image.onerror = () => resolve();
+      image.src = source;
+      if (image.complete) resolve();
+    }))).then(() => { if (!cancelled) setCriticalImagesLoaded(true); });
+    return () => { cancelled = true; };
+  }, [adminMode, items, marketItems, marketSubcategories, marketSubcategoriesLoaded]);
   const [networkProducts, setNetworkProducts] = useState<NetworkProduct[]>([]);
   const [networkLoading, setNetworkLoading] = useState(false);
   const [networkError, setNetworkError] = useState('');
@@ -218,10 +226,10 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
     }
   }, []);
 
-  const sourceItems = items?.length ? items : marketItems;
+  const sourceItems = items ?? marketItems;
   const boardTilePool = useMemo(() => {
     const subcategoryTiles = marketItems.flatMap((market) =>
-      (marketSubcategoriesLoaded ? (marketSubcategories[market.id] || []) : (DISCOVERY_SUBCATEGORIES[market.id] || [])).map((subcategory) => ({
+      (marketSubcategories[market.id] || []).map((subcategory) => ({
         id: `${market.id}-${subcategory.id}`,
         image: subcategory.image,
         imageJxl: subcategory.imageJxl,
@@ -254,7 +262,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const recentCategories = useMemo(
     () => recentCategoryNames
       .map((name) => marketItems.find((market) => market.category === name))
-      .filter((market): market is typeof DISCOVERY_MARKETS[number] => Boolean(market))
+      .filter((market): market is MoodboardItem => Boolean(market))
       .slice(0, 5),
     [recentCategoryNames]
   );
@@ -285,6 +293,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       const score = (product: NetworkProduct) => startsWithSearch(product.name) ? 0 : startsWithSearch(product.category) || startsWithSearch(product.subcategory || '') ? 1 : startsWithSearch(product.storeName) ? 2 : 3;
       return score(a) - score(b) || a.name.localeCompare(b.name);
     }).slice(0, 8) : [];
+  const moodboardLoading = !adminMode && !items && (!marketCategoriesLoaded || !marketSubcategoriesLoaded || !discoveryTilesLoaded || !criticalImagesLoaded);
   const boardColumns = Math.max(1, Math.min(columns, tiles.length));
   const boardRows = Math.ceil(tiles.length / boardColumns);
   const boardWidth = boardColumns * tileWidth + (boardColumns - 1) * gap;
@@ -401,6 +410,31 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
     stopMotion();
     applyPosition(positionRef.current.x - event.deltaX - (event.shiftKey ? event.deltaY : 0), positionRef.current.y - (event.shiftKey ? 0 : event.deltaY));
   };
+
+  if (moodboardLoading) {
+    return (
+      <section className={`kinetic-moodboard kinetic-moodboard--loading ${className}`} style={style} aria-label="Loading marketplace discovery" aria-busy="true">
+        <style>{`
+          .kinetic-moodboard--loading{width:100%;height:100%;min-height:320px;overflow:hidden;background:transparent}
+          .kinetic-moodboard--loading .kinetic-moodboard__skeleton-board{display:grid;grid-template-columns:repeat(8,230px);gap:16px;width:max-content}
+          .kinetic-moodboard--loading .kinetic-moodboard__skeleton-tile{width:230px;height:290px;border-radius:3px;background:linear-gradient(100deg,#e9e9e9 20%,#f4f4f4 40%,#e9e9e9 60%);background-size:200% 100%;animation:market-skeleton-shimmer 1.35s ease-in-out infinite}
+          @keyframes market-skeleton-shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+          @media(max-width:640px){.kinetic-moodboard--loading .kinetic-moodboard__skeleton-board{grid-template-columns:repeat(8,190px);gap:12px}.kinetic-moodboard--loading .kinetic-moodboard__skeleton-tile{width:190px;height:240px}}
+          @media(prefers-reduced-motion:reduce){.kinetic-moodboard--loading .kinetic-moodboard__skeleton-tile{animation:none;background:#e9e9e9}}
+        `}</style>
+        <div className="kinetic-moodboard__skeleton-board" aria-hidden="true">
+          {Array.from({ length: 16 }, (_, index) => <div key={index} className="kinetic-moodboard__skeleton-tile" />)}
+        </div>
+      </section>
+    );
+  }
+  if (marketDataError && !adminMode && !items) {
+    return (
+      <section className={`kinetic-moodboard kinetic-moodboard--error ${className}`} style={style} role="status" aria-label="Marketplace discovery unavailable">
+        <p>Marketplace discovery is temporarily unavailable. Please try again shortly.</p>
+      </section>
+    );
+  }
 
   return (
     <section className={`kinetic-moodboard ${decorativeOnly ? 'is-decorative ' : ''}${className}${colorReveal ? ' is-color-revealing' : ''}${interactive ? ' is-interactive' : ''}`} style={style} aria-label="Explore the moodboard">
@@ -528,11 +562,3 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
 
 
       
-      {!adminMode && normalizedSearch.length >= 1 && interactive && !searchDismissed && <MoodboardPredictiveSearch query={searchQuery} loading={networkLoading} error={networkError} stores={searchStores.map(store => ({ key: store.key, name: store.name, href: store.href }))} categories={searchCategories} products={matchingProducts} onCategorySelect={setSearchQuery} />}
-
-    </section>
-  );
-};
-
-
-export default KineticMoodboard;
