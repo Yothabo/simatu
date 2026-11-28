@@ -86,3 +86,43 @@
 .admin-moodboard-layout-preview__shape-card-footer button { flex:0 0 auto; border:1px solid rgba(255,255,255,.4); border-radius:3px; padding:9px 12px; color:#fff; background:transparent; font-size:11px; cursor:pointer; }
 .admin-moodboard-layout-preview__shape-card-footer button:hover,.admin-moodboard-layout-preview__shape-card-footer button.is-active { background:rgba(255,255,255,.12); border-color:#fff; }
 @media(max-width:640px) { .admin-moodboard-layout-preview__shape-library-header { align-items:flex-start; flex-direction:column; gap:8px; } .admin-moodboard-layout-preview__shape-library-grid { grid-template-columns:1fr; } }
+
+/* The Moodboard board is horizontally navigable, but it must not trap page-level vertical scrolling. */
+.admin-moodboard-layout-preview__scroll {
+  max-height: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
+}
+
+/* Release the fullscreen Marketplace shell only while the Moodboard/library view is active. */
+html:has(.admin-marketplace-admin-viewport .admin-marketplace-moodboard),
+body:has(.admin-marketplace-admin-viewport .admin-marketplace-moodboard),
+#root:has(.admin-marketplace-admin-viewport .admin-marketplace-moodboard) {
+  height: auto;
+  min-height: 100dvh;
+  max-height: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: auto;
+}
+.admin-scope.admin-marketplace-admin-viewport:has(.admin-marketplace-moodboard) {
+  height: auto !important;
+  min-height: 100dvh !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+.admin-page-shell--marketplace:has(.admin-marketplace-moodboard) {
+  height: auto !important;
+  min-height: 100dvh !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+.admin-marketplace-moodboard:has(.admin-moodboard-layout-preview) {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
