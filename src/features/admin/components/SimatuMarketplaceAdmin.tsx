@@ -8,6 +8,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import '../../../systems/homepage/design-system/index.css';
+import './SimatuMarketplaceAdminModal.css';
 
 type Props = { onReturn: () => void; };
 
@@ -149,28 +150,31 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
       )}
     </div>
     <Modal isOpen={Boolean(editingField)} onClose={cancelEdit} maxWidth="max-w-md">
-      <div style={{ padding: 24, background: '#fff', color: '#171717' }}>
-        <h2 style={{ fontSize: 20, fontWeight: 600, margin: '0 0 6px' }}>{editingField === 'add-subcategory' ? 'Add subcategory' : ((editingField === 'category-image' || editingField?.startsWith('subcategory-image-')) ? 'Edit image' : 'Edit ' + (editingField?.startsWith('category-') ? 'category' : 'subcategory') + ' ' + (editingField?.endsWith('title') ? 'title' : 'description'))}</h2>
-        <p style={{ margin: '0 0 16px', color: '#666', fontSize: 13 }}>Changes apply to this element only.</p>
+      <div className="admin-market-edit-modal">
+        <div className="admin-market-edit-modal__header">
+          <h2>{editingField === 'add-subcategory' ? 'Add subcategory' : ((editingField === 'category-image' || editingField?.startsWith('subcategory-image-')) ? 'Edit image' : 'Edit ' + (editingField?.startsWith('category-') ? 'category' : 'subcategory') + ' ' + (editingField?.endsWith('title') ? 'title' : 'description'))}</h2>
+          <p>Changes apply to this element only.</p>
+        </div>
         {editingField === 'add-subcategory' ? (
-          <div style={{ display: 'grid', gap: 12 }}>
-            <input value={newSubcategoryTitle} onChange={(event) => setNewSubcategoryTitle(event.target.value)} autoFocus placeholder="Subcategory title" style={{ width: '100%', border: '1px solid #ccc', borderRadius: 8, padding: 12, color: '#111', background: '#fff' }} />
-            <textarea value={newSubcategoryDescription} onChange={(event) => setNewSubcategoryDescription(event.target.value)} rows={3} placeholder="Description (optional)" style={{ width: '100%', border: '1px solid #ccc', borderRadius: 8, padding: 12, color: '#111', background: '#fff' }} />
-            <input value={newSubcategoryImage} onChange={(event) => setNewSubcategoryImage(event.target.value)} placeholder="Image URL (optional)" style={{ width: '100%', border: '1px solid #ccc', borderRadius: 8, padding: 12, color: '#111', background: '#fff' }} />
+          <div className="admin-market-edit-modal__fields">
+            <label className="admin-market-edit-modal__field"><span>Title</span><input value={newSubcategoryTitle} onChange={(event) => setNewSubcategoryTitle(event.target.value)} autoFocus placeholder="Subcategory title" /></label>
+            <label className="admin-market-edit-modal__field"><span>Description <small>Optional</small></span><textarea value={newSubcategoryDescription} onChange={(event) => setNewSubcategoryDescription(event.target.value)} rows={3} placeholder="Describe this subcategory" /></label>
+            <label className="admin-market-edit-modal__field"><span>Image URL <small>Optional</small></span><input value={newSubcategoryImage} onChange={(event) => setNewSubcategoryImage(event.target.value)} placeholder="https://…" /></label>
+            {newSubcategoryImage.trim() && <img className="admin-market-edit-modal__preview" src={newSubcategoryImage} alt="Subcategory image preview" onError={(event) => { event.currentTarget.style.display = 'none'; }} />}
           </div>
         ) : editingField === 'category-image' || editingField?.startsWith('subcategory-image-') ? (
-          <div style={{ display: 'grid', gap: 12 }}>
-            <input value={editingValue} onChange={(event) => setEditingValue(event.target.value)} autoFocus placeholder="Paste image URL" onKeyDown={(event) => { if (event.key === 'Enter') saveEdit(); if (event.key === 'Escape') cancelEdit(); }} style={{ width: '100%', border: '1px solid #ccc', borderRadius: 8, padding: 12, color: '#111', background: '#fff' }} />
-            {editingValue.trim() && <img src={editingValue} alt="Image preview" onError={(event) => { event.currentTarget.style.display = 'none'; }} style={{ width: '100%', maxHeight: 240, objectFit: 'contain', background: '#f2f2f2', borderRadius: 8 }} />}
+          <div className="admin-market-edit-modal__fields">
+            <label className="admin-market-edit-modal__field"><span>Image URL</span><input value={editingValue} onChange={(event) => setEditingValue(event.target.value)} autoFocus placeholder="Paste image URL" onKeyDown={(event) => { if (event.key === 'Enter') saveEdit(); if (event.key === 'Escape') cancelEdit(); }} /></label>
+            {editingValue.trim() && <img className="admin-market-edit-modal__preview" src={editingValue} alt="Image preview" onError={(event) => { event.currentTarget.style.display = 'none'; }} />}
           </div>
         ) : editingField?.endsWith('description') ? (
-          <textarea value={editingValue} onChange={(event) => setEditingValue(event.target.value)} autoFocus rows={5} style={{ width: '100%', border: '1px solid #ccc', borderRadius: 8, padding: 12, color: '#111', background: '#fff' }} />
+          <div className="admin-market-edit-modal__fields"><label className="admin-market-edit-modal__field"><span>Description</span><textarea value={editingValue} onChange={(event) => setEditingValue(event.target.value)} autoFocus rows={5} /></label></div>
         ) : (
-          <input value={editingValue} onChange={(event) => setEditingValue(event.target.value)} autoFocus onKeyDown={(event) => { if (event.key === 'Enter') saveEdit(); if (event.key === 'Escape') cancelEdit(); }} style={{ width: '100%', border: '1px solid #ccc', borderRadius: 8, padding: 12, color: '#111', background: '#fff' }} />
+          <div className="admin-market-edit-modal__fields"><label className="admin-market-edit-modal__field"><span>Title</span><input value={editingValue} onChange={(event) => setEditingValue(event.target.value)} autoFocus onKeyDown={(event) => { if (event.key === 'Enter') saveEdit(); if (event.key === 'Escape') cancelEdit(); }} /></label></div>
         )}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 16 }}>
-          <button type="button" onClick={cancelEdit} style={{ padding: '9px 14px', border: '1px solid #ccc', borderRadius: 8, background: '#fff', color: '#222' }}>Cancel</button>
-          <button type="button" onClick={saveEdit} style={{ padding: '9px 14px', border: '1px solid #111', borderRadius: 8, background: '#111', color: '#fff' }}>Save changes</button>
+        <div className="admin-market-edit-modal__actions">
+          <button type="button" onClick={cancelEdit} className="admin-market-edit-modal__button admin-market-edit-modal__button--secondary">Cancel</button>
+          <button type="button" onClick={saveEdit} className="admin-market-edit-modal__button admin-market-edit-modal__button--primary">Save changes</button>
         </div>
       </div>
     </Modal>
