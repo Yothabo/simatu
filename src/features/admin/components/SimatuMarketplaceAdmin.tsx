@@ -28,7 +28,7 @@ type CategoryDraft = MoodboardItem;
 type SubcategoryDraft = DiscoverySubcategory;
 
 const categoryImageOverlayButton: React.CSSProperties = {
-  position: 'absolute', zIndex: 3, top: 'auto', bottom: 'clamp(120px, 18vh, 170px)', left: '50%', right: 'auto', transform: 'translateX(-50%)', width: 38, height: 38,
+  position: 'absolute', zIndex: 3, top: 'auto', bottom: 'clamp(160px, 22vh, 210px)', left: '50%', right: 'auto', transform: 'translateX(-50%)', width: 38, height: 38,
   display: 'grid', placeItems: 'center', border: '1px solid rgba(255,255,255,.5)',
   borderRadius: '50%', background: 'rgba(15,15,15,.75)', color: '#fff', cursor: 'pointer',
   backdropFilter: 'blur(10px)', fontSize: 17,
@@ -127,7 +127,7 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
     <>
     <div className="admin-marketplace-moodboard" aria-label="Marketplace management" style={activeMarket ? { width: '100%', height: '100%', minHeight: 0, maxHeight: '100dvh', overflow: 'hidden', margin: 0, padding: 0 } : undefined}>
       {!activeMarket || !categoryDraft ? (
-        <AdminMoodboardLayoutPreview items={managedMarkets.filter((market) => !hiddenMarketIds.includes(market.id))} onItemClick={openMarket} onAddCategory={openAddCategory} onOpenManual={() => setManualOpen(true)} onReturn={onReturn} />
+        <AdminMoodboardLayoutPreview items={managedMarkets} hiddenMarketIds={hiddenMarketIds} onReactivateCategory={(id) => setHiddenMarketIds((ids) => ids.filter((hiddenId) => hiddenId !== id))} onItemClick={openMarket} onAddCategory={openAddCategory} onOpenManual={() => setManualOpen(true)} onReturn={onReturn} />
       ) : (
         <main style={{ height: '100%', minHeight: 0, maxHeight: '100dvh', overflow: 'hidden', position: 'relative', display: 'flex', flexDirection: 'column', background: '#111', color: '#f4f1ec', width: '100%', maxWidth: '100%', margin: 0, padding: 0, boxSizing: 'border-box' }}>
           <header style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 16px', background: 'transparent', border: 0, zIndex: 10 }}>
