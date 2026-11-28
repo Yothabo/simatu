@@ -9,8 +9,8 @@ import type { AdminRow } from '../../../types/admin.types';
 type UseProductFormSubmitArgs = {
   form: AdminProduct;
   statusValue: string;
-  isLoadingCategories: boolean;
-  categoryLoadError: string | null;
+  isLoadingMarketplaceTaxonomy: boolean;
+  marketplaceTaxonomyError: string | null;
   productToEdit?: AdminProduct | null;
   onSaved: (product: AdminRow) => void;
   handleClose: () => void;
@@ -20,8 +20,8 @@ type UseProductFormSubmitArgs = {
 export function useProductFormSubmit({
   form,
   statusValue,
-  isLoadingCategories,
-  categoryLoadError,
+  isLoadingMarketplaceTaxonomy,
+  marketplaceTaxonomyError,
   productToEdit,
   onSaved,
   handleClose,
@@ -36,10 +36,11 @@ export function useProductFormSubmit({
     )
       return toast.error('Supplier cost must be zero or greater');
     if (!statusValue) return toast.error('Status is required');
-    if (isLoadingCategories) return toast.error('Categories are still loading');
-    if (categoryLoadError) return toast.error('Categories could not be loaded');
-    if (!form.category_id) return toast.error('Select a valid category');
-    if (!form.subcategory_id) return toast.error('Select a valid subcategory');
+    if (isLoadingMarketplaceTaxonomy) return toast.error('Marketplace categories are still loading');
+    if (marketplaceTaxonomyError) return toast.error('Marketplace categories could not be loaded');
+    if (!form.marketplace_category_slug || !form.marketplace_subcategory_id) {
+      return toast.error('Select a marketplace category and subcategory assigned to this store');
+    }
     const legacyPublishedWithoutClassification = Boolean(productToEdit?.marketplace_visible && !productToEdit.marketplace_category_slug && !productToEdit.marketplace_subcategory_id);
     if (form.marketplace_visible && (!form.marketplace_category_slug || !form.marketplace_subcategory_id) && !legacyPublishedWithoutClassification) return toast.error('Assign this product to an available marketplace category and subcategory before publishing it to the marketplace.');
 
@@ -51,10 +52,6 @@ export function useProductFormSubmit({
       price: form.price,
       supplier_cost: form.supplier_cost ?? null,
       sku: form.sku?.trim().toUpperCase() || null,
-      category: form.category,
-      category_id: form.category_id,
-      subcategory: form.subcategory,
-      subcategory_id: form.subcategory_id,
       description: form.description?.trim() || null,
       image_url: form.image_url?.trim() || null,
       is_active: form.is_active,
@@ -146,10 +143,10 @@ export function useProductFormSubmit({
       setIsSaving(false);
     }
   }, [
-    categoryLoadError,
     form,
+    isLoadingMarketplaceTaxonomy,
+    marketplaceTaxonomyError,
     handleClose,
-    isLoadingCategories,
     onSaved,
     productToEdit,
     setIsSaving,
