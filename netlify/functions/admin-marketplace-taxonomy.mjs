@@ -76,6 +76,9 @@ export default async (request) => {
   if (request.method !== 'DELETE' && !validPublicationStatus(publicationStatus)) {
     return json({ error: 'Publication status must be draft, published or archived.' }, 400);
   }
+  if (request.method === 'POST' && publicationStatus === 'published') {
+    return json({ error: 'Create taxonomy content as a draft, upload its optimized JPEG and JPEG XL image, then publish it.' }, 409);
+  }
 
   if (request.method !== 'DELETE' && (!validName(name) || !validSlug(slug) || !Number.isInteger(sortOrder) || sortOrder < 0)) {
     return json({ error: 'Name, valid slug and non-negative sort order are required.' }, 400);
