@@ -220,6 +220,26 @@ describe('products API: public listing', () => {
 
     expect(sql).toContain('is_active = TRUE');
   });
+
+  it('requires published shared taxonomy membership for marketplace listings', async () => {
+    await handler(makeRequest('GET', undefined, '?scope=marketplace'));
+
+    const sql = mocks.poolQuery.mock.calls[0][0];
+
+    expect(sql).toContain('marketplace_visible = TRUE');
+    expect(sql).toContain('FROM public.marketplace_subcategories msc');
+    expect(sql).toContain("mc.publication_status = 'published'");
+    expect(sql).toContain("msc.publication_status = 'published'");
+    expect(sql).toContain('public.store_marketplace_categories');
+  });
+
+  it('keeps legacy storefront products readable during the classification transition', async () => {
+    await handler(makeRequest('GET'));
+
+    const sql = mocks.poolQuery.mock.calls[0][0];
+
+    expect(sql).not.toContain('FROM public.marketplace_subcategories msc');
+  });
 });
 
 describe('products API: admin listing', () => {
