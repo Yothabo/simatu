@@ -139,8 +139,7 @@ export default async (request) => {
   const jpegPath = `${resourceType}/${resourceId}/${assetId}.jpg`;
   const jxlPath = `${resourceType}/${resourceId}/${assetId}.jxl`;
   const uploadedPaths = [];
-  const client = await pool.connect();
-
+  let client = null;
   let transactionStarted = false;
   try {
     // Upload to unique immutable paths before acquiring the database row lock.
@@ -150,6 +149,9 @@ export default async (request) => {
     await uploadObject(baseUrl, storageSecret, jxlPath, jxlBuffer, 'image/jxl');
     uploadedPaths.push(jxlPath);
 
+    // Acquire a database connection only after storage uploads complete.
+    // Avoid holding scarce pool connections during network I/O.
+    client = await pool.connect();
     await client.query('BEGIN');
     transactionStarted = true;
     const target = categoryId
@@ -209,7 +211,7 @@ export default async (request) => {
       },
     }, 201);
   } catch (error) {
-    if (transactionStarted) await client.query('ROLLBACK').catch(() => {});
+    if (transactionStarted && client) await client.query('ROLLBACK').catch(() => {});
     await removeObjects(baseUrl, storageSecret, uploadedPaths);
     console.error('[admin-marketplace-media] upload failed', {
       errorCode: error?.code || null,
@@ -217,6 +219,6 @@ export default async (request) => {
     });
     return json({ error: 'Marketplace image could not be stored.' }, 500);
   } finally {
-    client.release();
+    if (client) client.release();
   }
 };
