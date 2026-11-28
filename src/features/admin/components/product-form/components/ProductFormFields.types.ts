@@ -7,10 +7,6 @@ export type ProductFormFieldsProps = {
   setStatusValue: (value: string) => void;
   sizeInput: string;
   setSizeInput: (value: string) => void;
-  categoryOptions: CategoryOption[];
-  subcategoryOptions: CategoryOption[];
-  isLoadingCategories: boolean;
-  categoryLoadError: string | null;
   marketplaceCategoryOptions: CategoryOption[];
   marketplaceSubcategoryOptions: CategoryOption[];
   isLoadingMarketplaceTaxonomy: boolean;
