@@ -47,6 +47,9 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
   const [isAddingSubcategory, setIsAddingSubcategory] = useState(false);
   const [editingField, setEditingField] = useState<string | null>(null);
   const [editingValue, setEditingValue] = useState('');
+  const [newSubcategoryTitle, setNewSubcategoryTitle] = useState('');
+  const [newSubcategoryDescription, setNewSubcategoryDescription] = useState('');
+  const [newSubcategoryImage, setNewSubcategoryImage] = useState('');
 
   const openMarket = (market: MoodboardItem) => {
     setActiveMarket(market);
@@ -76,28 +79,9 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
     }
     cancelEdit();
   };
-  const editCategoryImage = () => {
-    if (!categoryDraft) return;
-    const nextImage = window.prompt('Paste category image URL', categoryDraft.image);
-    if (nextImage?.trim()) setCategoryDraft((current) => current ? { ...current, image: nextImage.trim() } : current);
-  };
-
-  const editSubcategoryImage = (id: string) => {
-    const current = subcategoryDrafts.find((item) => item.id === id);
-    if (!current) return;
-    const imageUrl = window.prompt('Paste subcategory image URL', current.image);
-    if (imageUrl?.trim()) setSubcategoryDrafts((items) => items.map((item) => item.id === id ? { ...item, image: imageUrl.trim(), alt: item.title } : item));
-  };
-  const addSubcategory = () => {
-    setIsAddingSubcategory(true);
-    const title = window.prompt('New subcategory title');
-    if (title === null || !title.trim()) { setIsAddingSubcategory(false); return; }
-    const description = window.prompt('Subcategory description') ?? '';
-    const imageUrl = window.prompt('Subcategory image URL') ?? '';
-    const id = title.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' + Date.now().toString(36);
-    setSubcategoryDrafts((items) => [...items, { id, title: title.trim(), description: description.trim(), image: imageUrl.trim(), alt: title.trim(), terms: [title.trim().toLowerCase()] }]);
-    setIsAddingSubcategory(false);
-  };
+  const editCategoryImage = () => { if (categoryDraft) beginEdit('category-image', categoryDraft.image); };
+  const editSubcategoryImage = (id: string) => { const current = subcategoryDrafts.find((item) => item.id === id); if (current) beginEdit('subcategory-image-' + id, current.image); };
+  const addSubcategory = () => { setNewSubcategoryTitle(''); setNewSubcategoryDescription(''); setNewSubcategoryImage(''); setIsAddingSubcategory(true); setEditingField('add-subcategory'); };
 
   return (
     <>
@@ -153,13 +137,24 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
     </div>
     <Modal isOpen={Boolean(editingField)} onClose={cancelEdit} maxWidth="max-w-md">
       <div style={{ padding: 24, background: '#fff', color: '#171717' }}>
-        <h2 style={{ fontSize: 20, fontWeight: 600, margin: '0 0 6px' }}>Edit {editingField?.startsWith('category-') ? 'category' : 'subcategory'} {editingField?.endsWith('title') ? 'title' : 'description'}</h2>
+        <h2 style={{ fontSize: 20, fontWeight: 600, margin: '0 0 6px' }}>{editingField === 'add-subcategory' ? 'Add subcategory' : ((editingField === 'category-image' || editingField?.startsWith('subcategory-image-')) ? 'Edit image' : 'Edit ' + (editingField?.startsWith('category-') ? 'category' : 'subcategory') + ' ' + (editingField?.endsWith('title') ? 'title' : 'description'))}</h2>
         <p style={{ margin: '0 0 16px', color: '#666', fontSize: 13 }}>Changes apply to this element only.</p>
-        {editingField?.endsWith('description') ? (
+        {editingField === 'add-subcategory' ? (
+          <div style={{ display: 'grid', gap: 12 }}>
+            <input value={newSubcategoryTitle} onChange={(event) => setNewSubcategoryTitle(event.target.value)} autoFocus placeholder="Subcategory title" style={{ width: '100%', border: '1px solid #ccc', borderRadius: 8, padding: 12, color: '#111', background: '#fff' }} />
+            <textarea value={newSubcategoryDescription} onChange={(event) => setNewSubcategoryDescription(event.target.value)} rows={3} placeholder="Description (optional)" style={{ width: '100%', border: '1px solid #ccc', borderRadius: 8, padding: 12, color: '#111', background: '#fff' }} />
+            <input value={newSubcategoryImage} onChange={(event) => setNewSubcategoryImage(event.target.value)} placeholder="Image URL (optional)" style={{ width: '100%', border: '1px solid #ccc', borderRadius: 8, padding: 12, color: '#111', background: '#fff' }} />
+          </div>
+        ) : editingField === 'category-image' || editingField?.startsWith('subcategory-image-') ? (
+          <div style={{ display: 'grid', gap: 12 }}>
+            <input value={editingValue} onChange={(event) => setEditingValue(event.target.value)} autoFocus placeholder="Paste image URL" onKeyDown={(event) => { if (event.key === 'Enter') saveEdit(); if (event.key === 'Escape') cancelEdit(); }} style={{ width: '100%', border: '1px solid #ccc', borderRadius: 8, padding: 12, color: '#111', background: '#fff' }} />
+            {editingValue.trim() && <img src={editingValue} alt="Image preview" onError={(event) => { event.currentTarget.style.display = 'none'; }} style={{ width: '100%', maxHeight: 240, objectFit: 'contain', background: '#f2f2f2', borderRadius: 8 }} />}
+          </div>
+        ) : editingField?.endsWith('description') ? (
           <textarea value={editingValue} onChange={(event) => setEditingValue(event.target.value)} autoFocus rows={5} style={{ width: '100%', border: '1px solid #ccc', borderRadius: 8, padding: 12, color: '#111', background: '#fff' }} />
         ) : (
           <input value={editingValue} onChange={(event) => setEditingValue(event.target.value)} autoFocus onKeyDown={(event) => { if (event.key === 'Enter') saveEdit(); if (event.key === 'Escape') cancelEdit(); }} style={{ width: '100%', border: '1px solid #ccc', borderRadius: 8, padding: 12, color: '#111', background: '#fff' }} />
-        )}
+        )
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 16 }}>
           <button type="button" onClick={cancelEdit} style={{ padding: '9px 14px', border: '1px solid #ccc', borderRadius: 8, background: '#fff', color: '#222' }}>Cancel</button>
           <button type="button" onClick={saveEdit} style={{ padding: '9px 14px', border: '1px solid #111', borderRadius: 8, background: '#111', color: '#fff' }}>Save changes</button>
