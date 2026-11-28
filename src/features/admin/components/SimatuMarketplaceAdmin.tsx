@@ -18,6 +18,7 @@ function TextEditTrigger({ value, onEdit }: TextEditTriggerProps) {
       <span>{value}</span>
       <button type="button" onClick={onEdit} aria-label="Edit this text" title="Edit this text" style={{ display: 'inline-grid', placeItems: 'center', flex: '0 0 30px', width: 30, height: 30, border: '1px solid rgba(255,255,255,.28)', borderRadius: '50%', background: 'rgba(15,15,15,.55)', color: '#fff', cursor: 'pointer', fontSize: 13 }}>✎</button>
     </span>
+  );
 }
 type CategoryDraft = MoodboardItem;
 type SubcategoryDraft = DiscoverySubcategory;
