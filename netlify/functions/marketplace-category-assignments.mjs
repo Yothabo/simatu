@@ -51,7 +51,8 @@ export default async (request) => {
              json_agg(json_build_object(
                'id', mc.id,
                'name', mc.name,
-               'slug', mc.slug
+               'slug', mc.slug,
+               'is_primary', smc.is_primary
              ) ORDER BY mc.sort_order, mc.name)
              FILTER (WHERE mc.id IS NOT NULL),
              '[]'::json
@@ -87,8 +88,8 @@ export default async (request) => {
   const storeId = String(body?.storeId || '');
   const categoryId = String(body?.categoryId || '');
 
-  if (!['assign', 'unassign'].includes(action)) {
-    return json({ error: 'Action must be assign or unassign.' }, 400, { 'Cache-Control': 'no-store' });
+  if (!['assign', 'unassign', 'set-primary'].includes(action)) {
+    return json({ error: 'Action must be assign, unassign or set-primary.' }, 400, { 'Cache-Control': 'no-store' });
   }
   if (!uuidPattern.test(storeId) || !uuidPattern.test(categoryId)) {
     return json({ error: 'Valid storeId and categoryId UUIDs are required.' }, 400, { 'Cache-Control': 'no-store' });
@@ -125,17 +126,51 @@ export default async (request) => {
 
     if (action === 'assign') {
       await client.query(
-        `INSERT INTO public.store_marketplace_categories (store_id, marketplace_category_id)
-         VALUES ($1, $2)
+        `INSERT INTO public.store_marketplace_categories (store_id, marketplace_category_id, is_primary)
+         VALUES ($1, $2, NOT EXISTS (
+           SELECT 1 FROM public.store_marketplace_categories
+           WHERE store_id = $1 AND is_primary IS TRUE
+         ))
          ON CONFLICT (store_id, marketplace_category_id) DO NOTHING`,
         [storeId, categoryId]
       );
-    } else {
-      await client.query(
-        `DELETE FROM public.store_marketplace_categories
-         WHERE store_id = $1 AND marketplace_category_id = $2`,
+    } else if (action === 'set-primary') {
+      const assignment = await client.query(
+        'SELECT 1 FROM public.store_marketplace_categories WHERE store_id=$1 AND marketplace_category_id=$2',
         [storeId, categoryId]
       );
+      if (!assignment.rowCount) {
+        await client.query('ROLLBACK');
+        return json({ error: 'Assign the category to the store before making it primary.' }, 409, { 'Cache-Control': 'no-store' });
+      }
+      await client.query(
+        'UPDATE public.store_marketplace_categories SET is_primary=FALSE WHERE store_id=$1 AND is_primary IS TRUE',
+        [storeId]
+      );
+      await client.query(
+        'UPDATE public.store_marketplace_categories SET is_primary=TRUE WHERE store_id=$1 AND marketplace_category_id=$2',
+        [storeId, categoryId]
+      );
+    } else {
+      const removed = await client.query(
+        `DELETE FROM public.store_marketplace_categories
+         WHERE store_id = $1 AND marketplace_category_id = $2
+         RETURNING is_primary`,
+        [storeId, categoryId]
+      );
+      if (removed.rows[0]?.is_primary) {
+        const next = await client.query(
+          `SELECT marketplace_category_id FROM public.store_marketplace_categories
+           WHERE store_id=$1 ORDER BY created_at, marketplace_category_id LIMIT 1`,
+          [storeId]
+        );
+        if (next.rowCount) {
+          await client.query(
+            'UPDATE public.store_marketplace_categories SET is_primary=TRUE WHERE store_id=$1 AND marketplace_category_id=$2',
+            [storeId, next.rows[0].marketplace_category_id]
+          );
+        }
+      }
     }
 
     await client.query('COMMIT');
