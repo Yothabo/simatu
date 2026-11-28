@@ -363,7 +363,10 @@ export default function SimatuMarketplaceAdmin({ accessToken, onReturn }: Props)
             </div>}
           </header>
           <section style={{ position: 'relative', flex: '0 0 48vh', minHeight: 0, display: 'flex', alignItems: 'flex-end', padding: 0, overflow: 'hidden' }}>
-            <img src={categoryDraft.image} alt={categoryDraft.alt} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: categoryDraft.objectPosition || 'center' }} />
+            <picture style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
+              {categoryDraft.imageJxl ? <source srcSet={categoryDraft.imageJxl} type="image/jxl" /> : null}
+              <img src={categoryDraft.image} alt={categoryDraft.alt} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: categoryDraft.objectPosition || 'center' }} />
+            </picture>
             <button type="button" onClick={editCategoryImage} aria-label="Edit category image" title="Edit category image" style={categoryImageOverlayButton}>▧</button>
             <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,#111 0%,rgba(17,17,17,.92) 14%,rgba(17,17,17,.38) 58%,transparent 100%)' }} />
             <div style={{ position: 'relative', zIndex: 1, maxWidth: 760, padding: 'clamp(20px, 4vw, 48px)' }}>
@@ -380,7 +383,7 @@ export default function SimatuMarketplaceAdmin({ accessToken, onReturn }: Props)
               {subcategoryDrafts.map((sub) => (
                 <SwiperSlide key={sub.id} style={{ width: 230, height: 290, flexShrink: 0 }}>
                   <article className="discovery-subcategory-card" style={{ position: 'relative', display: 'block', width: 230, height: 290, padding: 0, textAlign: 'left', border: 0, borderRadius: 3, background: '#111', color: '#fff', overflow: 'hidden' }}>
-                    {sub.image ? <img src={sub.image} alt={sub.alt} loading="lazy" decoding="async" draggable={false} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'none' }} /> : null}
+                    {sub.image ? <picture style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>{sub.imageJxl ? <source srcSet={sub.imageJxl} type="image/jxl" /> : null}<img src={sub.image} alt={sub.alt} loading="lazy" decoding="async" draggable={false} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'none' }} /></picture> : null}
                     <button type="button" onClick={() => editSubcategoryImage(sub.id)} aria-label={'Change image for ' + sub.title} title="Change image" style={overlayButton}>▧</button>
                     
                     <span style={{ position: 'absolute', left: 12, right: 12, bottom: 14, zIndex: 2, pointerEvents: 'auto' }}>
@@ -416,23 +419,22 @@ export default function SimatuMarketplaceAdmin({ accessToken, onReturn }: Props)
           <div className="admin-market-edit-modal__fields">
             <label className="admin-market-edit-modal__field"><span>Category name</span><input value={newCategoryName} onChange={(event) => setNewCategoryName(event.target.value)} autoFocus placeholder="New category" /></label>
             <label className="admin-market-edit-modal__field"><span>Description</span><textarea value={newCategoryDescription} onChange={(event) => setNewCategoryDescription(event.target.value)} rows={3} placeholder="Category description" /></label>
-            <label className="admin-market-edit-modal__field"><span>Image URL</span><input type="url" value={newCategoryImage} onChange={(event) => setNewCategoryImage(event.target.value)} placeholder="Optional image URL" /></label>
+            <label className="admin-market-edit-modal__device-picker">▧ Choose category image<input type="file" accept="image/jpeg,image/png,image/webp,image/avif" onChange={(event) => importDeviceImage(event.target.files?.[0], setNewCategoryImage)} /></label>
+            {newCategoryImage && <img className="admin-market-edit-modal__preview" src={newCategoryImage} alt="New category preview" />}
           </div>
         ) : editingField === 'add-subcategory' ? (
           <div className="admin-market-edit-modal__fields">
             <label className="admin-market-edit-modal__field"><span>Title</span><input value={newSubcategoryTitle} onChange={(event) => setNewSubcategoryTitle(event.target.value)} autoFocus placeholder="Subcategory title" /></label>
             <label className="admin-market-edit-modal__field"><span>Description <small>Optional</small></span><textarea value={newSubcategoryDescription} onChange={(event) => setNewSubcategoryDescription(event.target.value)} rows={3} placeholder="Describe this subcategory" /></label>
             <div className="admin-market-edit-modal__image-source">
-              <label className="admin-market-edit-modal__field"><span>Image link <small>Optional</small></span><input type="url" value={newSubcategoryImage.startsWith('data:') ? '' : newSubcategoryImage} onChange={(event) => setNewSubcategoryImage(event.target.value)} placeholder="Paste image URL" /></label>
-              <label className="admin-market-edit-modal__device-picker">▧ Choose image from device<input type="file" accept="image/*" onChange={(event) => importDeviceImage(event.target.files?.[0], setNewSubcategoryImage)} /></label>
+              <label className="admin-market-edit-modal__device-picker">▧ Choose subcategory image<input type="file" accept="image/jpeg,image/png,image/webp,image/avif" onChange={(event) => importDeviceImage(event.target.files?.[0], setNewSubcategoryImage)} /></label>
               {newSubcategoryImage.trim() && <img className="admin-market-edit-modal__preview" src={newSubcategoryImage} alt="Subcategory image preview" onError={(event) => { event.currentTarget.style.display = 'none'; }} />}
             </div>
           </div>
         ) : editingField === 'category-image' || editingField?.startsWith('subcategory-image-') ? (
           <div className="admin-market-edit-modal__fields">
             <div className="admin-market-edit-modal__image-source">
-              <label className="admin-market-edit-modal__field"><span>Image link</span><input type="url" value={editingValue.startsWith('data:') ? '' : editingValue} onChange={(event) => setEditingValue(event.target.value)} autoFocus={!editingValue.startsWith('data:')} placeholder="Paste image URL" onKeyDown={(event) => { if (event.key === 'Enter') saveEdit(); if (event.key === 'Escape') cancelEdit(); }} /></label>
-              <label className="admin-market-edit-modal__device-picker">▧ Choose image from device<input type="file" accept="image/*" onChange={(event) => importDeviceImage(event.target.files?.[0], setEditingValue)} /></label>
+              <label className="admin-market-edit-modal__device-picker">▧ Choose optimized image source<input type="file" accept="image/jpeg,image/png,image/webp,image/avif" onChange={(event) => importDeviceImage(event.target.files?.[0], setEditingValue)} /></label>
               {editingValue.trim() && <img className="admin-market-edit-modal__preview" src={editingValue} alt="Image preview" onError={(event) => { event.currentTarget.style.display = 'none'; }} />}
             </div>
           </div>
@@ -443,7 +445,7 @@ export default function SimatuMarketplaceAdmin({ accessToken, onReturn }: Props)
         )}
         <div className="admin-market-edit-modal__actions">
           <button type="button" onClick={cancelEdit} className="admin-market-edit-modal__button admin-market-edit-modal__button--secondary">Cancel</button>
-          <button type="button" onClick={editingField === 'add-category' ? saveNewCategory : saveEdit} className="admin-market-edit-modal__button admin-market-edit-modal__button--primary">Save changes</button>
+          <button type="button" onClick={editingField === 'add-category' ? saveNewCategory : saveEdit} className="admin-market-edit-modal__button admin-market-edit-modal__button--primary" disabled={uploadingImage}>{uploadingImage ? 'Optimizing…' : 'Save changes'}</button>
         </div>
       </div>
     </Modal>
