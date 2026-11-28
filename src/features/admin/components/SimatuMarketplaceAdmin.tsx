@@ -9,6 +9,35 @@ import 'swiper/css/pagination';
 import '../../../systems/homepage/design-system/index.css';
 
 type Props = { onReturn: () => void; };
+
+type InlineEditableProps = {
+  value: string;
+  editing: boolean;
+  onEdit: () => void;
+  onChange: (value: string) => void;
+  onSave: () => void;
+  onCancel: () => void;
+  inputStyle?: React.CSSProperties;
+  multiline?: boolean;
+};
+function InlineEditable({ value, editing, onEdit, onChange, onSave, onCancel, inputStyle, multiline = false }: InlineEditableProps) {
+  const controlStyle: React.CSSProperties = { background: 'rgba(255,255,255,.08)', color: '#fff', border: '1px solid rgba(255,255,255,.3)', borderRadius: 6, padding: '8px 10px', font: 'inherit', width: '100%', outline: 'none', ...inputStyle };
+  if (!editing) return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, maxWidth: '100%' }}>
+      <span>{value}</span>
+      <button type="button" onClick={onEdit} aria-label="Edit this text" title="Edit this text" style={{ display: 'inline-grid', placeItems: 'center', flex: '0 0 30px', width: 30, height: 30, border: '1px solid rgba(255,255,255,.28)', borderRadius: '50%', background: 'rgba(15,15,15,.55)', color: '#fff', cursor: 'pointer', fontSize: 13 }}>✎</button>
+    </span>
+  );
+  const sharedProps = { value, onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange(event.target.value), onKeyDown: (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => { if (event.key === 'Enter' && !multiline) { event.preventDefault(); onSave(); } if (event.key === 'Escape') onCancel(); }, autoFocus: true, style: controlStyle };
+  return (
+    <span style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'stretch', gap: 8, width: '100%' }}>
+      {multiline ? <textarea {...sharedProps} rows={3} /> : <input {...sharedProps} />}
+      <span style={{ display: 'inline-flex', gap: 6, alignSelf: 'flex-start }}>
+        <button type="button" onClick={onSave} title="Save" aria-label="Save text edit" style={{ border: '1px solid rgba(255,255,255,.35)', borderRadius: 6, padding: '5px 10px', background: '#fff', color: '#111', cursor: 'pointer' }}>Save</button>
+        <button type="button" onClick={onCancel} title="Cancel" aria-label="Cancel text edit" style={{ border: '1px solid rgba(255,255,255,.25)', borderRadius: 6, padding: '5px 10px', background: 'transparent', color: '#fff', cursor: 'pointer' }}>Cancel</button>
+      </span>
+    </span>
+);}
 type CategoryDraft = MoodboardItem;
 type SubcategoryDraft = DiscoverySubcategory;
 
@@ -34,6 +63,8 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
   const [categoryDraft, setCategoryDraft] = useState<CategoryDraft | null>(null);
   const [subcategoryDrafts, setSubcategoryDrafts] = useState<SubcategoryDraft[]>([]);
   const [isAddingSubcategory, setIsAddingSubcategory] = useState(false);
+  const [editingField, setEditingField] = useState<string | null>(null);
+  const [editingValue, setEditingValue] = useState('');
 
   const openMarket = (market: MoodboardItem) => {
     setActiveMarket(market);
