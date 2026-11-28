@@ -54,6 +54,8 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
   const [newCategoryDescription, setNewCategoryDescription] = useState('');
   const [newCategoryImage, setNewCategoryImage] = useState('');
   const [manualOpen, setManualOpen] = useState(false);
+  const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
+  const [hiddenMarketIds, setHiddenMarketIds] = useState<string[]>([]);
 
   const openMarket = (market: MoodboardItem) => {
     setActiveMarket(market);
@@ -119,9 +121,18 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
     <>
     <div className="admin-marketplace-moodboard" aria-label="Marketplace management">
       {!activeMarket || !categoryDraft ? (
-        <AdminMoodboardLayoutPreview items={managedMarkets} onItemClick={openMarket} onAddCategory={openAddCategory} onOpenManual={() => setManualOpen(true)} onReturn={onReturn} />
+        <AdminMoodboardLayoutPreview items={managedMarkets.filter((market) => !hiddenMarketIds.includes(market.id))} onItemClick={openMarket} onAddCategory={openAddCategory} onOpenManual={() => setManualOpen(true)} onReturn={onReturn} />
       ) : (
         <main style={{ height: '100vh', maxHeight: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', background: '#111', color: '#f4f1ec', width: '100vw', maxWidth: '100vw', marginInline: 'calc(50% - 50vw)', padding: 0, boxSizing: 'border-box' }}>
+          <header style={{ height: 56, flex: '0 0 56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 16px', background: '#111', borderBottom: '1px solid rgba(255,255,255,.08)', position: 'relative', zIndex: 10 }}>
+            <button type="button" onClick={returnToTiles} aria-label="Return to moodboard" title="Return to moodboard" style={{ width: 40, height: 40, display: 'grid', placeItems: 'center', border: '1px solid rgba(255,255,255,.18)', borderRadius: 8, background: 'transparent', color: '#f4f1ec', cursor: 'pointer' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/></svg></button>
+            <button type="button" onClick={() => setCategoryMenuOpen((open) => !open)} aria-label="Category options" aria-expanded={categoryMenuOpen} title="Category options" style={{ width: 40, height: 40, display: 'grid', placeItems: 'center', border: '1px solid rgba(255,255,255,.18)', borderRadius: 8, background: 'transparent', color: '#f4f1ec', cursor: 'pointer' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></button>
+            {categoryMenuOpen && <div role="menu" style={{ position: 'absolute', top: 48, right: 16, width: 200, display: 'grid', gap: 2, padding: 6, border: '1px solid rgba(255,255,255,.14)', borderRadius: 10, background: '#262626', boxShadow: '0 12px 32px rgba(0,0,0,.35)', zIndex: 20 }}>
+              <button type="button" role="menuitem'" onClick={() => { setCategoryMenuOpen(false); beginEdit('category-title', categoryDraft.title); }} style={{ textAlign: 'left', border: 0, borderRadius: 6, background: 'transparent', color: '#f4f1ec', padding: '11px 12px', cursor: 'pointer' }}>Category settings</button>
+              <button type="button" role="menuitem'" onClick={() => { setHiddenMarketIds((ids) => ids.includes(activeMarket.id) ? ids : [...ids, activeMarket.id]); setCategoryMenuOpen(false); returnToTiles(); }} style={{ textAlign: 'left', border: 0, borderRadius: 6, background: 'transparent', color: '#f4f1ec', padding: '11px 12px', cursor: 'pointer' }}>Hide category</button>
+              <button type="button" role="menuitem'" onClick={() => { setManagedMarkets((items) => items.filter((item) => item.id !== activeMarket.id)); setCategoryMenuOpen(false); returnToTiles(); }} style={{ textAlign: 'left', border: 0, borderRadius: 6, background: 'transparent', color: '#f0a5a5', padding: '11px 12px', cursor: 'pointer' }}>Delete category</button>
+            </div>}
+          </header>
           <section style={{ position: 'relative', flex: '0 0 48vh', minHeight: 0, display: 'flex', alignItems: 'flex-end', padding: 0, overflow: 'hidden' }}>
             <img src={categoryDraft.image} alt={categoryDraft.alt} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: categoryDraft.objectPosition || 'center' }} />
             <button type="button" onClick={editCategoryImage} aria-label="Edit category image" title="Edit category image" style={overlayButton}>▧</button>
