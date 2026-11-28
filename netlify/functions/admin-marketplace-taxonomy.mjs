@@ -132,6 +132,10 @@ export default async (request) => {
     }
   }
 
+  if (request.method === 'POST' && publicationStatus === 'published') {
+    return json({ error: 'Create subcategories as drafts, upload their optimized JPEG and JPEG XL image, then publish them.' }, 409);
+  }
+
   const categoryId = String(body?.marketplace_category_id || '');
   if (request.method !== 'DELETE' && !uuidPattern.test(categoryId)) return json({ error: 'A valid parent category is required.' }, 400);
   try {
