@@ -46,8 +46,10 @@ const validProduct = () => ({
   name: 'Test Fragrance',
   price: 199.99,
   storefront: 'yotaabo',
-  category: 'His',
-  subcategory: 'Eau de Parfum',
+  category: '',
+  subcategory: '',
+  marketplace_category_slug: 'fashion',
+  marketplace_subcategory_id: '223e4567-e89b-42d3-a456-426614174000',
   is_active: true,
   sort_order: 0,
 });
@@ -354,11 +356,12 @@ describe('products API: product creation', () => {
       { rowCount: 1, rows: [{ id: 'store-y' }] },
       {
         rowCount: 1,
-        rows: [{ id: 'category-y', name: 'His', is_active: true }],
-      },
-      {
-        rowCount: 1,
-        rows: [{ id: 'subcategory-y', name: 'Eau de Parfum' }],
+        rows: [{
+          category_id: 'category-y',
+          category_name: 'Fashion',
+          subcategory_id: 'subcategory-y',
+          subcategory_name: 'Eau de Parfum',
+        }],
       },
       emptyResult(), // INSERT
       emptyResult(), // ROLLBACK
@@ -417,11 +420,12 @@ describe('products API: product creation', () => {
       { rowCount: 1, rows: [{ id: 'store-y' }] },
       {
         rowCount: 1,
-        rows: [{ id: 'category-y', name: 'His', is_active: true }],
-      },
-      {
-        rowCount: 1,
-        rows: [{ id: 'subcategory-y', name: 'Eau de Parfum' }],
+        rows: [{
+          category_id: 'category-y',
+          category_name: 'Fashion',
+          subcategory_id: 'subcategory-y',
+          subcategory_name: 'Eau de Parfum',
+        }],
       },
       {
         rowCount: 1,
@@ -450,11 +454,12 @@ describe('products API: product creation', () => {
       { rowCount: 1, rows: [{ id: 'store-y' }] },
       {
         rowCount: 1,
-        rows: [{ id: 'category-y', name: 'His', is_active: true }],
-      },
-      {
-        rowCount: 1,
-        rows: [{ id: 'subcategory-y', name: 'Eau de Parfum' }],
+        rows: [{
+          category_id: 'category-y',
+          category_name: 'Fashion',
+          subcategory_id: 'subcategory-y',
+          subcategory_name: 'Eau de Parfum',
+        }],
       },
       {
         rowCount: 1,
@@ -948,311 +953,56 @@ describe('products API: database failure handling', () => {
   });
 });
 
-describe('products API: category ownership and isolation', () => {
-  const categoryId = '123e4567-e89b-42d3-a456-426614174000';
-  const subcategoryId = '223e4567-e89b-42d3-a456-426614174000';
-
-  it('rejects a category ID that does not belong to the selected storefront', async () => {
+describe('products API: shared marketplace classification', () => {
+  it('rejects a subcategory that is not assigned to the selected store', async () => {
     queueClientResponses(
-      emptyResult(),
-      emptyResult(),
-      { rowCount: 1, rows: [{ id: 'store-y' }] },
-      emptyResult(),
+      emptyResult(), // BEGIN
+      emptyResult(), // set_config
+      { rowCount: 1, rows: [{ id: 'store-y' }] }, // Store
+      emptyResult(), // Shared taxonomy + store assignment
+      emptyResult(), // ROLLBACK
     );
 
     const result = await readResponse(
-      await handler(makeRequest('POST', {
-        ...validProduct(),
-        category_id: categoryId,
-      })),
+      await handler(makeRequest('POST', validProduct())),
     );
 
     expect(result.status).toBe(400);
-    expect(result.body.error).toBe(
-      'The selected category is not available in this storefront.',
-    );
-
-    const lookup = mocks.clientQuery.mock.calls.find(
-      ([sql]) => String(sql).includes('FROM public.categories'),
-    );
-
-    expect(lookup?.[1]).toEqual([categoryId, 'store-y', null]);
-    expect(mocks.clientQuery).toHaveBeenCalledWith('ROLLBACK');
-    expect(mocks.release).toHaveBeenCalledOnce();
-  });
-
-  it('rejects a subcategory ID belonging to another category', async () => {
-    queueClientResponses(
-      emptyResult(),
-      emptyResult(),
-      { rowCount: 1, rows: [{ id: 'store-y' }] },
-      {
-        rowCount: 1,
-        rows: [{ id: categoryId, name: 'His', is_active: true }],
-      },
-      emptyResult(),
-    );
-
-    const result = await readResponse(
-      await handler(makeRequest('POST', {
-        ...validProduct(),
-        category_id: categoryId,
-        subcategory_id: subcategoryId,
-      })),
-    );
-
-    expect(result.status).toBe(400);
-    expect(result.body.error).toBe(
-      'The selected subcategory is not available under this category.',
-    );
-
-    const lookup = mocks.clientQuery.mock.calls.find(
-      ([sql]) => String(sql).includes('FROM public.subcategories'),
-    );
-
-    expect(lookup?.[1]).toEqual([
-      subcategoryId,
-      'store-y',
-      categoryId,
-      null,
-      true,
-    ]);
+    expect(result.body.error).toContain('category assigned to this store');
     expect(mocks.clientQuery).toHaveBeenCalledWith('ROLLBACK');
   });
 
-  it('maps legacy Poshies Spaces submissions to Lounge', async () => {
+  it('persists shared category labels and leaves legacy store category IDs null', async () => {
     queueClientResponses(
-      emptyResult(),
-      emptyResult(),
-      { rowCount: 1, rows: [{ id: 'store-p' }] },
+      emptyResult(), // BEGIN
+      emptyResult(), // set_config
+      { rowCount: 1, rows: [{ id: 'store-y' }] }, // Store
       {
         rowCount: 1,
-        rows: [{ id: categoryId, name: 'Lounge', is_active: true }],
-      },
-      {
-        rowCount: 1,
-        rows: [{ id: subcategoryId, name: 'Room Spray' }],
-      },
-      {
-        rowCount: 1,
-        rows: [{ id: validId, category: 'Lounge', subcategory: 'Room Spray' }],
-      },
+        rows: [{
+          category_id: 'market-category',
+          category_name: 'Fashion',
+          subcategory_id: 'market-subcategory',
+          subcategory_name: 'Fragrance',
+        }],
+      }, // Assigned shared taxonomy
+      { rowCount: 1, rows: [{ id: validId, name: 'Test Fragrance' }] }, // INSERT
+      emptyResult(), // COMMIT
     );
 
     const result = await readResponse(
-      await handler(makeRequest('POST', {
-        ...validProduct(),
-        storefront: 'poshies',
-        category: 'Spaces',
-        subcategory: 'Room Spray',
-      })),
+      await handler(makeRequest('POST', validProduct())),
     );
 
     expect(result.status).toBe(201);
-
-    const categoryLookup = mocks.clientQuery.mock.calls.find(
-      ([sql]) => String(sql).includes('FROM public.categories'),
-    );
-
-    expect(categoryLookup?.[0]).toContain("THEN 'Lounge'");
-    expect(categoryLookup?.[1]).toEqual(['store-p', 'poshies', 'Spaces']);
-
     const insert = mocks.clientQuery.mock.calls.find(
       ([sql]) => String(sql).includes('INSERT INTO public.products'),
     );
-
-    expect(insert?.[1][2]).toBe('Lounge');
-  });
-
-  it('uses parameterized values for malicious category names', async () => {
-    const maliciousCategory = "His' OR TRUE; DROP TABLE products; --";
-
-    queueClientResponses(
-      emptyResult(),
-      emptyResult(),
-      { rowCount: 1, rows: [{ id: 'store-y' }] },
-      emptyResult(),
-    );
-
-    const result = await readResponse(
-      await handler(makeRequest('POST', {
-        ...validProduct(),
-        category: maliciousCategory,
-      })),
-    );
-
-    expect(result.status).toBe(400);
-
-    const lookup = mocks.clientQuery.mock.calls.find(
-      ([sql]) => String(sql).includes('FROM public.categories'),
-    );
-
-    expect(lookup?.[0]).not.toContain(maliciousCategory);
-    expect(lookup?.[1]).toContain(maliciousCategory);
-  });
-
-  it('does not allow a new product to use an inactive category ID', async () => {
-    queueClientResponses(
-      emptyResult(),
-      emptyResult(),
-      { rowCount: 1, rows: [{ id: 'store-y' }] },
-      emptyResult(),
-    );
-
-    const result = await readResponse(
-      await handler(makeRequest('POST', {
-        ...validProduct(),
-        category_id: categoryId,
-      })),
-    );
-
-    expect(result.status).toBe(400);
-
-    const lookup = mocks.clientQuery.mock.calls.find(
-      ([sql]) => String(sql).includes('FROM public.categories'),
-    );
-
-    expect(lookup?.[0]).toContain('(is_active IS TRUE OR id = $3)');
-    expect(lookup?.[1][2]).toBeNull();
-  });
-
-  it('does not allow a new product to use an inactive subcategory ID', async () => {
-    queueClientResponses(
-      emptyResult(),
-      emptyResult(),
-      { rowCount: 1, rows: [{ id: 'store-y' }] },
-      {
-        rowCount: 1,
-        rows: [{ id: categoryId, name: 'His', is_active: true }],
-      },
-      emptyResult(),
-    );
-
-    const result = await readResponse(
-      await handler(makeRequest('POST', {
-        ...validProduct(),
-        category_id: categoryId,
-        subcategory_id: subcategoryId,
-      })),
-    );
-
-    expect(result.status).toBe(400);
-
-    const lookup = mocks.clientQuery.mock.calls.find(
-      ([sql]) => String(sql).includes('FROM public.subcategories'),
-    );
-
-    expect(lookup?.[0]).toContain('(is_active IS TRUE OR id = $4)');
-    expect(lookup?.[1][3]).toBeNull();
-  });
-});
-
-describe('products API: update storefront integrity', () => {
-  const categoryId = '123e4567-e89b-42d3-a456-426614174000';
-  const subcategoryId = '223e4567-e89b-42d3-a456-426614174000';
-
-  it('retains the existing storefront when a super admin submits another storefront', async () => {
-    queueClientResponses(
-      emptyResult(),
-      emptyResult(),
-      {
-        rowCount: 1,
-        rows: [{
-          storefront: 'poshies',
-          category_id: categoryId,
-          subcategory_id: subcategoryId,
-        }],
-      },
-      { rowCount: 1, rows: [{ id: 'store-p' }] },
-      {
-        rowCount: 1,
-        rows: [{ id: categoryId, name: 'His', is_active: true }],
-      },
-      {
-        rowCount: 1,
-        rows: [{ id: subcategoryId, name: 'Eau de Parfum' }],
-      },
-      {
-        rowCount: 1,
-        rows: [{ id: validId, storefront: 'poshies' }],
-      },
-    );
-
-    const result = await readResponse(
-      await handler(makeRequest('PATCH', {
-        ...validProduct(),
-        id: validId,
-        storefront: 'yotaabo',
-        category_id: categoryId,
-        subcategory_id: subcategoryId,
-      })),
-    );
-
-    expect(result.status).toBe(200);
-
-    const storeLookup = mocks.clientQuery.mock.calls.find(
-      ([sql]) => String(sql).includes('FROM public.stores'),
-    );
-
-    expect(storeLookup?.[1]).toEqual(['poshies']);
-
-    const update = mocks.clientQuery.mock.calls.find(
-      ([sql]) => String(sql).includes('UPDATE public.products'),
-    );
-
-    expect(update?.[1][8]).toBe('poshies');
-  });
-
-  it('allows an existing product to retain its inactive category', async () => {
-    queueClientResponses(
-      emptyResult(),
-      emptyResult(),
-      {
-        rowCount: 1,
-        rows: [{
-          storefront: 'yotaabo',
-          category_id: categoryId,
-          subcategory_id: subcategoryId,
-        }],
-      },
-      { rowCount: 1, rows: [{ id: 'store-y' }] },
-      {
-        rowCount: 1,
-        rows: [{ id: categoryId, name: 'His', is_active: false }],
-      },
-      {
-        rowCount: 1,
-        rows: [{ id: subcategoryId, name: 'Eau de Parfum' }],
-      },
-      {
-        rowCount: 1,
-        rows: [{ id: validId, storefront: 'yotaabo' }],
-      },
-    );
-
-    const result = await readResponse(
-      await handler(makeRequest('PATCH', {
-        ...validProduct(),
-        id: validId,
-        category_id: categoryId,
-        subcategory_id: subcategoryId,
-      })),
-    );
-
-    expect(result.status).toBe(200);
-
-    const categoryLookup = mocks.clientQuery.mock.calls.find(
-      ([sql]) => String(sql).includes('FROM public.categories'),
-    );
-
-    expect(categoryLookup?.[1][2]).toBe(categoryId);
-
-    const subcategoryLookup = mocks.clientQuery.mock.calls.find(
-      ([sql]) => String(sql).includes('FROM public.subcategories'),
-    );
-
-    expect(subcategoryLookup?.[1][3]).toBe(subcategoryId);
-    expect(subcategoryLookup?.[1][4]).toBe(false);
+    expect(insert?.[1][2]).toBe('Fashion');
+    expect(insert?.[1][3]).toBe('Fragrance');
+    expect(insert?.[1][10]).toBeNull();
+    expect(insert?.[1][11]).toBeNull();
+    expect(insert?.[1][17]).toBe('223e4567-e89b-42d3-a456-426614174000');
   });
 });
 
@@ -1268,11 +1018,12 @@ describe('products API: transaction failure edge cases', () => {
       { rowCount: 1, rows: [{ id: 'store-y' }] },
       {
         rowCount: 1,
-        rows: [{ id: 'category-y', name: 'His', is_active: true }],
-      },
-      {
-        rowCount: 1,
-        rows: [{ id: 'subcategory-y', name: 'Eau de Parfum' }],
+        rows: [{
+          category_id: 'category-y',
+          category_name: 'Fashion',
+          subcategory_id: 'subcategory-y',
+          subcategory_name: 'Eau de Parfum',
+        }],
       },
       {
         rowCount: 1,
