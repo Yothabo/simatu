@@ -28,7 +28,7 @@ function TextEditTrigger({ value, onEdit }: TextEditTriggerProps) {
   );
 }
 type CategoryDraft = MoodboardItem & { dbId?: string; slug?: string; publicationStatus?: 'draft' | 'published' | 'archived'; isActive?: boolean; imageMediaId?: string | null };
-type SubcategoryDraft = DiscoverySubcategory & { dbId?: string; slug?: string; marketplaceCategoryId?: string; publicationStatus?: 'draft' | 'published' | 'archived'; isActive?: boolean };
+type SubcategoryDraft = DiscoverySubcategory & { dbId?: string; slug?: string; marketplaceCategoryId?: string; publicationStatus?: 'draft' | 'published' | 'archived'; isActive?: boolean; imageMediaId?: string | null };
 
 const categoryImageOverlayButton: React.CSSProperties = {
   position: 'absolute', zIndex: 3, top: 'auto', bottom: 'clamp(160px, 22vh, 210px)', left: '50%', right: 'auto', transform: 'translateX(-50%)', width: 38, height: 38,
@@ -79,7 +79,7 @@ export default function SimatuMarketplaceAdmin({ accessToken, onReturn }: Props)
     }).then(async (response) => {
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Marketplace content could not be loaded.');
-      const categories = (Array.isArray(data.categories) ? data.categories : []).map((item: any) => {
+      const categories: CategoryDraft[] = (Array.isArray(data.categories) ? data.categories : []).map((item: any) => {
         const slug = String(item.slug || '');
         const id = slug === 'home-living' ? 'spaces' : slug;
         const fallback = DISCOVERY_MARKETS.find((market) => market.id === id);
@@ -98,7 +98,7 @@ export default function SimatuMarketplaceAdmin({ accessToken, onReturn }: Props)
         } as CategoryDraft;
       });
       const subcategories = (Array.isArray(data.subcategories) ? data.subcategories : []).map((item: any) => {
-        const category = categories.find((entry) => entry.dbId === item.marketplace_category_id);
+        const category = categories.find((entry: CategoryDraft) => entry.dbId === item.marketplace_category_id);
         const fallback = category ? getSubcategories(category.id).find((entry) => entry.id === item.slug) : undefined;
         return {
           id: String(item.id),
