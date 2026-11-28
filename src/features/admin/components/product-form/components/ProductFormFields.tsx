@@ -16,11 +16,11 @@ export default function ProductFormFields(props: ProductFormFieldsProps) {
       <ProductPricingFields form={props.form} onChange={props.onChange} />
 
       <section style={SECTION_STYLE}>
-        <label style={{ display: 'grid', gap: 6, color: 'var(--admin-text-primary)', fontSize: 'var(--admin-size-body)' }}>Category
-          <select value={props.form.marketplace_category_slug ?? ''} onChange={(e) => props.onChange('marketplace_category_slug', e.target.value || null)} disabled={props.isLoadingMarketplaceTaxonomy} style={SELECT_STYLE}><option value="" disabled>Select category</option>{props.marketplaceCategoryOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>
+        <label style={{ display: 'grid', gap: 6, color: 'var(--admin-text-primary)', fontSize: 'var(--admin-size-body)' }}>Marketplace category
+          <select value={props.form.marketplace_category_slug ?? ''} onChange={(e) => props.onChange('marketplace_category_slug', e.target.value || null)} disabled={props.isLoadingMarketplaceTaxonomy} style={SELECT_STYLE}><option value="" disabled>{props.isLoadingMarketplaceTaxonomy ? 'Loading assigned categories…' : props.marketplaceCategoryOptions.length ? 'Select marketplace category' : 'No category assigned to this store'}</option>{props.marketplaceCategoryOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>
         </label>
-        <label style={{ display: 'grid', gap: 6, color: 'var(--admin-text-primary)', fontSize: 'var(--admin-size-body)' }}>Subcategory
-          <select value={props.form.marketplace_subcategory_id ?? ''} onChange={(e) => props.onChange('marketplace_subcategory_id', e.target.value || null)} disabled={!props.form.marketplace_category_slug || props.isLoadingMarketplaceTaxonomy} style={SELECT_STYLE}><option value="" disabled>Select subcategory</option>{props.marketplaceSubcategoryOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>
+        <label style={{ display: 'grid', gap: 6, color: 'var(--admin-text-primary)', fontSize: 'var(--admin-size-body)' }}>Marketplace subcategory
+          <select value={props.form.marketplace_subcategory_id ?? ''} onChange={(e) => props.onChange('marketplace_subcategory_id', e.target.value || null)} disabled={!props.form.marketplace_category_slug || props.isLoadingMarketplaceTaxonomy} style={SELECT_STYLE}><option value="" disabled>{!props.form.marketplace_category_slug ? 'Select category first' : props.marketplaceSubcategoryOptions.length ? 'Select marketplace subcategory' : 'No published subcategories available'}</option>{props.marketplaceSubcategoryOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>
         </label>
         {props.marketplaceTaxonomyError && <span role="status" style={{ color: 'var(--admin-text-secondary)', fontSize: 'var(--admin-size-caption)' }}>{props.marketplaceTaxonomyError}</span>}
       </section>
