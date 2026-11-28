@@ -765,14 +765,14 @@ describe('validateProduct: malformed JSON-like input', () => {
     expect(validateProduct({
       ...validProduct(),
       category_id: { value: 'category-id' },
-    }).error).toBe('Please provide a valid category.');
+    }).error).toBe('Please provide a valid legacy category reference.');
   });
 
   it('rejects a non-string subcategory ID', () => {
     expect(validateProduct({
       ...validProduct(),
       subcategory_id: { value: 'subcategory-id' },
-    }).error).toBe('Please provide a valid subcategory.');
+    }).error).toBe('Please provide a valid legacy subcategory reference.');
   });
 
   it('rejects non-string product names', () => {
@@ -782,18 +782,18 @@ describe('validateProduct: malformed JSON-like input', () => {
     }).error).toBe('Product name must be between 1 and 160 characters.');
   });
 
-  it('rejects non-string category names', () => {
+  it('ignores non-string legacy category labels because shared taxonomy is authoritative', () => {
     expect(validateProduct({
       ...validProduct(),
       category: { value: 'His' },
-    }).error).toBe('Please select a valid category.');
+    }).product?.category).toBe('');
   });
 
-  it('rejects non-string subcategory names', () => {
+  it('ignores non-string legacy subcategory labels because shared taxonomy is authoritative', () => {
     expect(validateProduct({
       ...validProduct(),
       subcategory: { value: 'Eau de Parfum' },
-    }).error).toBe('Please provide a valid subcategory.');
+    }).product?.subcategory).toBe('');
   });
 
   it('rejects non-string descriptions', () => {
