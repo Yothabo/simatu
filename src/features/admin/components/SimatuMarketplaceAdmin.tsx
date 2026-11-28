@@ -1,4 +1,5 @@
-import React, { useState } from 'react';\nimport Modal from '../../../shared/components/Modal';
+import React, { useState } from 'react';
+import Modal from '../../../shared/components/Modal';
 import KineticMoodboard, { type MoodboardItem } from '../../../systems/homepage/discover/KineticMoodboard';
 import { getSubcategories, type DiscoverySubcategory } from '../../../systems/homepage/discover/discovery-taxonomy';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -98,6 +99,7 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
   };
 
   return (
+    <>
     <div className="admin-marketplace-moodboard" aria-label="Marketplace management" style={{ position: 'fixed', inset: 0, zIndex: 10, overflow: 'hidden', background: '#111', color: '#f4f1ec' }}>
       <button type="button" onClick={activeMarket ? returnToTiles : onReturn} aria-label={activeMarket ? 'Back to Admin Market categories' : 'Return to Admin dashboard'} style={floatingButtonStyle}>{activeMarket ? '← Back' : '← Return'}</button>
       {!activeMarket || !categoryDraft ? (
@@ -163,5 +165,6 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
         </div>
       </div>
     </Modal>
+    </>
   );
 }
