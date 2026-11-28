@@ -66,16 +66,29 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
   const beginEdit = (field: string, value: string) => { setEditingField(field); setEditingValue(value); };
   const cancelEdit = () => { setEditingField(null); setEditingValue(''); };
   const saveEdit = () => {
+    if (!editingField) return;
     const value = editingValue.trim();
-    if (!value || !editingField) return;
-    if (editingField === 'category-title') setCategoryDraft((current) => current ? { ...current, category: value } : current);
-    else if (editingField === 'category-description') setCategoryDraft((current) => current ? { ...current, title: value } : current);
-    else if (editingField.startsWith('subcategory-title-')) {
-      const id = editingField.slice('subcategory-title-'.length);
-      setSubcategoryDrafts((items) => items.map((item) => item.id === id ? { ...item, title: value } : item));
-    } else if (editingField.startsWith('subcategory-description-')) {
-      const id = editingField.slice('subcategory-description-'.length);
-      setSubcategoryDrafts((items) => items.map((item) => item.id === id ? { ...item, description: value } : item));
+    if (editingField === 'add-subcategory') {
+      const title = newSubcategoryTitle.trim();
+      if (!title) return;
+      const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' + Date.now().toString(36);
+      setSubcategoryDrafts((items) => [...items, { id, title, description: newSubcategoryDescription.trim(), image: newSubcategoryImage.trim(), alt: title, terms: [title.toLowerCase()] }]);
+      setNewSubcategoryTitle(''); setNewSubcategoryDescription(''); setNewSubcategoryImage(''); setIsAddingSubcategory(false);
+    } else {
+      if (!value) return;
+      if (editingField === 'category-title') setCategoryDraft((current) => current ? { ...current, category: value } : current);
+      else if (editingField === 'category-description') setCategoryDraft((current) => current ? { ...current, title: value } : current);
+      else if (editingField === 'category-image') setCategoryDraft((current) => current ? { ...current, image: value } : current);
+      else if (editingField.startsWith('subcategory-title-')) {
+        const id = editingField.slice('subcategory-title-'.length);
+        setSubcategoryDrafts((items) => items.map((item) => item.id === id ? { ...item, title: value } : item));
+      } else if (editingField.startsWith('subcategory-description-')) {
+        const id = editingField.slice('subcategory-description-'.length);
+        setSubcategoryDrafts((items) => items.map((item) => item.id === id ? { ...item, description: value } : item));
+      } else if (editingField.startsWith('subcategory-image-')) {
+        const id = editingField.slice('subcategory-image-'.length);
+        setSubcategoryDrafts((items) => items.map((item) => item.id === id ? { ...item, image: value, alt: item.title } : item));
+      }
     }
     cancelEdit();
   };
@@ -154,7 +167,7 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
           <textarea value={editingValue} onChange={(event) => setEditingValue(event.target.value)} autoFocus rows={5} style={{ width: '100%', border: '1px solid #ccc', borderRadius: 8, padding: 12, color: '#111', background: '#fff' }} />
         ) : (
           <input value={editingValue} onChange={(event) => setEditingValue(event.target.value)} autoFocus onKeyDown={(event) => { if (event.key === 'Enter') saveEdit(); if (event.key === 'Escape') cancelEdit(); }} style={{ width: '100%', border: '1px solid #ccc', borderRadius: 8, padding: 12, color: '#111', background: '#fff' }} />
-        )
+        )}
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 16 }}>
           <button type="button" onClick={cancelEdit} style={{ padding: '9px 14px', border: '1px solid #ccc', borderRadius: 8, background: '#fff', color: '#222' }}>Cancel</button>
           <button type="button" onClick={saveEdit} style={{ padding: '9px 14px', border: '1px solid #111', borderRadius: 8, background: '#111', color: '#fff' }}>Save changes</button>
