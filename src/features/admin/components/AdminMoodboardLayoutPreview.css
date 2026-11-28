@@ -83,3 +83,18 @@ body:has(.admin-marketplace-admin-viewport .admin-marketplace-moodboard),
 .admin-scope.admin-marketplace-admin-viewport:has(.admin-marketplace-moodboard > .admin-moodboard-layout-preview), .admin-page-shell--marketplace:has(.admin-marketplace-moodboard > .admin-moodboard-layout-preview) { height:auto !important; min-height:100dvh !important; max-height:none !important; overflow:visible !important; }
 html:has(.admin-marketplace-moodboard > .admin-moodboard-layout-preview), body:has(.admin-marketplace-moodboard > .admin-moodboard-layout-preview), #root:has(.admin-marketplace-moodboard > .admin-moodboard-layout-preview) { height:auto; min-height:100dvh; max-height:none; overflow-x:hidden; overflow-y:auto; }
 .admin-marketplace-moodboard:has(.admin-moodboard-layout-preview) { height:auto !important; min-height:0 !important; max-height:none !important; overflow:visible !important; }
+
+
+/* Marketplace Moodboard reuses the homepage's actual floating liquid-glass header. */
+.admin-moodboard-layout-preview .admin-moodboard-header { position:fixed!important; top:0!important; left:0!important; right:0!important; z-index:125!important; transform:none!important; opacity:1!important; pointer-events:auto!important; padding:12px!important; }
+.admin-moodboard-layout-preview .admin-moodboard-header .kinetic-moodboard__search-row { width:100%!important; display:flex!important; align-items:flex-start!important; justify-content:space-between!important; gap:0!important; }
+.admin-moodboard-layout-preview .admin-moodboard-header:not(.menu-expanded) .kinetic-moodboard__search-shell { display:none!important; }
+.admin-moodboard-layout-preview .admin-moodboard-header:not(.menu-expanded) .kinetic-moodboard__search-back { border-radius:50%!important; }
+.admin-moodboard-layout-preview .admin-moodboard-header:not(.menu-expanded) .kinetic-moodboard__menu-button { border-radius:50%!important; }
+.admin-moodboard-layout-preview .admin-moodboard-header.menu-expanded .kinetic-moodboard__search-row { align-items:flex-start!important; }
+.admin-moodboard-layout-preview .admin-moodboard-header.menu-expanded .kinetic-moodboard__search-shell { display:flex!important; flex:1!important; width:auto!important; max-width:calc(100% - 52px)!important; margin-right:0!important; }
+.admin-moodboard-layout-preview .admin-moodboard-header .kinetic-moodboard__search-back { margin-right:8px!important; }
+.admin-moodboard-layout-preview .admin-moodboard-header .kinetic-moodboard__menu-button { margin-left:8px!important; }
+.admin-moodboard-menu-content { display:flex; flex-direction:column; gap:8px; width:100%; padding:6px 0; }
+.admin-moodboard-menu-content button { min-height:48px; width:100%; border:0; border-radius:12px; padding:0 14px; background:rgba(255,255,255,.08); color:#fff; text-align:left; cursor:pointer; font:inherit; }
+.admin-moodboard-menu-content button:hover { background:rgba(255,255,255,.16); }
