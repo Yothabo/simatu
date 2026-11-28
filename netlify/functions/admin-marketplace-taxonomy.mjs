@@ -152,12 +152,21 @@ export default async (request) => {
         const current = await pool.query(
           `SELECT msc.publication_status,
                   EXISTS (SELECT 1 FROM public.marketplace_content_media media
-                          WHERE media.id = msc.image_media_id AND media.retired_at IS NULL) AS has_active_image
-           FROM public.marketplace_subcategories msc WHERE msc.id = $1`,
+                          WHERE media.id = msc.image_media_id AND media.retired_at IS NULL) AS has_active_image,
+                  mc.is_active AS parent_is_active,
+                  mc.publication_status AS parent_publication_status,
+                  mc.audience_policy AS parent_audience_policy
+           FROM public.marketplace_subcategories msc
+           JOIN public.marketplace_categories mc ON mc.id = msc.marketplace_category_id
+           WHERE msc.id = $1`,
           [id]
         );
         if (!current.rowCount) return json({ error: 'Subcategory not found.' }, 404);
-        if (current.rows[0].publication_status !== 'published' && !current.rows[0].has_active_image) {
+        const state = current.rows[0];
+        if (!state.parent_is_active || state.parent_publication_status !== 'published' || state.parent_audience_policy !== 'general') {
+          return json({ error: 'Subcategories can only be published under an active, published, general-audience category.' }, 409);
+        }
+        if (state.publication_status !== 'published' && !state.has_active_image) {
           return json({ error: 'Upload an optimized JPEG and JPEG XL image before publishing this subcategory.' }, 409);
         }
       }
