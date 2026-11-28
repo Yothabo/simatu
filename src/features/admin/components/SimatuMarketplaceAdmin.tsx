@@ -67,6 +67,7 @@ export default function SimatuMarketplaceAdmin({ accessToken, onReturn }: Props)
   const [newCategoryImage, setNewCategoryImage] = useState('');
   const [manualOpen, setManualOpen] = useState(false);
   const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
+  const [subcategoryMenuId, setSubcategoryMenuId] = useState<string | null>(null);
   const [hiddenMarketIds, setHiddenMarketIds] = useState<string[]>([]);
 
   useEffect(() => {
@@ -112,11 +113,13 @@ export default function SimatuMarketplaceAdmin({ accessToken, onReturn }: Props)
           terms: fallback?.terms || [String(item.name || '').toLowerCase()],
           publicationStatus: item.publication_status,
           isActive: item.is_active !== false,
+          imageMediaId: item.image_media_id || null,
         } as SubcategoryDraft;
       });
       if (!cancelled) {
         setManagedMarkets(categories);
         setAllSubcategories(subcategories);
+        setHiddenMarketIds(categories.filter((item: CategoryDraft) => item.isActive === false).map((item: CategoryDraft) => item.id));
       }
     }).catch((error) => {
       console.error('[marketplace-admin] content load failed', error);
@@ -337,6 +340,56 @@ export default function SimatuMarketplaceAdmin({ accessToken, onReturn }: Props)
       toast.error(error instanceof Error ? error.message : 'Category could not be created.');
     }
   };
+  const updateCategoryStatus = async (status: 'draft' | 'published' | 'archived', active = true) => {
+    if (!activeMarket?.dbId) return;
+    if (status === 'published' && !activeMarket.imageMediaId) {
+      toast.error('Upload an optimized JPEG and JXL category image before publishing.');
+      return;
+    }
+    try {
+      await apiRequest('PATCH', categoryPayload(activeMarket, { publication_status: status, is_active: active }));
+      const updated = { ...activeMarket, publicationStatus: status, isActive: active };
+      setActiveMarket(updated);
+      setCategoryDraft(updated);
+      setManagedMarkets((items) => items.map((item) => item.dbId === updated.dbId ? updated : item));
+      if (!active) setHiddenMarketIds((ids) => ids.includes(updated.id) ? ids : [...ids, updated.id]);
+      else setHiddenMarketIds((ids) => ids.filter((id) => id !== updated.id));
+      setCategoryMenuOpen(false);
+      toast.success(status === 'published' ? 'Category published.' : status === 'archived' ? 'Category archived.' : 'Category saved as a draft.');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Category status could not be changed.');
+    }
+  };
+
+  const reactivateCategory = async (id: string) => {
+    const item = managedMarkets.find((market) => market.id === id);
+    if (!item?.dbId) return;
+    try {
+      await apiRequest('PATCH', categoryPayload(item, { is_active: true }));
+      setManagedMarkets((items) => items.map((market) => market.dbId === item.dbId ? { ...market, isActive: true } : market));
+      setHiddenMarketIds((ids) => ids.filter((hiddenId) => hiddenId !== id));
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Category could not be reactivated.');
+    }
+  };
+
+  const updateSubcategoryStatus = async (item: SubcategoryDraft, status: 'draft' | 'published' | 'archived') => {
+    if (status === 'published' && !item.imageMediaId) {
+      toast.error('Upload an optimized JPEG and JXL subcategory image before publishing.');
+      return;
+    }
+    try {
+      await apiRequest('PATCH', subcategoryPayload(item, { publication_status: status, is_active: status !== 'archived' }));
+      const updated = { ...item, publicationStatus: status, isActive: status !== 'archived' };
+      setSubcategoryDrafts((items) => items.map((entry) => entry.id === item.id ? updated : entry).filter((entry) => entry.isActive !== false));
+      setAllSubcategories((items) => items.map((entry) => entry.id === item.id ? updated : entry));
+      setSubcategoryMenuId(null);
+      toast.success(status === 'published' ? 'Subcategory published.' : status === 'archived' ? 'Subcategory archived.' : 'Subcategory saved as a draft.');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Subcategory status could not be changed.');
+    }
+  };
+
   const importDeviceImage = (file: File | undefined, onLoaded: (dataUrl: string) => void) => {
     if (!file || !file.type.startsWith('image/')) return;
     setPendingImageFile(file);
@@ -351,15 +404,16 @@ export default function SimatuMarketplaceAdmin({ accessToken, onReturn }: Props)
     <>
     <div className="admin-marketplace-moodboard" aria-label="Marketplace management" style={activeMarket ? { width: '100%', height: '100%', minHeight: 0, maxHeight: '100dvh', overflow: 'hidden', margin: 0, padding: 0 } : undefined}>
       {!activeMarket || !categoryDraft ? (
-        <AdminMoodboardLayoutPreview items={managedMarkets} hiddenMarketIds={hiddenMarketIds} onReactivateCategory={(id) => setHiddenMarketIds((ids) => ids.filter((hiddenId) => hiddenId !== id))} onItemClick={openMarket} onAddCategory={openAddCategory} onOpenManual={() => setManualOpen(true)} onReturn={onReturn} />
+        <AdminMoodboardLayoutPreview items={managedMarkets} hiddenMarketIds={hiddenMarketIds} onReactivateCategory={reactivateCategory} onItemClick={openMarket} onAddCategory={openAddCategory} onOpenManual={() => setManualOpen(true)} onReturn={onReturn} />
       ) : (
         <main style={{ height: '100%', minHeight: 0, maxHeight: '100dvh', overflow: 'hidden', position: 'relative', display: 'flex', flexDirection: 'column', background: '#111', color: '#f4f1ec', width: '100%', maxWidth: '100%', margin: 0, padding: 0, boxSizing: 'border-box' }}>
           <header className="admin-marketplace-category-header">
             <button type="button" className="admin-marketplace-category-action" onClick={returnToTiles} aria-label="Moodboard" title="Moodboard"><FaPalette aria-hidden="true" /></button>
             <button type="button" className="admin-marketplace-category-action" onClick={() => setCategoryMenuOpen((open) => !open)} aria-label="Category options" aria-expanded={categoryMenuOpen} title="Category options"><FaEllipsisV aria-hidden="true" /></button>
             {categoryMenuOpen && <div role="menu" style={{ position: 'absolute', top: 48, right: 16, width: 200, display: 'grid', gap: 2, padding: 6, border: '1px solid rgba(255,255,255,.14)', borderRadius: 10, background: '#262626', boxShadow: '0 12px 32px rgba(0,0,0,.35)', zIndex: 20 }}>
-              <button type="button" role="menuitem" onClick={() => { setHiddenMarketIds((ids) => ids.includes(activeMarket.id) ? ids : [...ids, activeMarket.id]); setCategoryMenuOpen(false); returnToTiles(); }} style={{ textAlign: 'left', border: 0, borderRadius: 6, background: 'transparent', color: '#f4f1ec', padding: '11px 12px', cursor: 'pointer' }}>Hide category</button>
-              <button type="button" role="menuitem" onClick={() => { setManagedMarkets((items) => items.filter((item) => item.id !== activeMarket.id)); setCategoryMenuOpen(false); returnToTiles(); }} style={{ textAlign: 'left', border: 0, borderRadius: 6, background: 'transparent', color: '#f0a5a5', padding: '11px 12px', cursor: 'pointer' }}>Delete category</button>
+              <button type="button" role="menuitem" onClick={() => void updateCategoryStatus(activeMarket.publicationStatus === 'published' ? 'draft' : 'published')} style={{ textAlign: 'left', border: 0, borderRadius: 6, background: 'transparent', color: '#f4f1ec', padding: '11px 12px', cursor: 'pointer' }}>{activeMarket.publicationStatus === 'published' ? 'Unpublish category' : 'Publish category'}</button>
+              <button type="button" role="menuitem" onClick={() => void updateCategoryStatus('archived', false)} style={{ textAlign: 'left', border: 0, borderRadius: 6, background: 'transparent', color: '#f0a5a5', padding: '11px 12px', cursor: 'pointer' }}>Archive category</button>
+              <button type="button" role="menuitem" onClick={() => void updateCategoryStatus('draft', false)} style={{ textAlign: 'left', border: 0, borderRadius: 6, background: 'transparent', color: '#f4f1ec', padding: '11px 12px', cursor: 'pointer' }}>Hide category</button>
             </div>}
           </header>
           <section style={{ position: 'relative', flex: '0 0 48vh', minHeight: 0, display: 'flex', alignItems: 'flex-end', padding: 0, overflow: 'hidden' }}>
