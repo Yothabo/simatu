@@ -53,7 +53,6 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
   const [newCategoryName, setNewCategoryName] = useState('');
   const [newCategoryDescription, setNewCategoryDescription] = useState('');
   const [newCategoryImage, setNewCategoryImage] = useState('');
-  const [scrollEnabled, setScrollEnabled] = useState(true);
   const [manualOpen, setManualOpen] = useState(false);
 
   const openMarket = (market: MoodboardItem) => {
@@ -118,9 +117,9 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
 
   return (
     <>
-    <div className="admin-marketplace-moodboard" aria-label="Marketplace management" style={{ position: 'fixed', inset: 0, zIndex: 10, overflowY: scrollEnabled ? 'auto' : 'hidden', overflowX: 'hidden', background: '#111', color: '#f4f1ec' }}>
+    <div className="admin-marketplace-moodboard" aria-label="Marketplace management" style={{ position: 'fixed', inset: 0, zIndex: 10, height: '100dvh', overflowY: 'auto', overflowX: 'hidden', WebkitOverflowScrolling: 'touch', touchAction: 'pan-y', background: '#111', color: '#f4f1ec' }}>
       {!activeMarket || !categoryDraft ? (
-        <div style={{ position: 'relative', marginTop: 64, overflow: 'visible' }}><AdminMoodboardLayoutPreview items={managedMarkets} onItemClick={openMarket} onAddCategory={openAddCategory} scrollEnabled={scrollEnabled} onToggleScroll={() => setScrollEnabled((value) => !value)} onOpenManual={() => setManualOpen(true)} onReturn={onReturn} /></div>
+        <div style={{ position: 'relative', marginTop: 64, overflow: 'visible' }}><AdminMoodboardLayoutPreview items={managedMarkets} onItemClick={openMarket} onAddCategory={openAddCategory} onOpenManual={() => setManualOpen(true)} onReturn={onReturn} /></div>
       ) : (
         <main style={{ minHeight: '100dvh', overflowY: 'auto', background: '#111', color: '#f4f1ec' }}>
           <section style={{ position: 'relative', minHeight: '42vh', display: 'flex', alignItems: 'flex-end', padding: 'clamp(24px,5vw,72px)', overflow: 'hidden' }}>
@@ -211,7 +210,7 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
     <Modal isOpen={manualOpen} onClose={() => setManualOpen(false)} maxWidth="max-w-md">
       <div className="admin-market-edit-modal">
         <div className="admin-market-edit-modal__header"><h2>Moodboard manual</h2></div>
-        <div className="admin-market-edit-modal__fields"><p>Choose an ad shape, select Add placement, then select a tile. Click a placed ad to remove it.</p><p>Use + Category to create a category. Select a category tile to edit its content and subcategories.</p><p>Scroll controls the Moodboard canvas. Published placements use the homepage scale.</p></div>
+        <div className="admin-market-edit-modal__fields"><p>Choose an ad shape, select Add placement, then select a tile. Click a placed ad to remove it.</p><p>Use + Category to create a category. Select a category tile to edit its content and subcategories.</p><p>Scroll the page to move through the full Moodboard canvas. Published placements use the homepage scale.</p></div>
         <div className="admin-market-edit-modal__actions"><button type="button" onClick={() => setManualOpen(false)} className="admin-market-edit-modal__button admin-market-edit-modal__button--primary">Close</button></div>
       </div>
     </Modal>
