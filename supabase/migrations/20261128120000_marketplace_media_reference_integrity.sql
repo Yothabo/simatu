@@ -1,5 +1,29 @@
 BEGIN;
 
+-- Fail migration safely if legacy references are already inconsistent.
+DO $audit$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM public.marketplace_categories c
+    JOIN public.marketplace_content_media m ON m.id = c.image_media_id
+    WHERE m.retired_at IS NOT NULL
+       OR m.marketplace_category_id IS DISTINCT FROM c.id
+       OR m.marketplace_subcategory_id IS NOT NULL
+  ) OR EXISTS (
+    SELECT 1
+    FROM public.marketplace_subcategories s
+    JOIN public.marketplace_content_media m ON m.id = s.image_media_id
+    WHERE m.retired_at IS NOT NULL
+       OR m.marketplace_subcategory_id IS DISTINCT FROM s.id
+       OR m.marketplace_category_id IS NOT NULL
+  ) THEN
+    RAISE EXCEPTION 'Existing marketplace media references are inconsistent; repair them before applying this migration.';
+  END IF;
+END;
+$audit$;
+
+
 -- Enforce that taxonomy image references point to media owned by the same entity.
 -- Deferred validation allows the upload transaction to retire the previous media
 -- and replace the entity reference atomically.
