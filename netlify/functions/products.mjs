@@ -60,7 +60,7 @@ async function saveProduct(body, isUpdate, admin, requestId) {
 
     if (isUpdate) {
       const existing = await client.query(
-        `SELECT storefront, category_id, subcategory_id, marketplace_subcategory_id
+        `SELECT storefront, category_id, subcategory_id, marketplace_subcategory_id, marketplace_visible
          FROM public.products
          WHERE id = $1
            AND ($2::text IS NULL OR storefront = $2)
@@ -161,7 +161,7 @@ async function saveProduct(body, isUpdate, admin, requestId) {
 
     // Preserve legacy classification when omitted; otherwise validate selected category scope.
     product.marketplace_subcategory_id = product.marketplace_subcategory_id ?? existingProduct?.marketplace_subcategory_id ?? null;
-    if (product.marketplace_visible && !product.marketplace_subcategory_id) {
+    if (product.marketplace_visible && !product.marketplace_subcategory_id && (!isUpdate || existingProduct?.marketplace_visible === false)) {
       await client.query('ROLLBACK');
       return json({ error: 'Assign this product to a marketplace category and subcategory before publishing it to the marketplace.' }, 400);
     }
