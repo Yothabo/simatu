@@ -291,12 +291,13 @@ describe('products API: product creation', () => {
       { rowCount: 1, rows: [{ id: 'store-y' }] }, // Store
       {
         rowCount: 1,
-        rows: [{ id: 'category-y', name: 'His', is_active: true }],
-      }, // Category
-      {
-        rowCount: 1,
-        rows: [{ id: 'subcategory-y', name: 'Eau de Parfum' }],
-      }, // Subcategory
+        rows: [{
+          category_id: 'category-y',
+          category_name: 'Fashion',
+          subcategory_id: 'subcategory-y',
+          subcategory_name: 'Eau de Parfum',
+        }],
+      }, // Assigned shared taxonomy
       duplicateSkuError, // INSERT
       emptyResult(), // ROLLBACK
     );
@@ -532,13 +533,20 @@ describe('products API: product updates', () => {
         rowCount: 1,
         rows: [{
           storefront: 'yotaabo',
-          category_id: 'category-y',
-          subcategory_id: 'subcategory-y',
+          category_id: null,
+          subcategory_id: null,
         }],
       }, // Existing product
       { rowCount: 1, rows: [{ id: 'store-y' }] },
-      { rowCount: 1, rows: [{ id: 'category-y', name: 'His', is_active: true }] },
-      { rowCount: 1, rows: [{ id: 'subcategory-y', name: 'Eau de Parfum' }] },
+      {
+        rowCount: 1,
+        rows: [{
+          category_id: 'category-y',
+          category_name: 'Fashion',
+          subcategory_id: 'subcategory-y',
+          subcategory_name: 'Eau de Parfum',
+        }],
+      },
       { rowCount: 1, rows: [{ id: validId, name: 'Test Fragrance' }] },
       emptyResult(), // COMMIT
     );
@@ -560,7 +568,8 @@ describe('products API: product updates', () => {
     );
 
     expect(lookup?.[1]).toEqual([validId, null]);
-    expect(update?.[1][13]).toBe(null);
+    expect(update?.[1][18]).toBe(validId);
+    expect(update?.[1][19]).toBeNull();
     expect(mocks.clientQuery).toHaveBeenCalledWith('COMMIT');
     expect(mocks.release).toHaveBeenCalledOnce();
   });
@@ -575,13 +584,20 @@ describe('products API: product updates', () => {
         rowCount: 1,
         rows: [{
           storefront: 'yotaabo',
-          category_id: 'category-y',
-          subcategory_id: 'subcategory-y',
+          category_id: null,
+          subcategory_id: null,
         }],
       }, // Existing product
       { rowCount: 1, rows: [{ id: 'store-y' }] },
-      { rowCount: 1, rows: [{ id: 'category-y', name: 'His', is_active: true }] },
-      { rowCount: 1, rows: [{ id: 'subcategory-y', name: 'Eau de Parfum' }] },
+      {
+        rowCount: 1,
+        rows: [{
+          category_id: 'category-y',
+          category_name: 'Fashion',
+          subcategory_id: 'subcategory-y',
+          subcategory_name: 'Eau de Parfum',
+        }],
+      },
       { rowCount: 1, rows: [{ id: validId, name: 'Test Fragrance' }] },
       emptyResult(), // COMMIT
     );
@@ -603,8 +619,8 @@ describe('products API: product updates', () => {
     );
 
     expect(lookup?.[1]).toEqual([validId, 'yotaabo']);
-    expect(update?.[1][15]).toBe(validId);
-    expect(update?.[1][16]).toBe('yotaabo');
+    expect(update?.[1][18]).toBe(validId);
+    expect(update?.[1][19]).toBe('yotaabo');
     expect(mocks.clientQuery).toHaveBeenCalledWith('COMMIT');
     expect(mocks.release).toHaveBeenCalledOnce();
   });
