@@ -188,6 +188,9 @@ export default async (request) => {
     });
   } catch (error) {
     await client.query('ROLLBACK').catch(() => {});
+    if (error?.code === '23503' || error?.code === '23514') {
+      return json({ error: 'This category is still required by one or more classified products and cannot be removed.' }, 409, { 'Cache-Control': 'no-store' });
+    }
     console.error('[marketplace-category-assignments] mutation failed', {
       action,
       errorCode: error?.code || null,
