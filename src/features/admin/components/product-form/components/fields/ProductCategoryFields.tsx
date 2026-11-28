@@ -5,61 +5,56 @@ import type { ProductFormFieldsProps } from '../ProductFormFields.types';
 type Props = Pick<
   ProductFormFieldsProps,
   | 'form'
-  | 'categoryOptions'
-  | 'subcategoryOptions'
-  | 'isLoadingCategories'
-  | 'categoryLoadError'
+  | 'marketplaceCategoryOptions'
+  | 'marketplaceSubcategoryOptions'
+  | 'isLoadingMarketplaceTaxonomy'
+  | 'marketplaceTaxonomyError'
   | 'onChange'
 >;
 
-const EXCLUDED_GENDER_CATEGORY = /\b(his|her|hers|his\s*and\s*hers|for\s*him|for\s*her)\b/i;
-
 export default function ProductCategoryFields({
   form,
-  categoryOptions,
-  subcategoryOptions,
-  isLoadingCategories,
-  categoryLoadError,
+  marketplaceCategoryOptions,
+  marketplaceSubcategoryOptions,
+  isLoadingMarketplaceTaxonomy,
+  marketplaceTaxonomyError,
   onChange,
 }: Props) {
-  const visibleCategories = categoryOptions.filter(
-    (option) => !EXCLUDED_GENDER_CATEGORY.test(option.label),
-  );
-  const visibleSubcategories = subcategoryOptions.filter(
-    (option) => !EXCLUDED_GENDER_CATEGORY.test(option.label),
-  );
-
   return (
     <div style={GRID_STYLE}>
-      <AdminField label="Store category" required>
+      <AdminField label="Marketplace category" required>
         <CustomDropdown
-          value={form.category_id ?? ''}
-          onChange={(value) => onChange('category', value)}
-          options={visibleCategories}
+          value={form.marketplace_category_slug ?? ''}
+          onChange={(value) => onChange('marketplace_category_slug', value || null)}
+          options={marketplaceCategoryOptions}
           placeholder={
-            isLoadingCategories
-              ? 'Loading categories...'
-              : categoryLoadError
-                ? 'Categories unavailable'
-                : 'Select'
+            isLoadingMarketplaceTaxonomy
+              ? 'Loading marketplace categories...'
+              : marketplaceCategoryOptions.length
+                ? 'Select'
+                : 'No category assigned to this store'
           }
         />
       </AdminField>
 
-      <AdminField label="Store subcategory" required>
+      <AdminField label="Marketplace subcategory" required>
         <CustomDropdown
-          value={form.subcategory_id ?? ''}
-          onChange={(value) => onChange('subcategory', value)}
-          options={visibleSubcategories}
+          value={form.marketplace_subcategory_id ?? ''}
+          onChange={(value) => onChange('marketplace_subcategory_id', value || null)}
+          options={marketplaceSubcategoryOptions}
           placeholder={
-            !form.category_id
-              ? 'Select category first'
-              : isLoadingCategories
+            !form.marketplace_category_slug
+              ? 'Select marketplace category first'
+              : isLoadingMarketplaceTaxonomy
                 ? 'Loading subcategories...'
                 : 'Select'
           }
         />
       </AdminField>
+
+      {marketplaceTaxonomyError && (
+        <span role="status">{marketplaceTaxonomyError}</span>
+      )}
     </div>
   );
 }
