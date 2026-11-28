@@ -155,7 +155,7 @@ export default function AdminDashboardContent({
       {activeTab === 'business' && <AdminBusinessCenter />}
 
       {activeTab === 'marketplace' && adminRole === 'super_admin' && (
-        <SimatuMarketplaceAdmin onReturn={() => setActiveTab('overview')} />
+        <SimatuMarketplaceAdmin accessToken={accessToken} onReturn={() => setActiveTab('overview')} />
       )}
 
       {activeTab === 'activities' && (
