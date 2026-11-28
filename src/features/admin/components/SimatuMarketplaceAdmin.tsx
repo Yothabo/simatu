@@ -28,7 +28,7 @@ type CategoryDraft = MoodboardItem;
 type SubcategoryDraft = DiscoverySubcategory;
 
 const categoryImageOverlayButton: React.CSSProperties = {
-  position: 'absolute', zIndex: 3, top: 'auto', bottom: 16, right: 16, width: 38, height: 38,
+  position: 'absolute', zIndex: 3, top: 'auto', bottom: 'clamp(120px, 18vh, 170px)', left: '50%', right: 'auto', transform: 'translateX(-50%)', width: 38, height: 38,
   display: 'grid', placeItems: 'center', border: '1px solid rgba(255,255,255,.5)',
   borderRadius: '50%', background: 'rgba(15,15,15,.75)', color: '#fff', cursor: 'pointer',
   backdropFilter: 'blur(10px)', fontSize: 17,
