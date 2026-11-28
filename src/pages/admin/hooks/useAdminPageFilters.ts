@@ -65,6 +65,16 @@ export function useAdminPageFilters({
     [orders, storefrontFilter],
   );
 
+  useEffect(() => {
+    if (
+      categoryFilter !== 'All' &&
+      categoryFilter !== 'Hidden' &&
+      !availableCategories.includes(categoryFilter)
+    ) {
+      setCategoryFilter('All');
+    }
+  }, [availableCategories, categoryFilter]);
+
   const filteredProducts = useMemo(() => {
     return storefrontProducts
       .filter((product) => {
