@@ -81,6 +81,7 @@ export default function AdminPageDashboard({
         setStorefrontFilter={filters.setStorefrontFilter}
         categoryFilter={filters.categoryFilter}
         setCategoryFilter={filters.setCategoryFilter}
+        availableCategories={filters.availableCategories}
         searchQuery={filters.searchQuery}
         setSearchQuery={filters.setSearchQuery}
         currentPage={filters.currentPage}
