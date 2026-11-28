@@ -64,6 +64,7 @@ export default async (request) => {
            ON mc.id = smc.marketplace_category_id
           AND mc.is_active IS TRUE
           AND mc.audience_policy = 'general'
+          AND mc.publication_status = 'published'
          GROUP BY s.id, s.name, s.slug, s.is_active
          ORDER BY s.name ASC`
       );
@@ -101,13 +102,13 @@ export default async (request) => {
     await client.query("SELECT set_config('app.actor_email', $1, true)", [admin.email || '']);
 
     const category = await client.query(
-      `SELECT id, slug, audience_policy, is_active
+      `SELECT id, slug, audience_policy, is_active, publication_status
        FROM public.marketplace_categories
        WHERE id = $1
        FOR UPDATE`,
       [categoryId]
     );
-    if (!category.rowCount || category.rows[0].is_active !== true || category.rows[0].audience_policy !== 'general') {
+    if (!category.rowCount || category.rows[0].is_active !== true || category.rows[0].audience_policy !== 'general' || category.rows[0].publication_status !== 'published') {
       await client.query('ROLLBACK');
       return json({ error: 'Category not found or not eligible for general marketplace assignment.' }, 404, { 'Cache-Control': 'no-store' });
     }
