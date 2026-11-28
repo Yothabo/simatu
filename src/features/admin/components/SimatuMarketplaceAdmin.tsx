@@ -142,7 +142,7 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
                   <article className="discovery-subcategory-card" style={{ position: 'relative', display: 'block', width: 230, height: 290, padding: 0, textAlign: 'left', border: 0, borderRadius: 3, background: '#111', color: '#fff', overflow: 'hidden' }}>
                     {sub.image ? <img src={sub.image} alt={sub.alt} loading="lazy" decoding="async" draggable={false} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'none' }} /> : null}
                     <button type="button" onClick={() => editSubcategoryImage(sub.id)} aria-label={'Change image for ' + sub.title} title="Change image" style={overlayButton}>▧</button>
-                    <span aria-hidden="true" style={{ position: 'absolute', inset: '38% 0 0', background: 'linear-gradient(to bottom,rgba(0,0,0,0),rgba(0,0,0,.16) 24%,rgba(0,0,0,.48) 60%,rgba(0,0,0,.76) 100%)' }} />
+                    <span aria-hidden="true" style={{ position: 'absolute', zIndex: 1, pointerEvents: 'none', inset: '52% 0 0', background: 'linear-gradient(to bottom,rgba(17,17,17,0) 0%,rgba(17,17,17,.12) 24%,rgba(17,17,17,.58) 100%)' }} />
                     <span style={{ position: 'absolute', left: 12, right: 12, bottom: 14, zIndex: 2, pointerEvents: 'auto' }}>
                       <strong style={{ display: 'block', fontSize: 12, fontWeight: 600, letterSpacing: '.04em', lineHeight: 1.3 }}>
                         <TextEditTrigger value={sub.title} onEdit={() => beginEdit('subcategory-title-' + sub.id, sub.title)} />
