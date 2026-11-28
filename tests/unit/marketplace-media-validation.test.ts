@@ -41,6 +41,15 @@ describe('marketplace media validators', () => {
       expect(getJpegDimensions(malformed)).toBeNull();
     });
 
+    it('rejects SOF segments missing component descriptor bytes', () => {
+      const incomplete = Buffer.from([
+        0xff, 0xd8, 0xff, 0xc0, 0x00, 0x08,
+        0x08, 0x00, 0x10, 0x00, 0x20, 0x01,
+        0xff, 0xd9,
+      ]);
+      expect(getJpegDimensions(incomplete)).toBeNull();
+    });
+
     it('rejects zero frame dimensions', () => {
       expect(getJpegDimensions(makeJpeg({ width: 0, height: 16 }))).toBeNull();
       expect(getJpegDimensions(makeJpeg({ width: 32, height: 0 }))).toBeNull();
