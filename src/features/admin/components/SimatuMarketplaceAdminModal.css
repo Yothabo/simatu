@@ -1,0 +1,117 @@
+/* Admin Market edit content — semantic tokens inherited from AdminPage's theme scope. */
+.admin-market-edit-modal {
+  --market-modal-bg: var(--admin-surface, #ffffff);
+  --market-modal-text: var(--admin-text-primary, #222222);
+  --market-modal-muted: var(--admin-text-secondary, #666666);
+  --market-modal-border: var(--admin-border-strong, rgba(0,0,0,.16));
+  --market-modal-field-bg: var(--admin-surface-subtle, #f7f7f7);
+  display: grid;
+  gap: 22px;
+  padding: clamp(20px, 4vw, 28px);
+  background: var(--market-modal-bg);
+  color: var(--market-modal-text);
+  font-family: var(--admin-font-body, inherit);
+}
+.admin-scope[data-theme='light'] .admin-market-edit-modal,
+.admin-scope[data-theme='dark'] .admin-market-edit-modal {
+  background: var(--admin-surface);
+  color: var(--admin-text-primary);
+}
+.admin-scope[data-theme='light'] [data-modal-panel]:has(.admin-market-edit-modal),
+.admin-scope[data-theme='dark'] [data-modal-panel]:has(.admin-market-edit-modal) {
+  background: var(--admin-surface) !important;
+}
+.admin-market-edit-modal__header { display: grid; gap: 6px; }
+.admin-market-edit-modal__header h2 {
+  margin: 0;
+  color: var(--market-modal-text);
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -.025em;
+}
+.admin-market-edit-modal__header p {
+  margin: 0;
+  color: var(--market-modal-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.admin-market-edit-modal__fields { display: grid; gap: 15px; }
+.admin-market-edit-modal__field { display: grid; gap: 7px; color: var(--market-modal-text); font-size: 12px; font-weight: 600; letter-spacing: .02em; }
+.admin-market-edit-modal__field small { color: var(--market-modal-muted); font-weight: 400; letter-spacing: 0; }
+.admin-market-edit-modal__field input,
+.admin-market-edit-modal__field textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--market-modal-border);
+  border-radius: 10px;
+  padding: 12px 13px;
+  color: var(--market-modal-text);
+  background: var(--market-modal-field-bg);
+  font: 400 14px/1.55 var(--admin-font-body, inherit);
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+}
+.admin-market-edit-modal__field textarea { resize: vertical; }
+.admin-market-edit-modal__field input::placeholder,
+.admin-market-edit-modal__field textarea::placeholder { color: var(--market-modal-muted); opacity: .8; }
+.admin-market-edit-modal__field input:focus,
+.admin-market-edit-modal__field textarea:focus {
+  border-color: var(--admin-focus, #777) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--admin-focus, #777) 18%, transparent);
+}
+.admin-market-edit-modal__preview {
+  display: block;
+  width: 100%;
+  max-height: 260px;
+  min-height: 90px;
+  object-fit: contain;
+  border: 1px solid var(--market-modal-border);
+  border-radius: 12px;
+  background: var(--market-modal-field-bg);
+}
+.admin-market-edit-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 9px;
+  padding-top: 2px;
+}
+.admin-market-edit-modal__button {
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease;
+}
+.admin-market-edit-modal__button:active { transform: translateY(1px); }
+.admin-market-edit-modal__button--secondary {
+  border: 1px solid var(--market-modal-border);
+  background: transparent;
+  color: var(--market-modal-text);
+}
+.admin-market-edit-modal__button--secondary:hover { background: var(--market-modal-field-bg); }
+.admin-market-edit-modal__button--primary {
+  border: 1px solid #262626;
+  background: #262626;
+  color: #ffffff;
+}
+.admin-market-edit-modal__button--primary:hover { background: #404040; border-color: #404040; }
+.admin-scope[data-theme='dark'] .admin-market-edit-modal {
+  --market-modal-bg: var(--admin-surface, #262626);
+  --market-modal-text: var(--admin-text-primary, #f5f5f5);
+  --market-modal-muted: var(--admin-text-secondary, #b8b8b8);
+  --market-modal-border: var(--admin-border-strong, rgba(255,255,255,.18));
+  --market-modal-field-bg: var(--admin-surface-subtle, #333333);
+}
+.admin-scope[data-theme='dark'] .admin-market-edit-modal__button--primary {
+  border-color: #f0f0f0;
+  background: #f0f0f0;
+  color: #202020;
+}
+.admin-scope[data-theme='dark'] .admin-market-edit-modal__button--primary:hover { background: #ffffff; border-color: #ffffff; }
+@media (max-width: 480px) {
+  .admin-market-edit-modal__actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .admin-market-edit-modal__button { width: 100%; }
+}
