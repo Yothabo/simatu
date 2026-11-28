@@ -428,7 +428,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       </section>
     );
   }
-  if (marketDataError && !adminMode && !items) {
+  if (marketDataError && !adminMode && !items && marketItems.length === 0) {
     return (
       <section className={`kinetic-moodboard kinetic-moodboard--error ${className}`} style={style} role="status" aria-label="Marketplace discovery unavailable">
         <p>Marketplace discovery is temporarily unavailable. Please try again shortly.</p>
