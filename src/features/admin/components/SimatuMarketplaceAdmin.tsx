@@ -119,7 +119,7 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
     <>
     <div className="admin-marketplace-moodboard" aria-label="Marketplace management">
       {!activeMarket || !categoryDraft ? (
-        <div style={{ position: 'relative', marginTop: 64, overflow: 'visible' }}><AdminMoodboardLayoutPreview items={managedMarkets} onItemClick={openMarket} onAddCategory={openAddCategory} onOpenManual={() => setManualOpen(true)} onReturn={onReturn} /></div>
+        <AdminMoodboardLayoutPreview items={managedMarkets} onItemClick={openMarket} onAddCategory={openAddCategory} onOpenManual={() => setManualOpen(true)} onReturn={onReturn} />
       ) : (
         <main style={{ minHeight: '100dvh', overflowY: 'auto', background: '#111', color: '#f4f1ec' }}>
           <section style={{ position: 'relative', minHeight: '42vh', display: 'flex', alignItems: 'flex-end', padding: 'clamp(24px,5vw,72px)', overflow: 'hidden' }}>
