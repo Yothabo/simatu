@@ -148,5 +148,20 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
         </main>
       )}
     </div>
+    <Modal isOpen={Boolean(editingField)} onClose={cancelEdit} maxWidth="max-w-md">
+      <div style={{ padding: 24, background: '#fff', color: '#171717' }}>
+        <h2 style={{ fontSize: 20, fontWeight: 600, margin: '0 0 6px' }}>Edit {editingField?.startsWith('category-') ? 'category' : 'subcategory'} {editingField?.endsWith('title') ? 'title' : 'description'}</h2>
+        <p style={{ margin: '0 0 16px', color: '#666', fontSize: 13 }}>Changes apply to this element only.</p>
+        {editingField?.endsWith('description') ? (
+          <textarea value={editingValue} onChange={(event) => setEditingValue(event.target.value)} autoFocus rows={5} style={{ width: '100%', border: '1px solid #ccc', borderRadius: 8, padding: 12, color: '#111', background: '#fff' }} />
+        ) : (
+          <input value={editingValue} onChange={(event) => setEditingValue(event.target.value)} autoFocus onKeyDown={(event) => { if (event.key === 'Enter') saveEdit(); if (event.key === 'Escape') cancelEdit(); }} style={{ width: '100%', border: '1px solid #ccc', borderRadius: 8, padding: 12, color: '#111', background: '#fff' }} />
+        )}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 16 }}>
+          <button type="button" onClick={cancelEdit} style={{ padding: '9px 14px', border: '1px solid #ccc', borderRadius: 8, background: '#fff', color: '#222' }}>Cancel</button>
+          <button type="button" onClick={saveEdit} style={{ padding: '9px 14px', border: '1px solid #111', borderRadius: 8, background: '#111', color: '#fff' }}>Save changes</button>
+        </div>
+      </div>
+    </Modal>
   );
 }
