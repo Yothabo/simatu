@@ -249,7 +249,7 @@ export default function SimatuMarketplaceAdmin({ accessToken, onReturn }: Props)
       } else if (editingField === 'category-image') {
         if (!pendingImageFile || !categoryDraft?.dbId) return toast.error('Choose an image file first.');
         const media = await uploadMarketplaceImage('category', categoryDraft.dbId, categoryDraft.category, pendingImageFile);
-        const updated = { ...categoryDraft, image: media.image_url, imageJxl: media.image_jxl_url, alt: media.alt_text };
+        const updated = { ...categoryDraft, image: media.image_url, imageJxl: media.image_jxl_url, alt: media.alt_text, imageMediaId: media.id };
         setCategoryDraft(updated);
         setActiveMarket(updated);
         setManagedMarkets((items) => items.map((item) => item.dbId === updated.dbId ? updated : item));
@@ -259,7 +259,7 @@ export default function SimatuMarketplaceAdmin({ accessToken, onReturn }: Props)
         const current = subcategoryDrafts.find((item) => item.id === id);
         if (!pendingImageFile || !current) return toast.error('Choose an image file first.');
         const media = await uploadMarketplaceImage('subcategory', id, current.title, pendingImageFile);
-        const updated = { ...current, image: media.image_url, imageJxl: media.image_jxl_url, alt: media.alt_text };
+        const updated = { ...current, image: media.image_url, imageJxl: media.image_jxl_url, alt: media.alt_text, imageMediaId: media.id };
         setSubcategoryDrafts((items) => items.map((item) => item.id === id ? updated : item));
         setAllSubcategories((items) => items.map((item) => item.id === id ? updated : item));
         toast.success('Subcategory image optimized and uploaded.');
@@ -327,7 +327,7 @@ export default function SimatuMarketplaceAdmin({ accessToken, onReturn }: Props)
       };
       if (pendingImageFile) {
         const media = await uploadMarketplaceImage('category', created.dbId!, created.category, pendingImageFile);
-        created = { ...created, image: media.image_url, imageJxl: media.image_jxl_url, alt: media.alt_text };
+        created = { ...created, image: media.image_url, imageJxl: media.image_jxl_url, alt: media.alt_text, imageMediaId: media.id };
       }
       setManagedMarkets((items) => [...items, created]);
       setActiveMarket(created);
