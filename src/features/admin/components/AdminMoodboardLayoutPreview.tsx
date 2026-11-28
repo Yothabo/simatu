@@ -7,7 +7,6 @@ type Props = {
 };
 
 const TILE_COUNT = 64;
-const COLUMNS = 8;
 
 export default function AdminMoodboardLayoutPreview({ items, onItemClick }: Props) {
   const placements = useMemo(() => {
