@@ -27,6 +27,12 @@ function TextEditTrigger({ value, onEdit }: TextEditTriggerProps) {
 type CategoryDraft = MoodboardItem;
 type SubcategoryDraft = DiscoverySubcategory;
 
+const categoryImageOverlayButton: React.CSSProperties = {
+  position: 'absolute', zIndex: 3, top: 'auto', bottom: 16, right: 16, width: 38, height: 38,
+  display: 'grid', placeItems: 'center', border: '1px solid rgba(255,255,255,.5)',
+  borderRadius: '50%', background: 'rgba(15,15,15,.75)', color: '#fff', cursor: 'pointer',
+  backdropFilter: 'blur(10px)', fontSize: 17,
+};
 const overlayButton: React.CSSProperties = {
   position: 'absolute', zIndex: 3, top: 12, right: 12, width: 38, height: 38,
   display: 'grid', placeItems: 'center', border: '1px solid rgba(255,255,255,.5)',
@@ -119,11 +125,11 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
 
   return (
     <>
-    <div className="admin-marketplace-moodboard" aria-label="Marketplace management">
+    <div className="admin-marketplace-moodboard" aria-label="Marketplace management" style={activeMarket ? { width: '100%', height: '100%', minHeight: 0, maxHeight: '100dvh', overflow: 'hidden', margin: 0, padding: 0 } : undefined}>
       {!activeMarket || !categoryDraft ? (
         <AdminMoodboardLayoutPreview items={managedMarkets.filter((market) => !hiddenMarketIds.includes(market.id))} onItemClick={openMarket} onAddCategory={openAddCategory} onOpenManual={() => setManualOpen(true)} onReturn={onReturn} />
       ) : (
-        <main style={{ height: '100dvh', maxHeight: '100dvh', overflow: 'hidden', position: 'relative', display: 'flex', flexDirection: 'column', background: '#111', color: '#f4f1ec', width: '100vw', maxWidth: '100vw', marginInline: 'calc(50% - 50vw)', padding: 0, boxSizing: 'border-box' }}>
+        <main style={{ height: '100%', minHeight: 0, maxHeight: '100dvh', overflow: 'hidden', position: 'relative', display: 'flex', flexDirection: 'column', background: '#111', color: '#f4f1ec', width: '100%', maxWidth: '100%', margin: 0, padding: 0, boxSizing: 'border-box' }}>
           <header style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 16px', background: 'transparent', border: 0, zIndex: 10 }}>
             <button type="button" onClick={returnToTiles} aria-label="Return to moodboard" title="Return to moodboard" style={{ width: 40, height: 40, display: 'grid', placeItems: 'center', border: '1px solid rgba(255,255,255,.18)', borderRadius: 8, background: 'transparent', color: '#f4f1ec', cursor: 'pointer' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/></svg></button>
             <button type="button" onClick={() => setCategoryMenuOpen((open) => !open)} aria-label="Category options" aria-expanded={categoryMenuOpen} title="Category options" style={{ width: 40, height: 40, display: 'grid', placeItems: 'center', border: '1px solid rgba(255,255,255,.18)', borderRadius: 8, background: 'transparent', color: '#f4f1ec', cursor: 'pointer' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></button>
@@ -134,7 +140,7 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
           </header>
           <section style={{ position: 'relative', flex: '0 0 48vh', minHeight: 0, display: 'flex', alignItems: 'flex-end', padding: 0, overflow: 'hidden' }}>
             <img src={categoryDraft.image} alt={categoryDraft.alt} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: categoryDraft.objectPosition || 'center' }} />
-            <button type="button" onClick={editCategoryImage} aria-label="Edit category image" title="Edit category image" style={overlayButton}>▧</button>
+            <button type="button" onClick={editCategoryImage} aria-label="Edit category image" title="Edit category image" style={categoryImageOverlayButton}>▧</button>
             <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,#111 0%,rgba(17,17,17,.92) 14%,rgba(17,17,17,.38) 58%,transparent 100%)' }} />
             <div style={{ position: 'relative', zIndex: 1, maxWidth: 760, padding: 'clamp(20px, 4vw, 48px)' }}>
               <h1 style={{ fontSize: 'clamp(40px,8vw,96px)', lineHeight: .95, fontWeight: 500, margin: '18px 0' }}>
@@ -145,8 +151,8 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
               </p>
             </div>
           </section>
-          <section style={{ flex: '1 1 0', minHeight: 0, display: 'flex', flexDirection: 'column', padding: '0 clamp(16px, 4vw, 48px)', margin: 0, width: '100%', boxSizing: 'border-box', overflow: 'hidden' }}>
-            <Swiper className="admin-marketplace-subcategory-swiper" modules={[A11y, Keyboard, Navigation, Pagination]} slidesPerView="auto" slidesPerGroup={1} spaceBetween={16} speed={520} threshold={6} resistanceRatio={0.85} roundLengths watchSlidesProgress navigation={subcategoryDrafts.length > 2} pagination={subcategoryDrafts.length > 0 ? { clickable: true } : false} keyboard={{ enabled: true, onlyInViewport: true }} grabCursor slideToClickedSlide watchOverflow loop={false} aria-label={categoryDraft.category + ' subcategories'} style={{ width: '100%', height: '100%', flex: '1 1 0', padding: 0, overflow: 'visible', alignItems: 'flex-start', '--swiper-theme-color': '#f4f1ec' } as React.CSSProperties}>
+          <section style={{ flex: '1 1 0', minHeight: 0, height: 0, display: 'flex', flexDirection: 'column', padding: '0 clamp(16px, 4vw, 48px)', margin: 0, width: '100%', boxSizing: 'border-box', overflow: 'hidden' }}>
+            <Swiper className="admin-marketplace-subcategory-swiper" modules={[A11y, Keyboard, Navigation, Pagination]} slidesPerView="auto" slidesPerGroup={1} spaceBetween={16} speed={520} threshold={6} resistanceRatio={0.85} roundLengths watchSlidesProgress navigation={subcategoryDrafts.length > 2} pagination={subcategoryDrafts.length > 0 ? { clickable: true } : false} keyboard={{ enabled: true, onlyInViewport: true }} grabCursor slideToClickedSlide watchOverflow loop={false} aria-label={categoryDraft.category + ' subcategories'} style={{ width: '100%', height: '100%', minHeight: 0, flex: '1 1 0', padding: 0, overflow: 'hidden', alignItems: 'flex-start', position: 'relative', '--swiper-theme-color': '#f4f1ec' } as React.CSSProperties}>
               {subcategoryDrafts.map((sub) => (
                 <SwiperSlide key={sub.id} style={{ width: 230, height: 290, flexShrink: 0 }}>
                   <article className="discovery-subcategory-card" style={{ position: 'relative', display: 'block', width: 230, height: 290, padding: 0, textAlign: 'left', border: 0, borderRadius: 3, background: '#111', color: '#fff', overflow: 'hidden' }}>
