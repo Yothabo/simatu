@@ -80,7 +80,7 @@ export default async (request) => {
   if (!admin) return json({ error: 'Authentication required.' }, 401);
   if (admin.role !== 'super_admin') return json({ error: 'Only platform administrators may audit marketplace media.' }, 403);
 
-  const baseUrl = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\\/+$/, '');
+  const baseUrl = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\/+$/, '');
   const storageSecret = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
   if (!baseUrl || !storageSecret) {
     return json({ error: 'Marketplace media storage is not configured on the server.' }, 503);
