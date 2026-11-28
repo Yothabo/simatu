@@ -138,7 +138,7 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
           <section style={{ flex: '1 1 auto', minHeight: 0, display: 'flex', flexDirection: 'column', padding: 'clamp(16px, 2vw, 24px) clamp(16px, 4vw, 48px)', margin: 0, width: '100%', boxSizing: 'border-box', overflow: 'hidden' }}>
             <Swiper modules={[A11y, Keyboard, Navigation, Pagination]} slidesPerView={1.35} slidesPerGroup={1} spaceBetween={14} speed={520} threshold={6} resistanceRatio={0.85} roundLengths watchSlidesProgress breakpoints={{ 480: { slidesPerView: 2.15, spaceBetween: 16 }, 768: { slidesPerView: 3.15, spaceBetween: 20 }, 1100: { slidesPerView: 4.15, spaceBetween: 24 } }} navigation={subcategoryDrafts.length > 2} pagination={subcategoryDrafts.length > 0 ? { clickable: true } : false} keyboard={{ enabled: true, onlyInViewport: true }} grabCursor slideToClickedSlide watchOverflow loop={false} aria-label={categoryDraft.category + ' subcategories'} style={{ flex: '1 1 auto', minHeight: 0, height: '100%', paddingBottom: 24, overflow: 'visible', '--swiper-theme-color': '#f4f1ec' } as React.CSSProperties}>
               {subcategoryDrafts.map((sub) => (
-                <SwiperSlide key={sub.id}>
+                <SwiperSlide key={sub.id} style={{ height: '100%' }}>
                   <article className="discovery-subcategory-card" style={{ position: 'relative', display: 'block', width: '100%', height: '100%', aspectRatio: 'unset', padding: 0, textAlign: 'left', border: '1px solid rgba(255,255,255,.14)', borderRadius: 8, background: '#262626', color: '#fff', overflow: 'hidden' }}>
                     {sub.image ? <img src={sub.image} alt={sub.alt} loading="lazy" decoding="async" draggable={false} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(.58)' }} /> : null}
                     <button type="button" onClick={() => editSubcategoryImage(sub.id)} aria-label={'Change image for ' + sub.title} title="Change image" style={overlayButton}>▧</button>
@@ -154,7 +154,7 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
                   </article>
                 </SwiperSlide>
               ))}
-              <SwiperSlide key="add-subcategory">
+              <SwiperSlide key="add-subcategory" style={{ height: '100%' }}>
                 <button type="button" onClick={addSubcategory} aria-label="Add subcategory" style={{ ...addCardStyle, height: '100%', aspectRatio: 'unset' }}>
                   <span style={{ display: 'grid', placeItems: 'center', width: 62, height: 62, border: '1px solid rgba(255,255,255,.55)', borderRadius: '50%', fontSize: 32, lineHeight: 1 }}>+</span>
                   <span style={{ fontSize: 15, letterSpacing: '.04em' }}>Add subcategory</span>
