@@ -58,7 +58,7 @@
 .admin-market-edit-modal__field input:focus,
 .admin-market-edit-modal__field textarea:focus {
   border-color: var(--admin-focus, #777) !important;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--admin-focus, #777) 18%, transparent);
+  box-shadow: none;
 }
 .admin-market-edit-modal__preview {
   display: block;
@@ -114,4 +114,38 @@
 @media (max-width: 480px) {
   .admin-market-edit-modal__actions { display: grid; grid-template-columns: 1fr 1fr; }
   .admin-market-edit-modal__button { width: 100%; }
+}
+
+/* Device image import: reuse a single border and change only its state color. */
+.admin-market-edit-modal__image-source {
+  display: grid;
+  gap: 10px;
+}
+.admin-market-edit-modal__device-picker {
+  display: flex;
+  min-height: 44px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 10px 14px;
+  border: 1px solid var(--market-modal-border);
+  border-radius: 10px;
+  color: var(--market-modal-text);
+  background: var(--market-modal-field-bg);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+.admin-market-edit-modal__device-picker:hover,
+.admin-market-edit-modal__device-picker:focus-visible {
+  border-color: var(--admin-focus, #777);
+  outline: none;
+}
+.admin-market-edit-modal__device-picker input[type='file'] {
+  display: none;
+}
+.admin-market-edit-modal__image-source input[type='url'] {
+  border: 1px solid var(--market-modal-border);
 }
