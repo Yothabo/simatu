@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaPalette, FaEllipsisV } from 'react-icons/fa';
 import Modal from '../../../shared/components/Modal';
 import type { MoodboardItem } from '../../../systems/homepage/discover/KineticMoodboard';
@@ -13,8 +13,9 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import '../../../systems/homepage/design-system/index.css';
 import './SimatuMarketplaceAdminModal.css';
+import { optimizeMarketplaceImage } from '../../../systems/media/marketplaceImageOptimizer';
 
-type Props = { onReturn: () => void; };
+type Props = { accessToken: string; onReturn: () => void; };
 
 type TextEditTriggerProps = { value: string; onEdit: () => void; };
 function TextEditTrigger({ value, onEdit }: TextEditTriggerProps) {
@@ -25,8 +26,8 @@ function TextEditTrigger({ value, onEdit }: TextEditTriggerProps) {
     </span>
   );
 }
-type CategoryDraft = MoodboardItem;
-type SubcategoryDraft = DiscoverySubcategory;
+type CategoryDraft = MoodboardItem & { dbId?: string; slug?: string; publicationStatus?: 'draft' | 'published' | 'archived'; isActive?: boolean; imageMediaId?: string | null };
+type SubcategoryDraft = DiscoverySubcategory & { dbId?: string; slug?: string; marketplaceCategoryId?: string; publicationStatus?: 'draft' | 'published' | 'archived'; isActive?: boolean };
 
 const categoryImageOverlayButton: React.CSSProperties = {
   position: 'absolute', zIndex: 3, top: 'auto', bottom: 'clamp(160px, 22vh, 210px)', left: '50%', right: 'auto', transform: 'translateX(-50%)', width: 38, height: 38,
@@ -46,7 +47,7 @@ const addCardStyle: React.CSSProperties = {
   borderRadius: 8, background: 'rgba(255,255,255,.035)', color: '#fff', cursor: 'pointer',
 };
 
-export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
+export default function SimatuMarketplaceAdmin({ accessToken, onReturn }: Props) {
   const [activeMarket, setActiveMarket] = useState<CategoryDraft | null>(null);
   const [categoryDraft, setCategoryDraft] = useState<CategoryDraft | null>(null);
   const [subcategoryDrafts, setSubcategoryDrafts] = useState<SubcategoryDraft[]>([]);
@@ -57,6 +58,9 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
   const [newSubcategoryDescription, setNewSubcategoryDescription] = useState('');
   const [newSubcategoryImage, setNewSubcategoryImage] = useState('');
   const [managedMarkets, setManagedMarkets] = useState<CategoryDraft[]>(DISCOVERY_MARKETS);
+  const [allSubcategories, setAllSubcategories] = useState<SubcategoryDraft[]>([]);
+  const [pendingImageFile, setPendingImageFile] = useState<File | null>(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
   const [newCategoryDescription, setNewCategoryDescription] = useState('');
   const [newCategoryImage, setNewCategoryImage] = useState('');
@@ -64,10 +68,101 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
   const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
   const [hiddenMarketIds, setHiddenMarketIds] = useState<string[]>([]);
 
-  const openMarket = (market: MoodboardItem) => {
+  useEffect(() => {
+    if (!accessToken) return;
+    let cancelled = false;
+    fetch('/api/admin-marketplace-taxonomy', {
+      headers: { Accept: 'application/json', Authorization: 'Bearer ' + accessToken },
+      cache: 'no-store',
+    }).then(async (response) => {
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Marketplace content could not be loaded.');
+      const categories = (Array.isArray(data.categories) ? data.categories : []).map((item: any) => {
+        const slug = String(item.slug || '');
+        const id = slug === 'home-living' ? 'spaces' : slug;
+        const fallback = DISCOVERY_MARKETS.find((market) => market.id === id);
+        return {
+          id,
+          dbId: String(item.id),
+          slug,
+          image: String(item.image_url || fallback?.image || ''),
+          imageJxl: item.image_jxl_url || undefined,
+          alt: String(item.image_alt_text || item.name || fallback?.alt || 'Marketplace category'),
+          category: String(item.name || slug),
+          title: String(item.description || fallback?.title || ''),
+          publicationStatus: item.publication_status,
+          isActive: item.is_active !== false,
+          imageMediaId: item.image_media_id || null,
+        } as CategoryDraft;
+      });
+      const subcategories = (Array.isArray(data.subcategories) ? data.subcategories : []).map((item: any) => {
+        const category = categories.find((entry) => entry.dbId === item.marketplace_category_id);
+        const fallback = category ? getSubcategories(category.id).find((entry) => entry.id === item.slug) : undefined;
+        return {
+          id: String(item.id),
+          dbId: String(item.id),
+          slug: String(item.slug || ''),
+          marketplaceCategoryId: String(item.marketplace_category_id),
+          title: String(item.name || item.slug),
+          image: String(item.image_url || fallback?.image || ''),
+          imageJxl: item.image_jxl_url || undefined,
+          alt: String(item.image_alt_text || item.name || fallback?.alt || 'Marketplace subcategory'),
+          description: String(item.description || fallback?.description || ''),
+          terms: fallback?.terms || [String(item.name || '').toLowerCase()],
+          publicationStatus: item.publication_status,
+          isActive: item.is_active !== false,
+        } as SubcategoryDraft;
+      });
+      if (!cancelled) {
+        setManagedMarkets(categories);
+        setAllSubcategories(subcategories);
+      }
+    }).catch((error) => {
+      console.error('[marketplace-admin] content load failed', error);
+    });
+    return () => { cancelled = true; };
+  }, [accessToken]);
+
+  const apiRequest = async (method: 'POST' | 'PATCH' | 'DELETE', payload: Record<string, unknown>) => {
+    const response = await fetch('/api/admin-marketplace-taxonomy', {
+      method,
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + accessToken },
+      body: JSON.stringify(payload),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Marketplace content could not be saved.');
+    return data;
+  };
+
+  const uploadMarketplaceImage = async (type: 'category' | 'subcategory', id: string, altText: string, file: File) => {
+    setUploadingImage(true);
+    try {
+      const optimized = await optimizeMarketplaceImage(file);
+      const form = new FormData();
+      form.append(type === 'category' ? 'category_id' : 'subcategory_id', id);
+      form.append('alt_text', altText);
+      form.append('width', String(optimized.width));
+      form.append('height', String(optimized.height));
+      form.append('jpeg', optimized.jpeg);
+      form.append('jxl', optimized.jxl);
+      const response = await fetch('/api/admin-marketplace-media', {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + accessToken },
+        body: form,
+      });
+      const data = await response.json();
+      if (!response.ok || !data.media) throw new Error(data.error || 'Optimized image upload failed.');
+      return data.media as { image_url: string; image_jxl_url: string; alt_text: string };
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const openMarket = (market: CategoryDraft) => {
     setActiveMarket(market);
     setCategoryDraft({ ...market });
-    setSubcategoryDrafts(getSubcategories(market.id).map((item) => ({ ...item })));
+    const stored = allSubcategories.filter((item) => item.marketplaceCategoryId === market.dbId && item.isActive !== false);
+    setSubcategoryDrafts(stored.length || allSubcategories.length ? stored : getSubcategories(market.id).map((item) => ({ ...item })));
     setIsAddingSubcategory(false);
   };
   const returnToTiles = () => {
@@ -77,7 +172,7 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
     setIsAddingSubcategory(false);
   };
   const beginEdit = (field: string, value: string) => { setEditingField(field); setEditingValue(value); };
-  const cancelEdit = () => { setEditingField(null); setEditingValue(''); };
+  const cancelEdit = () => { setEditingField(null); setEditingValue(''); setPendingImageFile(null); };
   const saveEdit = () => {
     if (!editingField) return;
     const value = editingValue.trim();
@@ -117,6 +212,7 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
   };
   const importDeviceImage = (file: File | undefined, onLoaded: (dataUrl: string) => void) => {
     if (!file || !file.type.startsWith('image/')) return;
+    setPendingImageFile(file);
     const reader = new FileReader();
     reader.onload = () => {
       if (typeof reader.result === 'string') onLoaded(reader.result);
