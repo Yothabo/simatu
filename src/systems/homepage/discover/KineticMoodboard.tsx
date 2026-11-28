@@ -11,6 +11,7 @@ const NETWORK_STORES = [{ key: 'yotaabo' as const, name: 'Yotaabo', href: '/yota
 export interface MoodboardItem {
   id: string;
   image: string;
+  imageJxl?: string;
   alt: string;
   category: string;
   title: string;
@@ -112,23 +113,31 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   };
   useEffect(() => { if (colorReveal) setSearchDismissed(false); }, [colorReveal]);
   const [marketItems, setMarketItems] = useState<MoodboardItem[]>(DISCOVERY_MARKETS);
+  const [marketSubcategories, setMarketSubcategories] = useState<Record<string, Array<{ id: string; title: string; image: string; imageJxl?: string; alt: string; description: string; terms: string[] }>>>({});
   useEffect(() => {
     let cancelled = false;
     fetch('/api/marketplace-categories', { headers: { Accept: 'application/json' } })
       .then(async (response) => {
         const data = await response.json();
         if (!response.ok || !Array.isArray(data.categories)) throw new Error('Marketplace categories unavailable');
-        const mapped = data.categories.map((category: { slug?: string; name?: string; description?: string }) => {
+        const mapped = data.categories.map((category: { slug?: string; name?: string; description?: string; image_url?: string | null; image_jxl_url?: string | null; image_alt_text?: string | null }) => {
           const slug = String(category.slug || '');
           const legacyId = slug === 'home-living' ? 'spaces' : slug;
           const existing = DISCOVERY_MARKETS.find((market) => market.id === legacyId || market.category.toLowerCase() === String(category.name || '').toLowerCase());
-          return existing || {
-            id: legacyId,
-            image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=900&q=85',
-            alt: String(category.name || 'Marketplace category'),
+          return {
+            ...(existing || {
+              id: legacyId,
+              image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=900&q=85',
+              alt: String(category.name || 'Marketplace category'),
+              category: String(category.name || slug),
+              title: String(category.description || ('Discover ' + (category.name || slug))),
+            }),
+            image: String(category.image_url || existing?.image || ''),
+            imageJxl: category.image_jxl_url || undefined,
+            alt: String(category.image_alt_text || category.name || existing?.alt || 'Marketplace category'),
             category: String(category.name || slug),
-            title: String(category.description || ('Discover ' + (category.name || slug))),
-          };
+            title: String(category.description || existing?.title || ('Discover ' + (category.name || slug))),
+          } as MoodboardItem;
         }).filter((item: MoodboardItem) => item.id !== 'age-restricted');
         // Keep the restricted destination locally; the public API intentionally excludes it.
         const restricted = DISCOVERY_MARKETS.find((item) => item.id === 'age-restricted');
@@ -140,6 +149,32 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       });
     return () => { cancelled = true; };
   }, []);
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/marketplace-subcategories', { headers: { Accept: 'application/json' } })
+      .then(async (response) => {
+        const data = await response.json();
+        if (!response.ok || !Array.isArray(data.subcategories)) throw new Error('Marketplace subcategories unavailable');
+        const grouped: Record<string, Array<{ id: string; title: string; image: string; imageJxl?: string; alt: string; description: string; terms: string[] }>> = {};
+        for (const item of data.subcategories as Array<{ id: string; slug: string; name: string; description?: string | null; category_slug: string; image_url?: string | null; image_jxl_url?: string | null; image_alt_text?: string | null }>) {
+          const categoryKey = item.category_slug === 'home-living' ? 'spaces' : item.category_slug;
+          const fallback = (DISCOVERY_SUBCATEGORIES[categoryKey] || []).find((entry) => entry.id === item.slug);
+          const entry = {
+            id: item.id,
+            title: item.name,
+            image: item.image_url || fallback?.image || '',
+            imageJxl: item.image_jxl_url || undefined,
+            alt: item.image_alt_text || item.name,
+            description: item.description || fallback?.description || '',
+            terms: [item.name.toLowerCase()],
+          };
+          (grouped[categoryKey] ||= []).push(entry);
+        }
+        if (!cancelled && Object.keys(grouped).length) setMarketSubcategories(grouped);
+      })
+      .catch(() => { /* Curated local subcategory data remains as a fallback. */ });
+    return () => { cancelled = true; };
+  }, []);
   // Managed Admin tiles override category imagery and ordering when configured.
   useEffect(() => {
     let cancelled = false;
@@ -147,9 +182,10 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
       .then(async response => {
         const data = await response.json();
         if (!response.ok || !Array.isArray(data.tiles) || !data.tiles.length) return;
-        const managed = data.tiles.map((tile: { category_slug?: string; category_name?: string; image_url?: string; alt_text?: string; title?: string; subtitle?: string; sort_order?: number; destination_path?: string }) => ({
+        const managed = data.tiles.map((tile: { category_slug?: string; category_name?: string; image_url?: string; image_jxl_url?: string; alt_text?: string; title?: string; subtitle?: string; sort_order?: number; destination_path?: string }) => ({
           id: String(tile.category_slug || '') === 'home-living' ? 'spaces' : String(tile.category_slug || ''),
           image: String(tile.image_url || ''),
+          imageJxl: tile.image_jxl_url || undefined,
           alt: String(tile.alt_text || tile.category_name || 'Marketplace category'),
           category: String(tile.category_name || tile.category_slug || ''),
           title: String(tile.subtitle || tile.title || tile.category_name || ''),
@@ -181,16 +217,17 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
   const sourceItems = items.length ? items : DEFAULT_ITEMS;
   const boardTilePool = useMemo(() => {
     const subcategoryTiles = marketItems.flatMap((market) =>
-      (DISCOVERY_SUBCATEGORIES[market.id] || []).map((subcategory) => ({
+      (marketSubcategories[market.id]?.length ? marketSubcategories[market.id] : (DISCOVERY_SUBCATEGORIES[market.id] || [])).map((subcategory) => ({
         id: `${market.id}-${subcategory.id}`,
         image: subcategory.image,
+        imageJxl: subcategory.imageJxl,
         alt: subcategory.alt,
         category: market.category,
         title: subcategory.title,
       } as MoodboardItem))
     );
     return [...sourceItems, ...subcategoryTiles];
-  }, [sourceItems, marketItems]);
+  }, [sourceItems, marketItems, marketSubcategories]);
   const allTiles = useMemo(() => {
     const random = seededRandom(29);
     const uniquePool = Array.from(new Map(boardTilePool.map((item) => [item.id, item])).values());
@@ -478,7 +515,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
               style={{ '--discover-row': Math.floor(index / columns) } as React.CSSProperties}
               draggable={false}
             >
-              <SharedImage src={item.image} alt={item.alt} loading={index < 4 ? 'eager' : 'lazy'} decoding="async" draggable={false} objectPosition={item.objectPosition || 'center'} style={{ transitionDelay: colorReveal ? `${Math.floor(index / columns) * 0.05}s` : '0s' }} />
+              <SharedImage src={item.image} jxlSrc={item.imageJxl} alt={item.alt} loading={index < 4 ? 'eager' : 'lazy'} decoding="async" draggable={false} objectPosition={item.objectPosition || 'center'} style={{ transitionDelay: colorReveal ? `${Math.floor(index / columns) * 0.05}s` : '0s' }} />
               {showLabels && <span className="kinetic-moodboard__label" style={{ transitionDelay: colorReveal ? `${Math.floor(index / columns) * 0.025}s` : "0s" }}><span className="kinetic-moodboard__category">{item.category}</span></span>}
             </button>
           ))}
