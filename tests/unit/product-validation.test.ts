@@ -11,8 +11,10 @@ const validProduct = () => ({
   name: 'Test Fragrance',
   price: 199.99,
   storefront: 'yotaabo',
-  category: 'His',
-  subcategory: 'Eau de Parfum',
+  category: '',
+  subcategory: '',
+  marketplace_category_slug: 'fashion',
+  marketplace_subcategory_id: validSubcategoryId,
   is_active: true,
   sort_order: 0,
 });
@@ -59,11 +61,12 @@ describe('validateProduct: valid input', () => {
         supplier_cost: null,
         sku: null,
         sizes: [],
-        category: 'His',
+        category: '',
         category_id: null,
-        subcategory: 'Eau de Parfum',
+        subcategory: '',
         subcategory_id: null,
-        marketplace_subcategory_id: null,
+        marketplace_category_slug: 'fashion',
+        marketplace_subcategory_id: validSubcategoryId,
         description: null,
         image_url: null,
         is_active: true,
@@ -425,25 +428,26 @@ describe('validateProduct: storefront validation', () => {
 });
 
 describe('validateProduct: category validation', () => {
-  it('rejects a missing category name and ID', () => {
+  it('does not require a legacy store-owned category name', () => {
     expect(validateProduct({
       ...validProduct(),
       category: '',
-    }).error).toBe('Please select a valid category.');
+      category_id: null,
+    }).product?.category_id).toBeNull();
   });
 
-  it('rejects a whitespace-only category', () => {
+  it('requires a shared marketplace category', () => {
     expect(validateProduct({
       ...validProduct(),
-      category: '   ',
-    }).error).toBe('Please select a valid category.');
+      marketplace_category_slug: null,
+    }).error).toBe('Select a marketplace category assigned to this store.');
   });
 
   it('rejects malformed category UUIDs', () => {
     expect(validateProduct({
       ...validProduct(),
       category_id: 'not-a-uuid',
-    }).error).toBe('Please provide a valid category.');
+    }).error).toBe('Please provide a valid legacy category reference.');
   });
 
   it('rejects category names longer than 120 characters', () => {
@@ -462,7 +466,7 @@ describe('validateProduct: category validation', () => {
 });
 
 describe('validateProduct: platform subcategory validation', () => {
-  it('accepts an optional marketplace subcategory UUID', () => {
+  it('requires a valid marketplace subcategory UUID', () => {
     const result = validateProduct({
       ...validProduct(),
       marketplace_subcategory_id: validSubcategoryId,
@@ -475,8 +479,11 @@ describe('validateProduct: platform subcategory validation', () => {
     expect(result.product?.marketplace_category_slug).toBe('fashion');
   });
 
-  it('requires a marketplace subcategory when a marketplace category is chosen', () => {
-    expect(validateProduct({ ...validProduct(), marketplace_category_slug: 'fashion' }).error).toBe('Select a marketplace subcategory for the chosen category.');
+  it('requires a marketplace subcategory', () => {
+    expect(validateProduct({
+      ...validProduct(),
+      marketplace_subcategory_id: null,
+    }).error).toBe('Select a valid marketplace subcategory.');
   });
 
   it('rejects invalid marketplace category slug', () => {
@@ -484,8 +491,12 @@ describe('validateProduct: platform subcategory validation', () => {
   });
 
 
-  it('defaults marketplace subcategory classification to null', () => {
-    expect(validateProduct(validProduct()).product?.marketplace_subcategory_id).toBeNull();
+  it('does not allow an unclassified store product', () => {
+    expect(validateProduct({
+      ...validProduct(),
+      marketplace_category_slug: null,
+      marketplace_subcategory_id: null,
+    }).error).toBe('Select a marketplace category assigned to this store.');
   });
 
   it('rejects malformed marketplace subcategory IDs', () => {
@@ -497,25 +508,19 @@ describe('validateProduct: platform subcategory validation', () => {
 });
 
 describe('validateProduct: subcategory validation', () => {
-  it('rejects a missing subcategory name and ID', () => {
+  it('does not require a legacy store-owned subcategory name', () => {
     expect(validateProduct({
       ...validProduct(),
       subcategory: '',
-    }).error).toBe('Please provide a valid subcategory.');
-  });
-
-  it('rejects a whitespace-only subcategory', () => {
-    expect(validateProduct({
-      ...validProduct(),
-      subcategory: '   ',
-    }).error).toBe('Please provide a valid subcategory.');
+      subcategory_id: null,
+    }).product?.subcategory_id).toBeNull();
   });
 
   it('rejects malformed subcategory UUIDs', () => {
     expect(validateProduct({
       ...validProduct(),
       subcategory_id: 'not-a-uuid',
-    }).error).toBe('Please provide a valid subcategory.');
+    }).error).toBe('Please provide a valid legacy subcategory reference.');
   });
 
   it('rejects subcategory names longer than 120 characters', () => {
