@@ -19,3 +19,10 @@ declare module '*.svg' {
   const value: string;
   export default value;
 }
+
+declare module '@jsquash/jxl' {
+  export function encode(
+    imageData: ImageData,
+    options?: { quality?: number; effort?: number },
+  ): Promise<ArrayBuffer>;
+}
