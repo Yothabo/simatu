@@ -126,7 +126,7 @@ const KineticMoodboard: React.FC<KineticMoodboardProps> = ({
         const mapped = data.categories.map((category: { id?: string; slug?: string; name?: string; description?: string; image_url?: string | null; image_jxl_url?: string | null; image_alt_text?: string | null }) => {
           const slug = String(category.slug || '');
           return {
-            id: String(category.id || (slug === 'home-living' ? 'spaces' : slug)),
+            id: slug === 'home-living' ? 'spaces' : slug,
             image: String(category.image_url || ''),
             imageJxl: category.image_jxl_url || undefined,
             alt: String(category.image_alt_text || category.name || 'Marketplace category'),
