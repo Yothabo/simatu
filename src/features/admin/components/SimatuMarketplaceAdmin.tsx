@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import Modal from '../../../shared/components/Modal';
-import KineticMoodboard, { type MoodboardItem } from '../../../systems/homepage/discover/KineticMoodboard';
+import type { MoodboardItem } from '../../../systems/homepage/discover/KineticMoodboard';
+import { DISCOVERY_MARKETS } from '../../../systems/homepage/discover/discovery-taxonomy';
+import AdminMoodboardLayoutPreview from './AdminMoodboardLayoutPreview';
+import './AdminMoodboardLayoutPreview.css';
 import { getSubcategories, type DiscoverySubcategory } from '../../../systems/homepage/discover/discovery-taxonomy';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { A11y, Keyboard, Navigation, Pagination } from 'swiper/modules';
@@ -110,7 +113,7 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
     <div className="admin-marketplace-moodboard" aria-label="Marketplace management" style={{ position: 'fixed', inset: 0, zIndex: 10, overflow: 'hidden', background: '#111', color: '#f4f1ec' }}>
       <button type="button" onClick={activeMarket ? returnToTiles : onReturn} aria-label={activeMarket ? 'Back to Admin Market categories' : 'Return to Admin dashboard'} style={floatingButtonStyle}>{activeMarket ? '← Back' : '← Return'}</button>
       {!activeMarket || !categoryDraft ? (
-        <KineticMoodboard colorReveal interactive adminMode onItemClick={openMarket} />
+        <div style={{ position: 'absolute', inset: '64px 0 0', overflow: 'auto', overscrollBehavior: 'contain' }}><AdminMoodboardLayoutPreview items={DISCOVERY_MARKETS} onItemClick={openMarket} /></div>
       ) : (
         <main style={{ minHeight: '100dvh', overflowY: 'auto', background: '#111', color: '#f4f1ec' }}>
           <section style={{ position: 'relative', minHeight: '42vh', display: 'flex', alignItems: 'flex-end', padding: 'clamp(24px,5vw,72px)', overflow: 'hidden' }}>
