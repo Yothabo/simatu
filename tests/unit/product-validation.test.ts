@@ -70,6 +70,8 @@ describe('validateProduct: valid input', () => {
         description: null,
         image_url: null,
         is_active: true,
+        marketplace_visible: true,
+        storefront_visible: true,
         sort_order: 0,
       },
     });
