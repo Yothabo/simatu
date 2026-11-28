@@ -7,7 +7,7 @@ type ShapeId = 'horizontal-2' | 'vertical-2' | 'l-3' | 'square-4' | 'wide-8';
 type Shape = { id: ShapeId; label: string; cells: Array<[number, number]>; width: number; height: number; note?: string };
 type AdDraft = { id: number; shape: ShapeId; anchor: number };
 const BOARD_COLUMNS = 8, BOARD_ROWS = 8, BOARD_COUNT = 64;
-const TILE_WIDTH = 230, TILE_HEIGHT = 290, TILE_GAP = 16;
+const TILE_WIDTH = 230, TILE_HEIGHT = 290, TILE_GAP = 16, ADMIN_CANVAS_SCALE = 0.35;
 const SHAPES: Shape[] = [
   { id: 'horizontal-2', label: 'Horizontal · 2', cells: [[0, 0], [0, 1]], width: 2, height: 1 },
   { id: 'vertical-2', label: 'Vertical · 2', cells: [[0, 0], [1, 0]], width: 1, height: 2 },
@@ -66,7 +66,7 @@ export default function AdminMoodboardLayoutPreview({ items, onItemClick }: Prop
       <section className="admin-moodboard-layout-preview__board-section" aria-label="Homepage 8 by 8 board preview">
         <header className="admin-moodboard-layout-preview__board-header"><span>HOMEPAGE MOODBOARD</span><small>8 × 8 · {BOARD_COUNT} positions · {pool.length} unique taxonomy tiles · {homepageTiles.length} shown</small></header>
         <div className="admin-moodboard-layout-preview__scroll">
-          <div className="admin-moodboard-layout-preview__board" role="grid" aria-label="Homepage 64-tile board" style={{ gridTemplateColumns: 'repeat(8, 230px)', gridTemplateRows: 'repeat(8, 290px)' }}>
+          <div className="admin-moodboard-layout-preview__board" role="grid" aria-label="Homepage 64-tile board" style={{ gridTemplateColumns: 'repeat(8, 230px)', gridTemplateRows: 'repeat(8, 290px)', zoom: ADMIN_CANVAS_SCALE }}>
             {homepageTiles.map((item, index) => <button type="button" role="gridcell" key={item.id} className={'admin-moodboard-layout-preview__tile' + (canPlace(index) ? ' is-ad-target' : '')} onClick={() => occupied.has(index) ? undefined : canPlace(index) ? placeAd(index) : onItemClick?.(items.find((market) => market.id === item.id) || items.find((market) => item.id.startsWith(market.id + '-')) || item)} aria-label={occupied.has(index) ? 'Ad occupied position ' + (index + 1) : canPlace(index) ? 'Select position ' + (index + 1) + ' for ad placement' : item.category + ': ' + item.title}>
               <img src={item.image} alt={item.alt} draggable={false} loading={index < 8 ? 'eager' : 'lazy'} /><span>{item.category}</span>
             </button>)}
