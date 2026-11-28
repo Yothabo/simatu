@@ -37,6 +37,7 @@ export default function AdminDashboardContent({
   setStorefrontFilter,
   categoryFilter,
   setCategoryFilter,
+  availableCategories,
   searchQuery,
   setSearchQuery,
   currentPage,
@@ -91,6 +92,7 @@ export default function AdminDashboardContent({
         <AdminProducts
           searchQuery={searchQuery}
           categoryFilter={categoryFilter}
+          availableCategories={availableCategories}
           filteredProducts={filteredProducts}
           paginatedProducts={paginatedProducts}
           currentPage={currentPage}
