@@ -31,6 +31,15 @@ export function useAdminPageFilters({
 
   const [categoryFilter, setCategoryFilter] =
     useState<CategoryFilter>('All');
+
+  const availableCategories = useMemo(
+    () => Array.from(new Set(
+      storefrontProducts
+        .map((product) => product.category?.trim())
+        .filter((category): category is string => Boolean(category)),
+    )).sort((a, b) => a.localeCompare(b)),
+    [storefrontProducts],
+  );
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -84,16 +93,6 @@ export function useAdminPageFilters({
     setCurrentPage(1);
   }, [storefrontFilter, categoryFilter, searchQuery]);
 
-  useEffect(() => {
-    if (storefrontFilter === 'yotaabo' && categoryFilter === 'Lounge') {
-      setCategoryFilter('All');
-    }
-
-    if (storefrontFilter === 'poshies' && categoryFilter === 'Spaces') {
-      setCategoryFilter('All');
-    }
-  }, [storefrontFilter, categoryFilter]);
-
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
 
   const paginatedProducts = useMemo(() => {
@@ -141,6 +140,7 @@ export function useAdminPageFilters({
 
     categoryFilter,
     setCategoryFilter,
+    availableCategories,
     searchQuery,
     setSearchQuery,
     currentPage,
