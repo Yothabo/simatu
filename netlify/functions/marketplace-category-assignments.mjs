@@ -152,6 +152,14 @@ export default async (request) => {
         [storeId, categoryId]
       );
     } else {
+      const assignmentCount = await client.query(
+        'SELECT COUNT(*)::integer AS count FROM public.store_marketplace_categories WHERE store_id=$1',
+        [storeId]
+      );
+      if (Number(assignmentCount.rows[0]?.count || 0) <= 1) {
+        await client.query('ROLLBACK');
+        return json({ error: 'Every classified store must retain at least one marketplace category.' }, 409, { 'Cache-Control': 'no-store' });
+      }
       const removed = await client.query(
         `DELETE FROM public.store_marketplace_categories
          WHERE store_id = $1 AND marketplace_category_id = $2
