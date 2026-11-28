@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import MoodboardSearchBar from '../../../systems/homepage/discover/MoodboardSearchBar';
+import React, { useMemo } from 'react';
+import { FaHome } from 'react-icons/fa';
 import type { MoodboardItem } from '../../../systems/homepage/discover/KineticMoodboard';
 import { DISCOVERY_SUBCATEGORIES } from '../../../systems/homepage/discover/discovery-taxonomy';
 
@@ -12,12 +12,11 @@ function homepagePool(items: MoodboardItem[]) {
   const pool=Array.from(new Map([...items,...subs].map((item)=>[item.id,item])).values()), random=seededRandom(29);
   for(let i=pool.length-1;i>0;i-=1){const j=Math.floor(random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];} return pool;
 }
-export default function AdminMoodboardLayoutPreview({items,hiddenMarketIds=[],onReactivateCategory,onItemClick,onAddCategory,onOpenManual,onReturn}:Props) {
+export default function AdminMoodboardLayoutPreview({items,hiddenMarketIds=[],onReactivateCategory,onItemClick,onAddCategory,onReturn}:Props) {
   const pool=useMemo(()=>homepagePool(items),[items]);
   const tiles=pool.slice(0,BOARD_COUNT-1);
-  const [menuOpen, setMenuOpen] = useState(false);
   return <div className="admin-moodboard-layout-preview">
-    <MoodboardSearchBar value="" onChange={() => {}} onBack={onReturn} visible fixed showMenu onMenuClick={() => setMenuOpen((open) => !open)} className={menuOpen ? 'admin-moodboard-header menu-expanded' : 'admin-moodboard-header'} adminMenuContent={<div className="admin-moodboard-menu-content"><button type="button" onClick={() => { setMenuOpen(false); onOpenManual?.(); }}>Moodboard manual</button></div>} />
+    <button type="button" className="admin-moodboard-home-button" onClick={onReturn} aria-label="Return to Admin dashboard" title="Home"><FaHome aria-hidden="true" /></button>
     <div className="admin-moodboard-layout-preview__scroll">
       <div className="admin-moodboard-layout-preview__board" role="grid" aria-label="Homepage moodboard" style={{gridTemplateColumns:'repeat(8, 230px)',gridTemplateRows:'repeat(8, 290px)',zoom:ADMIN_CANVAS_SCALE}}>
         <button type="button" role="gridcell" className="admin-moodboard-layout-preview__add-category" onClick={onAddCategory} aria-label="Add category"><span>+</span><small>Category</small></button>
