@@ -7,10 +7,6 @@ const pool = new Pool({
   idleTimeoutMillis: 10000,
   connectionTimeoutMillis: 10000,
 });
-const storageBase = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\\/+$/, '');
-const mediaUrl = (path) => path && storageBase
-  ? `${storageBase}/storage/v1/object/public/marketplace-media/${path.split('/').map(encodeURIComponent).join('/')}`
-  : null;
 
 export default async (request) => {
   if (request.method !== 'GET') {
