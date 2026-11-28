@@ -32,7 +32,7 @@ function InlineEditable({ value, editing, onEdit, onChange, onSave, onCancel, in
   return (
     <span style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'stretch', gap: 8, width: '100%' }}>
       {multiline ? <textarea {...sharedProps} rows={3} /> : <input {...sharedProps} />}
-      <span style={{ display: 'inline-flex', gap: 6, alignSelf: 'flex-start }}>
+      <span style={{ display: 'inline-flex', gap: 6, alignSelf: 'flex-start' }}>
         <button type="button" onClick={onSave} title="Save" aria-label="Save text edit" style={{ border: '1px solid rgba(255,255,255,.35)', borderRadius: 6, padding: '5px 10px', background: '#fff', color: '#111', cursor: 'pointer' }}>Save</button>
         <button type="button" onClick={onCancel} title="Cancel" aria-label="Cancel text edit" style={{ border: '1px solid rgba(255,255,255,.25)', borderRadius: 6, padding: '5px 10px', background: 'transparent', color: '#fff', cursor: 'pointer' }}>Cancel</button>
       </span>
@@ -78,28 +78,26 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
     setSubcategoryDrafts([]);
     setIsAddingSubcategory(false);
   };
-  const editCategoryText = () => {
-    if (!categoryDraft) return;
-    const nextTitle = window.prompt('Edit category title', categoryDraft.category);
-    if (nextTitle === null) return;
-    const nextDescription = window.prompt('Edit category description', categoryDraft.title);
-    if (nextDescription === null) return;
-    setCategoryDraft((current) => current ? { ...current, category: nextTitle.trim() || current.category, title: nextDescription.trim() } : current);
+  const beginEdit = (field: string, value: string) => { setEditingField(field); setEditingValue(value); };
+  const cancelEdit = () => { setEditingField(null); setEditingValue(''); };
+  const saveCategoryField = (field: 'category' | 'title') => {
+    const value = editingValue.trim();
+    if (!value) { cancelEdit(); return; }
+    setCategoryDraft((current) => current ? { ...current, [field]: value } : current);
+    cancelEdit();
+  };
+  const saveSubcategoryField = (id: string, field: 'title' | 'description') => {
+    const value = editingValue.trim();
+    if (!value) { cancelEdit(); return; }
+    setSubcategoryDrafts((items) => items.map((item) => item.id === id ? { ...item, [field]: value } : item));
+    cancelEdit();
   };
   const editCategoryImage = () => {
     if (!categoryDraft) return;
     const nextImage = window.prompt('Paste category image URL', categoryDraft.image);
     if (nextImage?.trim()) setCategoryDraft((current) => current ? { ...current, image: nextImage.trim() } : current);
   };
-  const editSubcategoryText = (id: string) => {
-    const current = subcategoryDrafts.find((item) => item.id === id);
-    if (!current) return;
-    const title = window.prompt('Edit subcategory title', current.title);
-    if (title === null) return;
-    const description = window.prompt('Edit subcategory description', current.description);
-    if (description === null) return;
-    setSubcategoryDrafts((items) => items.map((item) => item.id === id ? { ...item, title: title.trim() || item.title, description: description.trim() } : item));
-  };
+
   const editSubcategoryImage = (id: string) => {
     const current = subcategoryDrafts.find((item) => item.id === id);
     if (!current) return;
@@ -129,9 +127,12 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
             <button type="button" onClick={editCategoryImage} aria-label="Edit category image" title="Edit category image" style={overlayButton}>▧</button>
             <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,#111 0%,rgba(17,17,17,.92) 14%,rgba(17,17,17,.38) 58%,transparent 100%)' }} />
             <div style={{ position: 'relative', zIndex: 1, maxWidth: 760 }}>
-              <button type="button" onClick={editCategoryText} aria-label="Edit category title and description" title="Edit title and description" style={{ ...overlayButton, position: 'relative', display: 'inline-grid', top: 'auto', right: 'auto', marginBottom: 6 }}>✎</button>
-              <h1 style={{ fontSize: 'clamp(40px,8vw,96px)', lineHeight: .95, fontWeight: 500, margin: '18px 0' }}>{categoryDraft.category}</h1>
-              <p style={{ fontSize: 'clamp(14px,1.4vw,18px)', lineHeight: 1.65, maxWidth: 680 }}>{categoryDraft.title}</p>
+              <h1 style={{ fontSize: 'clamp(40px,8vw,96px)', lineHeight: .95, fontWeight: 500, margin: '18px 0' }}>
+                <InlineEditable value={categoryDraft.category} editing={editingField === 'category-title'} onEdit={() => beginEdit('category-title', categoryDraft.category)} onChange={setEditingValue} onSave={() => saveCategoryField('category')} onCancel={cancelEdit} inputStyle={{ fontSize: 'clamp(32px,7vw,80px)', lineHeight: .95 }} />
+              </h1>
+              <p style={{ fontSize: 'clamp(14px,1.4vw,18px)', lineHeight: 1.65, maxWidth: 680 }}>
+                <InlineEditable value={categoryDraft.title} editing={editingField === 'category-description'} onEdit={() => beginEdit('category-description', categoryDraft.title)} onChange={setEditingValue} onSave={() => saveCategoryField('title')} onCancel={cancelEdit} multiline inputStyle={{ maxWidth: 680 }} />
+              </p>
             </div>
           </section>
           <section style={{ padding: 'clamp(24px,5vw,72px)' }}>
@@ -141,11 +142,14 @@ export default function SimatuMarketplaceAdmin({ onReturn }: Props) {
                   <article className="discovery-subcategory-card" style={{ position: 'relative', display: 'block', width: '100%', aspectRatio: '4 / 5', padding: 0, textAlign: 'left', border: '1px solid rgba(255,255,255,.14)', borderRadius: 8, background: '#222', color: '#fff', overflow: 'hidden' }}>
                     {sub.image ? <img src={sub.image} alt={sub.alt} loading="lazy" decoding="async" draggable={false} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(.58)' }} /> : null}
                     <button type="button" onClick={() => editSubcategoryImage(sub.id)} aria-label={'Change image for ' + sub.title} title="Change image" style={overlayButton}>▧</button>
-                    <button type="button" onClick={() => editSubcategoryText(sub.id)} aria-label={'Edit ' + sub.title} title="Edit title and description" style={{ ...overlayButton, top: 12, right: 58 }}>✎</button>
                     <span aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(0,0,0,.8),rgba(0,0,0,.02) 76%)' }} />
                     <span style={{ position: 'absolute', left: 16, right: 16, bottom: 16, zIndex: 1, pointerEvents: 'none' }}>
-                      <strong style={{ display: 'block', fontSize: 18, fontWeight: 500 }}>{sub.title}</strong>
-                      <span style={{ display: 'block', marginTop: 7, fontSize: 13, lineHeight: 1.45, fontWeight: 400, color: 'rgba(255,255,255,.82)' }}>{sub.description}</span>
+                      <strong style={{ display: 'block', fontSize: 18, fontWeight: 500 }}>
+                        <InlineEditable value={sub.title} editing={editingField === 'subcategory-title-' + sub.id} onEdit={() => beginEdit('subcategory-title-' + sub.id, sub.title)} onChange={setEditingValue} onSave={() => saveSubcategoryField(sub.id, 'title')} onCancel={cancelEdit} />
+                      </strong>
+                      <span style={{ display: 'block', marginTop: 7, fontSize: 13, lineHeight: 1.45, fontWeight: 400, color: 'rgba(255,255,255,.82)' }}>
+                        <InlineEditable value={sub.description} editing={editingField === 'subcategory-description-' + sub.id} onEdit={() => beginEdit('subcategory-description-' + sub.id, sub.description)} onChange={setEditingValue} onSave={() => saveSubcategoryField(sub.id, 'description')} onCancel={cancelEdit} multiline inputStyle={{ fontSize: 13 }} />
+                      </span>
                     </span>
                   </article>
                 </SwiperSlide>
